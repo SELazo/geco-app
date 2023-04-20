@@ -1,0 +1,27 @@
+.input-box {
+  box-sizing: border-box;
+
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  padding: 14px 16px;
+  gap: 10px;
+
+  background: #ffffff;
+  border: 2px solid #18191f;
+  border-radius: 16px;
+
+  width: 327px;
+  height: 56px;
+
+  font-style: normal;
+  font-weight: 500;
+  font-size: 21px;
+  line-height: 28px;
+
+  color: #18191f;
+}
+
+.input-box-tag {
+  font-size: 1rem;
+}
