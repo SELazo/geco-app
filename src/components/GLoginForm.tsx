@@ -1,6 +1,7 @@
 import React, { ChangeEvent, Component, FC, FormEvent } from 'react';
 import { GInputBox } from './GInputBox';
 import { GSubmitButton } from './GSubmitButton';
+import { ButtonIcon } from '../interfaces/buttonIcon';
 
 interface LoginFormProps {
   //props
@@ -51,6 +52,10 @@ export class GLoginForm extends Component<LoginFormProps, LoginFormState> {
 
   render() {
     const { formData } = this.state;
+    const iconButtonSignIn: ButtonIcon = {
+      'icon-type': 'chevron-right',
+      color: '#FFFFFF',
+    };
     return (
       <form>
         <GInputBox
@@ -65,7 +70,11 @@ export class GLoginForm extends Component<LoginFormProps, LoginFormState> {
           value={formData.password}
           onChange={this.handlePasswordChange}
         />
-        <GSubmitButton onClick={this.handleSubmit} label="Submit" />
+        <GSubmitButton
+          onClick={this.handleSubmit}
+          label="Sign In"
+          icon={iconButtonSignIn}
+        />
       </form>
     );
   }
