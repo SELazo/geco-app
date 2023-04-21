@@ -14,14 +14,11 @@
   width: 327px;
   height: 56px;
 
+  font-family: 'Montserrat', sans-serif;
   font-style: normal;
   font-weight: 500;
-  font-size: 21px;
+  font-size: 19px;
   line-height: 28px;
 
   color: #18191f;
-}
-
-.input-box-tag {
-  font-size: 1rem;
 }

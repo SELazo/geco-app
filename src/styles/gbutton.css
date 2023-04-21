@@ -13,11 +13,11 @@
 
   color: #ffffff;
 
+  font-family: 'Montserrat', sans-serif;
   font-style: normal;
-  font-weight: 800;
+  font-weight: 700;
   font-size: 21px;
   line-height: 28px;
-  /* identical to box height, or 133% */
 
   text-align: center;
 }

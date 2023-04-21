@@ -1,7 +1,11 @@
-import React, { ChangeEvent, Component, FC, FormEvent } from 'react';
+import { Component } from 'react';
+
+import '../styles/gform.css';
 import { GInputBox } from './GInputBox';
 import { GSubmitButton } from './GSubmitButton';
 import { ButtonIcon } from '../interfaces/buttonIcon';
+import { GTextAction } from './GTextAction';
+import { SignUpAction, ForgetPasswordAction } from '../constants/wording';
 
 interface LoginFormProps {
   //props
@@ -50,6 +54,14 @@ export class GLoginForm extends Component<LoginFormProps, LoginFormState> {
     console.log(formData);
   };
 
+  handlePasswordRecoveryRedirect = () => {
+    console.log('Recovery password');
+  };
+
+  handleSignUpRedirect = () => {
+    console.log('Sign up!');
+  };
+
   render() {
     const { formData } = this.state;
     const iconButtonSignIn: ButtonIcon = {
@@ -57,7 +69,7 @@ export class GLoginForm extends Component<LoginFormProps, LoginFormState> {
       color: '#FFFFFF',
     };
     return (
-      <form>
+      <form className="geco-form">
         <GInputBox
           type="email"
           placeholder="Email"
@@ -70,10 +82,20 @@ export class GLoginForm extends Component<LoginFormProps, LoginFormState> {
           value={formData.password}
           onChange={this.handlePasswordChange}
         />
+
+        <GTextAction
+          onClick={this.handlePasswordRecoveryRedirect}
+          textAction={SignUpAction}
+        />
+
         <GSubmitButton
           onClick={this.handleSubmit}
           label="Sign In"
           icon={iconButtonSignIn}
+        />
+        <GTextAction
+          onClick={this.handlePasswordRecoveryRedirect}
+          textAction={ForgetPasswordAction}
         />
       </form>
     );

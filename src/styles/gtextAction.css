@@ -1,0 +1,20 @@
+.geco-text-action {
+  display: flex;
+  text-align: center;
+  align-items: center;
+}
+
+.geco-text-link {
+  font-style: normal;
+  font-weight: 700;
+  font-size: 13px;
+  line-height: 8px;
+  color: #f95a2c;
+}
+
+.geco-text-label {
+  font-style: normal;
+  font-weight: 500;
+  font-size: 13px;
+  line-height: 18px;
+}
