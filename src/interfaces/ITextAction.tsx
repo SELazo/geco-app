@@ -1,4 +1,4 @@
-export interface TextAction {
+export interface ITextAction {
   action: string;
   label: string;
 }

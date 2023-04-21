@@ -1,4 +1,4 @@
-export interface ButtonIcon {
+export interface IButtonIcon {
   'icon-type': string;
   color: string;
 }

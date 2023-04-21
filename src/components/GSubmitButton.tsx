@@ -1,17 +1,17 @@
 import { FC } from 'react';
 
 import '../styles/gbutton.css';
-import { ButtonIcon } from '../interfaces/buttonIcon';
+import { IButtonIcon } from '../interfaces/IButtonIcon';
 import { GIcon } from './GIcon';
 
-interface SubmitButtonProps {
+interface ISubmitButtonProps {
   onClick: () => void;
   label: string;
-  icon?: ButtonIcon;
+  icon?: IButtonIcon;
 }
 
-export const GSubmitButton: FC<SubmitButtonProps> = (
-  props: SubmitButtonProps
+export const GSubmitButton: FC<ISubmitButtonProps> = (
+  props: ISubmitButtonProps
 ) => {
   return (
     <button className="submit-btn" type="button" onClick={props.onClick}>

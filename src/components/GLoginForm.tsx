@@ -1,11 +1,16 @@
 import { Component } from 'react';
 
 import '../styles/gform.css';
+import { GHeadCenterTitle } from './GHeadCenterTitle';
 import { GInputBox } from './GInputBox';
 import { GSubmitButton } from './GSubmitButton';
-import { ButtonIcon } from '../interfaces/buttonIcon';
+import { IButtonIcon } from '../interfaces/IButtonIcon';
 import { GTextAction } from './GTextAction';
-import { SignUpAction, ForgetPasswordAction } from '../constants/wording';
+import {
+  SignUpAction,
+  ForgetPasswordAction,
+  LoginHeadCenterTitle,
+} from '../constants/wording';
 
 interface LoginFormProps {
   //props
@@ -64,12 +69,13 @@ export class GLoginForm extends Component<LoginFormProps, LoginFormState> {
 
   render() {
     const { formData } = this.state;
-    const iconButtonSignIn: ButtonIcon = {
+    const iconButtonSignIn: IButtonIcon = {
       'icon-type': 'chevron-right',
       color: '#FFFFFF',
     };
     return (
       <form className="geco-form">
+        <GHeadCenterTitle title={LoginHeadCenterTitle} />
         <GInputBox
           type="email"
           placeholder="Email"

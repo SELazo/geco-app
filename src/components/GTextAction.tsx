@@ -1,15 +1,15 @@
 import { FC } from 'react';
 
 import '../styles/gtextAction.css';
-import { TextAction } from '../interfaces/textAction';
+import { ITextAction } from '../interfaces/ITextAction';
 
-interface SubmitTextActionProps {
+interface ISubmitTextActionProps {
   onClick: () => void;
-  textAction: TextAction;
+  textAction: ITextAction;
 }
 
-export const GTextAction: FC<SubmitTextActionProps> = (
-  props: SubmitTextActionProps
+export const GTextAction: FC<ISubmitTextActionProps> = (
+  props: ISubmitTextActionProps
 ) => {
   return (
     <>

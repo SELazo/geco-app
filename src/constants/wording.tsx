@@ -1,20 +1,60 @@
-import { TextAction } from '../interfaces/textAction';
+import { IFeedback } from '../interfaces/IFeedback';
+import { IHeadSectionTitle } from '../interfaces/IHeadSectionTitle';
+import { ITextAction } from '../interfaces/ITextAction';
 
 /**
  * Actions: A link that contains a description and a link to do an action.
  */
 
-export const ForgetPasswordAction: TextAction = {
+export const ForgetPasswordAction: ITextAction = {
   label: 'Olvidaste tu contraseña?',
   action: 'Recuperala!',
 };
 
-export const SignInAction: TextAction = {
+export const SignInAction: ITextAction = {
   label: 'Eres nuevo?',
   action: 'Creá tu cuenta ahora!',
 };
 
-export const SignUpAction: TextAction = {
+export const SignUpAction: ITextAction = {
   label: 'Ya eres parte del club?',
   action: 'Por aquí!',
+};
+
+/**
+ * Head Center Titles
+ */
+
+export const LoginHeadCenterTitle: string = 'Login';
+
+/**
+ * Head Section Titles
+ */
+
+export const SignUpHeadSectionTitle: IHeadSectionTitle = {
+  title: 'Sign Up',
+  subtitle: 'Crea tu cuenta para comenzar a comunicar tus mensajes!',
+};
+
+export const ForgotPasswordHeadSectionTitle: IHeadSectionTitle = {
+  title: 'Recupera tu contraseña',
+  subtitle: 'Ingresa el email correspondiente a tu cuenta.',
+};
+
+export const PasswordRecoveryHeadSectionTitle: IHeadSectionTitle = {
+  title: 'Nueva contraseña',
+  subtitle: 'Ingresa tu nueva contraseña y confirmala.',
+};
+
+/**
+ * Feedbacks
+ */
+
+export const PasswordChange: IFeedback = {
+  title: 'Contraseña modificada!',
+  subtitle: 'Ahora podrás ingresar a tu cuenta con tu nueva contraseña!',
+  buttonLabel: 'Okay!',
+  buttonAction: () => {
+    console.log('Password cambiada!');
+  },
 };
