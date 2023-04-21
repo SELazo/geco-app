@@ -1,16 +1,17 @@
 import { Component } from 'react';
 
 import '../styles/gform.css';
-import { GHeadCenterTitle } from './GHeadCenterTitle';
-import { GInputBox } from './GInputBox';
-import { GSubmitButton } from './GSubmitButton';
+import { GHeadCenterTitle } from '../components/GHeadCenterTitle';
+import { GInputBox } from '../components/GInputBox';
+import { GSubmitButton } from '../components/GSubmitButton';
 import { IButtonIcon } from '../interfaces/IButtonIcon';
-import { GTextAction } from './GTextAction';
+import { GTextAction } from '../components/GTextAction';
 import {
   SignUpAction,
   ForgetPasswordAction,
   LoginHeadCenterTitle,
 } from '../constants/wording';
+import { GLogoLetter } from '../components/GLogoLetter';
 
 interface LoginFormProps {
   //props
@@ -25,7 +26,7 @@ interface LoginFormState {
   formData: LoginFormData;
 }
 
-export class GLoginForm extends Component<LoginFormProps, LoginFormState> {
+export class GSignUpPage extends Component<LoginFormProps, LoginFormState> {
   constructor(props: LoginFormProps) {
     super(props);
 
@@ -59,14 +60,6 @@ export class GLoginForm extends Component<LoginFormProps, LoginFormState> {
     console.log(formData);
   };
 
-  handlePasswordRecoveryRedirect = () => {
-    console.log('Recovery password');
-  };
-
-  handleSignUpRedirect = () => {
-    console.log('Sign up!');
-  };
-
   render() {
     const { formData } = this.state;
     const iconButtonSignIn: IButtonIcon = {
@@ -75,7 +68,6 @@ export class GLoginForm extends Component<LoginFormProps, LoginFormState> {
     };
     return (
       <form className="geco-form">
-        <GHeadCenterTitle title={LoginHeadCenterTitle} />
         <GInputBox
           type="email"
           placeholder="Email"
@@ -89,19 +81,10 @@ export class GLoginForm extends Component<LoginFormProps, LoginFormState> {
           onChange={this.handlePasswordChange}
         />
 
-        <GTextAction
-          onClick={this.handlePasswordRecoveryRedirect}
-          textAction={SignUpAction}
-        />
-
         <GSubmitButton
           onClick={this.handleSubmit}
           label="Sign In"
           icon={iconButtonSignIn}
-        />
-        <GTextAction
-          onClick={this.handlePasswordRecoveryRedirect}
-          textAction={ForgetPasswordAction}
         />
       </form>
     );

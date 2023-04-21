@@ -3,4 +3,12 @@
 html {
   font-family: 'Montserrat', sans-serif;
   color: #18191f;
+  justify-content: center;
+  align-items: center;
+  display: flex;
+  height: -webkit-fill-available;
+}
+
+body {
+  max-width: 375px;
 }

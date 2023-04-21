@@ -2,6 +2,7 @@
   display: flex;
   text-align: center;
   align-items: center;
+  margin-bottom: 24px;
 }
 
 .geco-text-link {
@@ -16,5 +17,5 @@
   font-style: normal;
   font-weight: 500;
   font-size: 13px;
-  line-height: 18px;
+  margin: 0;
 }
