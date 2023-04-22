@@ -6,8 +6,13 @@ import './index.css';
 import { GLoginPage } from './pages/GLoginPage';
 import { GSignUpPage } from './pages/GSignUpPage';
 import { GForgotPasswordPage } from './pages/GForgotPasswordPage';
+import { GBootPage } from './pages/GBootPage';
 
 const router = createBrowserRouter([
+  {
+    path: '/',
+    element: <GBootPage />,
+  },
   {
     path: '/login',
     element: <GLoginPage />,

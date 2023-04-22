@@ -9,19 +9,19 @@ import { ITextAction } from '../interfaces/ITextAction';
 export const ForgetPasswordAction: ITextAction = {
   label: 'Olvidaste tu contraseña?',
   action: 'Recuperala!',
-  route: '',
+  route: '/forgot-password',
 };
 
 export const SignInAction: ITextAction = {
   label: 'Eres nuevo?',
   action: 'Creá tu cuenta ahora!',
-  route: '',
+  route: '/sign-up',
 };
 
 export const SignUpAction: ITextAction = {
   label: 'Ya eres parte del club?',
   action: 'Por aquí!',
-  route: '',
+  route: '/login',
 };
 
 /**
@@ -57,5 +57,5 @@ export const PasswordChange: IFeedback = {
   title: 'Contraseña modificada!',
   subtitle: 'Ahora podrás ingresar a tu cuenta con tu nueva contraseña!',
   buttonLabel: 'Okay!',
-  buttonPath: '',
+  buttonPath: '/login',
 };
