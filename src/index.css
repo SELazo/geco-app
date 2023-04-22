@@ -12,3 +12,7 @@ html {
 body {
   max-width: 375px;
 }
+
+a {
+  text-decoration: none;
+}

@@ -12,13 +12,13 @@ export const ForgetPasswordAction: ITextAction = {
   route: '/forgot-password',
 };
 
-export const SignInAction: ITextAction = {
+export const SignUpAction: ITextAction = {
   label: 'Eres nuevo?',
   action: 'Creá tu cuenta ahora!',
   route: '/sign-up',
 };
 
-export const SignUpAction: ITextAction = {
+export const SignInAction: ITextAction = {
   label: 'Ya eres parte del club?',
   action: 'Por aquí!',
   route: '/login',

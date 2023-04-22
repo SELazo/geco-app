@@ -60,14 +60,6 @@ export class GLoginPage extends Component<LoginFormProps, LoginFormState> {
     console.log(formData);
   };
 
-  handlePasswordRecoveryRedirect = () => {
-    console.log('Recovery password');
-  };
-
-  handleSignUpRedirect = () => {
-    console.log('Sign up!');
-  };
-
   render() {
     const { formData } = this.state;
     const iconButtonSignIn: IButtonIcon = {
@@ -91,20 +83,14 @@ export class GLoginPage extends Component<LoginFormProps, LoginFormState> {
           onChange={this.handlePasswordChange}
         />
 
-        <GTextAction
-          onClick={this.handleSignUpRedirect}
-          textAction={SignUpAction}
-        />
+        <GTextAction textAction={SignUpAction} />
 
         <GSubmitButton
           onClick={this.handleSubmit}
           label="Sign In"
           icon={iconButtonSignIn}
         />
-        <GTextAction
-          onClick={this.handlePasswordRecoveryRedirect}
-          textAction={ForgetPasswordAction}
-        />
+        <GTextAction textAction={ForgetPasswordAction} />
       </form>
     );
   }
