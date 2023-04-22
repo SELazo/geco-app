@@ -10,8 +10,12 @@ import {
   SignUpAction,
   ForgetPasswordAction,
   LoginHeadCenterTitle,
+  SignUpHeadSectionTitle,
 } from '../constants/wording';
 import { GLogoLetter } from '../components/GLogoLetter';
+import { GHeadSectionTitle } from '../components/GHeadSectionTitle';
+import { GCircularButton } from '../components/GCircularButton';
+import { GIconButtonBack, GIconButtonSignIn } from '../constants/buttons';
 
 interface LoginFormProps {
   //props
@@ -55,6 +59,10 @@ export class GSignUpPage extends Component<LoginFormProps, LoginFormState> {
     this.handleCHangeState('password', value);
   };
 
+  onClickAction = () => {
+    window.history.back();
+  };
+
   handleSubmit = () => {
     const { formData } = this.state;
     console.log(formData);
@@ -62,31 +70,39 @@ export class GSignUpPage extends Component<LoginFormProps, LoginFormState> {
 
   render() {
     const { formData } = this.state;
-    const iconButtonSignIn: IButtonIcon = {
-      'icon-type': 'chevron-right',
-      color: '#FFFFFF',
-    };
     return (
-      <form className="geco-form">
-        <GInputBox
-          type="email"
-          placeholder="Email"
-          value={formData.email}
-          onChange={this.handleEmailChange}
-        />
-        <GInputBox
-          type="password"
-          placeholder="Contraseña"
-          value={formData.password}
-          onChange={this.handlePasswordChange}
-        />
+      <>
+        <div style={{ margin: '15px' }}>
+          <GCircularButton
+            icon={GIconButtonBack}
+            onClickAction={this.onClickAction}
+          />
+          <GHeadSectionTitle
+            title={SignUpHeadSectionTitle.title}
+            subtitle={SignUpHeadSectionTitle.subtitle}
+          />
+        </div>
+        <form className="geco-form">
+          <GInputBox
+            type="email"
+            placeholder="Email"
+            value={formData.email}
+            onChange={this.handleEmailChange}
+          />
+          <GInputBox
+            type="password"
+            placeholder="Contraseña"
+            value={formData.password}
+            onChange={this.handlePasswordChange}
+          />
 
-        <GSubmitButton
-          onClick={this.handleSubmit}
-          label="Sign In"
-          icon={iconButtonSignIn}
-        />
-      </form>
+          <GSubmitButton
+            onClick={this.handleSubmit}
+            label="Sign In"
+            icon={GIconButtonSignIn}
+          />
+        </form>
+      </>
     );
   }
 }

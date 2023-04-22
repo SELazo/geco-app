@@ -12,6 +12,7 @@ import {
   LoginHeadCenterTitle,
 } from '../constants/wording';
 import { GLogoLetter } from '../components/GLogoLetter';
+import { GWhite } from '../constants/palette';
 
 interface LoginFormProps {
   //props
@@ -64,12 +65,13 @@ export class GLoginPage extends Component<LoginFormProps, LoginFormState> {
     const { formData } = this.state;
     const iconButtonSignIn: IButtonIcon = {
       'icon-type': 'chevron-right',
-      color: '#FFFFFF',
+      color: GWhite,
     };
     return (
       <form className="geco-form">
         <GLogoLetter />
         <GHeadCenterTitle title={LoginHeadCenterTitle} />
+
         <GInputBox
           type="email"
           placeholder="Email"
