@@ -16,7 +16,7 @@ import { GCircularButton } from '../components/GCircularButton';
 import { GIconButtonBack, GIconButtonSignIn } from '../constants/buttons';
 
 type SignUpFormData = {
-  fullname: string;
+  name: string;
   email: string;
   password: string;
   confirmedPassword: string;
@@ -24,7 +24,7 @@ type SignUpFormData = {
 
 export const GSignUpPage = () => {
   const validationSchema = Yup.object().shape({
-    fullname: Yup.string().required('Por favor ingrese un nombre completo.'),
+    name: Yup.string().required('Por favor ingrese un nombre completo.'),
     email: Yup.string()
       .email('Por favor ingrese un correo electrónico válido')
       .required('Por favor ingrese su correo electrónico'),
@@ -68,13 +68,13 @@ export const GSignUpPage = () => {
         <div className="input-group">
           <input
             type="text"
-            {...register('fullname')}
+            {...register('name')}
             placeholder="Nombre completo"
             className={`input-box form-control ${
-              errors.fullname ? 'is-invalid' : ''
+              errors.name ? 'is-invalid' : ''
             }`}
           />
-          <span className="span-error">{errors.fullname?.message}</span>
+          <span className="span-error">{errors.name?.message}</span>
         </div>
         <div className="input-group">
           <input

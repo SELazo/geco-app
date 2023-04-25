@@ -5,6 +5,7 @@ import * as Yup from 'yup';
 
 import '../styles/ginputBox.css';
 import '../styles/gform.css';
+
 import { GHeadCenterTitle } from '../components/GHeadCenterTitle';
 
 import { GSubmitButton } from '../components/GSubmitButton';
@@ -17,6 +18,8 @@ import {
 } from '../constants/wording';
 import { GLogoLetter } from '../components/GLogoLetter';
 import { GWhite } from '../constants/palette';
+
+import authService from '../services/authService';
 
 type LoginForm = {
   email: string;
@@ -48,8 +51,9 @@ export const GLoginPage = () => {
     resolver: yupResolver(validationSchema),
   });
 
-  const onSubmit = (data: LoginForm) => {
-    console.log(data);
+  const onSubmit = async (data: LoginForm) => {
+    const token = await authService.login(data.email, data.password);
+    console.log('Token:', token);
     reset();
   };
 
