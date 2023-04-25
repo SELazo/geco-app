@@ -1,5 +1,9 @@
+.input-group {
+  margin-bottom: 15px;
+}
+
 .input-box {
-  margin-bottom: 24px;
+  margin-bottom: 4px;
   box-sizing: border-box;
 
   display: flex;
@@ -22,4 +26,13 @@
   line-height: 28px;
 
   color: #18191f;
+}
+
+.is-invalid {
+  border: 2px solid #f95a2c !important;
+}
+
+.span-error {
+  color: #f95a2c;
+  font-size: 12px;
 }

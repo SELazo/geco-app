@@ -44,7 +44,7 @@ export const ForgotPasswordHeadSectionTitle: IHeadSectionTitle = {
   subtitle: 'Ingresa el email correspondiente a tu cuenta.',
 };
 
-export const PasswordRecoveryHeadSectionTitle: IHeadSectionTitle = {
+export const ResetPasswordHeadSectionTitle: IHeadSectionTitle = {
   title: 'Nueva contraseña',
   subtitle: 'Ingresa tu nueva contraseña y confirmala.',
 };

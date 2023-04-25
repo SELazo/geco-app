@@ -1,96 +1,70 @@
-import { Component } from 'react';
+import React from 'react';
+import { useForm } from 'react-hook-form';
+import { yupResolver } from '@hookform/resolvers/yup';
+import * as Yup from 'yup';
 
+import '../styles/ginputBox.css';
 import '../styles/gform.css';
-import { GHeadCenterTitle } from '../components/GHeadCenterTitle';
-import { GInputBox } from '../components/GInputBox';
+
+import { GHeadSectionTitle } from '../components/GHeadSectionTitle';
+import { GCircularButton } from '../components/GCircularButton';
+import { GIconButtonBack, GIconButtonSignIn } from '../constants/buttons';
+
 import { GSubmitButton } from '../components/GSubmitButton';
-import { IButtonIcon } from '../interfaces/IButtonIcon';
-import { GTextAction } from '../components/GTextAction';
-import {
-  SignUpAction,
-  ForgetPasswordAction,
-  LoginHeadCenterTitle,
-} from '../constants/wording';
-import { GLogoLetter } from '../components/GLogoLetter';
+import { ForgotPasswordHeadSectionTitle } from '../constants/wording';
 
-interface LoginFormProps {
-  //props
-}
-
-interface LoginFormData {
+type ForgotPasswordFormData = {
   email: string;
-  password: string;
-}
+};
 
-interface LoginFormState {
-  formData: LoginFormData;
-}
+export const GForgotPasswordPage = () => {
+  const validationSchema = Yup.object().shape({
+    email: Yup.string()
+      .email('Por favor ingrese un correo electrónico válido')
+      .required('Por favor ingrese su correo electrónico'),
+  });
 
-export class GForgotPasswordPage extends Component<
-  LoginFormProps,
-  LoginFormState
-> {
-  constructor(props: LoginFormProps) {
-    super(props);
-
-    this.state = {
-      formData: {
-        email: '',
-        password: '',
-      },
-    };
-  }
-
-  handleCHangeState = (name: string, value: string) => {
-    this.setState({
-      formData: {
-        ...this.state.formData,
-        [name]: value,
-      },
-    });
+  const onClickAction = () => {
+    window.history.back();
   };
 
-  handleEmailChange = (value: string) => {
-    this.handleCHangeState('email', value);
+  const onSubmit = (data: ForgotPasswordFormData) => {
+    console.log(data);
+    reset();
   };
 
-  handlePasswordChange = (value: string) => {
-    this.handleCHangeState('password', value);
-  };
+  const {
+    register,
+    handleSubmit,
+    reset,
+    formState: { errors },
+  } = useForm<ForgotPasswordFormData>({
+    resolver: yupResolver(validationSchema),
+  });
 
-  handleSubmit = () => {
-    const { formData } = this.state;
-    console.log(formData);
-  };
-
-  handlePasswordRecoveryRedirect = () => {
-    console.log('Recovery password');
-  };
-
-  handleSignUpRedirect = () => {
-    console.log('Sign up!');
-  };
-
-  render() {
-    const { formData } = this.state;
-    const iconButtonSignIn: IButtonIcon = {
-      'icon-type': 'chevron-right',
-      color: '#FFFFFF',
-    };
-    return (
-      <form className="geco-form">
-        <GInputBox
-          type="email"
-          placeholder="Email"
-          value={formData.email}
-          onChange={this.handleEmailChange}
+  return (
+    <>
+      <div style={{ margin: '15px' }}>
+        <GCircularButton icon={GIconButtonBack} onClickAction={onClickAction} />
+        <GHeadSectionTitle
+          title={ForgotPasswordHeadSectionTitle.title}
+          subtitle={ForgotPasswordHeadSectionTitle.subtitle}
         />
-        <GSubmitButton
-          onClick={this.handleSubmit}
-          label="Sign In"
-          icon={iconButtonSignIn}
-        />
+      </div>
+      <form className="geco-form" onSubmit={handleSubmit(onSubmit)}>
+        <div className="input-group">
+          <input
+            type="email"
+            {...register('email')}
+            placeholder="Email"
+            className={`input-box form-control ${
+              errors.email ? 'is-invalid' : ''
+            }`}
+          />
+          <span className="span-error">{errors.email?.message}</span>
+        </div>
+        <GSubmitButton label="Sign In" icon={GIconButtonSignIn} />
       </form>
-    );
-  }
-}
+    </>
+  );
+};

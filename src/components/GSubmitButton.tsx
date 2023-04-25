@@ -5,7 +5,6 @@ import { IButtonIcon } from '../interfaces/IButtonIcon';
 import { GIcon } from './GIcon';
 
 interface ISubmitButtonProps {
-  onClick: () => void;
   label: string;
   icon?: IButtonIcon;
 }
@@ -14,7 +13,7 @@ export const GSubmitButton: FC<ISubmitButtonProps> = (
   props: ISubmitButtonProps
 ) => {
   return (
-    <button className="submit-btn" type="button" onClick={props.onClick}>
+    <button className="submit-btn" type="submit">
       {props.label}
       {props.icon != undefined ? (
         <GIcon icon-type={props.icon['icon-type']} color={props.icon.color} />

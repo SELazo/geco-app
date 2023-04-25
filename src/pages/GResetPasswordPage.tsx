@@ -6,28 +6,23 @@ import * as Yup from 'yup';
 import '../styles/ginputBox.css';
 import '../styles/gform.css';
 
-import { GSubmitButton } from '../components/GSubmitButton';
-
-import { GTextAction } from '../components/GTextAction';
-import { SignUpHeadSectionTitle, SignInAction } from '../constants/wording';
-
 import { GHeadSectionTitle } from '../components/GHeadSectionTitle';
 import { GCircularButton } from '../components/GCircularButton';
-import { GIconButtonBack, GIconButtonSignIn } from '../constants/buttons';
+import { GIconButtonSignIn, GIconButtonX } from '../constants/buttons';
 
-type SignUpFormData = {
-  fullname: string;
-  email: string;
+import { GSubmitButton } from '../components/GSubmitButton';
+import { ResetPasswordHeadSectionTitle } from '../constants/wording';
+import { useNavigate } from 'react-router-dom';
+
+type ResetPasswordFormData = {
   password: string;
   confirmedPassword: string;
 };
 
-export const GSignUpPage = () => {
+export const GResetPasswordPage = () => {
+  const navigate = useNavigate();
+
   const validationSchema = Yup.object().shape({
-    fullname: Yup.string().required('Por favor ingrese un nombre completo.'),
-    email: Yup.string()
-      .email('Por favor ingrese un correo electrónico válido')
-      .required('Por favor ingrese su correo electrónico'),
     password: Yup.string()
       .required('Por favor ingrese su contraseña')
       .min(6, 'La contraseña debe tener al menos 6 caracteres.')
@@ -38,7 +33,12 @@ export const GSignUpPage = () => {
   });
 
   const onClickAction = () => {
-    window.history.back();
+    navigate('/login');
+  };
+
+  const onSubmit = (data: ResetPasswordFormData) => {
+    console.log(data);
+    reset();
   };
 
   const {
@@ -46,47 +46,20 @@ export const GSignUpPage = () => {
     handleSubmit,
     reset,
     formState: { errors },
-  } = useForm<SignUpFormData>({
+  } = useForm<ResetPasswordFormData>({
     resolver: yupResolver(validationSchema),
   });
-
-  const onSubmit = (data: SignUpFormData) => {
-    console.log(data);
-    reset();
-  };
 
   return (
     <>
       <div style={{ margin: '15px' }}>
-        <GCircularButton icon={GIconButtonBack} onClickAction={onClickAction} />
+        <GCircularButton icon={GIconButtonX} onClickAction={onClickAction} />
         <GHeadSectionTitle
-          title={SignUpHeadSectionTitle.title}
-          subtitle={SignUpHeadSectionTitle.subtitle}
+          title={ResetPasswordHeadSectionTitle.title}
+          subtitle={ResetPasswordHeadSectionTitle.subtitle}
         />
       </div>
       <form className="geco-form" onSubmit={handleSubmit(onSubmit)}>
-        <div className="input-group">
-          <input
-            type="text"
-            {...register('fullname')}
-            placeholder="Nombre completo"
-            className={`input-box form-control ${
-              errors.fullname ? 'is-invalid' : ''
-            }`}
-          />
-          <span className="span-error">{errors.fullname?.message}</span>
-        </div>
-        <div className="input-group">
-          <input
-            type="email"
-            {...register('email')}
-            placeholder="Email"
-            className={`input-box form-control ${
-              errors.email ? 'is-invalid' : ''
-            }`}
-          />
-          <span className="span-error">{errors.email?.message}</span>
-        </div>
         <div className="input-group">
           <input
             type="password"
@@ -112,7 +85,6 @@ export const GSignUpPage = () => {
           </span>
         </div>
         <GSubmitButton label="Sign In" icon={GIconButtonSignIn} />
-        <GTextAction textAction={SignInAction} />
       </form>
     </>
   );
