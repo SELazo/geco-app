@@ -51,7 +51,8 @@ export const SignUpHeadSectionTitle: IHeadSectionTitle = {
 
 export const ForgotPasswordHeadSectionTitle: IHeadSectionTitle = {
   title: 'Recupera tu contraseña',
-  subtitle: 'Ingresa el email correspondiente a tu cuenta.',
+  subtitle:
+    'Ingresa el email correspondiente a tu cuenta. Te llegará un mail para poder recuperarla!',
 };
 
 export const ResetPasswordHeadSectionTitle: IHeadSectionTitle = {

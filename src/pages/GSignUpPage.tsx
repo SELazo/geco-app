@@ -14,6 +14,7 @@ import { SignUpHeadSectionTitle, SignInAction } from '../constants/wording';
 import { GHeadSectionTitle } from '../components/GHeadSectionTitle';
 import { GCircularButton } from '../components/GCircularButton';
 import { GIconButtonBack, GIconButtonSignIn } from '../constants/buttons';
+import { GBlack, GYellow } from '../constants/palette';
 
 type SignUpFormData = {
   name: string;
@@ -117,7 +118,11 @@ export const GSignUpPage = () => {
             {errors.confirmedPassword?.message}
           </span>
         </div>
-        <GSubmitButton label="Sign In" icon={GIconButtonSignIn} />
+        <GSubmitButton
+          label="Sign Up"
+          colorBackground={GYellow}
+          colorFont={GBlack}
+        />
         <GTextAction textAction={SignInAction} />
       </form>
     </>

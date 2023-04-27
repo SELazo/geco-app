@@ -12,6 +12,7 @@ import { GIconButtonBack, GIconButtonSignIn } from '../constants/buttons';
 
 import { GSubmitButton } from '../components/GSubmitButton';
 import { ForgotPasswordHeadSectionTitle } from '../constants/wording';
+import { GBlack, GYellow } from '../constants/palette';
 
 type ForgotPasswordFormData = {
   email: string;
@@ -69,7 +70,11 @@ export const GForgotPasswordPage = () => {
           />
           <span className="span-error">{errors.email?.message}</span>
         </div>
-        <GSubmitButton label="Sign In" icon={GIconButtonSignIn} />
+        <GSubmitButton
+          label="Enviar"
+          colorBackground={GYellow}
+          colorFont={GBlack}
+        />
       </form>
     </>
   );

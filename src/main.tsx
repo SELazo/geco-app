@@ -35,6 +35,30 @@ const router = createBrowserRouter([
     path: '/home',
     element: <GHomePage />,
   },
+  {
+    path: '/user',
+    element: <GHomePage />,
+  },
+  {
+    path: '/pricing',
+    element: <GHomePage />,
+  },
+  {
+    path: '/ad',
+    element: <GHomePage />,
+  },
+  {
+    path: '/strategy',
+    element: <GHomePage />,
+  },
+  {
+    path: '/contacts',
+    element: <GHomePage />,
+  },
+  {
+    path: '/statistics',
+    element: <GHomePage />,
+  },
 ]);
 ReactDOM.createRoot(document.getElementById('root') as HTMLElement).render(
   <React.StrictMode>

@@ -43,3 +43,13 @@ export const GStatisticsIcon: IButtonIcon = {
   color: GGreen,
   'icon-type': 'reg-chart-bar',
 };
+
+export const GChevronRightIcon: IButtonIcon = {
+  color: GWhite,
+  'icon-type': 'chevron-right',
+};
+
+export const GChevronLeftIcon: IButtonIcon = {
+  color: GBlack,
+  'icon-type': 'chevron-left',
+};

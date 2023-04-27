@@ -13,6 +13,7 @@ import { GIconButtonSignIn, GIconButtonX } from '../constants/buttons';
 
 import { GSubmitButton } from '../components/GSubmitButton';
 import { ResetPasswordHeadSectionTitle } from '../constants/wording';
+import { GBlack, GYellow } from '../constants/palette';
 
 type ResetPasswordFormData = {
   password: string;
@@ -90,7 +91,11 @@ export const GResetPasswordPage = () => {
             {errors.confirmedPassword?.message}
           </span>
         </div>
-        <GSubmitButton label="Sign In" icon={GIconButtonSignIn} />
+        <GSubmitButton
+          label="Confirmar"
+          colorBackground={GYellow}
+          colorFont={GBlack}
+        />
       </form>
     </>
   );

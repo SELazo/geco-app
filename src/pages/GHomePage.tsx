@@ -1,7 +1,6 @@
-import { useNavigate } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 
 import '../styles/ghome.css';
-import { GLogoLetter } from '../components/GLogoLetter';
 import { BlueYelowPalette, GRed, GWhite, GYellow } from '../constants/palette';
 
 import emailCampaign from '../assets/images/email_campaign_bro.svg';
@@ -69,26 +68,31 @@ export const GHomePage = () => {
         style={{
           background: GRed,
           width: '100vw',
-          height: '250px',
+          height: '280px',
           overflow: 'hidden',
+          borderRadius: '0 0 1.2em 1.2em',
         }}
       >
         <div className="geco-nav-bar">
           <GLogoWord />
           <div className="geco-nav-bar-right">
             <button className="geco-without-background-btn">
-              <GIcon
-                color={premiumStarIcon.color}
-                icon-type={premiumStarIcon['icon-type']}
-              />
+              <Link to={'/pricing'}>
+                <GIcon
+                  color={premiumStarIcon.color}
+                  icon-type={premiumStarIcon['icon-type']}
+                />
+              </Link>
             </button>
-            <GCircularButton
-              icon={GUserIcon}
-              size="1.5em"
-              width="50px"
-              height="50px"
-              onClickAction={handleUserNavigate}
-            />
+            <Link to={'/user'}>
+              <GCircularButton
+                icon={GUserIcon}
+                size="1.5em"
+                width="50px"
+                height="50px"
+                onClickAction={handleUserNavigate}
+              />
+            </Link>
           </div>
         </div>
         <img

@@ -2,6 +2,7 @@ import React from 'react';
 import { useForm } from 'react-hook-form';
 import { yupResolver } from '@hookform/resolvers/yup';
 import * as Yup from 'yup';
+import { useNavigate } from 'react-router-dom';
 
 import '../styles/ginputBox.css';
 import '../styles/gform.css';
@@ -20,6 +21,7 @@ import { GLogoLetter } from '../components/GLogoLetter';
 import { GBlack, GWhite } from '../constants/palette';
 
 import authService from '../services/authService';
+import { GChevronRightIcon } from '../constants/buttons';
 
 type LoginForm = {
   email: string;
@@ -27,11 +29,6 @@ type LoginForm = {
 };
 
 export const GLoginPage = () => {
-  const iconButtonSignIn: IButtonIcon = {
-    color: GWhite,
-    'icon-type': 'chevron-right',
-  };
-
   const validationSchema = Yup.object().shape({
     email: Yup.string()
       .email('Por favor ingrese un correo electrónico válido')
@@ -52,9 +49,15 @@ export const GLoginPage = () => {
   });
 
   const onSubmit = async (data: LoginForm) => {
-    const token = await authService.login(data.email, data.password);
-    console.log('Token:', token);
+    //const token = await authService.login(data.email, data.password);
+    //console.log('Token:', token);
+    console.log(data);
     reset();
+    handleContactsNavigate();
+  };
+  const navigate = useNavigate();
+  const handleContactsNavigate = () => {
+    navigate('/home');
   };
 
   return (
@@ -86,7 +89,12 @@ export const GLoginPage = () => {
       </div>
       <GTextAction textAction={SignUpAction} />
 
-      <GSubmitButton label="Sign In" icon={iconButtonSignIn} />
+      <GSubmitButton
+        label="Sign In"
+        icon={GChevronRightIcon}
+        colorBackground={GBlack}
+        colorFont={GWhite}
+      />
       <GTextAction textAction={ForgetPasswordAction} />
     </form>
   );
