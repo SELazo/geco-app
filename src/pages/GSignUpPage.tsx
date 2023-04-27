@@ -1,0 +1,119 @@
+import React from 'react';
+import { useForm } from 'react-hook-form';
+import { yupResolver } from '@hookform/resolvers/yup';
+import * as Yup from 'yup';
+
+import '../styles/ginputBox.css';
+import '../styles/gform.css';
+
+import { GSubmitButton } from '../components/GSubmitButton';
+
+import { GTextAction } from '../components/GTextAction';
+import { SignUpHeadSectionTitle, SignInAction } from '../constants/wording';
+
+import { GHeadSectionTitle } from '../components/GHeadSectionTitle';
+import { GCircularButton } from '../components/GCircularButton';
+import { GIconButtonBack, GIconButtonSignIn } from '../constants/buttons';
+
+type SignUpFormData = {
+  name: string;
+  email: string;
+  password: string;
+  confirmedPassword: string;
+};
+
+export const GSignUpPage = () => {
+  const validationSchema = Yup.object().shape({
+    name: Yup.string().required('Por favor ingrese un nombre completo.'),
+    email: Yup.string()
+      .email('Por favor ingrese un correo electrónico válido')
+      .required('Por favor ingrese su correo electrónico'),
+    password: Yup.string()
+      .required('Por favor ingrese su contraseña')
+      .min(6, 'La contraseña debe tener al menos 6 caracteres.')
+      .max(40, 'La contraseña debe tener menos de 40 caracteres.'),
+    confirmedPassword: Yup.string()
+      .required('Por favor confirme su contraseña.')
+      .oneOf([Yup.ref('password')], 'La contraseña no coincide.'),
+  });
+
+  const onClickAction = () => {
+    window.history.back();
+  };
+
+  const {
+    register,
+    handleSubmit,
+    reset,
+    formState: { errors },
+  } = useForm<SignUpFormData>({
+    resolver: yupResolver(validationSchema),
+  });
+
+  const onSubmit = (data: SignUpFormData) => {
+    console.log(data);
+    reset();
+  };
+
+  return (
+    <>
+      <div style={{ margin: '15px' }}>
+        <GCircularButton icon={GIconButtonBack} onClickAction={onClickAction} />
+        <GHeadSectionTitle
+          title={SignUpHeadSectionTitle.title}
+          subtitle={SignUpHeadSectionTitle.subtitle}
+        />
+      </div>
+      <form className="geco-form" onSubmit={handleSubmit(onSubmit)}>
+        <div className="input-group">
+          <input
+            type="text"
+            {...register('name')}
+            placeholder="Nombre completo"
+            className={`input-box form-control ${
+              errors.name ? 'is-invalid' : ''
+            }`}
+          />
+          <span className="span-error">{errors.name?.message}</span>
+        </div>
+        <div className="input-group">
+          <input
+            type="email"
+            {...register('email')}
+            placeholder="Email"
+            className={`input-box form-control ${
+              errors.email ? 'is-invalid' : ''
+            }`}
+          />
+          <span className="span-error">{errors.email?.message}</span>
+        </div>
+        <div className="input-group">
+          <input
+            type="password"
+            {...register('password')}
+            placeholder="Contraseña"
+            className={`input-box form-control ${
+              errors.password ? 'is-invalid' : ''
+            }`}
+          />
+          <span className="span-error">{errors.password?.message}</span>
+        </div>
+        <div className="input-group">
+          <input
+            type="password"
+            {...register('confirmedPassword')}
+            placeholder="Repita su contraseña"
+            className={`input-box form-control ${
+              errors.confirmedPassword ? 'is-invalid' : ''
+            }`}
+          />
+          <span className="span-error">
+            {errors.confirmedPassword?.message}
+          </span>
+        </div>
+        <GSubmitButton label="Sign In" icon={GIconButtonSignIn} />
+        <GTextAction textAction={SignInAction} />
+      </form>
+    </>
+  );
+};

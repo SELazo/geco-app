@@ -1,0 +1,24 @@
+.submit-btn {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 16px;
+  gap: 10px;
+  margin-bottom: 20px;
+
+  background: #18191f;
+  border-radius: 16px;
+
+  width: 327px;
+  height: 60px;
+
+  color: #ffffff;
+
+  font-family: 'Montserrat', sans-serif;
+  font-style: normal;
+  font-weight: 700;
+  font-size: 21px;
+  line-height: 28px;
+
+  text-align: center;
+}
