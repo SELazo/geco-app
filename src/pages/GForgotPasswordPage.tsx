@@ -45,7 +45,13 @@ export const GForgotPasswordPage = () => {
   return (
     <>
       <div style={{ margin: '15px' }}>
-        <GCircularButton icon={GIconButtonBack} onClickAction={onClickAction} />
+        <GCircularButton
+          icon={GIconButtonBack}
+          size="1.5em"
+          width="50px"
+          height="50px"
+          onClickAction={onClickAction}
+        />
         <GHeadSectionTitle
           title={ForgotPasswordHeadSectionTitle.title}
           subtitle={ForgotPasswordHeadSectionTitle.subtitle}

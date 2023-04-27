@@ -21,7 +21,6 @@ import {
   FiPlus,
   FiPlusCircle,
   FiRefreshCcw,
-  FiRss,
   FiSave,
   FiSearch,
   FiSettings,
@@ -35,6 +34,17 @@ import {
   FiXSquare,
   FiX,
 } from 'react-icons/fi';
+
+import {
+  FaStar,
+  FaUser,
+  FaWhatsapp,
+  FaImages,
+  FaShareAlt,
+  FaRegChartBar,
+  FaRss,
+  FaUsers,
+} from 'react-icons/fa';
 
 interface IconsMap {
   [key: string]: JSX.Element;
@@ -56,23 +66,30 @@ export const Icons: IconsMap = {
   file: <FiFile />,
   'help-circle': <FiHelpCircle />,
   image: <FiImage />,
+  images: <FaImages />,
   mail: <FiMail />,
   'more-horizontal': <FiMoreHorizontal />,
   lock: <FiLock />,
   plus: <FiPlus />,
   'plus-circle': <FiPlusCircle />,
   'refresh-ccw': <FiRefreshCcw />,
-  rss: <FiRss />,
+  'reg-chart-bar': <FaRegChartBar />,
+  rss: <FaRss />,
   save: <FiSave />,
   search: <FiSearch />,
   settings: <FiSettings />,
+  'share-alt': <FaShareAlt />,
   'share-2': <FiShare2 />,
   star: <FiStar />,
+  'star-fa': <FaStar />,
   trash: <FiTrash />,
   'trending-down': <FiTrendingDown />,
   'treding-up': <FiTrendingUp />,
   user: <FiUser />,
+  'user-fa': <FaUser />,
+  users: <FaUsers />,
   'x-circle': <FiXCircle />,
   square: <FiXSquare />,
+  whatsapp: <FaWhatsapp />,
   x: <FiX />,
 };

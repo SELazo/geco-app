@@ -30,6 +30,16 @@ export const SignInAction: ITextAction = {
 
 export const LoginHeadCenterTitle: string = 'Login';
 
+export const HomeHeadCenterTitle: string = 'Comienza a crecer';
+
+export const AdHeadCenterTitle: string = 'Publicidades';
+
+export const StrategyHeadCenterTitle: string = 'Estrategias de comunicación';
+
+export const ContactsHeadCenterTitle: string = 'Agenda';
+
+export const StatisticsHeadCenterTitle: string = 'Estadísticas';
+
 /**
  * Head Section Titles
  */

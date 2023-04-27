@@ -17,7 +17,7 @@ import {
   LoginHeadCenterTitle,
 } from '../constants/wording';
 import { GLogoLetter } from '../components/GLogoLetter';
-import { GWhite } from '../constants/palette';
+import { GBlack, GWhite } from '../constants/palette';
 
 import authService from '../services/authService';
 
@@ -28,8 +28,8 @@ type LoginForm = {
 
 export const GLoginPage = () => {
   const iconButtonSignIn: IButtonIcon = {
-    'icon-type': 'chevron-right',
     color: GWhite,
+    'icon-type': 'chevron-right',
   };
 
   const validationSchema = Yup.object().shape({
@@ -60,7 +60,7 @@ export const GLoginPage = () => {
   return (
     <form className="geco-form" onSubmit={handleSubmit(onSubmit)}>
       <GLogoLetter />
-      <GHeadCenterTitle title={LoginHeadCenterTitle} />
+      <GHeadCenterTitle title={LoginHeadCenterTitle} color={GBlack} />
 
       <div className="input-group">
         <input
