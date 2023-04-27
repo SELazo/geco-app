@@ -2,6 +2,7 @@ import React from 'react';
 import { useForm } from 'react-hook-form';
 import { yupResolver } from '@hookform/resolvers/yup';
 import * as Yup from 'yup';
+import { useNavigate } from 'react-router-dom';
 
 import '../styles/ginputBox.css';
 import '../styles/gform.css';
@@ -12,7 +13,6 @@ import { GIconButtonSignIn, GIconButtonX } from '../constants/buttons';
 
 import { GSubmitButton } from '../components/GSubmitButton';
 import { ResetPasswordHeadSectionTitle } from '../constants/wording';
-import { useNavigate } from 'react-router-dom';
 
 type ResetPasswordFormData = {
   password: string;
@@ -53,7 +53,13 @@ export const GResetPasswordPage = () => {
   return (
     <>
       <div style={{ margin: '15px' }}>
-        <GCircularButton icon={GIconButtonX} onClickAction={onClickAction} />
+        <GCircularButton
+          icon={GIconButtonX}
+          size="1.5em"
+          width="50px"
+          height="50px"
+          onClickAction={onClickAction}
+        />
         <GHeadSectionTitle
           title={ResetPasswordHeadSectionTitle.title}
           subtitle={ResetPasswordHeadSectionTitle.subtitle}

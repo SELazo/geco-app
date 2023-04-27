@@ -8,6 +8,7 @@ import { GSignUpPage } from './pages/GSignUpPage';
 import { GForgotPasswordPage } from './pages/GForgotPasswordPage';
 import { GBootPage } from './pages/GBootPage';
 import { GResetPasswordPage } from './pages/GResetPasswordPage';
+import { GHomePage } from './pages/GHomePage';
 
 const router = createBrowserRouter([
   {
@@ -29,6 +30,10 @@ const router = createBrowserRouter([
   {
     path: '/reset-password',
     element: <GResetPasswordPage />,
+  },
+  {
+    path: '/home',
+    element: <GHomePage />,
   },
 ]);
 ReactDOM.createRoot(document.getElementById('root') as HTMLElement).render(

@@ -11,7 +11,7 @@ export const GIcon: FC<IButtonIcon> = (props: IButtonIcon) => {
 
   return (
     <>
-      <div className="geco-icon" color={props.color}>
+      <div className="geco-icon" style={{ color: props.color }}>
         {getIcon(props['icon-type'])}
       </div>
     </>

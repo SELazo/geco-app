@@ -58,7 +58,13 @@ export const GSignUpPage = () => {
   return (
     <>
       <div style={{ margin: '15px' }}>
-        <GCircularButton icon={GIconButtonBack} onClickAction={onClickAction} />
+        <GCircularButton
+          icon={GIconButtonBack}
+          size="1.5em"
+          width="50px"
+          height="50px"
+          onClickAction={onClickAction}
+        />
         <GHeadSectionTitle
           title={SignUpHeadSectionTitle.title}
           subtitle={SignUpHeadSectionTitle.subtitle}

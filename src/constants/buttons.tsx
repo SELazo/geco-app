@@ -1,20 +1,45 @@
 import { IButtonIcon } from '../interfaces/IButtonIcon';
-import { GBlack, GWhite } from './palette';
+import { GBlack, GGreen, GPink, GRed, GWhite, GYellow } from './palette';
 
 /**
  * Circular buttons
  */
 export const GIconButtonSignIn: IButtonIcon = {
-  'icon-type': 'chevron-right',
   color: GWhite,
+  'icon-type': 'chevron-right',
 };
 
 export const GIconButtonBack: IButtonIcon = {
-  'icon-type': 'chevron-left',
   color: GBlack,
+  'icon-type': 'chevron-left',
 };
 
 export const GIconButtonX: IButtonIcon = {
-  'icon-type': 'x',
   color: GBlack,
+  'icon-type': 'x',
+};
+
+export const GUserIcon: IButtonIcon = {
+  color: GYellow,
+  'icon-type': 'user-fa',
+};
+
+export const GAdIcon: IButtonIcon = {
+  color: GPink,
+  'icon-type': 'image',
+};
+
+export const GStrategyIcon: IButtonIcon = {
+  color: GYellow,
+  'icon-type': 'rss',
+};
+
+export const GContactsIcon: IButtonIcon = {
+  color: GRed,
+  'icon-type': 'users',
+};
+
+export const GStatisticsIcon: IButtonIcon = {
+  color: GGreen,
+  'icon-type': 'reg-chart-bar',
 };
