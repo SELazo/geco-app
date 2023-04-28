@@ -10,7 +10,6 @@ import '../styles/gform.css';
 import { GHeadCenterTitle } from '../components/GHeadCenterTitle';
 
 import { GSubmitButton } from '../components/GSubmitButton';
-import { IButtonIcon } from '../interfaces/IButtonIcon';
 import { GTextAction } from '../components/GTextAction';
 import {
   SignUpAction,

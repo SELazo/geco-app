@@ -10,6 +10,7 @@ import { GCircularButton } from '../components/GCircularButton';
 import {
   GAdIcon,
   GContactsIcon,
+  GPremiumStarIcon,
   GStatisticsIcon,
   GStrategyIcon,
   GUserIcon,
@@ -25,11 +26,6 @@ import {
 } from '../constants/wording';
 
 export const GHomePage = () => {
-  const premiumStarIcon: IButtonIcon = {
-    color: GYellow,
-    'icon-type': 'star-fa',
-  };
-
   const navigate = useNavigate();
 
   const handleUserNavigate = () => {
@@ -79,8 +75,8 @@ export const GHomePage = () => {
             <button className="geco-without-background-btn">
               <Link to={'/pricing'}>
                 <GIcon
-                  color={premiumStarIcon.color}
-                  icon-type={premiumStarIcon['icon-type']}
+                  color={GPremiumStarIcon.color}
+                  icon-type={GPremiumStarIcon['icon-type']}
                 />
               </Link>
             </button>
@@ -90,6 +86,7 @@ export const GHomePage = () => {
                 size="1.5em"
                 width="50px"
                 height="50px"
+                colorBackground={GWhite}
                 onClickAction={handleUserNavigate}
               />
             </Link>
@@ -112,6 +109,7 @@ export const GHomePage = () => {
               size="2em"
               width="70px"
               height="70px"
+              colorBackground={GWhite}
               onClickAction={handleAdNavigate}
             />
             <p>{AdHeadCenterTitle}</p>
@@ -122,6 +120,7 @@ export const GHomePage = () => {
               size="2em"
               width="70px"
               height="70px"
+              colorBackground={GWhite}
               onClickAction={handleStrategyNavigate}
             />
             <p>{StrategyHeadCenterTitle}</p>
@@ -134,6 +133,7 @@ export const GHomePage = () => {
               size="2em"
               width="70px"
               height="70px"
+              colorBackground={GWhite}
               onClickAction={handleContactsNavigate}
             />
             <p>{ContactsHeadCenterTitle}</p>
@@ -144,6 +144,7 @@ export const GHomePage = () => {
               size="2em"
               width="70px"
               height="70px"
+              colorBackground={GWhite}
               onClickAction={handleStatisticsNavigate}
             />
             <p>{StatisticsHeadCenterTitle}</p>

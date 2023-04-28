@@ -12,7 +12,7 @@ import { GIconButtonBack, GIconButtonSignIn } from '../constants/buttons';
 
 import { GSubmitButton } from '../components/GSubmitButton';
 import { ForgotPasswordHeadSectionTitle } from '../constants/wording';
-import { GBlack, GYellow } from '../constants/palette';
+import { GBlack, GWhite, GYellow } from '../constants/palette';
 
 type ForgotPasswordFormData = {
   email: string;
@@ -51,6 +51,7 @@ export const GForgotPasswordPage = () => {
           size="1.5em"
           width="50px"
           height="50px"
+          colorBackground={GWhite}
           onClickAction={onClickAction}
         />
         <GHeadSectionTitle

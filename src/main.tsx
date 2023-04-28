@@ -1,67 +1,46 @@
 import React from 'react';
 import ReactDOM from 'react-dom/client';
-import { createBrowserRouter, RouterProvider } from 'react-router-dom';
+import {
+  BrowserRouter,
+  createBrowserRouter,
+  Route,
+  RouterProvider,
+  Routes,
+} from 'react-router-dom';
 
 import './index.css';
-import { GLoginPage } from './pages/GLoginPage';
-import { GSignUpPage } from './pages/GSignUpPage';
-import { GForgotPasswordPage } from './pages/GForgotPasswordPage';
 import { GBootPage } from './pages/GBootPage';
-import { GResetPasswordPage } from './pages/GResetPasswordPage';
+import { GForgotPasswordPage } from './pages/GForgotPasswordPage';
 import { GHomePage } from './pages/GHomePage';
+import { GLoginPage } from './pages/GLoginPage';
+import { GResetPasswordPage } from './pages/GResetPasswordPage';
+import { GSignUpPage } from './pages/GSignUpPage';
+import { GFeedbackSuccessResetPassword } from './pages/GSuccessResetPassword';
+import { GRecoveryPage } from './pages/GRecoveryPage';
 
-const router = createBrowserRouter([
-  {
-    path: '/',
-    element: <GBootPage />,
-  },
-  {
-    path: '/login',
-    element: <GLoginPage />,
-  },
-  {
-    path: '/sign-up',
-    element: <GSignUpPage />,
-  },
-  {
-    path: '/forgot-password',
-    element: <GForgotPasswordPage />,
-  },
-  {
-    path: '/reset-password',
-    element: <GResetPasswordPage />,
-  },
-  {
-    path: '/home',
-    element: <GHomePage />,
-  },
-  {
-    path: '/user',
-    element: <GHomePage />,
-  },
-  {
-    path: '/pricing',
-    element: <GHomePage />,
-  },
-  {
-    path: '/ad',
-    element: <GHomePage />,
-  },
-  {
-    path: '/strategy',
-    element: <GHomePage />,
-  },
-  {
-    path: '/contacts',
-    element: <GHomePage />,
-  },
-  {
-    path: '/statistics',
-    element: <GHomePage />,
-  },
-]);
 ReactDOM.createRoot(document.getElementById('root') as HTMLElement).render(
   <React.StrictMode>
-    <RouterProvider router={router} />
+    <BrowserRouter>
+      <Routes>
+        <Route path="/" element={<GBootPage />} />
+        <Route path="/login" element={<GLoginPage />} />
+        <Route path="/sign-up" element={<GSignUpPage />} />
+        <Route path="/forgot-password" element={<GForgotPasswordPage />} />
+        <Route path="/recovery" element={<GRecoveryPage />}>
+          <Route path="reset-password" element={<GResetPasswordPage />} />
+          <Route
+            path="reset-success"
+            element={<GFeedbackSuccessResetPassword />}
+          />
+        </Route>
+        <Route path="/home" element={<GHomePage />} />
+        <Route path="/user" element={<GHomePage />} />
+        <Route path="/pricing" element={<GHomePage />} />
+        <Route path="/ad" element={<GHomePage />} />
+        <Route path="/strategy" element={<GHomePage />} />
+        <Route path="/contacts" element={<GHomePage />} />
+        <Route path="/statistics" element={<GHomePage />} />
+      </Routes>
+    </BrowserRouter>
   </React.StrictMode>
 );

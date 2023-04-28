@@ -40,6 +40,17 @@ export const ContactsHeadCenterTitle: string = 'Agenda';
 
 export const StatisticsHeadCenterTitle: string = 'Estadísticas';
 
+export const SuccessResetPasswordTitle: string = 'Contraseña modificada!';
+
+/**
+ * Wording
+ */
+
+export const SuccessResetPasswordSubtitle: string =
+  'Ahora podrás ingresar a tu cuenta con tu nueva contraseña!';
+
+export const Okay: string = 'Okay!';
+
 /**
  * Head Section Titles
  */

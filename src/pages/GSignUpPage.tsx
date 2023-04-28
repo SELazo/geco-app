@@ -14,7 +14,7 @@ import { SignUpHeadSectionTitle, SignInAction } from '../constants/wording';
 import { GHeadSectionTitle } from '../components/GHeadSectionTitle';
 import { GCircularButton } from '../components/GCircularButton';
 import { GIconButtonBack, GIconButtonSignIn } from '../constants/buttons';
-import { GBlack, GYellow } from '../constants/palette';
+import { GBlack, GWhite, GYellow } from '../constants/palette';
 
 type SignUpFormData = {
   name: string;
@@ -64,6 +64,7 @@ export const GSignUpPage = () => {
           size="1.5em"
           width="50px"
           height="50px"
+          colorBackground={GWhite}
           onClickAction={onClickAction}
         />
         <GHeadSectionTitle

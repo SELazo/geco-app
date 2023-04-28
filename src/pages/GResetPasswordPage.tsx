@@ -13,7 +13,7 @@ import { GIconButtonSignIn, GIconButtonX } from '../constants/buttons';
 
 import { GSubmitButton } from '../components/GSubmitButton';
 import { ResetPasswordHeadSectionTitle } from '../constants/wording';
-import { GBlack, GYellow } from '../constants/palette';
+import { GBlack, GWhite, GYellow } from '../constants/palette';
 
 type ResetPasswordFormData = {
   password: string;
@@ -40,6 +40,7 @@ export const GResetPasswordPage = () => {
   const onSubmit = (data: ResetPasswordFormData) => {
     console.log(data);
     reset();
+    navigate('/recovery/reset-success');
   };
 
   const {
@@ -59,6 +60,7 @@ export const GResetPasswordPage = () => {
           size="1.5em"
           width="50px"
           height="50px"
+          colorBackground={GWhite}
           onClickAction={onClickAction}
         />
         <GHeadSectionTitle
