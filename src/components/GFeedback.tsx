@@ -18,6 +18,7 @@ interface IGFeedbackProps {
   iconHeight: string;
   //button
   buttonLabel: string;
+  iconButton?: IButtonIcon;
   colorButtonFont: string;
   colorButtonBackground: string;
   route: string;
@@ -39,7 +40,7 @@ export const GFeedback: FC<IGFeedbackProps> = (props: IGFeedbackProps) => {
         <Link to={props.route}>
           <GSubmitButton
             label={props.buttonLabel}
-            icon={props.icon}
+            icon={props.iconButton ? props.iconButton : null}
             colorBackground={props.colorButtonBackground}
             colorFont={props.colorButtonFont}
           />
