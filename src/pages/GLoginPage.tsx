@@ -1,4 +1,3 @@
-import React from 'react';
 import { useForm } from 'react-hook-form';
 import { yupResolver } from '@hookform/resolvers/yup';
 import * as Yup from 'yup';
@@ -20,7 +19,7 @@ import { GBlack, GWhite } from '../constants/palette';
 
 import { AuthService } from '../services/authService';
 import { GChevronRightIcon } from '../constants/buttons';
-import { NavigationService } from '../services/navigationService';
+import { useNavigate } from 'react-router-dom';
 
 type LoginForm = {
   email: string;
@@ -47,11 +46,12 @@ export const GLoginPage = () => {
     resolver: yupResolver(validationSchema),
   });
 
+  const navigate = useNavigate();
   const onSubmit = async (data: LoginForm) => {
     //use service
     console.log(data);
     reset();
-    NavigationService.navigate('/home');
+    navigate('/home');
   };
 
   return (

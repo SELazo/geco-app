@@ -3,10 +3,9 @@ import { useNavigate } from 'react-router-dom';
 interface INavigationService {
   goBack(): void;
   goFoward(): void;
-  navigate(route: string): () => void;
+  handleNavigation(route: string): () => void;
+  navigateTo(route: string): void;
 }
-
-const navigate = useNavigate();
 
 export const NavigationService: INavigationService = {
   goBack: (): void => {
@@ -15,7 +14,12 @@ export const NavigationService: INavigationService = {
   goFoward: (): void => {
     window.history.forward();
   },
-  navigate: (route: string): (() => void) => {
+  handleNavigation: (route: string): (() => void) => {
+    const navigate = useNavigate();
     return () => navigate(route);
+  },
+  navigateTo: (route: string): void => {
+    const navigate = useNavigate();
+    navigate(route);
   },
 };

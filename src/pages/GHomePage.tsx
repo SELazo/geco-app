@@ -1,7 +1,7 @@
-import { Link } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 
 import '../styles/ghome.css';
-import { BlueYelowPalette, GRed, GWhite, GYellow } from '../constants/palette';
+import { BlueYelowPalette, GRed, GWhite } from '../constants/palette';
 
 import emailCampaign from '../assets/images/email_campaign_bro.svg';
 import { GIcon } from '../components/GIcon';
@@ -65,7 +65,7 @@ export const GHomePage = () => {
               width="50px"
               height="50px"
               colorBackground={GWhite}
-              onClickAction={NavigationService.navigate('/user')}
+              onClickAction={NavigationService.handleNavigation('/user')}
             />
           </div>
         </div>
@@ -87,7 +87,7 @@ export const GHomePage = () => {
               width="70px"
               height="70px"
               colorBackground={GWhite}
-              onClickAction={NavigationService.navigate('/ad')}
+              onClickAction={NavigationService.handleNavigation('/ad')}
             />
             <p>{AdHeadCenterTitle}</p>
           </div>
@@ -98,7 +98,7 @@ export const GHomePage = () => {
               width="70px"
               height="70px"
               colorBackground={GWhite}
-              onClickAction={NavigationService.navigate('/strategy')}
+              onClickAction={NavigationService.handleNavigation('/strategy')}
             />
             <p>{StrategyHeadCenterTitle}</p>
           </div>
@@ -111,7 +111,7 @@ export const GHomePage = () => {
               width="70px"
               height="70px"
               colorBackground={GWhite}
-              onClickAction={NavigationService.navigate('/contacts')}
+              onClickAction={NavigationService.handleNavigation('/contacts')}
             />
             <p>{ContactsHeadCenterTitle}</p>
           </div>
@@ -122,7 +122,7 @@ export const GHomePage = () => {
               width="70px"
               height="70px"
               colorBackground={GWhite}
-              onClickAction={NavigationService.navigate('/statistics')}
+              onClickAction={NavigationService.handleNavigation('/statistics')}
             />
             <p>{StatisticsHeadCenterTitle}</p>
           </div>

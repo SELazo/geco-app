@@ -37,7 +37,7 @@ export const GResetPasswordPage = () => {
   const onSubmit = (data: ResetPasswordFormData) => {
     console.log(data);
     reset();
-    NavigationService.navigate('/recovery/reset-success');
+    NavigationService.navigateTo('/recovery/reset-success');
   };
 
   const {
@@ -58,7 +58,7 @@ export const GResetPasswordPage = () => {
           width="50px"
           height="50px"
           colorBackground={GWhite}
-          onClickAction={NavigationService.navigate('/login')}
+          onClickAction={NavigationService.handleNavigation('/login')}
         />
         <GHeadSectionTitle
           title={ResetPasswordHeadSectionTitle.title}

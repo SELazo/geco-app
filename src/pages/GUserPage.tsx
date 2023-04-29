@@ -1,5 +1,3 @@
-import { Link, useNavigate } from 'react-router-dom';
-
 import '../styles/guser.css';
 import { GWhite } from '../constants/palette';
 
@@ -15,6 +13,7 @@ import {
   EditUserInfoTitle,
   PricingTitle,
 } from '../constants/wording';
+import { useNavigate } from 'react-router-dom';
 import { NavigationService } from '../services/navigationService';
 
 export const GUserPage = () => {
@@ -39,7 +38,7 @@ export const GUserPage = () => {
               width="70px"
               height="70px"
               colorBackground={GWhite}
-              onClickAction={NavigationService.navigate('/user/edit')}
+              onClickAction={NavigationService.handleNavigation('/user/edit')}
             />
             <p className="geco-option-title">{EditUserInfoTitle}</p>
           </div>
@@ -50,7 +49,9 @@ export const GUserPage = () => {
               width="70px"
               height="70px"
               colorBackground={GWhite}
-              onClickAction={NavigationService.navigate('/user/pricing')}
+              onClickAction={NavigationService.handleNavigation(
+                '/user/pricing'
+              )}
             />
             <p>{PricingTitle}</p>
           </div>
@@ -63,7 +64,9 @@ export const GUserPage = () => {
               width="70px"
               height="70px"
               colorBackground={GWhite}
-              onClickAction={NavigationService.navigate('/user/comments')}
+              onClickAction={NavigationService.handleNavigation(
+                '/user/comments'
+              )}
             />
             <p>{CommentsTitle}</p>
           </div>
