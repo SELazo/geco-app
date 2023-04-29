@@ -2,7 +2,6 @@ import React from 'react';
 import { useForm } from 'react-hook-form';
 import { yupResolver } from '@hookform/resolvers/yup';
 import * as Yup from 'yup';
-import { useNavigate } from 'react-router-dom';
 
 import '../styles/ginputBox.css';
 import '../styles/gform.css';
@@ -19,8 +18,9 @@ import {
 import { GLogoLetter } from '../components/GLogoLetter';
 import { GBlack, GWhite } from '../constants/palette';
 
-import authService from '../services/authService';
+import { AuthService } from '../services/authService';
 import { GChevronRightIcon } from '../constants/buttons';
+import { NavigationService } from '../services/navigationService';
 
 type LoginForm = {
   email: string;
@@ -48,15 +48,10 @@ export const GLoginPage = () => {
   });
 
   const onSubmit = async (data: LoginForm) => {
-    //const token = await authService.login(data.email, data.password);
-    //console.log('Token:', token);
+    //use service
     console.log(data);
     reset();
-    handleContactsNavigate();
-  };
-  const navigate = useNavigate();
-  const handleContactsNavigate = () => {
-    navigate('/home');
+    NavigationService.navigate('/home');
   };
 
   return (

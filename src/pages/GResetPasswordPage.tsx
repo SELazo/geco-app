@@ -14,6 +14,7 @@ import { GIconButtonSignIn, GIconButtonX } from '../constants/buttons';
 import { GSubmitButton } from '../components/GSubmitButton';
 import { ResetPasswordHeadSectionTitle } from '../constants/wording';
 import { GBlack, GWhite, GYellow } from '../constants/palette';
+import { NavigationService } from '../services/navigationService';
 
 type ResetPasswordFormData = {
   password: string;
@@ -33,14 +34,10 @@ export const GResetPasswordPage = () => {
       .oneOf([Yup.ref('password')], 'La contraseña no coincide.'),
   });
 
-  const onClickAction = () => {
-    navigate('/login');
-  };
-
   const onSubmit = (data: ResetPasswordFormData) => {
     console.log(data);
     reset();
-    navigate('/recovery/reset-success');
+    NavigationService.navigate('/recovery/reset-success');
   };
 
   const {
@@ -61,7 +58,7 @@ export const GResetPasswordPage = () => {
           width="50px"
           height="50px"
           colorBackground={GWhite}
-          onClickAction={onClickAction}
+          onClickAction={NavigationService.navigate('/login')}
         />
         <GHeadSectionTitle
           title={ResetPasswordHeadSectionTitle.title}

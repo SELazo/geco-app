@@ -1,11 +1,10 @@
-import { Link, useNavigate } from 'react-router-dom';
+import { Link } from 'react-router-dom';
 
 import '../styles/ghome.css';
 import { BlueYelowPalette, GRed, GWhite, GYellow } from '../constants/palette';
 
 import emailCampaign from '../assets/images/email_campaign_bro.svg';
 import { GIcon } from '../components/GIcon';
-import { IButtonIcon } from '../interfaces/IButtonIcon';
 import { GCircularButton } from '../components/GCircularButton';
 import {
   GAdIcon,
@@ -24,14 +23,9 @@ import {
   StatisticsHeadCenterTitle,
   StrategyHeadCenterTitle,
 } from '../constants/wording';
+import { NavigationService } from '../services/navigationService';
 
 export const GHomePage = () => {
-  const navigate = useNavigate();
-
-  const handleNavigation = (route: string) => {
-    return () => navigate(route);
-  };
-
   return (
     <div
       style={{
@@ -71,7 +65,7 @@ export const GHomePage = () => {
               width="50px"
               height="50px"
               colorBackground={GWhite}
-              onClickAction={handleNavigation('/user')}
+              onClickAction={NavigationService.navigate('/user')}
             />
           </div>
         </div>
@@ -93,7 +87,7 @@ export const GHomePage = () => {
               width="70px"
               height="70px"
               colorBackground={GWhite}
-              onClickAction={handleNavigation('/ad')}
+              onClickAction={NavigationService.navigate('/ad')}
             />
             <p>{AdHeadCenterTitle}</p>
           </div>
@@ -104,7 +98,7 @@ export const GHomePage = () => {
               width="70px"
               height="70px"
               colorBackground={GWhite}
-              onClickAction={handleNavigation('/strategy')}
+              onClickAction={NavigationService.navigate('/strategy')}
             />
             <p>{StrategyHeadCenterTitle}</p>
           </div>
@@ -117,7 +111,7 @@ export const GHomePage = () => {
               width="70px"
               height="70px"
               colorBackground={GWhite}
-              onClickAction={handleNavigation('/contacts')}
+              onClickAction={NavigationService.navigate('/contacts')}
             />
             <p>{ContactsHeadCenterTitle}</p>
           </div>
@@ -128,7 +122,7 @@ export const GHomePage = () => {
               width="70px"
               height="70px"
               colorBackground={GWhite}
-              onClickAction={handleNavigation('/statistics')}
+              onClickAction={NavigationService.navigate('/statistics')}
             />
             <p>{StatisticsHeadCenterTitle}</p>
           </div>

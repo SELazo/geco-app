@@ -15,6 +15,7 @@ import { GHeadSectionTitle } from '../components/GHeadSectionTitle';
 import { GCircularButton } from '../components/GCircularButton';
 import { GIconButtonBack, GIconButtonSignIn } from '../constants/buttons';
 import { GBlack, GWhite, GYellow } from '../constants/palette';
+import { NavigationService } from '../services/navigationService';
 
 type SignUpFormData = {
   name: string;
@@ -37,10 +38,6 @@ export const GSignUpPage = () => {
       .required('Por favor confirme su contraseña.')
       .oneOf([Yup.ref('password')], 'La contraseña no coincide.'),
   });
-
-  const onClickAction = () => {
-    window.history.back();
-  };
 
   const {
     register,
@@ -65,7 +62,7 @@ export const GSignUpPage = () => {
           width="50px"
           height="50px"
           colorBackground={GWhite}
-          onClickAction={onClickAction}
+          onClickAction={NavigationService.goBack}
         />
         <GHeadSectionTitle
           title={SignUpHeadSectionTitle.title}

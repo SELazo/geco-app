@@ -15,14 +15,9 @@ import {
   EditUserInfoTitle,
   PricingTitle,
 } from '../constants/wording';
+import { NavigationService } from '../services/navigationService';
 
 export const GUserPage = () => {
-  const navigate = useNavigate();
-
-  const handleNavigation = (route: string) => {
-    return () => navigate(route);
-  };
-
   return (
     <div className="geco-user-page">
       <div className="geco-user-header">
@@ -44,7 +39,7 @@ export const GUserPage = () => {
               width="70px"
               height="70px"
               colorBackground={GWhite}
-              onClickAction={handleNavigation('/user/edit')}
+              onClickAction={NavigationService.navigate('/user/edit')}
             />
             <p className="geco-option-title">{EditUserInfoTitle}</p>
           </div>
@@ -55,7 +50,7 @@ export const GUserPage = () => {
               width="70px"
               height="70px"
               colorBackground={GWhite}
-              onClickAction={handleNavigation('/user/pricing')}
+              onClickAction={NavigationService.navigate('/user/pricing')}
             />
             <p>{PricingTitle}</p>
           </div>
@@ -68,7 +63,7 @@ export const GUserPage = () => {
               width="70px"
               height="70px"
               colorBackground={GWhite}
-              onClickAction={handleNavigation('/user/comments')}
+              onClickAction={NavigationService.navigate('/user/comments')}
             />
             <p>{CommentsTitle}</p>
           </div>

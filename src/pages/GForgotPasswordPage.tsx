@@ -13,6 +13,7 @@ import { GIconButtonBack, GIconButtonSignIn } from '../constants/buttons';
 import { GSubmitButton } from '../components/GSubmitButton';
 import { ForgotPasswordHeadSectionTitle } from '../constants/wording';
 import { GBlack, GWhite, GYellow } from '../constants/palette';
+import { NavigationService } from '../services/navigationService';
 
 type ForgotPasswordFormData = {
   email: string;
@@ -24,10 +25,6 @@ export const GForgotPasswordPage = () => {
       .email('Por favor ingrese un correo electrónico válido')
       .required('Por favor ingrese su correo electrónico'),
   });
-
-  const onClickAction = () => {
-    window.history.back();
-  };
 
   const onSubmit = (data: ForgotPasswordFormData) => {
     console.log(data);
@@ -52,7 +49,7 @@ export const GForgotPasswordPage = () => {
           width="50px"
           height="50px"
           colorBackground={GWhite}
-          onClickAction={onClickAction}
+          onClickAction={NavigationService.goBack}
         />
         <GHeadSectionTitle
           title={ForgotPasswordHeadSectionTitle.title}
