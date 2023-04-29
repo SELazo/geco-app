@@ -14,7 +14,6 @@ interface ISubmitButtonProps {
 export const GSubmitButton: FC<ISubmitButtonProps> = (
   props: ISubmitButtonProps
 ) => {
-  console.log(props);
   return (
     <button
       className="geco-submit-btn"

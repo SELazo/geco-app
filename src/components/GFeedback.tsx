@@ -40,7 +40,7 @@ export const GFeedback: FC<IGFeedbackProps> = (props: IGFeedbackProps) => {
         <Link to={props.route}>
           <GSubmitButton
             label={props.buttonLabel}
-            icon={props.iconButton ? props.iconButton : null}
+            icon={props.iconButton ? props.iconButton : undefined}
             colorBackground={props.colorButtonBackground}
             colorFont={props.colorButtonFont}
           />

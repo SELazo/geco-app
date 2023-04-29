@@ -42,6 +42,12 @@ export const StatisticsHeadCenterTitle: string = 'Estadísticas';
 
 export const SuccessResetPasswordTitle: string = 'Contraseña modificada!';
 
+export const EditUserInfoTitle: string = 'Editar información';
+
+export const PricingTitle: string = 'Cambiar suscripción';
+
+export const CommentsTitle: string = 'Contáctanos';
+
 /**
  * Wording
  */

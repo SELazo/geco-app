@@ -28,24 +28,8 @@ import {
 export const GHomePage = () => {
   const navigate = useNavigate();
 
-  const handleUserNavigate = () => {
-    navigate('/user');
-  };
-
-  const handleAdNavigate = () => {
-    navigate('/ad');
-  };
-
-  const handleStrategyNavigate = () => {
-    navigate('/strategy');
-  };
-
-  const handleContactsNavigate = () => {
-    navigate('/contacts');
-  };
-
-  const handleStatisticsNavigate = () => {
-    navigate('/statistics');
+  const handleNavigation = (route: string) => {
+    return () => navigate(route);
   };
 
   return (
@@ -73,23 +57,22 @@ export const GHomePage = () => {
           <GLogoWord />
           <div className="geco-nav-bar-right">
             <button className="geco-without-background-btn">
-              <Link to={'/pricing'}>
+              <Link to={'/user/pricing'}>
                 <GIcon
                   color={GPremiumStarIcon.color}
                   icon-type={GPremiumStarIcon['icon-type']}
                 />
               </Link>
             </button>
-            <Link to={'/user'}>
-              <GCircularButton
-                icon={GUserIcon}
-                size="1.5em"
-                width="50px"
-                height="50px"
-                colorBackground={GWhite}
-                onClickAction={handleUserNavigate}
-              />
-            </Link>
+
+            <GCircularButton
+              icon={GUserIcon}
+              size="1.5em"
+              width="50px"
+              height="50px"
+              colorBackground={GWhite}
+              onClickAction={handleNavigation('/user')}
+            />
           </div>
         </div>
         <img
@@ -110,7 +93,7 @@ export const GHomePage = () => {
               width="70px"
               height="70px"
               colorBackground={GWhite}
-              onClickAction={handleAdNavigate}
+              onClickAction={handleNavigation('/ad')}
             />
             <p>{AdHeadCenterTitle}</p>
           </div>
@@ -121,7 +104,7 @@ export const GHomePage = () => {
               width="70px"
               height="70px"
               colorBackground={GWhite}
-              onClickAction={handleStrategyNavigate}
+              onClickAction={handleNavigation('/strategy')}
             />
             <p>{StrategyHeadCenterTitle}</p>
           </div>
@@ -134,7 +117,7 @@ export const GHomePage = () => {
               width="70px"
               height="70px"
               colorBackground={GWhite}
-              onClickAction={handleContactsNavigate}
+              onClickAction={handleNavigation('/contacts')}
             />
             <p>{ContactsHeadCenterTitle}</p>
           </div>
@@ -145,7 +128,7 @@ export const GHomePage = () => {
               width="70px"
               height="70px"
               colorBackground={GWhite}
-              onClickAction={handleStatisticsNavigate}
+              onClickAction={handleNavigation('/statistics')}
             />
             <p>{StatisticsHeadCenterTitle}</p>
           </div>

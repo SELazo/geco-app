@@ -63,3 +63,13 @@ export const GSuccessIcon: IButtonIcon = {
   color: GBlack,
   'icon-type': 'check',
 };
+
+export const GEditIcon: IButtonIcon = {
+  color: GBlack,
+  'icon-type': 'edit',
+};
+
+export const GCommentIcon: IButtonIcon = {
+  color: GBlack,
+  'icon-type': 'comment',
+};

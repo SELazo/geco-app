@@ -44,6 +44,9 @@ import {
   FaCheckCircle,
   FaChartBar,
   FaChartLine,
+  FaPencilAlt,
+  FaEnvelope,
+  FaComment,
 } from 'react-icons/fa';
 
 interface IconsMap {
@@ -62,12 +65,13 @@ export const Icons: IconsMap = {
   'chevron-left': <FaChevronLeft />,
   clock: <FiClock />,
   'credit-card': <FiCreditCard />,
-  'edit-2': <FiEdit2 />,
+  comment: <FaComment />,
+  edit: <FaPencilAlt />,
   file: <FiFile />,
   'help-circle': <FiHelpCircle />,
   image: <FiImage />,
   images: <FaImages />,
-  mail: <FiMail />,
+  mail: <FaEnvelope />,
   'more-horizontal': <FiMoreHorizontal />,
   lock: <FiLock />,
   plus: <FiPlus />,

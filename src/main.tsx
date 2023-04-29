@@ -17,6 +17,7 @@ import { GResetPasswordPage } from './pages/GResetPasswordPage';
 import { GSignUpPage } from './pages/GSignUpPage';
 import { GFeedbackSuccessResetPassword } from './pages/GSuccessResetPassword';
 import { GRecoveryPage } from './pages/GRecoveryPage';
+import { GUserPage } from './pages/GUserPage';
 
 ReactDOM.createRoot(document.getElementById('root') as HTMLElement).render(
   <React.StrictMode>
@@ -34,7 +35,11 @@ ReactDOM.createRoot(document.getElementById('root') as HTMLElement).render(
           />
         </Route>
         <Route path="/home" element={<GHomePage />} />
-        <Route path="/user" element={<GHomePage />} />
+        <Route path="/user" element={<GUserPage />}>
+          <Route path="pricing" element={<GFeedbackSuccessResetPassword />} />
+          <Route path="comments" element={<GFeedbackSuccessResetPassword />} />
+          <Route path="edit" element={<GFeedbackSuccessResetPassword />} />
+        </Route>
         <Route path="/pricing" element={<GHomePage />} />
         <Route path="/ad" element={<GHomePage />} />
         <Route path="/strategy" element={<GHomePage />} />
