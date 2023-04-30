@@ -13,9 +13,10 @@ import { SignUpHeadSectionTitle, SignInAction } from '../constants/wording';
 
 import { GHeadSectionTitle } from '../components/GHeadSectionTitle';
 import { GCircularButton } from '../components/GCircularButton';
-import { GIconButtonBack, GIconButtonSignIn } from '../constants/buttons';
+import { GIconButtonBack, GUserIcon } from '../constants/buttons';
 import { GBlack, GWhite, GYellow } from '../constants/palette';
 import { NavigationService } from '../services/navigationService';
+import { GHeadCenterTitle } from '../components/GHeadCenterTitle';
 
 type SignUpFormData = {
   name: string;
@@ -54,20 +55,26 @@ export const GSignUpPage = () => {
   };
 
   return (
-    <>
-      <div style={{ margin: '1em' }}>
+    <div className="geco-user-page">
+      <div className="geco-user-header">
+        <div className="geco-user-nav">
+          <GCircularButton
+            icon={GIconButtonBack}
+            size="1.5em"
+            width="50px"
+            height="50px"
+            colorBackground={GWhite}
+            onClickAction={NavigationService.goBack}
+          />
+        </div>
         <GCircularButton
-          icon={GIconButtonBack}
-          size="1.5em"
-          width="50px"
-          height="50px"
+          icon={GUserIcon}
+          size="3em"
+          width="100px"
+          height="100px"
           colorBackground={GWhite}
-          onClickAction={NavigationService.goBack}
         />
-        <GHeadSectionTitle
-          title={SignUpHeadSectionTitle.title}
-          subtitle={SignUpHeadSectionTitle.subtitle}
-        />
+        <GHeadCenterTitle title="some name" color={GWhite} />
       </div>
       <form className="geco-form" onSubmit={handleSubmit(onSubmit)}>
         <div className="input-group">
@@ -123,6 +130,6 @@ export const GSignUpPage = () => {
         />
         <GTextAction textAction={SignInAction} />
       </form>
-    </>
+    </div>
   );
 };

@@ -57,6 +57,8 @@ export const SuccessResetPasswordSubtitle: string =
 
 export const Okay: string = 'Okay!';
 
+export const UserOptionsSubtitle: string = 'Opciones de usuario';
+
 /**
  * Head Section Titles
  */

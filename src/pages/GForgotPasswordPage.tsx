@@ -41,7 +41,7 @@ export const GForgotPasswordPage = () => {
 
   return (
     <>
-      <div style={{ margin: '15px' }}>
+      <div style={{ margin: '1em' }}>
         <GCircularButton
           icon={GIconButtonBack}
           size="1.5em"

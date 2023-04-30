@@ -14,7 +14,28 @@
   display: flex;
   justify-content: center;
   align-items: center;
+  flex-direction: column;
   margin-bottom: 1em;
+}
+
+.geco-user-nav {
+  display: flex;
+  align-self: flex-start;
+  margin-left: 1.3em;
+}
+
+.geco-user-email {
+  font-family: 'Montserrat';
+  font-style: normal;
+  font-weight: 600;
+  font-size: 15px;
+  text-align: center;
+  color: #ffffff;
+  margin: 0;
+}
+
+.geco-user-header .geco-center-title {
+  margin: 0.3em 0 0 0;
 }
 
 .geco-user-options {

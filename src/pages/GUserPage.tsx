@@ -1,3 +1,5 @@
+import { useSelector } from 'react-redux';
+
 import '../styles/guser.css';
 import { GWhite } from '../constants/palette';
 
@@ -5,6 +7,7 @@ import { GCircularButton } from '../components/GCircularButton';
 import {
   GCommentIcon,
   GEditIcon,
+  GIconButtonBack,
   GPremiumStarIcon,
   GUserIcon,
 } from '../constants/buttons';
@@ -12,23 +15,37 @@ import {
   CommentsTitle,
   EditUserInfoTitle,
   PricingTitle,
+  UserOptionsSubtitle,
 } from '../constants/wording';
-import { useNavigate } from 'react-router-dom';
 import { NavigationService } from '../services/navigationService';
+import { GHeadCenterTitle } from '../components/GHeadCenterTitle';
 
 export const GUserPage = () => {
+  const user = useSelector((state: any) => state.user);
   return (
     <div className="geco-user-page">
       <div className="geco-user-header">
+        <div className="geco-user-nav">
+          <GCircularButton
+            icon={GIconButtonBack}
+            size="1.5em"
+            width="50px"
+            height="50px"
+            colorBackground={GWhite}
+            onClickAction={NavigationService.goBack}
+          />
+        </div>
         <GCircularButton
           icon={GUserIcon}
-          size="5em"
-          width="150px"
-          height="150px"
+          size="3em"
+          width="100px"
+          height="100px"
           colorBackground={GWhite}
         />
+        <GHeadCenterTitle title="some name" color={GWhite} />
+        <p className="geco-user-email">someemail@email.com</p>
       </div>
-      <p className="geco-user-options-title">Opciones de usuario</p>
+      <p className="geco-user-options-title">{UserOptionsSubtitle}</p>
       <div className="geco-user-options">
         <div className="geco-options-column">
           <div className="geco-option-icon">

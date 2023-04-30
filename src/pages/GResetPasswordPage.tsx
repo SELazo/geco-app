@@ -51,7 +51,7 @@ export const GResetPasswordPage = () => {
 
   return (
     <>
-      <div style={{ margin: '15px' }}>
+      <div style={{ margin: '1em' }}>
         <GCircularButton
           icon={GIconButtonX}
           size="1.5em"

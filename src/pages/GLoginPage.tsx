@@ -20,6 +20,8 @@ import { GBlack, GWhite } from '../constants/palette';
 import { AuthService } from '../services/authService';
 import { GChevronRightIcon } from '../constants/buttons';
 import { useNavigate } from 'react-router-dom';
+import { useDispatch } from 'react-redux';
+import { AuthState, loginSuccess } from '../redux/authSlice';
 
 type LoginForm = {
   email: string;
@@ -46,10 +48,21 @@ export const GLoginPage = () => {
     resolver: yupResolver(validationSchema),
   });
 
+  const dispatch = useDispatch();
+
   const navigate = useNavigate();
   const onSubmit = async (data: LoginForm) => {
-    //use service
-    console.log(data);
+    //TODO: use service
+
+    //mock user
+    const user: AuthState = {
+      user: { name: 'Diluc Ragnvindr', email: 'noctua.pyro@teyvat.com' },
+      token: 'some_token',
+      isAuthenticated: true,
+    };
+
+    dispatch(loginSuccess(user));
+
     reset();
     navigate('/home');
   };
