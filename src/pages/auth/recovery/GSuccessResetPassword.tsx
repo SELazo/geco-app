@@ -1,11 +1,11 @@
-import { GFeedback } from '../components/GFeedback';
-import { GSuccessIcon } from '../constants/buttons';
-import { GBlack, GWhite } from '../constants/palette';
+import { GFeedback } from '../../../components/GFeedback';
+import { GSuccessIcon } from '../../../constants/buttons';
+import { GBlack, GWhite } from '../../../constants/palette';
 import {
   Okay,
   SuccessResetPasswordSubtitle,
   SuccessResetPasswordTitle,
-} from '../constants/wording';
+} from '../../../constants/wording';
 
 export const GFeedbackSuccessResetPassword = () => {
   return (

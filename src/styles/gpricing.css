@@ -1,0 +1,33 @@
+.geco-pricing-options {
+  margin-top: 5em;
+  width: 100vw;
+  display: flex;
+  flex-direction: column;
+}
+
+.geco-pricing-header {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  margin-left: 1.5em;
+  margin-top: 5em;
+}
+
+.geco-pricing-title {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.geco-pricing-title h1 {
+  margin: 0.5em 0 0.5em 0;
+}
+
+.geco-pricing-cards {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+.geco-pricing-option {
+  width: 80%;
+}

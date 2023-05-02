@@ -1,27 +1,28 @@
 import { useSelector } from 'react-redux';
 
-import '../styles/guser.css';
-import { GWhite } from '../constants/palette';
+import '../../styles/guser.css';
+import { GWhite } from '../../constants/palette';
 
-import { GCircularButton } from '../components/GCircularButton';
+import { GCircularButton } from '../../components/GCircularButton';
 import {
   GCommentIcon,
   GEditIcon,
   GIconButtonBack,
   GPremiumStarIcon,
   GUserIcon,
-} from '../constants/buttons';
+} from '../../constants/buttons';
 import {
   CommentsTitle,
   EditUserInfoTitle,
   PricingTitle,
   UserOptionsSubtitle,
-} from '../constants/wording';
-import { NavigationService } from '../services/navigationService';
-import { GHeadCenterTitle } from '../components/GHeadCenterTitle';
+} from '../../constants/wording';
+import { NavigationService } from '../../services/navigationService';
+import { GHeadCenterTitle } from '../../components/GHeadCenterTitle';
+import { User } from '../../redux/authSlice';
 
 export const GUserPage = () => {
-  const user = useSelector((state: any) => state.user);
+  const user: User = useSelector((state: any) => state.auth.user as User);
   return (
     <div className="geco-user-page">
       <div className="geco-user-header">
@@ -42,8 +43,8 @@ export const GUserPage = () => {
           height="100px"
           colorBackground={GWhite}
         />
-        <GHeadCenterTitle title="some name" color={GWhite} />
-        <p className="geco-user-email">someemail@email.com</p>
+        <GHeadCenterTitle title={user.name} color={GWhite} />
+        <p className="geco-user-email">{user.email}</p>
       </div>
       <p className="geco-user-options-title">{UserOptionsSubtitle}</p>
       <div className="geco-user-options">

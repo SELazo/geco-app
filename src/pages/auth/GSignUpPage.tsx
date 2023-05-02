@@ -3,20 +3,19 @@ import { useForm } from 'react-hook-form';
 import { yupResolver } from '@hookform/resolvers/yup';
 import * as Yup from 'yup';
 
-import '../styles/ginputBox.css';
-import '../styles/gform.css';
+import '../../styles/ginputBox.css';
+import '../../styles/gform.css';
 
-import { GSubmitButton } from '../components/GSubmitButton';
+import { GSubmitButton } from '../../components/GSubmitButton';
 
-import { GTextAction } from '../components/GTextAction';
-import { SignUpHeadSectionTitle, SignInAction } from '../constants/wording';
+import { GTextAction } from '../../components/GTextAction';
+import { SignUpHeadSectionTitle, SignInAction } from '../../constants/wording';
 
-import { GHeadSectionTitle } from '../components/GHeadSectionTitle';
-import { GCircularButton } from '../components/GCircularButton';
-import { GIconButtonBack, GUserIcon } from '../constants/buttons';
-import { GBlack, GWhite, GYellow } from '../constants/palette';
-import { NavigationService } from '../services/navigationService';
-import { GHeadCenterTitle } from '../components/GHeadCenterTitle';
+import { GHeadSectionTitle } from '../../components/GHeadSectionTitle';
+import { GCircularButton } from '../../components/GCircularButton';
+import { GIconButtonBack, GIconButtonSignIn } from '../../constants/buttons';
+import { GBlack, GWhite, GYellow } from '../../constants/palette';
+import { NavigationService } from '../../services/navigationService';
 
 type SignUpFormData = {
   name: string;
@@ -55,26 +54,20 @@ export const GSignUpPage = () => {
   };
 
   return (
-    <div className="geco-user-page">
-      <div className="geco-user-header">
-        <div className="geco-user-nav">
-          <GCircularButton
-            icon={GIconButtonBack}
-            size="1.5em"
-            width="50px"
-            height="50px"
-            colorBackground={GWhite}
-            onClickAction={NavigationService.goBack}
-          />
-        </div>
+    <>
+      <div style={{ margin: '1em' }}>
         <GCircularButton
-          icon={GUserIcon}
-          size="3em"
-          width="100px"
-          height="100px"
+          icon={GIconButtonBack}
+          size="1.5em"
+          width="50px"
+          height="50px"
           colorBackground={GWhite}
+          onClickAction={NavigationService.goBack}
         />
-        <GHeadCenterTitle title="some name" color={GWhite} />
+        <GHeadSectionTitle
+          title={SignUpHeadSectionTitle.title}
+          subtitle={SignUpHeadSectionTitle.subtitle}
+        />
       </div>
       <form className="geco-form" onSubmit={handleSubmit(onSubmit)}>
         <div className="input-group">
@@ -130,6 +123,6 @@ export const GSignUpPage = () => {
         />
         <GTextAction textAction={SignInAction} />
       </form>
-    </div>
+    </>
   );
 };

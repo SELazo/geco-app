@@ -2,26 +2,26 @@ import { useForm } from 'react-hook-form';
 import { yupResolver } from '@hookform/resolvers/yup';
 import * as Yup from 'yup';
 
-import '../styles/ginputBox.css';
-import '../styles/gform.css';
+import '../../styles/ginputBox.css';
+import '../../styles/gform.css';
 
-import { GHeadCenterTitle } from '../components/GHeadCenterTitle';
+import { GHeadCenterTitle } from '../../components/GHeadCenterTitle';
 
-import { GSubmitButton } from '../components/GSubmitButton';
-import { GTextAction } from '../components/GTextAction';
+import { GSubmitButton } from '../../components/GSubmitButton';
+import { GTextAction } from '../../components/GTextAction';
 import {
   SignUpAction,
   ForgetPasswordAction,
   LoginHeadCenterTitle,
-} from '../constants/wording';
-import { GLogoLetter } from '../components/GLogoLetter';
-import { GBlack, GWhite } from '../constants/palette';
+} from '../../constants/wording';
+import { GLogoLetter } from '../../components/GLogoLetter';
+import { GBlack, GWhite } from '../../constants/palette';
 
-import { AuthService } from '../services/authService';
-import { GChevronRightIcon } from '../constants/buttons';
+import { AuthService } from '../../services/authService';
+import { GChevronRightIcon } from '../../constants/buttons';
 import { useNavigate } from 'react-router-dom';
 import { useDispatch } from 'react-redux';
-import { AuthState, loginSuccess } from '../redux/authSlice';
+import { AuthState, loginSuccess } from '../../redux/authSlice';
 
 type LoginForm = {
   email: string;

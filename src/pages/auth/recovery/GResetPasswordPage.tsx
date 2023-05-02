@@ -2,34 +2,29 @@ import React from 'react';
 import { useForm } from 'react-hook-form';
 import { yupResolver } from '@hookform/resolvers/yup';
 import * as Yup from 'yup';
+import { useNavigate } from 'react-router-dom';
 
-import '../styles/ginputBox.css';
-import '../styles/gform.css';
+import '../../../styles/ginputBox.css';
+import '../../../styles/gform.css';
 
-import { GSubmitButton } from '../components/GSubmitButton';
+import { GHeadSectionTitle } from '../../../components/GHeadSectionTitle';
+import { GCircularButton } from '../../../components/GCircularButton';
+import { GIconButtonSignIn, GIconButtonX } from '../../../constants/buttons';
 
-import { GTextAction } from '../components/GTextAction';
-import { SignUpHeadSectionTitle, SignInAction } from '../constants/wording';
+import { GSubmitButton } from '../../../components/GSubmitButton';
+import { ResetPasswordHeadSectionTitle } from '../../../constants/wording';
+import { GBlack, GWhite, GYellow } from '../../../constants/palette';
+import { NavigationService } from '../../../services/navigationService';
 
-import { GHeadSectionTitle } from '../components/GHeadSectionTitle';
-import { GCircularButton } from '../components/GCircularButton';
-import { GIconButtonBack, GIconButtonSignIn } from '../constants/buttons';
-import { GBlack, GWhite, GYellow } from '../constants/palette';
-import { NavigationService } from '../services/navigationService';
-
-type SignUpFormData = {
-  name: string;
-  email: string;
+type ResetPasswordFormData = {
   password: string;
   confirmedPassword: string;
 };
 
-export const GSignUpPage = () => {
+export const GResetPasswordPage = () => {
+  const navigate = useNavigate();
+
   const validationSchema = Yup.object().shape({
-    name: Yup.string().required('Por favor ingrese un nombre completo.'),
-    email: Yup.string()
-      .email('Por favor ingrese un correo electrónico válido')
-      .required('Por favor ingrese su correo electrónico'),
     password: Yup.string()
       .required('Por favor ingrese su contraseña')
       .min(6, 'La contraseña debe tener al menos 6 caracteres.')
@@ -39,59 +34,38 @@ export const GSignUpPage = () => {
       .oneOf([Yup.ref('password')], 'La contraseña no coincide.'),
   });
 
+  const onSubmit = (data: ResetPasswordFormData) => {
+    console.log(data);
+    reset();
+    NavigationService.navigateTo('/recovery/reset-success');
+  };
+
   const {
     register,
     handleSubmit,
     reset,
     formState: { errors },
-  } = useForm<SignUpFormData>({
+  } = useForm<ResetPasswordFormData>({
     resolver: yupResolver(validationSchema),
   });
-
-  const onSubmit = (data: SignUpFormData) => {
-    console.log(data);
-    reset();
-  };
 
   return (
     <>
       <div style={{ margin: '1em' }}>
         <GCircularButton
-          icon={GIconButtonBack}
+          icon={GIconButtonX}
           size="1.5em"
           width="50px"
           height="50px"
           colorBackground={GWhite}
-          onClickAction={NavigationService.goBack}
+          onClickAction={NavigationService.handleNavigation('/login')}
         />
         <GHeadSectionTitle
-          title={SignUpHeadSectionTitle.title}
-          subtitle={SignUpHeadSectionTitle.subtitle}
+          title={ResetPasswordHeadSectionTitle.title}
+          subtitle={ResetPasswordHeadSectionTitle.subtitle}
         />
       </div>
       <form className="geco-form" onSubmit={handleSubmit(onSubmit)}>
-        <div className="input-group">
-          <input
-            type="text"
-            {...register('name')}
-            placeholder="Nombre completo"
-            className={`input-box form-control ${
-              errors.name ? 'is-invalid' : ''
-            }`}
-          />
-          <span className="span-error">{errors.name?.message}</span>
-        </div>
-        <div className="input-group">
-          <input
-            type="email"
-            {...register('email')}
-            placeholder="Email"
-            className={`input-box form-control ${
-              errors.email ? 'is-invalid' : ''
-            }`}
-          />
-          <span className="span-error">{errors.email?.message}</span>
-        </div>
         <div className="input-group">
           <input
             type="password"
@@ -117,11 +91,10 @@ export const GSignUpPage = () => {
           </span>
         </div>
         <GSubmitButton
-          label="Sign Up"
+          label="Confirmar"
           colorBackground={GYellow}
           colorFont={GBlack}
         />
-        <GTextAction textAction={SignInAction} />
       </form>
     </>
   );

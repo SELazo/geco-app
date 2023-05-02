@@ -2,14 +2,13 @@ import { BrowserRouter, Navigate, Route, Routes } from 'react-router-dom';
 import { useSelector } from 'react-redux';
 
 import { GPrivateRoutes } from './GPrivateRoutes';
-import { GPublicRoutes } from './GPublicRoutes';
 import { GBootPage } from '../pages/GBootPage';
-import { GLoginPage } from '../pages/GLoginPage';
-import { GSignUpPage } from '../pages/GSignUpPage';
-import { GForgotPasswordPage } from '../pages/GForgotPasswordPage';
-import { GRecoveryPage } from '../pages/GRecoveryPage';
-import { GResetPasswordPage } from '../pages/GResetPasswordPage';
-import { GFeedbackSuccessResetPassword } from '../pages/GSuccessResetPassword';
+import { GLoginPage } from '../pages/auth/GLoginPage';
+import { GSignUpPage } from '../pages/auth/GSignUpPage';
+import { GForgotPasswordPage } from '../pages/auth/GForgotPasswordPage';
+import { GRecoveryPage } from '../pages/auth/recovery/GRecoveryPage';
+import { GResetPasswordPage } from '../pages/auth/recovery/GResetPasswordPage';
+import { GFeedbackSuccessResetPassword } from '../pages/auth/recovery/GSuccessResetPassword';
 
 export const GRouter = () => {
   const isAuthenticated = useSelector(
@@ -35,7 +34,6 @@ export const GRouter = () => {
             element={<GFeedbackSuccessResetPassword />}
           />
         </Route>
-        <Route path="*" element={<Navigate to="/login" replace />} />
       </Routes>
     </BrowserRouter>
   );

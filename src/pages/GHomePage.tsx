@@ -65,7 +65,7 @@ export const GHomePage = () => {
               width="50px"
               height="50px"
               colorBackground={GWhite}
-              onClickAction={NavigationService.handleNavigation('/user')}
+              onClickAction={NavigationService.handleNavigation('/user/info')}
             />
           </div>
         </div>

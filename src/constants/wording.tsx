@@ -48,6 +48,8 @@ export const PricingTitle: string = 'Cambiar suscripción';
 
 export const CommentsTitle: string = 'Contáctanos';
 
+export const PricingSectionTitle: string = 'Modalidades';
+
 /**
  * Wording
  */
@@ -79,6 +81,11 @@ export const ResetPasswordHeadSectionTitle: IHeadSectionTitle = {
   subtitle: 'Ingresa tu nueva contraseña y confirmala.',
 };
 
+export const CommentsHeadSectionTitle: IHeadSectionTitle = {
+  title: 'Contactános',
+  subtitle: 'Si tienés alguna duda no dudes en mensajearnos 😃',
+};
+
 /**
  * Feedbacks
  */
@@ -88,4 +95,12 @@ export const PasswordChange: IFeedback = {
   subtitle: 'Ahora podrás ingresar a tu cuenta con tu nueva contraseña!',
   buttonLabel: 'Okay!',
   buttonPath: '/login',
+};
+
+export const CommentSended: IFeedback = {
+  title: 'Tu mensaje ha sido enviado!',
+  subtitle:
+    'En breve nos pondremos estaremos comunicando a través de un email!',
+  buttonLabel: 'Okay!',
+  buttonPath: '/home',
 };

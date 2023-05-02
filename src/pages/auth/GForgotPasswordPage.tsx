@@ -2,17 +2,17 @@ import { useForm } from 'react-hook-form';
 import { yupResolver } from '@hookform/resolvers/yup';
 import * as Yup from 'yup';
 
-import '../styles/ginputBox.css';
-import '../styles/gform.css';
+import '../../styles/ginputBox.css';
+import '../../styles/gform.css';
 
-import { GHeadSectionTitle } from '../components/GHeadSectionTitle';
-import { GCircularButton } from '../components/GCircularButton';
-import { GIconButtonBack, GIconButtonSignIn } from '../constants/buttons';
+import { GHeadSectionTitle } from '../../components/GHeadSectionTitle';
+import { GCircularButton } from '../../components/GCircularButton';
+import { GIconButtonBack } from '../../constants/buttons';
 
-import { GSubmitButton } from '../components/GSubmitButton';
-import { ForgotPasswordHeadSectionTitle } from '../constants/wording';
-import { GBlack, GWhite, GYellow } from '../constants/palette';
-import { NavigationService } from '../services/navigationService';
+import { GSubmitButton } from '../../components/GSubmitButton';
+import { ForgotPasswordHeadSectionTitle } from '../../constants/wording';
+import { GBlack, GWhite, GYellow } from '../../constants/palette';
+import { NavigationService } from '../../services/navigationService';
 
 type ForgotPasswordFormData = {
   email: string;
