@@ -1,43 +1,15 @@
 import React from 'react';
+import { Provider } from 'react-redux';
 import ReactDOM from 'react-dom/client';
-import { createBrowserRouter, RouterProvider } from 'react-router-dom';
+import { GRouter } from './routes/GRouter';
+import gecoStore from './redux/gecoStore';
 
 import './index.css';
-import { GLoginPage } from './pages/GLoginPage';
-import { GSignUpPage } from './pages/GSignUpPage';
-import { GForgotPasswordPage } from './pages/GForgotPasswordPage';
-import { GBootPage } from './pages/GBootPage';
-import { GResetPasswordPage } from './pages/GResetPasswordPage';
-import { GHomePage } from './pages/GHomePage';
 
-const router = createBrowserRouter([
-  {
-    path: '/',
-    element: <GBootPage />,
-  },
-  {
-    path: '/login',
-    element: <GLoginPage />,
-  },
-  {
-    path: '/sign-up',
-    element: <GSignUpPage />,
-  },
-  {
-    path: '/forgot-password',
-    element: <GForgotPasswordPage />,
-  },
-  {
-    path: '/reset-password',
-    element: <GResetPasswordPage />,
-  },
-  {
-    path: '/home',
-    element: <GHomePage />,
-  },
-]);
 ReactDOM.createRoot(document.getElementById('root') as HTMLElement).render(
   <React.StrictMode>
-    <RouterProvider router={router} />
+    <Provider store={gecoStore}>
+      <GRouter />
+    </Provider>
   </React.StrictMode>
 );

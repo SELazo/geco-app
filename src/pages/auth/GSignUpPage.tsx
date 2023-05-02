@@ -3,17 +3,19 @@ import { useForm } from 'react-hook-form';
 import { yupResolver } from '@hookform/resolvers/yup';
 import * as Yup from 'yup';
 
-import '../styles/ginputBox.css';
-import '../styles/gform.css';
+import '../../styles/ginputBox.css';
+import '../../styles/gform.css';
 
-import { GSubmitButton } from '../components/GSubmitButton';
+import { GSubmitButton } from '../../components/GSubmitButton';
 
-import { GTextAction } from '../components/GTextAction';
-import { SignUpHeadSectionTitle, SignInAction } from '../constants/wording';
+import { GTextAction } from '../../components/GTextAction';
+import { SignUpHeadSectionTitle, SignInAction } from '../../constants/wording';
 
-import { GHeadSectionTitle } from '../components/GHeadSectionTitle';
-import { GCircularButton } from '../components/GCircularButton';
-import { GIconButtonBack, GIconButtonSignIn } from '../constants/buttons';
+import { GHeadSectionTitle } from '../../components/GHeadSectionTitle';
+import { GCircularButton } from '../../components/GCircularButton';
+import { GIconButtonBack, GIconButtonSignIn } from '../../constants/buttons';
+import { GBlack, GWhite, GYellow } from '../../constants/palette';
+import { NavigationService } from '../../services/navigationService';
 
 type SignUpFormData = {
   name: string;
@@ -37,10 +39,6 @@ export const GSignUpPage = () => {
       .oneOf([Yup.ref('password')], 'La contraseña no coincide.'),
   });
 
-  const onClickAction = () => {
-    window.history.back();
-  };
-
   const {
     register,
     handleSubmit,
@@ -57,13 +55,14 @@ export const GSignUpPage = () => {
 
   return (
     <>
-      <div style={{ margin: '15px' }}>
+      <div style={{ margin: '1em' }}>
         <GCircularButton
           icon={GIconButtonBack}
           size="1.5em"
           width="50px"
           height="50px"
-          onClickAction={onClickAction}
+          colorBackground={GWhite}
+          onClickAction={NavigationService.goBack}
         />
         <GHeadSectionTitle
           title={SignUpHeadSectionTitle.title}
@@ -117,7 +116,11 @@ export const GSignUpPage = () => {
             {errors.confirmedPassword?.message}
           </span>
         </div>
-        <GSubmitButton label="Sign In" icon={GIconButtonSignIn} />
+        <GSubmitButton
+          label="Sign Up"
+          colorBackground={GYellow}
+          colorFont={GBlack}
+        />
         <GTextAction textAction={SignInAction} />
       </form>
     </>

@@ -36,3 +36,7 @@
   color: #f95a2c;
   font-size: 12px;
 }
+
+.input-group textarea {
+  height: 300px;
+}

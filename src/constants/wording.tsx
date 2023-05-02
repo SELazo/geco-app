@@ -40,6 +40,27 @@ export const ContactsHeadCenterTitle: string = 'Agenda';
 
 export const StatisticsHeadCenterTitle: string = 'Estadísticas';
 
+export const SuccessResetPasswordTitle: string = 'Contraseña modificada!';
+
+export const EditUserInfoTitle: string = 'Editar información';
+
+export const PricingTitle: string = 'Cambiar suscripción';
+
+export const CommentsTitle: string = 'Contáctanos';
+
+export const PricingSectionTitle: string = 'Modalidades';
+
+/**
+ * Wording
+ */
+
+export const SuccessResetPasswordSubtitle: string =
+  'Ahora podrás ingresar a tu cuenta con tu nueva contraseña!';
+
+export const Okay: string = 'Okay!';
+
+export const UserOptionsSubtitle: string = 'Opciones de usuario';
+
 /**
  * Head Section Titles
  */
@@ -51,12 +72,18 @@ export const SignUpHeadSectionTitle: IHeadSectionTitle = {
 
 export const ForgotPasswordHeadSectionTitle: IHeadSectionTitle = {
   title: 'Recupera tu contraseña',
-  subtitle: 'Ingresa el email correspondiente a tu cuenta.',
+  subtitle:
+    'Ingresa el email correspondiente a tu cuenta. Te llegará un mail para poder recuperarla!',
 };
 
 export const ResetPasswordHeadSectionTitle: IHeadSectionTitle = {
   title: 'Nueva contraseña',
   subtitle: 'Ingresa tu nueva contraseña y confirmala.',
+};
+
+export const CommentsHeadSectionTitle: IHeadSectionTitle = {
+  title: 'Contactános',
+  subtitle: 'Si tienés alguna duda no dudes en mensajearnos 😃',
 };
 
 /**
@@ -68,4 +95,12 @@ export const PasswordChange: IFeedback = {
   subtitle: 'Ahora podrás ingresar a tu cuenta con tu nueva contraseña!',
   buttonLabel: 'Okay!',
   buttonPath: '/login',
+};
+
+export const CommentSended: IFeedback = {
+  title: 'Tu mensaje ha sido enviado!',
+  subtitle:
+    'En breve nos pondremos estaremos comunicando a través de un email!',
+  buttonLabel: 'Okay!',
+  buttonPath: '/home',
 };

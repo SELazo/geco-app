@@ -1,25 +1,27 @@
-import React from 'react';
 import { useForm } from 'react-hook-form';
 import { yupResolver } from '@hookform/resolvers/yup';
 import * as Yup from 'yup';
 
-import '../styles/ginputBox.css';
-import '../styles/gform.css';
+import '../../styles/ginputBox.css';
+import '../../styles/gform.css';
 
-import { GHeadCenterTitle } from '../components/GHeadCenterTitle';
+import { GHeadCenterTitle } from '../../components/GHeadCenterTitle';
 
-import { GSubmitButton } from '../components/GSubmitButton';
-import { IButtonIcon } from '../interfaces/IButtonIcon';
-import { GTextAction } from '../components/GTextAction';
+import { GSubmitButton } from '../../components/GSubmitButton';
+import { GTextAction } from '../../components/GTextAction';
 import {
   SignUpAction,
   ForgetPasswordAction,
   LoginHeadCenterTitle,
-} from '../constants/wording';
-import { GLogoLetter } from '../components/GLogoLetter';
-import { GBlack, GWhite } from '../constants/palette';
+} from '../../constants/wording';
+import { GLogoLetter } from '../../components/GLogoLetter';
+import { GBlack, GWhite } from '../../constants/palette';
 
-import authService from '../services/authService';
+import { AuthService } from '../../services/authService';
+import { GChevronRightIcon } from '../../constants/buttons';
+import { useNavigate } from 'react-router-dom';
+import { useDispatch } from 'react-redux';
+import { AuthState, loginSuccess } from '../../redux/authSlice';
 
 type LoginForm = {
   email: string;
@@ -27,11 +29,6 @@ type LoginForm = {
 };
 
 export const GLoginPage = () => {
-  const iconButtonSignIn: IButtonIcon = {
-    color: GWhite,
-    'icon-type': 'chevron-right',
-  };
-
   const validationSchema = Yup.object().shape({
     email: Yup.string()
       .email('Por favor ingrese un correo electrónico válido')
@@ -51,10 +48,23 @@ export const GLoginPage = () => {
     resolver: yupResolver(validationSchema),
   });
 
+  const dispatch = useDispatch();
+
+  const navigate = useNavigate();
   const onSubmit = async (data: LoginForm) => {
-    const token = await authService.login(data.email, data.password);
-    console.log('Token:', token);
+    //TODO: use service
+
+    //mock user
+    const user: AuthState = {
+      user: { name: 'Diluc Ragnvindr', email: 'noctua.pyro@teyvat.com' },
+      token: 'some_token',
+      isAuthenticated: true,
+    };
+
+    dispatch(loginSuccess(user));
+
     reset();
+    navigate('/home');
   };
 
   return (
@@ -86,7 +96,12 @@ export const GLoginPage = () => {
       </div>
       <GTextAction textAction={SignUpAction} />
 
-      <GSubmitButton label="Sign In" icon={iconButtonSignIn} />
+      <GSubmitButton
+        label="Sign In"
+        icon={GChevronRightIcon}
+        colorBackground={GBlack}
+        colorFont={GWhite}
+      />
       <GTextAction textAction={ForgetPasswordAction} />
     </form>
   );

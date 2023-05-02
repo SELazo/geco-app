@@ -1,0 +1,50 @@
+.geco-pricing-card {
+  box-shadow: 0px 4px 0px #18191f;
+  border-radius: 16px;
+  border: 2px solid #18191f;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-direction: column;
+  margin-bottom: 1em;
+}
+
+.geco-pricing-card h1 {
+  margin: 0;
+  color: #ffffff;
+  font-family: 'Montserrat';
+  font-style: normal;
+  font-weight: 800;
+  font-size: 44px;
+  line-height: 54px;
+}
+
+.geco-pricing-card h3 {
+  margin: 1em 0 0 0;
+  color: #ffffff;
+  font-family: 'Montserrat';
+  font-style: normal;
+  font-weight: 500;
+  font-size: 24px;
+  line-height: 28px;
+}
+
+.geco-pricing-card .geco-submit-btn {
+  width: 250px;
+}
+
+.geco-pricing-item {
+  color: #ffffff;
+  margin: 0.5em;
+  display: flex;
+  align-items: center;
+  font-family: 'Montserrat';
+  font-style: normal;
+  font-weight: 500;
+  font-size: 19px;
+  line-height: 28px;
+}
+
+.geco-pricing-item p {
+  margin: 0 0 0 0.5em;
+}

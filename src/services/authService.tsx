@@ -1,16 +1,23 @@
 import axios, { AxiosResponse } from 'axios';
 
+interface IAuthService {
+  isAuthenticated(): Promise<boolean>;
+  login(email: string, password: string): Promise<string>;
+  logout(): void;
+}
 interface LoginResponse {
   token: string;
 }
 
-class AuthService {
-  public isAuthenticated(): boolean {
+const apiUrl = '';
+
+export const AuthService: IAuthService = {
+  isAuthenticated: async (): Promise<boolean> => {
     const token = localStorage.getItem('token');
     return !!token;
-  }
+  },
 
-  public async login(email: string, password: string): Promise<string> {
+  login: async (email: string, password: string): Promise<string> => {
     const response: AxiosResponse<LoginResponse> =
       await axios.post<LoginResponse>('/login', {
         email,
@@ -18,11 +25,9 @@ class AuthService {
       });
     const token = response.data.token;
     return Promise.resolve(token);
-  }
+  },
 
-  public logout(): void {
+  logout: (): void => {
     localStorage.removeItem('token');
-  }
-}
-
-export default new AuthService();
+  },
+};

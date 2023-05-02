@@ -1,0 +1,74 @@
+.geco-user-page {
+  display: flex;
+  align-items: center;
+  flex-direction: column;
+  height: 100vh;
+}
+
+.geco-user-header {
+  background: #1947e5;
+  width: 100vw;
+  height: 280px;
+  overflow: hidden;
+  border-radius: 0 0 1.2em 1.2em;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  flex-direction: column;
+  margin-bottom: 1em;
+}
+
+.geco-user-nav {
+  display: flex;
+  align-self: flex-start;
+  margin-left: 1.3em;
+}
+
+.geco-user-email {
+  font-family: 'Montserrat';
+  font-style: normal;
+  font-weight: 600;
+  font-size: 15px;
+  text-align: center;
+  color: #ffffff;
+  margin: 0;
+}
+
+.geco-user-header .geco-center-title {
+  margin: 0.3em 0 0 0;
+}
+
+.geco-user-options {
+  width: 100%;
+  margin-top: 1.5em;
+}
+
+.geco-options-column {
+  display: flex;
+  flex-direction: row;
+  justify-content: space-around;
+  text-align: center;
+}
+
+.geco-user-options-title {
+  color: #9fa4b4;
+  margin-bottom: 1.5em;
+}
+
+.geco-option-icon {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  min-width: 50%;
+  max-width: 50%;
+}
+
+.geco-option-icon p {
+  margin-top: 0.5em;
+  font-family: 'Montserrat';
+  font-style: normal;
+  font-weight: 600;
+  font-size: 20px;
+
+  color: #18191f;
+}

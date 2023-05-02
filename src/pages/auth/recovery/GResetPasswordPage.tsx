@@ -4,15 +4,17 @@ import { yupResolver } from '@hookform/resolvers/yup';
 import * as Yup from 'yup';
 import { useNavigate } from 'react-router-dom';
 
-import '../styles/ginputBox.css';
-import '../styles/gform.css';
+import '../../../styles/ginputBox.css';
+import '../../../styles/gform.css';
 
-import { GHeadSectionTitle } from '../components/GHeadSectionTitle';
-import { GCircularButton } from '../components/GCircularButton';
-import { GIconButtonSignIn, GIconButtonX } from '../constants/buttons';
+import { GHeadSectionTitle } from '../../../components/GHeadSectionTitle';
+import { GCircularButton } from '../../../components/GCircularButton';
+import { GIconButtonSignIn, GIconButtonX } from '../../../constants/buttons';
 
-import { GSubmitButton } from '../components/GSubmitButton';
-import { ResetPasswordHeadSectionTitle } from '../constants/wording';
+import { GSubmitButton } from '../../../components/GSubmitButton';
+import { ResetPasswordHeadSectionTitle } from '../../../constants/wording';
+import { GBlack, GWhite, GYellow } from '../../../constants/palette';
+import { NavigationService } from '../../../services/navigationService';
 
 type ResetPasswordFormData = {
   password: string;
@@ -32,13 +34,10 @@ export const GResetPasswordPage = () => {
       .oneOf([Yup.ref('password')], 'La contraseña no coincide.'),
   });
 
-  const onClickAction = () => {
-    navigate('/login');
-  };
-
   const onSubmit = (data: ResetPasswordFormData) => {
     console.log(data);
     reset();
+    NavigationService.navigateTo('/recovery/reset-success');
   };
 
   const {
@@ -52,13 +51,14 @@ export const GResetPasswordPage = () => {
 
   return (
     <>
-      <div style={{ margin: '15px' }}>
+      <div style={{ margin: '1em' }}>
         <GCircularButton
           icon={GIconButtonX}
           size="1.5em"
           width="50px"
           height="50px"
-          onClickAction={onClickAction}
+          colorBackground={GWhite}
+          onClickAction={NavigationService.handleNavigation('/login')}
         />
         <GHeadSectionTitle
           title={ResetPasswordHeadSectionTitle.title}
@@ -90,7 +90,11 @@ export const GResetPasswordPage = () => {
             {errors.confirmedPassword?.message}
           </span>
         </div>
-        <GSubmitButton label="Sign In" icon={GIconButtonSignIn} />
+        <GSubmitButton
+          label="Confirmar"
+          colorBackground={GYellow}
+          colorFont={GBlack}
+        />
       </form>
     </>
   );

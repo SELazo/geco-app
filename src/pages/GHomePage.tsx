@@ -1,16 +1,15 @@
-import { useNavigate } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 
 import '../styles/ghome.css';
-import { GLogoLetter } from '../components/GLogoLetter';
-import { BlueYelowPalette, GRed, GWhite, GYellow } from '../constants/palette';
+import { BlueYelowPalette, GRed, GWhite } from '../constants/palette';
 
 import emailCampaign from '../assets/images/email_campaign_bro.svg';
 import { GIcon } from '../components/GIcon';
-import { IButtonIcon } from '../interfaces/IButtonIcon';
 import { GCircularButton } from '../components/GCircularButton';
 import {
   GAdIcon,
   GContactsIcon,
+  GPremiumStarIcon,
   GStatisticsIcon,
   GStrategyIcon,
   GUserIcon,
@@ -24,35 +23,9 @@ import {
   StatisticsHeadCenterTitle,
   StrategyHeadCenterTitle,
 } from '../constants/wording';
+import { NavigationService } from '../services/navigationService';
 
 export const GHomePage = () => {
-  const premiumStarIcon: IButtonIcon = {
-    color: GYellow,
-    'icon-type': 'star-fa',
-  };
-
-  const navigate = useNavigate();
-
-  const handleUserNavigate = () => {
-    navigate('/user');
-  };
-
-  const handleAdNavigate = () => {
-    navigate('/ad');
-  };
-
-  const handleStrategyNavigate = () => {
-    navigate('/strategy');
-  };
-
-  const handleContactsNavigate = () => {
-    navigate('/contacts');
-  };
-
-  const handleStatisticsNavigate = () => {
-    navigate('/statistics');
-  };
-
   return (
     <div
       style={{
@@ -69,25 +42,30 @@ export const GHomePage = () => {
         style={{
           background: GRed,
           width: '100vw',
-          height: '250px',
+          height: '280px',
           overflow: 'hidden',
+          borderRadius: '0 0 1.2em 1.2em',
         }}
       >
         <div className="geco-nav-bar">
           <GLogoWord />
           <div className="geco-nav-bar-right">
             <button className="geco-without-background-btn">
-              <GIcon
-                color={premiumStarIcon.color}
-                icon-type={premiumStarIcon['icon-type']}
-              />
+              <Link to={'/user/pricing'}>
+                <GIcon
+                  color={GPremiumStarIcon.color}
+                  icon-type={GPremiumStarIcon['icon-type']}
+                />
+              </Link>
             </button>
+
             <GCircularButton
               icon={GUserIcon}
               size="1.5em"
               width="50px"
               height="50px"
-              onClickAction={handleUserNavigate}
+              colorBackground={GWhite}
+              onClickAction={NavigationService.handleNavigation('/user/info')}
             />
           </div>
         </div>
@@ -108,7 +86,8 @@ export const GHomePage = () => {
               size="2em"
               width="70px"
               height="70px"
-              onClickAction={handleAdNavigate}
+              colorBackground={GWhite}
+              onClickAction={NavigationService.handleNavigation('/ad')}
             />
             <p>{AdHeadCenterTitle}</p>
           </div>
@@ -118,7 +97,8 @@ export const GHomePage = () => {
               size="2em"
               width="70px"
               height="70px"
-              onClickAction={handleStrategyNavigate}
+              colorBackground={GWhite}
+              onClickAction={NavigationService.handleNavigation('/strategy')}
             />
             <p>{StrategyHeadCenterTitle}</p>
           </div>
@@ -130,7 +110,8 @@ export const GHomePage = () => {
               size="2em"
               width="70px"
               height="70px"
-              onClickAction={handleContactsNavigate}
+              colorBackground={GWhite}
+              onClickAction={NavigationService.handleNavigation('/contacts')}
             />
             <p>{ContactsHeadCenterTitle}</p>
           </div>
@@ -140,7 +121,8 @@ export const GHomePage = () => {
               size="2em"
               width="70px"
               height="70px"
-              onClickAction={handleStatisticsNavigate}
+              colorBackground={GWhite}
+              onClickAction={NavigationService.handleNavigation('/statistics')}
             />
             <p>{StatisticsHeadCenterTitle}</p>
           </div>
