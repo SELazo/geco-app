@@ -1,6 +1,6 @@
 import { Outlet } from 'react-router-dom';
 
-export const GUserRenderMainPage = () => {
+export const GContactsRenderMainPage = () => {
   return (
     <>
       <Outlet />

@@ -1,0 +1,35 @@
+.geco-contacts-head {
+  width: 100vw;
+  display: flex;
+}
+
+.geco-contacts-header {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: center;
+  width: 25%;
+}
+
+.geco-contacts-title {
+  display: flex;
+  align-items: center;
+  width: 75%;
+}
+
+.geco-contacts-title h1 {
+  margin: 0.5em 0 0.5em 0;
+}
+
+.geco-contacts-body {
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+.geco-contacts-options {
+  width: 90%;
+}
+
+.geco-contacts {
+}

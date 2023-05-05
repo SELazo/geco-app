@@ -1,3 +1,4 @@
+import { IMenuOption } from '../components/GMenuOption';
 import { IFeedback } from '../interfaces/IFeedback';
 import { IHeadSectionTitle } from '../interfaces/IHeadSectionTitle';
 import { ITextAction } from '../interfaces/ITextAction';
@@ -49,6 +50,8 @@ export const PricingTitle: string = 'Cambiar suscripción';
 export const CommentsTitle: string = 'Contáctanos';
 
 export const PricingSectionTitle: string = 'Modalidades';
+
+export const ContactsSectionTitle: string = 'Agenda';
 
 /**
  * Wording
@@ -103,4 +106,20 @@ export const CommentSended: IFeedback = {
     'En breve nos pondremos estaremos comunicando a través de un email!',
   buttonLabel: 'Okay!',
   buttonPath: '/home',
+};
+
+/**
+ * Menu Options
+ */
+
+export const AdminListContacts: IMenuOption = {
+  mainTitle: 'Administrar contactos',
+  description: 'Agrega, modifica o elimina tus contactos',
+  route: '/contacts/list',
+};
+
+export const GroupsContacts: IMenuOption = {
+  mainTitle: 'Administrar grupos',
+  description: 'Agrega, modifica o elimina tus grupos',
+  route: '/contacts/groups',
 };

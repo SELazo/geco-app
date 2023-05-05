@@ -54,6 +54,11 @@ export const GChevronLeftIcon: IButtonIcon = {
   'icon-type': 'chevron-left',
 };
 
+export const GMoreInfoIcon: IButtonIcon = {
+  color: GBlack,
+  'icon-type': 'three-circles',
+};
+
 export const GPremiumStarIcon: IButtonIcon = {
   color: GYellow,
   'icon-type': 'star-fa',
