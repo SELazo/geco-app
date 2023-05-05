@@ -4,6 +4,8 @@ import('../styles/gcontactItem.css');
 
 import { GBlack, GWhite } from '../constants/palette';
 import { NavigationService } from '../services/navigationService';
+import { GSubmitButton } from './GSubmitButton';
+import { GIcon } from './GIcon';
 
 export interface IContactItem {
   id: number;
@@ -33,6 +35,9 @@ export const GContactItem: FC<IContactItemnProps> = (
             <p>{props.contact.mail}</p>
           </div>
         </div>
+        <button className="geco-edit-btn">
+          <GIcon color={GBlack} icon-type="edit" />
+        </button>
       </div>
     </>
   );
