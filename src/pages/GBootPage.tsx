@@ -9,40 +9,22 @@ import desertores from '../assets/images/logo_desertores.svg';
 
 export const GBootPage = () => {
   return (
-    <div
-      style={{
-        background: BlueYelowPalette.backgroundColor,
-        height: '100vh',
-        width: '100vw',
-        display: 'flex',
-        flexDirection: 'column',
-        placeContent: 'flex-end',
-        textAlign: 'center',
-        alignItems: 'center',
-      }}
-    >
-      <Link to="/login">
-        <GLogoLetter />
-      </Link>
-      <img
-        src={geco}
-        alt="SVG"
-        style={{
-          width: '100%',
-          fill: BlueYelowPalette.gecoColor,
-        }}
-      />
-      <div
-        style={{
-          position: 'absolute',
-          bottom: '50px',
-          left: '50%',
-          transform: 'translateX(-50%)',
-        }}
-      >
-        <p className="geco-develop ">desarrollado por</p>
-        <img src={desertores} alt="SVG" />
-      </div>
+    <div className='boot-main'>
+
+      <div className='buttom-login'>
+          <div className='img-login'>
+            <Link to="/login">
+              <GLogoLetter />
+            </Link>
+          </div>
+        </div>
+        <div className='dev-by'>
+          <div className='div-dev-by'>
+            <p className="geco-develop ">desarrollado por</p>
+            <img src={desertores} alt="SVG" />
+          </div>
+        </div>
+
     </div>
   );
 };

@@ -5,6 +5,7 @@ import * as Yup from 'yup';
 
 import '../../styles/ginputBox.css';
 import '../../styles/gform.css';
+import '../../styles/gsignup.css';
 
 import { GSubmitButton } from '../../components/GSubmitButton';
 
@@ -54,8 +55,8 @@ export const GSignUpPage = () => {
   };
 
   return (
-    <>
-      <div style={{ margin: '1em' }}>
+    <div className='signup-main'>
+      <div className='singup-head'>
         <GCircularButton
           icon={GIconButtonBack}
           size="1.5em"
@@ -123,6 +124,6 @@ export const GSignUpPage = () => {
         />
         <GTextAction textAction={SignInAction} />
       </form>
-    </>
+    </div>
   );
 };
