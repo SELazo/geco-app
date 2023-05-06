@@ -3,6 +3,7 @@ import { yupResolver } from '@hookform/resolvers/yup';
 import * as Yup from 'yup';
 
 import '../../styles/ginputBox.css';
+import '../../styles/glogin.css';
 import '../../styles/gform.css';
 
 import { GHeadCenterTitle } from '../../components/GHeadCenterTitle';
@@ -68,41 +69,43 @@ export const GLoginPage = () => {
   };
 
   return (
-    <form className="geco-form" onSubmit={handleSubmit(onSubmit)}>
-      <GLogoLetter />
-      <GHeadCenterTitle title={LoginHeadCenterTitle} color={GBlack} />
+    <div className='login-main'>
+      <form className="geco-form" onSubmit={handleSubmit(onSubmit)}>
+        <GLogoLetter />
+        <GHeadCenterTitle title={LoginHeadCenterTitle} color={GBlack} />
 
-      <div className="input-group">
-        <input
-          type="email"
-          {...register('email')}
-          placeholder="Email"
-          className={`input-box form-control ${
-            errors.email ? 'is-invalid' : ''
-          }`}
-        />
-        <span className="span-error">{errors.email?.message}</span>
-      </div>
-      <div className="input-group">
-        <input
-          type="password"
-          {...register('password')}
-          placeholder="Contraseña"
-          className={`input-box form-control ${
-            errors.password ? 'is-invalid' : ''
-          }`}
-        />
-        <span className="span-error">{errors.password?.message}</span>
-      </div>
-      <GTextAction textAction={SignUpAction} />
+        <div className="input-group">
+          <input
+            type="email"
+            {...register('email')}
+            placeholder="Email"
+            className={`input-box form-control ${
+              errors.email ? 'is-invalid' : ''
+            }`}
+          />
+          <span className="span-error">{errors.email?.message}</span>
+        </div>
+        <div className="input-group">
+          <input
+            type="password"
+            {...register('password')}
+            placeholder="Contraseña"
+            className={`input-box form-control ${
+              errors.password ? 'is-invalid' : ''
+            }`}
+          />
+          <span className="span-error">{errors.password?.message}</span>
+        </div>
+        <GTextAction textAction={SignUpAction} />
 
-      <GSubmitButton
-        label="Sign In"
-        icon={GChevronRightIcon}
-        colorBackground={GBlack}
-        colorFont={GWhite}
-      />
-      <GTextAction textAction={ForgetPasswordAction} />
-    </form>
+        <GSubmitButton
+          label="Sign In"
+          icon={GChevronRightIcon}
+          colorBackground={GBlack}
+          colorFont={GWhite}
+        />
+        <GTextAction textAction={ForgetPasswordAction} />
+      </form>
+    </div>
   );
 };

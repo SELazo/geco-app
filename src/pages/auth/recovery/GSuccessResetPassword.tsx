@@ -7,9 +7,11 @@ import {
   SuccessResetPasswordTitle,
 } from '../../../constants/wording';
 
+import '../../../styles/gsuccessreset.css';
+
 export const GFeedbackSuccessResetPassword = () => {
   return (
-    <>
+    <div className='successreset-main'>
       <GFeedback
         title={SuccessResetPasswordTitle}
         subtitle={SuccessResetPasswordSubtitle}
@@ -22,6 +24,6 @@ export const GFeedbackSuccessResetPassword = () => {
         colorButtonBackground={GBlack}
         route={'/login'}
       />
-    </>
+    </div>
   );
 };

@@ -1,0 +1,11 @@
+.signup-main{
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    margin-top: 7vh;
+}
+
+.singup-head{
+    align-items: center;
+    max-width: 325px;
+}

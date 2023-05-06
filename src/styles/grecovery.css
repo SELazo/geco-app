@@ -1,0 +1,11 @@
+.recovery-main{
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    margin-top: 7vh;
+}
+
+.recovery-head{
+    align-items: center;
+    max-width: 325px;
+}
