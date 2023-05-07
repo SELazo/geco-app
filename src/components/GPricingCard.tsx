@@ -7,11 +7,13 @@ import { GBlack, GWhite } from '../constants/palette';
 import { GIcon } from './GIcon';
 
 export interface IPricingBenefitsItem {
+  idBenefit: number;
   icon: 'check' | 'x';
   description: string;
 }
 
 export interface IPricing {
+  idPricing: number;
   topTitle: string;
   mainTitle: string;
   benefits: IPricingBenefitsItem[];
@@ -38,16 +40,14 @@ export const GPricingCard: FC<IPricingCardProps> = (
       >
         <h3>{props.pricing.topTitle}</h3>
         <h1>{props.pricing.mainTitle}</h1>
-        {props.pricing.benefits.map((item, index) => (
-          <div className="geco-pricing-item">
-            <GIcon
-              key={`${index}-benefit`}
-              icon-type={item.icon}
-              color={GWhite}
-            />
-            <p>{item.description}</p>
-          </div>
-        ))}
+        <div className="geco-pricing-items">
+          {props.pricing.benefits.map((item) => (
+            <div key={item.idBenefit} className="geco-pricing-item">
+              <GIcon icon-type={item.icon} color={GWhite} />
+              <p>{item.description}</p>
+            </div>
+          ))}
+        </div>
         <GSubmitButton
           colorBackground={GBlack}
           colorFont={GWhite}
