@@ -1,11 +1,11 @@
-.geco-pricing-main {
+.geco-pricing-terms-main {
   display: flex;
   flex-direction: column;
   align-items: center;
   margin-top: 7vh;
 }
 
-.geco-pricing-header {
+.geco-pricing-terms-header {
   display: flex;
   align-items: center;
   max-width: 325px;
@@ -13,20 +13,24 @@
   margin-bottom: 2vh;
 }
 
-.geco-pricing-title {
+.geco-pricing-terms-title {
   display: flex;
   align-items: center;
   justify-content: center;
   flex-grow: 1;
 }
 
-.geco-pricing-title h1 {
+.geco-pricing-terms-title h1 {
   margin: 0.5em 0 0.5em 0;
   text-align: center;
 }
 
-.geco-pricing-cards {
+.geco-pricing-terms-info {
   display: flex;
   flex-direction: column;
   align-items: center;
+}
+
+.geco-pricing-terms-body {
+  max-width: 325px;
 }

@@ -9,6 +9,7 @@ export interface AuthState {
   user: User;
   isAuthenticated: boolean;
   token: string | null;
+  terms?: number;
 }
 
 const initialState: AuthState = {
@@ -24,6 +25,14 @@ export const authSlice = createSlice({
     setUser: (state, action: PayloadAction<User>) => {
       state.user = action.payload;
     },
+    setIdTerms: (state, action: PayloadAction<number>) => {
+      state.terms = action.payload;
+    },
+    resetTerms: (state) => {
+      const newState = { ...state };
+      delete newState.terms;
+      state = newState;
+    },
     loginSuccess: (state, action: PayloadAction<AuthState>) => {
       state.user = action.payload.user;
       state.isAuthenticated = true;
@@ -36,4 +45,5 @@ export const authSlice = createSlice({
   },
 });
 
-export const { setUser, loginSuccess, logout } = authSlice.actions;
+export const { setUser, setIdTerms, resetTerms, loginSuccess, logout } =
+  authSlice.actions;

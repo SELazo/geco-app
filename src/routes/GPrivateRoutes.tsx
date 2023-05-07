@@ -6,6 +6,7 @@ import { GRenderMainPage } from '../pages/user/GUserRenderMainPage';
 import { GPricingPage } from '../pages/user/GPricingPage';
 import { GCommentsPage } from '../pages/user/GCommentsPage';
 import { GSuccessSendCommentPage } from '../pages/user/GSuccessSendCommentPage';
+import { GPricingTermsPage } from '../pages/user/GPrincingTerms';
 
 export const GPrivateRoutes = () => {
   return (
@@ -14,6 +15,7 @@ export const GPrivateRoutes = () => {
       <Route path="/user" element={<GRenderMainPage />}>
         <Route path="info" element={<GUserPage />} />
         <Route path="pricing" element={<GPricingPage />} />
+        <Route path="pricing/terms" element={<GPricingTermsPage />} />
         <Route path="comments" element={<GCommentsPage />} />
         <Route path="edit" element={<GEditUserInfoPage />} />
         <Route path="message-sended" element={<GSuccessSendCommentPage />} />

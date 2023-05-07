@@ -7,6 +7,7 @@
   justify-content: center;
   flex-direction: column;
   margin-bottom: 1em;
+  max-width: 325px;
 }
 
 .geco-pricing-card h1 {
