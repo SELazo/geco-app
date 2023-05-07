@@ -31,9 +31,7 @@ export const GPricingPage = () => {
       active: true,
       backgroundColor: GRed,
       buttonLabel: 'GRATIS',
-      action: () => {
-        console.log('Eligio cuenta free');
-      },
+      idTerms: 1,
     },
     {
       idPricing: 1,
@@ -47,14 +45,9 @@ export const GPricingPage = () => {
       active: true,
       backgroundColor: GYellow,
       buttonLabel: '$1500',
-      action: () => {
-        console.log('Eligio cuenta PREMIUM');
-      },
+      idTerms: 2,
     },
   ];
-  const onSubmit = (data: SignUpFormData) => {
-    console.log(data);
-  };
 
   return (
     <div className="geco-pricing-main">
