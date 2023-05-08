@@ -1,30 +1,30 @@
-.home-main{
+.home-main {
   display: flex;
   flex-direction: column;
   border: none;
   height: 100vh;
   width: 100vw;
-  background-color: #1947E5;
+  background-color: #1947e5;
 }
 
-.home-head{
+.home-head {
   display: flex;
   border: none;
   flex-direction: column;
   height: 40vh;
-  background-color: #F95A2C;
+  background-color: #f95a2c;
   overflow: hidden;
   border-radius: 0 0 1.2em 1.2em;
 }
 
-.home-head-header{
+.home-head-header {
   display: flex;
   flex-direction: row;
   justify-content: center;
   height: 20vh;
 }
 
-.home-head-header-logo{
+.home-head-header-logo {
   display: flex;
   flex: 1;
   margin-top: 1vh;
@@ -33,7 +33,7 @@
   height: auto;
 }
 
-.home-head-header-nav-bar{
+.home-head-header-nav-bar {
   display: flex;
   align-items: center;
   margin-right: 1vh;
@@ -43,32 +43,32 @@
   height: auto;
 }
 
-.home-head-img{
-  height: 80vh  ;
+.home-head-img {
+  height: 80vh;
   background-image: url('src/assets/images/email_campaign_bro.svg');
   background-repeat: no-repeat;
   background-position: top center;
-  
 }
 
-.home-body{
+.home-body {
   display: flex;
   flex-direction: column;
   justify-content: center;
   align-items: center;
   border: none;
   width: 100vw;
-  height: 60vh;
 }
 
-.home-body-title{
+.home-body-title {
   display: flex;
-  height: 20vh;
+  height: 12vh;
 }
 
-.home-body-container-columns{
+.home-body-container-columns {
   display: flex;
-  height: 80vh;
+  align-items: flex-start;
+  max-width: 90%;
+  max-height: 300px;
 }
 
 .geco-services-column {
@@ -96,13 +96,6 @@
 
   color: #ffffff;
 }
-
-
-
-
-
-
-
 
 .geco-nav-bar-right {
   display: flex;
@@ -132,9 +125,3 @@
   width: 100%;
   margin-top: 1.5em;
 }
-
-
-
-
-
-
