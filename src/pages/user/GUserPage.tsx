@@ -24,9 +24,9 @@ import { User } from '../../redux/authSlice';
 export const GUserPage = () => {
   const user: User = useSelector((state: any) => state.auth.user as User);
   return (
-    <div className="geco-user-page">
-      <div className="geco-user-header">
-        <div className="geco-user-nav">
+    <div className="user-main">
+      <div className="user-head">
+        <div className="user-head-nav-bar">
           <GCircularButton
             icon={GIconButtonBack}
             size="1.5em"
@@ -36,20 +36,28 @@ export const GUserPage = () => {
             onClickAction={NavigationService.goBack}
           />
         </div>
-        <GCircularButton
-          icon={GUserIcon}
-          size="3em"
-          width="100px"
-          height="100px"
-          colorBackground={GWhite}
-        />
-        <GHeadCenterTitle title={user.name} color={GWhite} />
-        <p className="geco-user-email">{user.email}</p>
+        <div className="user-head-user-info">
+          <GCircularButton
+            icon={GUserIcon}
+            size="3em"
+            width="100px"
+            height="100px"
+            colorBackground={GWhite}
+          />
+          <div className="user-head-user-info-foot-img">
+            <GHeadCenterTitle title={user.name} color={GWhite} />
+            <p className="geco-user-email">{user.email}</p>
+          </div>
+        </div>
       </div>
-      <p className="geco-user-options-title">{UserOptionsSubtitle}</p>
-      <div className="geco-user-options">
-        <div className="geco-options-column">
-          <div className="geco-option-icon">
+
+      <div className="user-body">
+        <div className="user-body-title">
+          <p className="geco-user-options-title">{UserOptionsSubtitle}</p>
+        </div>
+
+        <div className="user-body-icons">
+          <div className="user-body-icons-center">
             <GCircularButton
               icon={GEditIcon}
               size="2em"
@@ -58,9 +66,12 @@ export const GUserPage = () => {
               colorBackground={GWhite}
               onClickAction={NavigationService.handleNavigation('/user/edit')}
             />
-            <p className="geco-option-title">{EditUserInfoTitle}</p>
+            <div className="user-body-icons-texts">
+              <p className="geco-option-title">{EditUserInfoTitle}</p>
+            </div>
           </div>
-          <div className="geco-option-icon">
+
+          <div className="user-body-icons-top">
             <GCircularButton
               icon={GPremiumStarIcon}
               size="2em"
@@ -71,11 +82,12 @@ export const GUserPage = () => {
                 '/user/pricing'
               )}
             />
-            <p>{PricingTitle}</p>
+            <div className="user-body-icons-texts">
+              <p>{PricingTitle}</p>
+            </div>
           </div>
-        </div>
-        <div className="geco-options-column">
-          <div className="geco-option-icon">
+
+          <div className="user-body-icons-center">
             <GCircularButton
               icon={GCommentIcon}
               size="2em"
@@ -86,7 +98,9 @@ export const GUserPage = () => {
                 '/user/comments'
               )}
             />
-            <p>{CommentsTitle}</p>
+            <div className="user-body-icons-texts">
+              <p>{CommentsTitle}</p>
+            </div>
           </div>
         </div>
       </div>
