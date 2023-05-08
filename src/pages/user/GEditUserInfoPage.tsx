@@ -1,5 +1,5 @@
 import React from 'react';
-import { useSelector } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 import { useForm } from 'react-hook-form';
 import { yupResolver } from '@hookform/resolvers/yup';
 import * as Yup from 'yup';
@@ -14,7 +14,9 @@ import { GIconButtonBack, GUserIcon } from '../../constants/buttons';
 import { GBlack, GWhite, GYellow } from '../../constants/palette';
 import { NavigationService } from '../../services/navigationService';
 import { GHeadCenterTitle } from '../../components/GHeadCenterTitle';
-import { User } from '../../redux/authSlice';
+import { User, setUser } from '../../redux/authSlice';
+import { Users } from '../auth/GSignUpPage';
+import { useNavigate } from 'react-router-dom';
 
 type SignUpFormData = {
   name: string;
@@ -24,7 +26,8 @@ type SignUpFormData = {
 };
 
 export const GEditUserInfoPage = () => {
-  const user: User = useSelector((state: any) => state.auth.user as User);
+  let user: User = useSelector((state: any) => state.auth.user as User);
+  const dispatch = useDispatch();
 
   const validationSchema = Yup.object().shape({
     name: Yup.string().required('Por favor ingrese un nombre completo.'),
@@ -54,7 +57,23 @@ export const GEditUserInfoPage = () => {
   });
 
   const onSubmit = (data: SignUpFormData) => {
-    console.log(data);
+    /**temporal */
+    const dataBase = JSON.parse(
+      localStorage.getItem('users') || '[]'
+    ) as Users[];
+
+    const newInfoUser: Users = {
+      name: data.name,
+      email: data.email,
+      password: data.password,
+    };
+
+    dataBase[user.id] = newInfoUser;
+
+    dispatch(
+      setUser({ id: user.id, name: newInfoUser.name, email: newInfoUser.email })
+    );
+    localStorage.setItem('users', JSON.stringify(dataBase));
     reset();
   };
 
