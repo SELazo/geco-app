@@ -49,7 +49,6 @@
 .user-body {
   display: flex;
   flex-direction: column;
-  justify-content: center;
   align-items: center;
   border: none;
   width: 100vw;
@@ -69,6 +68,8 @@
   justify-content: center;
   height: 90vh;
   width: 80%;
+  max-width: 325px;
+  max-height: 500px;
 }
 
 .user-body-icons-top {

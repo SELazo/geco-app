@@ -68,7 +68,8 @@
   display: flex;
   align-items: flex-start;
   max-width: 90%;
-  max-height: 300px;
+  max-height: 350;
+  min-height: 350;
 }
 
 .geco-services-column {
@@ -85,6 +86,7 @@
   align-items: center;
   min-width: 50%;
   max-width: 50%;
+  margin-bottom: 2vh;
 }
 
 .geco-services-icon p {
