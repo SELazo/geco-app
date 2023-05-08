@@ -6,6 +6,7 @@ import * as Yup from 'yup';
 
 import '../../styles/ginputBox.css';
 import '../../styles/gform.css';
+import '../../styles/gedituser.css';
 
 import { GSubmitButton } from '../../components/GSubmitButton';
 
@@ -17,6 +18,7 @@ import { GHeadCenterTitle } from '../../components/GHeadCenterTitle';
 import { User, setUser } from '../../redux/authSlice';
 import { Users } from '../auth/GSignUpPage';
 import { useNavigate } from 'react-router-dom';
+import { UserEditInfoSubtitle } from '../../constants/wording';
 
 type SignUpFormData = {
   name: string;
@@ -78,9 +80,9 @@ export const GEditUserInfoPage = () => {
   };
 
   return (
-    <div className="geco-user-page">
-      <div className="geco-user-header">
-        <div className="geco-user-nav">
+    <div className="geco-edit-user-page">
+      <div className="geco-edit-user-header">
+        <div className="geco-edit-user-nav">
           <GCircularButton
             icon={GIconButtonBack}
             size="1.5em"
@@ -90,16 +92,21 @@ export const GEditUserInfoPage = () => {
             onClickAction={NavigationService.goBack}
           />
         </div>
-        <GCircularButton
-          icon={GUserIcon}
-          size="3em"
-          width="100px"
-          height="100px"
-          colorBackground={GWhite}
-        />
-        <GHeadCenterTitle title={user.name} color={GWhite} />
+        <div className="geco-edit-user-info">
+          <GCircularButton
+            icon={GUserIcon}
+            size="3em"
+            width="100px"
+            height="100px"
+            colorBackground={GWhite}
+          />
+          <GHeadCenterTitle title={user.name} color={GWhite} />
+        </div>
       </div>
       <form className="geco-form" onSubmit={handleSubmit(onSubmit)}>
+        <div className="geco-user-edit-subtitle">
+          <p>{UserEditInfoSubtitle}</p>
+        </div>
         <div className="input-group">
           <input
             type="text"

@@ -61,6 +61,8 @@ export const Okay: string = 'Okay!';
 
 export const UserOptionsSubtitle: string = 'Opciones de usuario';
 
+export const UserEditInfoSubtitle: string = 'Edita tu información';
+
 /**
  * Head Section Titles
  */
