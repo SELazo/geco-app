@@ -23,6 +23,7 @@ import { GChevronRightIcon } from '../../constants/buttons';
 import { useNavigate } from 'react-router-dom';
 import { useDispatch } from 'react-redux';
 import { AuthState, loginSuccess } from '../../redux/authSlice';
+import { Users } from './GSignUpPage';
 
 type LoginForm = {
   email: string;
@@ -44,6 +45,7 @@ export const GLoginPage = () => {
     register,
     handleSubmit,
     reset,
+    setError,
     formState: { errors },
   } = useForm<LoginForm>({
     resolver: yupResolver(validationSchema),
@@ -54,22 +56,31 @@ export const GLoginPage = () => {
   const navigate = useNavigate();
   const onSubmit = async (data: LoginForm) => {
     //TODO: use service
+    const dataBase = JSON.parse(
+      localStorage.getItem('users') || '[]'
+    ) as Users[];
+    const searchedUser = dataBase.find((user) => user.email === data.email);
+    if (searchedUser?.password === data.password) {
+      const index = dataBase.findIndex((user) => user.email === data.email);
+      const user: AuthState = {
+        user: { id: index, name: searchedUser.name, email: searchedUser.email },
+        token: 'some_token',
+        isAuthenticated: true,
+      };
 
-    //mock user
-    const user: AuthState = {
-      user: { name: 'Diluc Ragnvindr', email: 'noctua.pyro@teyvat.com' },
-      token: 'some_token',
-      isAuthenticated: true,
-    };
+      dispatch(loginSuccess(user));
 
-    dispatch(loginSuccess(user));
-
-    reset();
-    navigate('/home');
+      reset();
+      navigate('/home');
+    }
+    setError('password', {
+      type: 'manual',
+      message: 'El correo electrónico o la contraseña son incorrectos',
+    });
   };
 
   return (
-    <div className='login-main'>
+    <div className="login-main">
       <form className="geco-form" onSubmit={handleSubmit(onSubmit)}>
         <GLogoLetter />
         <GHeadCenterTitle title={LoginHeadCenterTitle} color={GBlack} />
