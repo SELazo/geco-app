@@ -4,6 +4,7 @@ import * as Yup from 'yup';
 
 import '../../styles/ginputBox.css';
 import '../../styles/gform.css';
+import '../../styles/gcommentsPage.css';
 
 import { GHeadSectionTitle } from '../../components/GHeadSectionTitle';
 import { GCircularButton } from '../../components/GCircularButton';
@@ -47,7 +48,7 @@ export const GCommentsPage = () => {
   });
 
   return (
-    <>
+    <div className='commentsPage-main'>
       <div style={{ margin: '1em' }}>
         <GCircularButton
           icon={GIconButtonBack}
@@ -79,6 +80,6 @@ export const GCommentsPage = () => {
           colorFont={GBlack}
         />
       </form>
-    </>
+    </div>
   );
 };
