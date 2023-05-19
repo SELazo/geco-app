@@ -11,13 +11,18 @@ import {
   GroupsContacts,
 } from '../../constants/wording';
 import { GMenuOption } from '../../components/GMenuOption';
+import { Link } from 'react-router-dom';
+import { GLogoLetter } from '../../components/GLogoLetter';
 
 export const GContactsPage = () => {
   return (
     <>
       <div className="geco-contacts">
         <div className="geco-contacts-head">
-          <div className="geco-contacts-header">
+          <div className="geco-contacts-head-nav-bar">
+            <Link className="geco-contacts-head-nav-bar-logo" to="/home">
+              <GLogoLetter />
+            </Link>
             <GCircularButton
               icon={GIconButtonBack}
               size="1.5em"

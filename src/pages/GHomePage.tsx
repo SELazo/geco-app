@@ -93,7 +93,9 @@ export const GHomePage = () => {
                 width="70px"
                 height="70px"
                 colorBackground={GWhite}
-                onClickAction={NavigationService.handleNavigation('/contacts')}
+                onClickAction={NavigationService.handleNavigation(
+                  '/contacts/options'
+                )}
               />
               <p>{ContactsHeadCenterTitle}</p>
             </div>
