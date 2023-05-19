@@ -9,6 +9,8 @@ import { NavigationService } from '../../services/navigationService';
 import { GHeadCenterTitle } from '../../components/GHeadCenterTitle';
 import { PricingSectionTitle } from '../../constants/wording';
 import { GPricingCard, IPricing } from '../../components/GPricingCard';
+import { Link } from 'react-router-dom';
+import { GLogoLetter } from '../../components/GLogoLetter';
 
 type SignUpFormData = {
   name: string;
@@ -52,14 +54,19 @@ export const GPricingPage = () => {
   return (
     <div className="geco-pricing-main">
       <div className="geco-pricing-header">
-        <GCircularButton
-          icon={GIconButtonBack}
-          size="1.5em"
-          width="50px"
-          height="50px"
-          colorBackground={GWhite}
-          onClickAction={NavigationService.goBack}
-        />
+        <div className="geco-pricing-header-nav-bar">
+          <Link className="geco-pricing-header-nav-bar-logo" to="/home">
+            <GLogoLetter />
+          </Link>
+          <GCircularButton
+            icon={GIconButtonBack}
+            size="1.5em"
+            width="50px"
+            height="50px"
+            colorBackground={GWhite}
+            onClickAction={NavigationService.goBack}
+          />
+        </div>
         <div className="geco-pricing-title">
           <GHeadCenterTitle title={PricingSectionTitle} color={GBlack} />
         </div>

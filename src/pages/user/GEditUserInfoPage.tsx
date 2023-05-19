@@ -1,4 +1,3 @@
-import React from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { useForm } from 'react-hook-form';
 import { yupResolver } from '@hookform/resolvers/yup';
@@ -17,8 +16,9 @@ import { NavigationService } from '../../services/navigationService';
 import { GHeadCenterTitle } from '../../components/GHeadCenterTitle';
 import { User, setUser } from '../../redux/authSlice';
 import { Users } from '../auth/GSignUpPage';
-import { useNavigate } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 import { UserEditInfoSubtitle } from '../../constants/wording';
+import { GLogoLetter } from '../../components/GLogoLetter';
 
 type SignUpFormData = {
   name: string;
@@ -82,7 +82,10 @@ export const GEditUserInfoPage = () => {
   return (
     <div className="geco-edit-user-page">
       <div className="geco-edit-user-header">
-        <div className="geco-edit-user-nav">
+        <div className="geco-edit-user-header-nav-bar">
+          <Link className="geco-edit-user-header-nav-bar-logo" to="/home">
+            <GLogoLetter />
+          </Link>
           <GCircularButton
             icon={GIconButtonBack}
             size="1.5em"
