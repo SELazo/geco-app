@@ -35,7 +35,6 @@
 
 .home-head-header-nav-bar {
   display: flex;
-  align-items: center;
   margin-right: 1vh;
   margin-top: 1vw;
   flex: 1;
@@ -45,7 +44,7 @@
 
 .home-head-img {
   height: 80vh;
-  background-image: url('src/assets/images/email_campaign_bro.svg');
+  background-image: url('../assets/images/email_campaign_bro.svg');
   background-repeat: no-repeat;
   background-position: top center;
 }

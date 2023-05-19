@@ -20,6 +20,8 @@ import {
 import { NavigationService } from '../../services/navigationService';
 import { GHeadCenterTitle } from '../../components/GHeadCenterTitle';
 import { User } from '../../redux/authSlice';
+import { GLogoLetter } from '../../components/GLogoLetter';
+import { Link } from 'react-router-dom';
 
 export const GUserPage = () => {
   const user: User = useSelector((state: any) => state.auth.user as User);
@@ -27,6 +29,9 @@ export const GUserPage = () => {
     <div className="user-main">
       <div className="user-head">
         <div className="user-head-nav-bar">
+          <Link className="user-head-nav-bar-logo" to="/home">
+            <GLogoLetter />
+          </Link>
           <GCircularButton
             icon={GIconButtonBack}
             size="1.5em"
