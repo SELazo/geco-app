@@ -3,14 +3,18 @@
 html {
   font-family: 'Montserrat', sans-serif;
   color: #18191f;
-  justify-content: center;
-  align-items: center;
-  display: flex;
-  height: -webkit-fill-available;
 }
 
+
 body {
-  max-width: 375px;
+  margin: 0%;
+  
+}
+
+#root{
+  border: none;
+  margin: none;
+  padding: none;
 }
 
 a {

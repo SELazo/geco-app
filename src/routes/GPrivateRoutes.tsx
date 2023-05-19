@@ -9,6 +9,7 @@ import { GSuccessSendCommentPage } from '../pages/user/GSuccessSendCommentPage';
 import { GContactsRenderMainPage } from '../pages/contacts/GContactsRenderMainPage';
 import { GContactsPage } from '../pages/contacts/GContactsPage';
 import { GContactsListPage } from '../pages/contacts/GContactsListPage';
+import { GPricingTermsPage } from '../pages/user/GPrincingTerms';
 
 export const GPrivateRoutes = () => {
   return (
@@ -17,6 +18,7 @@ export const GPrivateRoutes = () => {
       <Route path="/user" element={<GUserRenderMainPage />}>
         <Route path="info" element={<GUserPage />} />
         <Route path="pricing" element={<GPricingPage />} />
+        <Route path="pricing/terms" element={<GPricingTermsPage />} />
         <Route path="comments" element={<GCommentsPage />} />
         <Route path="edit" element={<GEditUserInfoPage />} />
         <Route path="message-sended" element={<GSuccessSendCommentPage />} />

@@ -8,19 +8,19 @@ import { ITextAction } from '../interfaces/ITextAction';
  */
 
 export const ForgetPasswordAction: ITextAction = {
-  label: 'Olvidaste tu contraseña?',
+  label: 'Olvidaste tu contraseña? ',
   action: 'Recuperala!',
   route: '/forgot-password',
 };
 
 export const SignUpAction: ITextAction = {
-  label: 'Eres nuevo?',
+  label: 'Eres nuevo? ',
   action: 'Creá tu cuenta ahora!',
   route: '/sign-up',
 };
 
 export const SignInAction: ITextAction = {
-  label: 'Ya eres parte del club?',
+  label: 'Ya eres parte del club? ',
   action: 'Por aquí!',
   route: '/login',
 };
@@ -63,6 +63,8 @@ export const SuccessResetPasswordSubtitle: string =
 export const Okay: string = 'Okay!';
 
 export const UserOptionsSubtitle: string = 'Opciones de usuario';
+
+export const UserEditInfoSubtitle: string = 'Edita tu información';
 
 /**
  * Head Section Titles

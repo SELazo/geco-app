@@ -2,10 +2,11 @@ import React from 'react';
 import { useForm } from 'react-hook-form';
 import { yupResolver } from '@hookform/resolvers/yup';
 import * as Yup from 'yup';
-import { useNavigate } from 'react-router-dom';
+import { Navigate, useNavigate } from 'react-router-dom';
 
 import '../../../styles/ginputBox.css';
 import '../../../styles/gform.css';
+import '../../../styles/grecovery.css';
 
 import { GHeadSectionTitle } from '../../../components/GHeadSectionTitle';
 import { GCircularButton } from '../../../components/GCircularButton';
@@ -37,7 +38,7 @@ export const GResetPasswordPage = () => {
   const onSubmit = (data: ResetPasswordFormData) => {
     console.log(data);
     reset();
-    NavigationService.navigateTo('/recovery/reset-success');
+    navigate('/recovery/reset-success');
   };
 
   const {
@@ -50,8 +51,8 @@ export const GResetPasswordPage = () => {
   });
 
   return (
-    <>
-      <div style={{ margin: '1em' }}>
+    <div className='recovery-main'>
+      <div className='recovery-head'>
         <GCircularButton
           icon={GIconButtonX}
           size="1.5em"
@@ -96,6 +97,6 @@ export const GResetPasswordPage = () => {
           colorFont={GBlack}
         />
       </form>
-    </>
+    </div>
   );
 };

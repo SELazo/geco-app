@@ -9,6 +9,8 @@ import { NavigationService } from '../../services/navigationService';
 import { GHeadCenterTitle } from '../../components/GHeadCenterTitle';
 import { PricingSectionTitle } from '../../constants/wording';
 import { GPricingCard, IPricing } from '../../components/GPricingCard';
+import { Link } from 'react-router-dom';
+import { GLogoLetter } from '../../components/GLogoLetter';
 
 type SignUpFormData = {
   name: string;
@@ -20,44 +22,42 @@ type SignUpFormData = {
 export const GPricingPage = () => {
   const pricingOptions: IPricing[] = [
     {
+      idPricing: 0,
       topTitle: 'CUENTA',
       mainTitle: 'FREE',
       benefits: [
-        { icon: 'check', description: '5 estrategias' },
-        { icon: 'check', description: '5 imágenes inteligentes' },
-        { icon: 'x', description: '5 grupos de contactos' },
+        { idBenefit: 0, icon: 'check', description: '5 estrategias' },
+        { idBenefit: 1, icon: 'check', description: '5 imágenes inteligentes' },
+        { idBenefit: 2, icon: 'x', description: '5 grupos de contactos' },
       ],
       active: true,
       backgroundColor: GRed,
       buttonLabel: 'GRATIS',
-      action: () => {
-        console.log('Eligio cuenta free');
-      },
+      idTerms: 1,
     },
     {
+      idPricing: 1,
       topTitle: 'CUENTA',
       mainTitle: 'PREMIUM',
       benefits: [
-        { icon: 'check', description: '∞ estrategias' },
-        { icon: 'check', description: '∞ imágenes inteligentes' },
-        { icon: 'check', description: '∞ grupos de contactos' },
+        { idBenefit: 3, icon: 'check', description: '∞ estrategias' },
+        { idBenefit: 4, icon: 'check', description: '∞ imágenes inteligentes' },
+        { idBenefit: 5, icon: 'check', description: '∞ grupos de contactos' },
       ],
       active: true,
       backgroundColor: GYellow,
       buttonLabel: '$1500',
-      action: () => {
-        console.log('Eligio cuenta PREMIUM');
-      },
+      idTerms: 2,
     },
   ];
-  const onSubmit = (data: SignUpFormData) => {
-    console.log(data);
-  };
 
   return (
-    <>
-      <div className="geco-pricing-options">
-        <div className="geco-pricing-header">
+    <div className="geco-pricing-main">
+      <div className="geco-pricing-header">
+        <div className="geco-pricing-header-nav-bar">
+          <Link className="geco-pricing-header-nav-bar-logo" to="/home">
+            <GLogoLetter />
+          </Link>
           <GCircularButton
             icon={GIconButtonBack}
             size="1.5em"
@@ -70,14 +70,14 @@ export const GPricingPage = () => {
         <div className="geco-pricing-title">
           <GHeadCenterTitle title={PricingSectionTitle} color={GBlack} />
         </div>
-        <div className="geco-pricing-cards">
-          <div className="geco-pricing-option">
-            {pricingOptions.map((item, index) => (
-              <GPricingCard key={`${index}-card`} pricing={item} />
-            ))}
-          </div>
+      </div>
+      <div className="geco-pricing-cards">
+        <div className="geco-pricing-option">
+          {pricingOptions.map((item) => (
+            <GPricingCard key={item.idPricing} pricing={item} />
+          ))}
         </div>
       </div>
-    </>
+    </div>
   );
 };

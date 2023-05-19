@@ -4,6 +4,7 @@ import * as Yup from 'yup';
 
 import '../../styles/ginputBox.css';
 import '../../styles/gform.css';
+import '../../styles/gcommentsPage.css';
 
 import { GHeadSectionTitle } from '../../components/GHeadSectionTitle';
 import { GCircularButton } from '../../components/GCircularButton';
@@ -15,7 +16,8 @@ import { GBlack, GWhite, GYellow } from '../../constants/palette';
 import { NavigationService } from '../../services/navigationService';
 import { useSelector } from 'react-redux';
 import { User } from '../../redux/authSlice';
-import { useNavigate } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
+import { GLogoLetter } from '../../components/GLogoLetter';
 
 type CommentsFormData = {
   message: string;
@@ -47,8 +49,11 @@ export const GCommentsPage = () => {
   });
 
   return (
-    <>
-      <div style={{ margin: '1em' }}>
+    <div className="commentsPage-main">
+      <div className="geco-comments-header-nav-bar">
+        <Link className="geco-comments-header-nav-bar-logo" to="/home">
+          <GLogoLetter />
+        </Link>
         <GCircularButton
           icon={GIconButtonBack}
           size="1.5em"
@@ -57,6 +62,8 @@ export const GCommentsPage = () => {
           colorBackground={GWhite}
           onClickAction={NavigationService.goBack}
         />
+      </div>
+      <div className="geco-comments-header-title">
         <GHeadSectionTitle
           title={CommentsHeadSectionTitle.title}
           subtitle={CommentsHeadSectionTitle.subtitle}
@@ -79,6 +86,6 @@ export const GCommentsPage = () => {
           colorFont={GBlack}
         />
       </form>
-    </>
+    </div>
   );
 };

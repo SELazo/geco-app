@@ -5,6 +5,7 @@ import * as Yup from 'yup';
 
 import '../../styles/ginputBox.css';
 import '../../styles/gform.css';
+import '../../styles/gsignup.css';
 
 import { GSubmitButton } from '../../components/GSubmitButton';
 
@@ -16,12 +17,20 @@ import { GCircularButton } from '../../components/GCircularButton';
 import { GIconButtonBack, GIconButtonSignIn } from '../../constants/buttons';
 import { GBlack, GWhite, GYellow } from '../../constants/palette';
 import { NavigationService } from '../../services/navigationService';
+import { useNavigate } from 'react-router-dom';
 
 type SignUpFormData = {
   name: string;
   email: string;
   password: string;
   confirmedPassword: string;
+};
+
+/**temporal */
+export type Users = {
+  name: string;
+  email: string;
+  password: string;
 };
 
 export const GSignUpPage = () => {
@@ -38,24 +47,51 @@ export const GSignUpPage = () => {
       .required('Por favor confirme su contraseña.')
       .oneOf([Yup.ref('password')], 'La contraseña no coincide.'),
   });
-
+  const navigate = useNavigate();
   const {
     register,
     handleSubmit,
     reset,
+    setError,
     formState: { errors },
   } = useForm<SignUpFormData>({
     resolver: yupResolver(validationSchema),
   });
 
   const onSubmit = (data: SignUpFormData) => {
-    console.log(data);
-    reset();
+    /**temporal */
+    const dataBase = JSON.parse(
+      localStorage.getItem('users') || '[]'
+    ) as Users[];
+
+    const searchedUser = dataBase.find((user) => user.email === data.email);
+
+    if (searchedUser === undefined) {
+      const newUser = {
+        id: dataBase.length + 1,
+        name: data.name,
+        email: data.email,
+        password: data.password,
+      };
+
+      dataBase.push(newUser);
+
+      localStorage.setItem('users', JSON.stringify(dataBase));
+
+      reset();
+
+      navigate('/login');
+    }
+
+    setError('email', {
+      type: 'manual',
+      message: 'El correo electrónico está en uso',
+    });
   };
 
   return (
-    <>
-      <div style={{ margin: '1em' }}>
+    <div className="signup-main">
+      <div className="singup-head">
         <GCircularButton
           icon={GIconButtonBack}
           size="1.5em"
@@ -123,6 +159,6 @@ export const GSignUpPage = () => {
         />
         <GTextAction textAction={SignInAction} />
       </form>
-    </>
+    </div>
   );
 };

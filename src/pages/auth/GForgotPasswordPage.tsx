@@ -4,6 +4,7 @@ import * as Yup from 'yup';
 
 import '../../styles/ginputBox.css';
 import '../../styles/gform.css';
+import '../../styles/gforgotpss.css';
 
 import { GHeadSectionTitle } from '../../components/GHeadSectionTitle';
 import { GCircularButton } from '../../components/GCircularButton';
@@ -40,8 +41,8 @@ export const GForgotPasswordPage = () => {
   });
 
   return (
-    <>
-      <div style={{ margin: '1em' }}>
+    <div className='forgotpss-main'>
+      <div className='forgotpss-head'>
         <GCircularButton
           icon={GIconButtonBack}
           size="1.5em"
@@ -73,6 +74,6 @@ export const GForgotPasswordPage = () => {
           colorFont={GBlack}
         />
       </form>
-    </>
+    </div>
   );
 };

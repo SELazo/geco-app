@@ -1,33 +1,38 @@
-.geco-pricing-options {
-  margin-top: 5em;
-  width: 100vw;
-  display: flex;
-  flex-direction: column;
+.geco-pricing-header {
+  margin-bottom: 2vh;
 }
 
-.geco-pricing-header {
+.geco-pricing-header-nav-bar {
   display: flex;
-  flex-direction: row;
   align-items: center;
-  margin-left: 1.5em;
-  margin-top: 5em;
+  align-self: flex-start;
+  margin-left: 4vw;
+  margin-top: 2vh;
+}
+
+.geco-pricing-header-nav-bar-logo img {
+  border: 2px solid #18191f;
+  box-shadow: 0px 2px 0px #18191f;
+  border-radius: 50%;
+  margin-right: 1vw;
+  width: 48px;
+  height: 48px;
 }
 
 .geco-pricing-title {
   display: flex;
   align-items: center;
   justify-content: center;
+  flex-grow: 1;
 }
 
 .geco-pricing-title h1 {
   margin: 0.5em 0 0.5em 0;
+  text-align: center;
 }
 
 .geco-pricing-cards {
   display: flex;
   flex-direction: column;
   align-items: center;
-}
-.geco-pricing-option {
-  width: 80%;
 }

@@ -1,3 +1,103 @@
+.home-main {
+  display: flex;
+  flex-direction: column;
+  border: none;
+  height: 100vh;
+  width: 100vw;
+  background-color: #1947e5;
+}
+
+.home-head {
+  display: flex;
+  border: none;
+  flex-direction: column;
+  height: 40vh;
+  background-color: #f95a2c;
+  overflow: hidden;
+  border-radius: 0 0 1.2em 1.2em;
+}
+
+.home-head-header {
+  display: flex;
+  flex-direction: row;
+  justify-content: center;
+  height: 20vh;
+}
+
+.home-head-header-logo {
+  display: flex;
+  flex: 1;
+  margin-top: 1vh;
+  margin-left: 1vw;
+  justify-self: flex-start;
+  height: auto;
+}
+
+.home-head-header-nav-bar {
+  display: flex;
+  margin-right: 1vh;
+  margin-top: 1vw;
+  flex: 1;
+  justify-content: flex-end;
+  height: auto;
+}
+
+.home-head-img {
+  height: 80vh;
+  background-image: url('../assets/images/email_campaign_bro.svg');
+  background-repeat: no-repeat;
+  background-position: top center;
+}
+
+.home-body {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  border: none;
+  width: 100vw;
+}
+
+.home-body-title {
+  display: flex;
+  height: 12vh;
+}
+
+.home-body-container-columns {
+  display: flex;
+  align-items: flex-start;
+  max-width: 90%;
+  max-height: 350;
+  min-height: 350;
+}
+
+.geco-services-column {
+  display: flex;
+  flex: 1;
+  flex-direction: column;
+  align-items: center;
+  justify-content: space-around;
+}
+
+.geco-services-icon {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  min-width: 50%;
+  max-width: 50%;
+  margin-bottom: 2vh;
+}
+
+.geco-services-icon p {
+  margin-top: 0.5em;
+  font-family: 'Montserrat';
+  font-style: normal;
+  font-weight: 600;
+  font-size: 20px;
+
+  color: #ffffff;
+}
+
 .geco-nav-bar-right {
   display: flex;
   align-items: center;
@@ -25,28 +125,4 @@
 .geco-services {
   width: 100%;
   margin-top: 1.5em;
-}
-
-.geco-services-column {
-  display: flex;
-  flex-direction: row;
-  justify-content: space-around;
-}
-
-.geco-services-icon {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  min-width: 50%;
-  max-width: 50%;
-}
-
-.geco-services-icon p {
-  margin-top: 0.5em;
-  font-family: 'Montserrat';
-  font-style: normal;
-  font-weight: 600;
-  font-size: 20px;
-
-  color: #ffffff;
 }
