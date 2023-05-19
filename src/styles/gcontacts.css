@@ -34,3 +34,15 @@
   max-width: 325px;
   min-width: 325px;
 }
+
+.geco-contacts {
+  display: flex;
+  flex-direction: column;
+  border: none;
+  height: 100vh;
+  background-image: url('../assets/images/geco_animal_crop.svg');
+  /*background-size: 80vh;*/
+  background-repeat: no-repeat;
+  background-position: bottom right;
+  background-color: #f95a2c;
+}
