@@ -2,7 +2,7 @@ import('../../styles/gcontactsList.css');
 
 import { GCircularButton } from '../../components/GCircularButton';
 import { GIconButtonBack, GMoreInfoIcon } from '../../constants/buttons';
-import { GBlack, GWhite } from '../../constants/palette';
+import { GBlack, GGreen, GRed, GWhite, GYellow } from '../../constants/palette';
 import { NavigationService } from '../../services/navigationService';
 import { GHeadCenterTitle } from '../../components/GHeadCenterTitle';
 import {
@@ -13,6 +13,7 @@ import {
 import { GContactItem, IContactItem } from '../../components/GContactItem';
 import { GLogoLetter } from '../../components/GLogoLetter';
 import { Link } from 'react-router-dom';
+import { GDropdownMenu, IMenuItem } from '../../components/GDropdownMenu';
 
 export const GContactsListPage = () => {
   const contacts: IContactItem[] = [
@@ -45,6 +46,17 @@ export const GContactsListPage = () => {
       route: `/contacts/edit/4`,
     },
   ];
+
+  const menuContacts: IMenuItem[] = [
+    { label: 'Agregar contacto', route: 'add-contact', color: GYellow },
+    {
+      label: 'Agregar contactos desde Excel',
+      route: 'add-contact-excel',
+      color: GGreen,
+    },
+    { label: 'Eliminar contactos', route: 'delete-contact', color: GRed },
+  ];
+
   return (
     <>
       <div className="geco-contacts-list">
@@ -66,14 +78,7 @@ export const GContactsListPage = () => {
             className="geco-contacts-list-head-nav-bar-right
           "
           >
-            <GCircularButton
-              icon={GMoreInfoIcon}
-              size="1.5em"
-              width="50px"
-              height="50px"
-              colorBackground={GWhite}
-              onClickAction={NavigationService.goBack}
-            />
+            <GDropdownMenu menu={menuContacts} />
           </div>
         </div>
         <div className="geco-contacts-list-title">

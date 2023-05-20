@@ -61,8 +61,6 @@
 }
 
 .geco-contacts-list-ul {
-  width: 90%;
-}
-
-.geco-contacts-list-item {
+  min-width: 325px;
+  max-width: 325px;
 }
