@@ -60,9 +60,12 @@
   display: flex;
   justify-content: center;
   align-items: center;
-  max-width: 325px;
-  min-width: 325px;
+  width: 290px;
   overflow: hidden;
+  border: 2px dotted 18191f;
+  border-radius: 16px;
+  padding: 1em;
+  margin-bottom: 10px;
 }
 
 .file-preview .geco-icon svg {
