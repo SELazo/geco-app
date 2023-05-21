@@ -1,3 +1,4 @@
+import { IDropdownHelpProps } from '../components/GDropdownHelp';
 import { IMenuOption } from '../components/GMenuOption';
 import { IFeedback } from '../interfaces/IFeedback';
 import { IHeadSectionTitle } from '../interfaces/IHeadSectionTitle';
@@ -149,4 +150,16 @@ export const GroupsContacts: IMenuOption = {
   mainTitle: 'Administrar grupos',
   description: 'Agrega, modifica o elimina tus grupos',
   route: '/contacts/groups',
+};
+
+/**
+ * Dropdown Help
+ */
+
+export const ImportExcelHelp: IDropdownHelpProps = {
+  title: 'Importante!',
+  body: 'El Excel deberá estar compuesto por tres columnas: Nombres, números telefónicos y dirección de correos electrónicos.',
+  routeLabel: 'Descarga una muestra!',
+  route:
+    'https://docs.google.com/spreadsheets/d/1vqt6EbxHXypIU73HsWhpmGDQkzeN4zLh/edit?usp=share_link&ouid=104991212361139592910&rtpof=true&sd=true',
 };

@@ -49,6 +49,7 @@ import {
   FaComment,
   FaEllipsisH,
   FaFileExcel,
+  FaQuestion,
 } from 'react-icons/fa';
 
 interface IconsMap {
@@ -72,6 +73,7 @@ export const Icons: IconsMap = {
   'three-circles': <FaEllipsisH />,
   file: <FiFile />,
   'file-excel': <FaFileExcel />,
+  help: <FaQuestion />,
   'help-circle': <FiHelpCircle />,
   image: <FiImage />,
   images: <FaImages />,

@@ -7,13 +7,17 @@ import { GCircularButton } from '../../../components/GCircularButton';
 import { GIconButtonBack } from '../../../constants/buttons';
 
 import { GSubmitButton } from '../../../components/GSubmitButton';
-import { AddContactsExcelSectionTitle } from '../../../constants/wording';
+import {
+  AddContactsExcelSectionTitle,
+  ImportExcelHelp,
+} from '../../../constants/wording';
 import { GBlack, GGreen, GWhite, GYellow } from '../../../constants/palette';
 import { NavigationService } from '../../../services/navigationService';
 import { Link, useNavigate } from 'react-router-dom';
 import { GLogoLetter } from '../../../components/GLogoLetter';
 import { useState } from 'react';
 import { GIcon } from '../../../components/GIcon';
+import { GDropdownHelp } from '../../../components/GDropdownHelp';
 
 const EXAMPLE_URL =
   'https://docs.google.com/spreadsheets/d/1vqt6EbxHXypIU73HsWhpmGDQkzeN4zLh/edit?usp=share_link&ouid=104991212361139592910&rtpof=true&sd=true';
@@ -50,18 +54,28 @@ export const GAddContactsExcelPage = () => {
 
   return (
     <div className="geco-add-contacts-excel-main">
-      <div className="geco-add-contacts-excel-nav-bar">
-        <Link className="geco-add-contacts-excel-nav-bar-logo" to="/home">
-          <GLogoLetter />
-        </Link>
-        <GCircularButton
-          icon={GIconButtonBack}
-          size="1.5em"
-          width="50px"
-          height="50px"
-          colorBackground={GWhite}
-          onClickAction={NavigationService.goBack}
-        />
+      <div className="geco-add-contacts-excel-head-nav-bar">
+        <div className="geco-add-contacts-excel-nav-bar">
+          <Link className="geco-add-contacts-excel-nav-bar-logo" to="/home">
+            <GLogoLetter />
+          </Link>
+          <GCircularButton
+            icon={GIconButtonBack}
+            size="1.5em"
+            width="50px"
+            height="50px"
+            colorBackground={GWhite}
+            onClickAction={NavigationService.goBack}
+          />
+        </div>
+        <div className="geco-add-contacts-excel-nav-bar-right">
+          <GDropdownHelp
+            title={ImportExcelHelp.title}
+            body={ImportExcelHelp.body}
+            routeLabel={ImportExcelHelp.routeLabel}
+            route={ImportExcelHelp.route}
+          />
+        </div>
       </div>
       <div className="geco-add-contacts-excel-header-title">
         <GHeadSectionTitle

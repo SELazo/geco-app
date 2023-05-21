@@ -9,6 +9,7 @@ export const GGreen: string = '#00C6AE';
 export const GRed: string = '#F95A2C';
 export const GPink: string = '#FF89BB';
 export const GYellow: string = '#FFBD12';
+export const GLightYellow: string = '#FFF4CC';
 export const GWhite: string = '#FFFFFF';
 
 /**

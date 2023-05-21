@@ -1,0 +1,40 @@
+.dropdown-help-modal-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background-color: rgba(0, 0, 0, 0.2);
+}
+
+.dropdown-help-modal-toggle {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding: 1em;
+  gap: 10px;
+
+  background: #18191f;
+  border-radius: 12px;
+}
+
+.dropdown-help-modal-body {
+  background: #fff4cc;
+  border: 2px solid #18191f;
+  border-radius: 16px;
+  max-width: 250px;
+  padding: 1.5em;
+}
+
+.dropdown-help-modal-body h3 {
+  margin: 0;
+}
+
+.dropdown-help-modal-body a {
+  margin-top: 0;
+  font-family: 'Montserrat';
+  font-style: bold;
+  font-weight: 700;
+  color: #18191f;
+  text-decoration: underline;
+}
