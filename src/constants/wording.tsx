@@ -91,6 +91,11 @@ export const CommentsHeadSectionTitle: IHeadSectionTitle = {
   subtitle: 'Si tienés alguna duda no dudes en mensajearnos 😃',
 };
 
+export const AddContactSectionTitle: IHeadSectionTitle = {
+  title: 'Crear contacto',
+  subtitle: 'Crea un nuevo contacto. 😌',
+};
+
 /**
  * Feedbacks
  */

@@ -48,7 +48,11 @@ export const GContactsListPage = () => {
   ];
 
   const menuContacts: IMenuItem[] = [
-    { label: 'Agregar contacto', route: 'add-contact', color: GYellow },
+    {
+      label: 'Agregar contacto',
+      route: '/contacts/add-contact',
+      color: GYellow,
+    },
     {
       label: 'Agregar contactos desde Excel',
       route: 'add-contact-excel',

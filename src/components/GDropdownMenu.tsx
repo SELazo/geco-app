@@ -1,4 +1,4 @@
-import { FC, useState } from 'react';
+import { FC, useEffect, useState } from 'react';
 
 import('../styles/gdropdownMenu.css');
 
@@ -8,6 +8,7 @@ import { GMoreInfoIcon } from '../constants/buttons';
 import Modal from 'react-modal';
 import { usePopper } from 'react-popper';
 import { GIcon } from './GIcon';
+import { Link } from 'react-router-dom';
 
 export interface IMenuItem {
   label: string;
@@ -32,6 +33,10 @@ export const GDropdownMenu: FC<IDropdownMenuProps> = (
     placement: 'bottom-end',
   });
 
+  useEffect(() => {
+    Modal.setAppElement('#root');
+  }, []);
+
   const toggleMenu = () => {
     setIsOpen(!isOpen);
   };
@@ -43,13 +48,15 @@ export const GDropdownMenu: FC<IDropdownMenuProps> = (
         onClick={toggleMenu}
         ref={setReferenceElement}
       >
-        <GCircularButton
-          icon={GMoreInfoIcon}
-          size="1.5em"
-          width="50px"
-          height="50px"
-          colorBackground={GWhite}
-        />
+        <span>
+          <GCircularButton
+            icon={GMoreInfoIcon}
+            size="1.5em"
+            width="50px"
+            height="50px"
+            colorBackground={GWhite}
+          />
+        </span>
       </button>
       <Modal
         isOpen={isOpen}
@@ -77,7 +84,7 @@ export const GDropdownMenu: FC<IDropdownMenuProps> = (
                         border: '2px solid #18191f',
                       }}
                     />
-                    <a href={item.route}>{item.label}</a>
+                    <Link to={item.route}>{item.label}</Link>
                   </div>
                   <GIcon color={GBlack} icon-type="chevron-right" />
                 </div>

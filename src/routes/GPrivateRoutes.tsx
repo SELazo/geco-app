@@ -10,6 +10,7 @@ import { GContactsRenderMainPage } from '../pages/contacts/GContactsRenderMainPa
 import { GContactsPage } from '../pages/contacts/GContactsPage';
 import { GContactsListPage } from '../pages/contacts/GContactsListPage';
 import { GPricingTermsPage } from '../pages/user/GPrincingTerms';
+import { GAddContactPage } from '../pages/contacts/add-contact/GAddContactPage';
 
 export const GPrivateRoutes = () => {
   return (
@@ -26,6 +27,8 @@ export const GPrivateRoutes = () => {
       </Route>
       <Route path="/contacts" element={<GContactsRenderMainPage />}>
         <Route path="options" element={<GContactsPage />} />
+        <Route path="add-contact" element={<GAddContactPage />} />
+        <Route path="add-contact-excel" element={<GContactsPage />} />
         <Route path="groups" element={<GPricingPage />} />
         <Route path="list" element={<GContactsListPage />} />
         <Route path="*" element={<Navigate to="/contacts/options" />} />
