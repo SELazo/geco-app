@@ -96,6 +96,11 @@ export const AddContactSectionTitle: IHeadSectionTitle = {
   subtitle: 'Crea un nuevo contacto. 😌',
 };
 
+export const AddContactsExcelSectionTitle: IHeadSectionTitle = {
+  title: 'Importar contactos',
+  subtitle: 'Importar contactos desde un archivo Excel. 🧐',
+};
+
 /**
  * Feedbacks
  */
@@ -118,6 +123,14 @@ export const CommentSended: IFeedback = {
 export const ContactAdded: IFeedback = {
   title: 'El contacto ha sido añadido!',
   subtitle: 'Ahora podrá administrar su nuevo contacto a través de la Agenda!',
+  buttonLabel: 'Okay!',
+  buttonPath: '/contacts/list',
+};
+
+export const ContactsExcelAdded: IFeedback = {
+  title: 'Los contactos han sido añadidos!',
+  subtitle:
+    'Ahora podrá administrar sus nuevo contactos a través de la Agenda!',
   buttonLabel: 'Okay!',
   buttonPath: '/contacts/list',
 };

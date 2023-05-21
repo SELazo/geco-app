@@ -55,7 +55,7 @@ export const GContactsListPage = () => {
     },
     {
       label: 'Agregar contactos desde Excel',
-      route: 'add-contact-excel',
+      route: '/contacts/add-contacts-excel',
       color: GGreen,
     },
     { label: 'Eliminar contactos', route: 'delete-contact', color: GRed },
