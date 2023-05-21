@@ -20,12 +20,10 @@ export const GSubmitButton: FC<ISubmitButtonProps> = (
       style={{ backgroundColor: props.colorBackground, color: props.colorFont }}
       type="submit"
     >
-      <span>
-        {props.label}
-        {props.icon != undefined ? (
-          <GIcon icon-type={props.icon['icon-type']} color={props.icon.color} />
-        ) : null}
-      </span>
+      {props.label}
+      {props.icon != undefined ? (
+        <GIcon icon-type={props.icon['icon-type']} color={props.icon.color} />
+      ) : null}
     </button>
   );
 };

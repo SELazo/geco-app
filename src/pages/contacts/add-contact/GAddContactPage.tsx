@@ -14,8 +14,6 @@ import { GSubmitButton } from '../../../components/GSubmitButton';
 import { AddContactSectionTitle } from '../../../constants/wording';
 import { GBlack, GWhite, GYellow } from '../../../constants/palette';
 import { NavigationService } from '../../../services/navigationService';
-import { useSelector } from 'react-redux';
-import { User } from '../../../redux/authSlice';
 import { Link, useNavigate } from 'react-router-dom';
 import { GLogoLetter } from '../../../components/GLogoLetter';
 import { IContactData } from '../../../interfaces/IContact';
@@ -28,7 +26,7 @@ export const GAddContactPage = () => {
     cellphone: Yup.string()
       .test(
         'has-contact-info',
-        'Por favor ingrese al menos un correo electrónico o número de celular',
+        'Por favor ingrese al menos número de celular',
         function (value) {
           const { email, cellphone } = this.parent;
           if (!email && !cellphone) {
@@ -50,7 +48,7 @@ export const GAddContactPage = () => {
     //llamada al servicio
     //si okey
     reset();
-    navigate('/user/message-sended');
+    navigate('success-add-contact');
   };
 
   const {
