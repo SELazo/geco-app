@@ -116,8 +116,8 @@ export const CommentSended: IFeedback = {
 };
 
 export const ContactAdded: IFeedback = {
-  title: 'Contacto Agregado!',
-  subtitle: 'Ahora podrás administrar tu contacto desde tu Agenda!',
+  title: 'El contacto ha sido añadido!',
+  subtitle: 'Ahora podrá administrar su nuevo contacto a través de la Agenda!',
   buttonLabel: 'Okay!',
   buttonPath: '/contacts/list',
 };

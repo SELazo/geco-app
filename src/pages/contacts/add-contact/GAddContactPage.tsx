@@ -48,7 +48,7 @@ export const GAddContactPage = () => {
     //llamada al servicio
     //si okey
     reset();
-    navigate('success-add-contact');
+    navigate('/contacts/success-add-contact');
   };
 
   const {
