@@ -35,6 +35,7 @@
 .span-error {
   color: #f95a2c;
   font-size: 12px;
+  max-width: 325px;
 }
 
 .input-group textarea {
