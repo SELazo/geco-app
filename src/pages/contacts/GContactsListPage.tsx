@@ -1,7 +1,11 @@
 import('../../styles/gcontactsList.css');
 
 import { GCircularButton } from '../../components/GCircularButton';
-import { GEditIcon, GIconButtonBack } from '../../constants/buttons';
+import {
+  GContactsIcon,
+  GEditIcon,
+  GIconButtonBack,
+} from '../../constants/buttons';
 import { GBlack, GGreen, GRed, GWhite, GYellow } from '../../constants/palette';
 import { NavigationService } from '../../services/navigationService';
 import { GHeadCenterTitle } from '../../components/GHeadCenterTitle';
@@ -45,6 +49,18 @@ export const GContactsListPage = () => {
           <div className="geco-contacts-list-head-nav-bar">
             <Link className="geco-contacts-head-nav-bar-logo" to="/home">
               <GLogoLetter />
+            </Link>
+            <Link
+              className="geco-contacts-list-nav-bar-section"
+              to="/contacts/info"
+            >
+              <GCircularButton
+                icon={GContactsIcon}
+                size="1.5em"
+                width="50px"
+                height="50px"
+                colorBackground={GWhite}
+              />
             </Link>
             <GCircularButton
               icon={GIconButtonBack}

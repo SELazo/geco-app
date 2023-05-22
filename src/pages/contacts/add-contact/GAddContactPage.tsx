@@ -8,7 +8,7 @@ import '../../../styles/gaddcontact.css';
 
 import { GHeadSectionTitle } from '../../../components/GHeadSectionTitle';
 import { GCircularButton } from '../../../components/GCircularButton';
-import { GIconButtonBack } from '../../../constants/buttons';
+import { GContactsIcon, GIconButtonBack } from '../../../constants/buttons';
 
 import { GSubmitButton } from '../../../components/GSubmitButton';
 import { AddContactSectionTitle } from '../../../constants/wording';
@@ -81,6 +81,15 @@ export const GAddContactPage = () => {
       <div className="geco-add-contact-nav-bar">
         <Link className="geco-add-contact-nav-bar-logo" to="/home">
           <GLogoLetter />
+        </Link>
+        <Link className="geco-add-contact-nav-bar-section" to="/contacts/info">
+          <GCircularButton
+            icon={GContactsIcon}
+            size="1.5em"
+            width="50px"
+            height="50px"
+            colorBackground={GWhite}
+          />
         </Link>
         <GCircularButton
           icon={GIconButtonBack}

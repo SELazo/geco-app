@@ -21,6 +21,10 @@
   height: 48px;
 }
 
+.geco-add-contact-nav-bar-section {
+  margin-right: 1vw;
+}
+
 .geco-add-contact-header-title {
   min-width: 325px;
   max-width: 325px;

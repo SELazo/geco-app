@@ -35,6 +35,10 @@
   height: 48px;
 }
 
+.geco-add-contact-excel-nav-bar-section {
+  margin-right: 1vw;
+}
+
 .geco-add-contacts-excel-header-title {
   min-width: 325px;
   max-width: 325px;

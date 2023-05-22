@@ -5,7 +5,11 @@ import('../../../styles/gcontactsList.css');
 
 import { NavigationService } from '../../../services/navigationService';
 import { GCircularButton } from '../../../components/GCircularButton';
-import { GDeletetIcon, GIconButtonBack } from '../../../constants/buttons';
+import {
+  GContactsIcon,
+  GDeletetIcon,
+  GIconButtonBack,
+} from '../../../constants/buttons';
 import { GBlack, GRed, GWhite, GYellow } from '../../../constants/palette';
 import { GHeadCenterTitle } from '../../../components/GHeadCenterTitle';
 import { ContactsSectionTitle } from '../../../constants/wording';
@@ -77,6 +81,18 @@ export const GListContactsToImportPage = () => {
           <div className="geco-contacts-list-head-nav-bar">
             <Link className="geco-contacts-head-nav-bar-logo" to="/home">
               <GLogoLetter />
+            </Link>
+            <Link
+              className="geco-contacts-list-nav-bar-section"
+              to="/contacts/info"
+            >
+              <GCircularButton
+                icon={GContactsIcon}
+                size="1.5em"
+                width="50px"
+                height="50px"
+                colorBackground={GWhite}
+              />
             </Link>
             <GCircularButton
               icon={GIconButtonBack}

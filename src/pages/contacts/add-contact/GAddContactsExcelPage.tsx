@@ -8,7 +8,11 @@ import '../../../styles/gaddcontactsexcel.css';
 
 import { GHeadSectionTitle } from '../../../components/GHeadSectionTitle';
 import { GCircularButton } from '../../../components/GCircularButton';
-import { GDeletetIcon, GIconButtonBack } from '../../../constants/buttons';
+import {
+  GContactsIcon,
+  GDeletetIcon,
+  GIconButtonBack,
+} from '../../../constants/buttons';
 
 import { GSubmitButton } from '../../../components/GSubmitButton';
 import {
@@ -130,6 +134,18 @@ export const GAddContactsExcelPage = () => {
         <div className="geco-add-contacts-excel-nav-bar">
           <Link className="geco-add-contacts-excel-nav-bar-logo" to="/home">
             <GLogoLetter />
+          </Link>
+          <Link
+            className="geco-add-contact-excel-nav-bar-section"
+            to="/contacts/info"
+          >
+            <GCircularButton
+              icon={GContactsIcon}
+              size="1.5em"
+              width="50px"
+              height="50px"
+              colorBackground={GWhite}
+            />
           </Link>
           <GCircularButton
             icon={GIconButtonBack}

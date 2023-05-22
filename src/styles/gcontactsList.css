@@ -27,6 +27,10 @@
   height: 48px;
 }
 
+.geco-contacts-list-nav-bar-section {
+  margin-right: 1vw;
+}
+
 .geco-contacts-list {
   display: flex;
   flex-direction: column;
