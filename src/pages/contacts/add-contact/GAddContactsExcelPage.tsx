@@ -106,7 +106,9 @@ export const GAddContactsExcelPage = () => {
           }
 
           console.log('vamos bien');
-          navigate('/contacts/success-add-contact');
+          navigate('/contacts/list-contacts-to-import', {
+            state: { contacts: contacts },
+          });
         }
       };
     }

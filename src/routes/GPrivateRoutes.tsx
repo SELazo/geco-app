@@ -14,6 +14,8 @@ import { GAddContactPage } from '../pages/contacts/add-contact/GAddContactPage';
 import { GAddContactSuccessPage } from '../pages/contacts/add-contact/GAddContactSuccessPage';
 import { GAddContactsExcelPage } from '../pages/contacts/add-contact/GAddContactsExcelPage';
 import { GDeleteContactsListPage } from '../pages/contacts/add-contact/GDeleteContactsListPage';
+import { GListContactsToImportPage } from '../pages/contacts/add-contact/GListContactsToImportPage';
+import { GAddContactsExcelSuccessPage } from '../pages/contacts/add-contact/GAddContactExcelSuccessPage';
 
 export const GPrivateRoutes = () => {
   return (
@@ -35,7 +37,15 @@ export const GPrivateRoutes = () => {
           path="success-add-contact"
           element={<GAddContactSuccessPage />}
         />
+        <Route
+          path="success-add-contacts-excel"
+          element={<GAddContactsExcelSuccessPage />}
+        />
         <Route path="delete-contact" element={<GDeleteContactsListPage />} />
+        <Route
+          path="list-contacts-to-import"
+          element={<GListContactsToImportPage />}
+        />
         <Route path="add-contacts-excel" element={<GAddContactsExcelPage />} />
         <Route path="groups" element={<GPricingPage />} />
         <Route path="list" element={<GContactsListPage />} />
