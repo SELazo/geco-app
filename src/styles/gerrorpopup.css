@@ -50,3 +50,10 @@
   bottom: 20px; /* Ajusta la distancia inferior según tus necesidades */
   z-index: 9999; /* Asegúrate de que el z-index sea mayor que otros elementos en la página */
 }
+
+@media only screen and (min-width: 720px) {
+  .geco-error-pop-up-overlay {
+    background-position-x: 97%;
+    background-size: 18%;
+  }
+}
