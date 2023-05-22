@@ -1,51 +1,20 @@
 import('../../styles/gcontactsList.css');
 
 import { GCircularButton } from '../../components/GCircularButton';
-import { GIconButtonBack, GMoreInfoIcon } from '../../constants/buttons';
+import { GEditIcon, GIconButtonBack } from '../../constants/buttons';
 import { GBlack, GGreen, GRed, GWhite, GYellow } from '../../constants/palette';
 import { NavigationService } from '../../services/navigationService';
 import { GHeadCenterTitle } from '../../components/GHeadCenterTitle';
-import {
-  AdminListContacts,
-  ContactsSectionTitle,
-  GroupsContacts,
-} from '../../constants/wording';
+import { ContactsSectionTitle } from '../../constants/wording';
 import { GContactItem, IContactItem } from '../../components/GContactItem';
 import { GLogoLetter } from '../../components/GLogoLetter';
 import { Link } from 'react-router-dom';
 import { GDropdownMenu, IMenuItem } from '../../components/GDropdownMenu';
 
 export const GContactsListPage = () => {
-  const contacts: IContactItem[] = [
-    {
-      id: 1,
-      name: 'Jessica Altenburger',
-      number: '+123456789',
-      mail: 'nelson.loto@geco.com',
-      route: `/contacts/edit/1`,
-    },
-    {
-      id: 2,
-      name: 'Maximiliano Vergara',
-      number: '+123456789',
-      mail: 'maximiliano.vergara@geco.com',
-      route: `/contacts/edit/2`,
-    },
-    {
-      id: 3,
-      name: 'Nelson Loto',
-      number: '+123456789',
-      mail: 'nelson.loto@geco.com',
-      route: `/contacts/edit/3`,
-    },
-    {
-      id: 4,
-      name: 'San Loto',
-      number: '+123456789',
-      mail: 'nelson.loto@geco.com',
-      route: `/contacts/edit/4`,
-    },
-  ];
+  const contacts: IContactItem[] = JSON.parse(
+    localStorage.getItem('contacts') || '[]'
+  );
 
   const menuContacts: IMenuItem[] = [
     {
@@ -58,8 +27,16 @@ export const GContactsListPage = () => {
       route: '/contacts/add-contacts-excel',
       color: GGreen,
     },
-    { label: 'Eliminar contactos', route: 'delete-contact', color: GRed },
+    {
+      label: 'Eliminar contactos',
+      route: '/contacts/delete-contact',
+      color: GRed,
+    },
   ];
+
+  const editContact = (id: number) => {
+    console.log(contacts.find((c) => c.id === id));
+  };
 
   return (
     <>
@@ -88,15 +65,29 @@ export const GContactsListPage = () => {
         <div className="geco-contacts-list-title">
           <GHeadCenterTitle title={ContactsSectionTitle} color={GBlack} />
         </div>
-        <div className="geco-contacts-list-container">
-          <div className="geco-contacts-list-ul">
-            <div className="geco-contacts-list-item">
-              {contacts.map((item) => (
-                <GContactItem key={item.id} contact={item} />
-              ))}
+        {contacts.length > 0 && (
+          <div className="geco-contacts-list-container">
+            <div className="geco-contacts-list-ul">
+              <div className="geco-contacts-list-item">
+                {contacts.map((item) => (
+                  <GContactItem
+                    key={item.id}
+                    contact={item}
+                    icon={GEditIcon}
+                    iconBackgroundColor={GYellow}
+                    onClickAction={() => editContact(item.id)}
+                  />
+                ))}
+              </div>
             </div>
           </div>
-        </div>
+        )}
+
+        {contacts.length === 0 && (
+          <div className="geco-contacts-empty">
+            <p>No tiene contactos aún.</p>
+          </div>
+        )}
       </div>
     </>
   );

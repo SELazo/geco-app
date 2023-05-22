@@ -17,6 +17,7 @@ import { NavigationService } from '../../../services/navigationService';
 import { Link, useNavigate } from 'react-router-dom';
 import { GLogoLetter } from '../../../components/GLogoLetter';
 import { IContactData } from '../../../interfaces/IContact';
+import { IContactItem } from '../../../components/GContactItem';
 
 export const GAddContactPage = () => {
   const validationSchema = Yup.object().shape({
@@ -44,9 +45,24 @@ export const GAddContactPage = () => {
   const navigate = useNavigate();
 
   const onSubmit = (data: IContactData) => {
-    console.log(data);
-    //llamada al servicio
-    //si okey
+    const contacts: IContactItem[] = JSON.parse(
+      localStorage.getItem('contacts') || '[]'
+    );
+
+    const id = contacts[contacts.length - 1]
+      ? contacts[contacts.length - 1].id + 1
+      : 0;
+
+    const newContact: IContactItem = {
+      id: id,
+      name: data.name,
+      mail: data.email ? data.email : undefined,
+      number: data.cellphone,
+    };
+
+    const newContacts = [...contacts, newContact];
+    localStorage.setItem('contacts', JSON.stringify(newContacts));
+
     reset();
     navigate('/contacts/success-add-contact');
   };

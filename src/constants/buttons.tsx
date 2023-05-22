@@ -78,3 +78,8 @@ export const GCommentIcon: IButtonIcon = {
   color: GBlack,
   'icon-type': 'comment',
 };
+
+export const GDeletetIcon: IButtonIcon = {
+  color: GBlack,
+  'icon-type': 'x',
+};
