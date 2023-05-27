@@ -73,8 +73,8 @@ export const GPolarAreaChart: React.FC<PolarAreaChartProps> = (
 
   return (
     <>
-      <canvas ref={chartRef} />;
-      <div className="geco-polar-legend-container">{renderLegend()}</div>
+      <canvas ref={chartRef} className="geco-statistics-contacts-polar-chart" />
+      ;<div className="geco-polar-legend-container">{renderLegend()}</div>
     </>
   );
 };

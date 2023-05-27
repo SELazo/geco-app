@@ -12,3 +12,11 @@ export interface IGroupsGrowthLastXMonthsResponse {
     quantityPerMonth: number[];
   };
 }
+
+export interface IContactsCompositionResponse {
+  groups: {
+    label: string;
+    quantity: number;
+  }[];
+  total: number;
+}

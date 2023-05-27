@@ -13,7 +13,10 @@ import {
   GWhite,
   GYellow,
 } from '../../../constants/palette';
-import { StatisticsSectionTitle } from '../../../constants/wording';
+import {
+  ContactsHeadCenterTitle,
+  StatisticsSectionTitle,
+} from '../../../constants/wording';
 import { NavigationService } from '../../../services/navigationService';
 
 import '../../../styles/gstatisticsContacts.css';
@@ -21,39 +24,70 @@ import {
   DatasetPolarArea,
   GPolarAreaChart,
 } from '../../../components/GPolarAreaChart';
+import { IContactsCompositionResponse } from '../../../interfaces/IContactsStatistics';
 
 type ContactGrowthChartProps = {
   data: { label: string; values: number[]; color: string }[];
 };
 
-const generateColorList = (count: number): string[] => {
-  const colors = [
-    `${GPink}99`,
-    `${GBlue}99`,
-    `${GRed}99`,
-    `${GGreen}99`,
-    `${GYellow}99`,
-  ];
-  const colorList = [];
-
-  for (let i = 0; i < count; i++) {
-    const color = colors[i % colors.length];
-
-    colorList.push(color);
-  }
-
-  return colorList;
-};
-
 export const GRedCompositionPage = () => {
-  const labels = ['Mamás', 'Papás', 'Universitarios', 'Niños', 'Jubilados'];
-  const data: DatasetPolarArea[] = [
-    {
-      label: 'Contactos',
-      data: [50, 60, 70, 40, 70],
-      backgroundColor: generateColorList(labels.length),
-    },
-  ];
+  const labels: string[] = [];
+  const data: DatasetPolarArea[] = [];
+
+  const infoContactsComposition: IContactsCompositionResponse = {
+    groups: [
+      { label: 'Mamás', quantity: 50 },
+      { label: 'Papás', quantity: 60 },
+      { label: 'Universitarios', quantity: 70 },
+      { label: 'Niños', quantity: 40 },
+      { label: 'Jubilados', quantity: 90 },
+    ],
+    total: 500,
+  };
+
+  const generateColorList = (count: number): string[] => {
+    const colors = [
+      `${GPink}99`,
+      `${GBlue}99`,
+      `${GRed}99`,
+      `${GGreen}99`,
+      `${GYellow}99`,
+    ];
+    const colorList = [];
+
+    for (let i = 0; i < count; i++) {
+      const color = colors[i % colors.length];
+
+      colorList.push(color);
+    }
+
+    return colorList;
+  };
+
+  const generateChartContactData = (): DatasetPolarArea[] => {
+    const compositions: number[] = [];
+
+    infoContactsComposition.groups.map((group) => {
+      compositions.push(group.quantity);
+    });
+
+    data.push({
+      label: ContactsHeadCenterTitle,
+      data: compositions,
+      backgroundColor: generateColorList(infoContactsComposition.groups.length),
+    });
+
+    return data;
+  };
+
+  const generateChartLabels = (): string[] => {
+    infoContactsComposition.groups.map((group) => {
+      labels.push(group.label);
+    });
+
+    return labels;
+  };
+
   return (
     <>
       <div className="geco-statistics-contacts">
@@ -90,7 +124,10 @@ export const GRedCompositionPage = () => {
         <div className="geco-statistics-contacts-title">
           <GHeadCenterTitle title={StatisticsSectionTitle} color={GBlack} />
         </div>
-        <GPolarAreaChart datasets={data} labels={labels} />
+        <GPolarAreaChart
+          datasets={generateChartContactData()}
+          labels={generateChartLabels()}
+        />
       </div>
     </>
   );

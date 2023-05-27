@@ -90,7 +90,6 @@ export const GLineChart: React.FC<ContactGrowthChartProps> = (
     } else {
       setActiveDataset(null);
     }
-    console.log(activeDataset);
   };
 
   return (
