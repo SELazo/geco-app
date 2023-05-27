@@ -16,6 +16,11 @@ import { GAddContactsExcelPage } from '../pages/contacts/add-contact/GAddContact
 import { GDeleteContactsListPage } from '../pages/contacts/add-contact/GDeleteContactsListPage';
 import { GListContactsToImportPage } from '../pages/contacts/add-contact/GListContactsToImportPage';
 import { GAddContactsExcelSuccessPage } from '../pages/contacts/add-contact/GAddContactExcelSuccessPage';
+import { GStatisticsRenderMainPage } from '../pages/statistics/GStatisticsRenderMainPage';
+import { GStatisticsPage } from '../pages/statistics/GStatisticsPage';
+import { GStatisticsContactsPage } from '../pages/statistics/contacts/GStatisticsContactsPage';
+import { GGroupsGrowthPage } from '../pages/statistics/contacts/GGroupsGrowthPage';
+import { GRedCompositionPage } from '../pages/statistics/contacts/GRedCompositionPage';
 
 export const GPrivateRoutes = () => {
   return (
@@ -50,6 +55,16 @@ export const GPrivateRoutes = () => {
         <Route path="groups" element={<GPricingPage />} />
         <Route path="list" element={<GContactsListPage />} />
         <Route path="*" element={<Navigate to="/contacts/options" />} />
+      </Route>
+      <Route path="/statistics" element={<GStatisticsRenderMainPage />}>
+        <Route path="options" element={<GStatisticsPage />} />
+        <Route path="contacts" element={<GStatisticsContactsPage />} />
+        <Route path="contacts/groups-growth" element={<GGroupsGrowthPage />} />
+        <Route
+          path="contacts/red-composition"
+          element={<GRedCompositionPage />}
+        />
+        <Route path="*" element={<Navigate to="/statistics/options" />} />
       </Route>
       <Route path="/pricing" element={<GHomePage />} />
       <Route path="/ad" element={<GHomePage />} />

@@ -50,6 +50,7 @@ import {
   FaEllipsisH,
   FaFileExcel,
   FaQuestion,
+  FaChartPie,
 } from 'react-icons/fa';
 
 interface IconsMap {
@@ -62,6 +63,8 @@ export const Icons: IconsMap = {
   'arrow-right-circle': <FiArrowRightCircle />,
   'dollar-sign': <FiDollarSign />,
   check: <FaCheck />,
+  'chart-line': <FaChartLine />,
+  'chart-pie': <FaChartPie />,
   'check-circle': <FaCheckCircle />,
   'check-square': <FiCheckSquare />,
   'chevron-right': <FaChevronRight />,

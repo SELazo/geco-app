@@ -107,7 +107,7 @@ export const GHomePage = () => {
                 height="70px"
                 colorBackground={GWhite}
                 onClickAction={NavigationService.handleNavigation(
-                  '/statistics'
+                  '/statistics/options'
                 )}
               />
               <p>{StatisticsHeadCenterTitle}</p>

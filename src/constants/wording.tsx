@@ -54,6 +54,13 @@ export const PricingSectionTitle: string = 'Modalidades';
 
 export const ContactsSectionTitle: string = 'Agenda';
 
+export const StatisticsSectionTitle: string = 'Estadísticas';
+
+export const GroupGrowthSectionTitle: string = 'Crecimiento de grupos tu red';
+
+export const RedCompositionSectionTitle: string =
+  'Composición de tu red de contactos';
+
 /**
  * Wording
  */
@@ -150,6 +157,18 @@ export const GroupsContacts: IMenuOption = {
   mainTitle: 'Administrar grupos',
   description: 'Agrega, modifica o elimina tus grupos',
   route: '/contacts/groups',
+};
+
+export const FeedbackStrategiesStatistics: IMenuOption = {
+  mainTitle: 'Feedback de estrategias de comunicación',
+  description: 'Consulta como le fue a tus estrategias de comunicación',
+  route: '/statistics/strategies',
+};
+
+export const FeedbackContactsStatistics: IMenuOption = {
+  mainTitle: 'Feedback de red de contactos',
+  description: 'Consulta como creció tu red de contactos',
+  route: '/statistics/contacts',
 };
 
 /**
