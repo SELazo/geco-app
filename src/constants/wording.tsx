@@ -74,6 +74,21 @@ export const UserOptionsSubtitle: string = 'Opciones de usuario';
 
 export const UserEditInfoSubtitle: string = 'Edita tu información';
 
+export const Months: string[] = [
+  'Enero',
+  'Febrero',
+  'Marzo',
+  'Abril',
+  'Mayo',
+  'Junio',
+  'Julio',
+  'Agosto',
+  'Septiembre',
+  'Octubre',
+  'Noviembre',
+  'Diciembre',
+];
+
 /**
  * Head Section Titles
  */

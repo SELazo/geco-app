@@ -26,21 +26,32 @@ type ContactGrowthChartProps = {
   data: { label: string; values: number[]; color: string }[];
 };
 
-export const GRedCompositionPage = () => {
-  const contacts = { count: 500, min: 0, max: 500 };
+const generateColorList = (count: number): string[] => {
+  const colors = [
+    `${GPink}99`,
+    `${GBlue}99`,
+    `${GRed}99`,
+    `${GGreen}99`,
+    `${GYellow}99`,
+  ];
+  const colorList = [];
 
+  for (let i = 0; i < count; i++) {
+    const color = colors[i % colors.length];
+
+    colorList.push(color);
+  }
+
+  return colorList;
+};
+
+export const GRedCompositionPage = () => {
   const labels = ['Mamás', 'Papás', 'Universitarios', 'Niños', 'Jubilados'];
   const data: DatasetPolarArea[] = [
     {
       label: 'Contactos',
       data: [50, 60, 70, 40, 70],
-      backgroundColor: [
-        `${GPink}99`,
-        `${GBlue}99`,
-        `${GRed}99`,
-        `${GGreen}99`,
-        `${GYellow}99`,
-      ],
+      backgroundColor: generateColorList(labels.length),
     },
   ];
   return (
