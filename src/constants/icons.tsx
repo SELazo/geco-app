@@ -18,7 +18,6 @@ import {
   FiPlusCircle,
   FiRefreshCcw,
   FiSave,
-  FiSearch,
   FiSettings,
   FiShare2,
   FiStar,
@@ -51,6 +50,7 @@ import {
   FaFileExcel,
   FaQuestion,
   FaChartPie,
+  FaSearch,
 } from 'react-icons/fa';
 
 interface IconsMap {
@@ -89,7 +89,7 @@ export const Icons: IconsMap = {
   'reg-chart-bar': <FaChartBar />,
   rss: <FaRss />,
   save: <FiSave />,
-  search: <FiSearch />,
+  search: <FaSearch />,
   settings: <FiSettings />,
   'share-alt': <FaShareAlt />,
   'share-2': <FiShare2 />,
