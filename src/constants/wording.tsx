@@ -56,7 +56,8 @@ export const ContactsSectionTitle: string = 'Agenda';
 
 export const StatisticsSectionTitle: string = 'Estadísticas';
 
-export const GroupGrowthSectionTitle: string = 'Crecimiento de grupos tu red';
+export const GroupGrowthSectionTitle: string =
+  'Crecimiento de los grupos en tu red';
 
 export const RedCompositionSectionTitle: string =
   'Composición de tu red de contactos';

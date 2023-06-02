@@ -6,7 +6,6 @@ import { GIconButtonBack, GStatisticsIcon } from '../../../constants/buttons';
 import {
   GBlack,
   GBlue,
-  GGray,
   GGreen,
   GPink,
   GRed,
@@ -123,6 +122,9 @@ export const GRedCompositionPage = () => {
         </div>
         <div className="geco-statistics-contacts-title">
           <GHeadCenterTitle title={StatisticsSectionTitle} color={GBlack} />
+        </div>
+        <div className="geco-statistics-contacts-total">
+          <p>Total de contactos: {infoContactsComposition.total}</p>
         </div>
         <GPolarAreaChart
           datasets={generateChartContactData()}

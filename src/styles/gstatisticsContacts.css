@@ -101,3 +101,8 @@
   align-items: center;
   text-align: center;
 }
+
+.geco-statistics-contacts-total p {
+  color: #9fa4b4;
+  margin: 0 0 20px 0;
+}
