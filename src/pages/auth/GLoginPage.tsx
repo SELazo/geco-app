@@ -22,7 +22,12 @@ import { AuthService } from '../../services/authService';
 import { GChevronRightIcon } from '../../constants/buttons';
 import { useNavigate } from 'react-router-dom';
 import { useDispatch } from 'react-redux';
-import { AuthState, loginSuccess } from '../../redux/authSlice';
+import {
+  Auth,
+  SessionState,
+  User,
+  loginSuccess,
+} from '../../redux/sessionSlice';
 import { Users } from './GSignUpPage';
 
 type LoginForm = {
@@ -62,13 +67,18 @@ export const GLoginPage = () => {
     const searchedUser = dataBase.find((user) => user.email === data.email);
     if (searchedUser?.password === data.password) {
       const index = dataBase.findIndex((user) => user.email === data.email);
-      const user: AuthState = {
-        user: { id: index, name: searchedUser.name, email: searchedUser.email },
+      const user: User = {
+        id: index,
+        name: searchedUser.name,
+        email: searchedUser.email,
+      };
+
+      const auth: Auth = {
         token: 'some_token',
         isAuthenticated: true,
       };
 
-      dispatch(loginSuccess(user));
+      dispatch(loginSuccess({ user, auth }));
 
       reset();
       navigate('/home');

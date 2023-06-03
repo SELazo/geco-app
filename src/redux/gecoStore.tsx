@@ -1,15 +1,15 @@
 import { configureStore } from '@reduxjs/toolkit';
-import { authSlice } from './authSlice';
+import { sessionSlice } from './sessionSlice';
 
 // Define el tipo de RootState
 export type RootState = {
-  auth: ReturnType<typeof authSlice.reducer>;
+  auth: ReturnType<typeof sessionSlice.reducer>;
 };
 
 // Crea el store
 export const gecoStore = configureStore({
   reducer: {
-    auth: authSlice.reducer,
+    auth: sessionSlice.reducer,
   },
 });
 

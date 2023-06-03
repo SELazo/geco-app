@@ -15,7 +15,7 @@ import { CommentsHeadSectionTitle } from '../../constants/wording';
 import { GBlack, GWhite, GYellow } from '../../constants/palette';
 import { NavigationService } from '../../services/navigationService';
 import { useSelector } from 'react-redux';
-import { User } from '../../redux/authSlice';
+import { User } from '../../redux/sessionSlice';
 import { Link, useNavigate } from 'react-router-dom';
 import { GLogoLetter } from '../../components/GLogoLetter';
 

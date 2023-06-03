@@ -14,7 +14,7 @@ import { GIconButtonBack, GUserIcon } from '../../constants/buttons';
 import { GBlack, GWhite, GYellow } from '../../constants/palette';
 import { NavigationService } from '../../services/navigationService';
 import { GHeadCenterTitle } from '../../components/GHeadCenterTitle';
-import { User, setUser } from '../../redux/authSlice';
+import { User, setUser } from '../../redux/sessionSlice';
 import { Users } from '../auth/GSignUpPage';
 import { Link, useNavigate } from 'react-router-dom';
 import { UserEditInfoSubtitle } from '../../constants/wording';
