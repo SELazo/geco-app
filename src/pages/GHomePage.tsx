@@ -13,6 +13,7 @@ import {
   GStatisticsIcon,
   GStrategyIcon,
   GUserIcon,
+  GLogOutIcon
 } from '../constants/buttons';
 import { GLogoWord } from '../components/GLogoWord';
 import { GHeadCenterTitle } from '../components/GHeadCenterTitle';
@@ -26,6 +27,7 @@ import {
 import { NavigationService } from '../services/navigationService';
 
 export const GHomePage = () => {
+
   return (
     <div className="home-main">
       <div className="home-head">
@@ -34,6 +36,13 @@ export const GHomePage = () => {
             <GLogoWord />
           </div>
           <div className="home-head-header-nav-bar">
+
+            <div className='home-head-header-nav-bar-logout'>
+              <GIcon
+                color={GLogOutIcon.color}
+                icon-type={GLogOutIcon['icon-type']}/>
+            </div>
+            
             <button className="geco-without-background-btn">
               <Link to={'/user/pricing'}>
                 <GIcon

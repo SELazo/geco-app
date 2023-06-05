@@ -69,6 +69,11 @@ export const GPremiumStarIcon: IButtonIcon = {
   'icon-type': 'star-fa',
 };
 
+export const GLogOutIcon: IButtonIcon = {
+  color: GWhite,
+  'icon-type': 'power-off'
+}
+
 export const GSuccessIcon: IButtonIcon = {
   color: GBlack,
   'icon-type': 'check',

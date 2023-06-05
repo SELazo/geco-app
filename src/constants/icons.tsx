@@ -51,6 +51,7 @@ import {
   FaQuestion,
   FaChartPie,
   FaSearch,
+  FaPowerOff,
 } from 'react-icons/fa';
 
 interface IconsMap {
@@ -87,6 +88,7 @@ export const Icons: IconsMap = {
   'plus-circle': <FiPlusCircle />,
   'refresh-ccw': <FiRefreshCcw />,
   'reg-chart-bar': <FaChartBar />,
+  'power-off': <FaPowerOff />,
   rss: <FaRss />,
   save: <FiSave />,
   search: <FaSearch />,
