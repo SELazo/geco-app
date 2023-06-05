@@ -106,62 +106,64 @@ export const GEditUserInfoPage = () => {
           <GHeadCenterTitle title={user.name} color={GWhite} />
         </div>
       </div>
-      <form className="geco-form" onSubmit={handleSubmit(onSubmit)}>
-        <div className="geco-user-edit-subtitle">
-          <p>{UserEditInfoSubtitle}</p>
-        </div>
-        <div className="input-group">
-          <input
-            type="text"
-            {...register('name')}
-            placeholder={user.name}
-            className={`input-box form-control ${
-              errors.name ? 'is-invalid' : ''
-            }`}
+      <div className="geco-edit-user-form">
+        <form className="geco-form" onSubmit={handleSubmit(onSubmit)}>
+          <div className="geco-user-edit-subtitle">
+            <p>{UserEditInfoSubtitle}</p>
+          </div>
+          <div className="input-group">
+            <input
+              type="text"
+              {...register('name')}
+              placeholder={user.name}
+              className={`input-box form-control ${
+                errors.name ? 'is-invalid' : ''
+              }`}
+            />
+            <span className="span-error">{errors.name?.message}</span>
+          </div>
+          <div className="input-group">
+            <input
+              type="email"
+              {...register('email')}
+              placeholder={user.email}
+              className={`input-box form-control ${
+                errors.email ? 'is-invalid' : ''
+              }`}
+            />
+            <span className="span-error">{errors.email?.message}</span>
+          </div>
+          <div className="input-group">
+            <input
+              type="password"
+              {...register('password')}
+              placeholder="Contraseña"
+              className={`input-box form-control ${
+                errors.password ? 'is-invalid' : ''
+              }`}
+            />
+            <span className="span-error">{errors.password?.message}</span>
+          </div>
+          <div className="input-group">
+            <input
+              type="password"
+              {...register('confirmedPassword')}
+              placeholder="Repita su contraseña"
+              className={`input-box form-control ${
+                errors.confirmedPassword ? 'is-invalid' : ''
+              }`}
+            />
+            <span className="span-error">
+              {errors.confirmedPassword?.message}
+            </span>
+          </div>
+          <GSubmitButton
+            label="Modificar"
+            colorBackground={GYellow}
+            colorFont={GBlack}
           />
-          <span className="span-error">{errors.name?.message}</span>
-        </div>
-        <div className="input-group">
-          <input
-            type="email"
-            {...register('email')}
-            placeholder={user.email}
-            className={`input-box form-control ${
-              errors.email ? 'is-invalid' : ''
-            }`}
-          />
-          <span className="span-error">{errors.email?.message}</span>
-        </div>
-        <div className="input-group">
-          <input
-            type="password"
-            {...register('password')}
-            placeholder="Contraseña"
-            className={`input-box form-control ${
-              errors.password ? 'is-invalid' : ''
-            }`}
-          />
-          <span className="span-error">{errors.password?.message}</span>
-        </div>
-        <div className="input-group">
-          <input
-            type="password"
-            {...register('confirmedPassword')}
-            placeholder="Repita su contraseña"
-            className={`input-box form-control ${
-              errors.confirmedPassword ? 'is-invalid' : ''
-            }`}
-          />
-          <span className="span-error">
-            {errors.confirmedPassword?.message}
-          </span>
-        </div>
-        <GSubmitButton
-          label="Modificar"
-          colorBackground={GYellow}
-          colorFont={GBlack}
-        />
-      </form>
+        </form>
+      </div>
     </div>
   );
 };

@@ -22,6 +22,8 @@ import { GStatisticsContactsPage } from '../pages/statistics/contacts/GStatistic
 import { GGroupsGrowthPage } from '../pages/statistics/contacts/GGroupsGrowthPage';
 import { GRedCompositionPage } from '../pages/statistics/contacts/GRedCompositionPage';
 import { GContactsGroupPage } from '../pages/contacts/GContactsGroupsPage';
+import { GAddNewGroupFormStep1Page } from '../pages/contacts/add-group/GAddNewGroupFormStep1Page';
+import { GAddNewGroupFormStep2Page } from '../pages/contacts/add-group/GAddNewGroupFormStep2Page';
 
 export const GPrivateRoutes = () => {
   return (
@@ -54,6 +56,14 @@ export const GPrivateRoutes = () => {
         />
         <Route path="add-contacts-excel" element={<GAddContactsExcelPage />} />
         <Route path="groups" element={<GContactsGroupPage />} />
+        <Route
+          path="groups/add-group/info"
+          element={<GAddNewGroupFormStep1Page />}
+        />
+        <Route
+          path="groups/add-group/members"
+          element={<GAddNewGroupFormStep2Page />}
+        />
         <Route path="list" element={<GContactsListPage />} />
         <Route path="*" element={<Navigate to="/contacts/options" />} />
       </Route>

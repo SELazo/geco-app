@@ -44,7 +44,7 @@ export const GContactsGroupPage = () => {
   const menuGroups: IMenuItem[] = [
     {
       label: 'Agregar grupo',
-      route: '/contacts/add-group',
+      route: '/contacts/groups/add-group/info',
       color: GYellow,
     },
     {

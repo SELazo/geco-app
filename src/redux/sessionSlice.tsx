@@ -11,13 +11,13 @@ export interface Auth {
   token: string | null;
 }
 
-export interface newGoupInfo {
+export interface INewGoupInfo {
   name: string;
   description: string;
 }
 
-export interface NewGroupForm {
-  groupInfo: newGoupInfo;
+export interface INewGroupForm {
+  groupInfo: INewGoupInfo;
   contacts: number[];
 }
 
@@ -25,13 +25,13 @@ export interface SessionState {
   user: User;
   auth: Auth;
   terms?: number;
-  formNewGroup: NewGroupForm;
+  formNewGroup: INewGroupForm;
 }
 
 const initialState: SessionState = {
   user: { id: -1, name: '', email: '' },
   auth: { isAuthenticated: false, token: null },
-  formNewGroup: {} as NewGroupForm,
+  formNewGroup: {} as INewGroupForm,
 };
 
 export const sessionSlice = createSlice({
@@ -61,17 +61,25 @@ export const sessionSlice = createSlice({
       state.auth.isAuthenticated = false;
       state.auth.token = null;
     },
-    setNewFormGroupInfo: (state, action: PayloadAction<newGoupInfo>) => {
+    setNewFormGroupInfo: (state, action: PayloadAction<INewGoupInfo>) => {
       state.formNewGroup.groupInfo = action.payload;
     },
     setNewGroupContacts: (state, action: PayloadAction<number[]>) => {
       state.formNewGroup.contacts = action.payload;
     },
     clearNewGroupForm: (state) => {
-      state.formNewGroup = {} as NewGroupForm;
+      state.formNewGroup = {} as INewGroupForm;
     },
   },
 });
 
-export const { setUser, setIdTerms, resetTerms, loginSuccess, logout } =
-  sessionSlice.actions;
+export const {
+  setUser,
+  setIdTerms,
+  resetTerms,
+  loginSuccess,
+  logout,
+  setNewFormGroupInfo,
+  setNewGroupContacts,
+  clearNewGroupForm,
+} = sessionSlice.actions;

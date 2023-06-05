@@ -120,6 +120,12 @@ export const AddContactSectionTitle: IHeadSectionTitle = {
   subtitle: 'Crea un nuevo contacto. 😌',
 };
 
+export const AddNewGroupStep1SectionTitle: IHeadSectionTitle = {
+  title: 'Crear grupo',
+  subtitle:
+    'Crea un grupo de contactos para enviar comunicaciones.📢 \n Añade información sobre el mismo para poder identificarlo de forma rápida. 📋',
+};
+
 export const AddContactsExcelSectionTitle: IHeadSectionTitle = {
   title: 'Importar contactos',
   subtitle: 'Importar contactos desde un archivo Excel. 🧐',
@@ -198,3 +204,10 @@ export const ImportExcelHelp: IDropdownHelpProps = {
   route:
     'https://docs.google.com/spreadsheets/d/1vqt6EbxHXypIU73HsWhpmGDQkzeN4zLh/edit?usp=share_link&ouid=104991212361139592910&rtpof=true&sd=true',
 };
+
+/**
+ * Form placeholders.
+ */
+
+export const NewGroupDescriptionPlaceholder: string =
+  'Añade una descripción que te ayude a identificar el proposito del grupo de forma rápida. 👀';
