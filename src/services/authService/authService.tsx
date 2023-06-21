@@ -42,6 +42,7 @@ export const AuthService: IAuthService = {
   validateSession: async (): Promise<IValidateSessionResponse> => {
     const token = localStorage.getItem('token');
     const response = await fetch(`${authServiceURI}/validate-session`, {
+      method: 'GET',
       headers: {
         'Content-Type': 'application/json',
         'Authorization': `${token}`
