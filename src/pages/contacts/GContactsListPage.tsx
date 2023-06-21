@@ -7,7 +7,7 @@ import {
   GIconButtonBack,
 } from '../../constants/buttons';
 import { GBlack, GGreen, GRed, GWhite, GYellow } from '../../constants/palette';
-import { NavigationService } from '../../services/navigationService';
+import { NavigationService } from '../../services/navigationService/navigationService';
 import { GHeadCenterTitle } from '../../components/GHeadCenterTitle';
 import { ContactsSectionTitle } from '../../constants/wording';
 import { GContactItem, IContactItem } from '../../components/GContactItem';

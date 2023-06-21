@@ -3,7 +3,7 @@ import { useState } from 'react';
 
 import('../../../styles/gcontactsList.css');
 
-import { NavigationService } from '../../../services/navigationService';
+import { NavigationService } from '../../../services/navigationService/navigationService';
 import { GCircularButton } from '../../../components/GCircularButton';
 import {
   GContactsIcon,

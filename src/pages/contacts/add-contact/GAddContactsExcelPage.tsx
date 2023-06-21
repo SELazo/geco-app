@@ -1,5 +1,5 @@
 import { Link, useNavigate } from 'react-router-dom';
-import { NavigationService } from '../../../services/navigationService';
+import { NavigationService } from '../../../services/navigationService/navigationService';
 import * as XLSX from 'xlsx';
 
 import '../../../styles/ginputBox.css';

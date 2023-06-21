@@ -10,7 +10,7 @@ import {
   RedCompositionSectionTitle,
   StatisticsSectionTitle,
 } from '../../../constants/wording';
-import { NavigationService } from '../../../services/navigationService';
+import { NavigationService } from '../../../services/navigationService/navigationService';
 
 import '../../../styles/gstatisticsContacts.css';
 
