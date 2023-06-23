@@ -13,7 +13,7 @@ import { GContactsIcon, GIconButtonBack } from '../../../constants/buttons';
 import { GSubmitButton } from '../../../components/GSubmitButton';
 import { AddContactSectionTitle } from '../../../constants/wording';
 import { GBlack, GWhite, GYellow } from '../../../constants/palette';
-import { NavigationService } from '../../../services/navigationService';
+import { NavigationService } from '../../../services/navigationService/navigationService';
 import { Link, useNavigate } from 'react-router-dom';
 import { GLogoLetter } from '../../../components/GLogoLetter';
 import { IContactData } from '../../../interfaces/IContact';

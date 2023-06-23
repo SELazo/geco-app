@@ -18,7 +18,7 @@ import {
 import { GLogoLetter } from '../../components/GLogoLetter';
 import { GBlack, GWhite } from '../../constants/palette';
 
-import { AuthService } from '../../services/authService';
+import { AuthService } from '../../services/authService/authService';
 import { GChevronRightIcon } from '../../constants/buttons';
 import { useNavigate } from 'react-router-dom';
 import { useDispatch } from 'react-redux';
@@ -59,35 +59,7 @@ export const GLoginPage = () => {
   const dispatch = useDispatch();
 
   const navigate = useNavigate();
-//  const onSubmit = async (data: LoginForm) => {
-//  TODO: use service
-//    const dataBase = JSON.parse(
-//      localStorage.getItem('users') || '[]'
-//    ) as Users[];
-//    const searchedUser = dataBase.find((user) => user.email === data.email);
-//    if (searchedUser?.password === data.password) {
-//      const index = dataBase.findIndex((user) => user.email === data.email);
-//      const user: User = {
-//        id: index,
-//        name: searchedUser.name,
-//        email: searchedUser.email,
-//      };
-//
-//      const auth: Auth = {
-//        token: 'some_token',
-//        isAuthenticated: true,
-//      };
-//
-//      dispatch(loginSuccess({ user, auth }));
-//
-//      reset();
-//      navigate('/home');
-//    }
-//    setError('password', {
-//      type: 'manual',
-//      message: 'El correo electrónico o la contraseña son incorrectos',
-//    });
-//  };
+
   const onSubmit = async (data: LoginForm) => {
     const response = await AuthService.login(data.email, data.password).catch (e => {
       setError('password', {

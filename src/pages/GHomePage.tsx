@@ -24,7 +24,7 @@ import {
   StatisticsHeadCenterTitle,
   StrategyHeadCenterTitle,
 } from '../constants/wording';
-import { NavigationService } from '../services/navigationService';
+import { NavigationService } from '../services/navigationService/navigationService';
 
 export const GHomePage = () => {
 
