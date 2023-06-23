@@ -1,9 +1,5 @@
 import { IBasicSuccessResponse } from "./IBasicResponse";
 
-export interface ILoginResponse {
-    token: string;
-}
-
 export interface IContactResponse {
     id: number;
     name: string;
