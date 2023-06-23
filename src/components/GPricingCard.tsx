@@ -7,7 +7,7 @@ import { GBlack, GWhite } from '../constants/palette';
 import { GIcon } from './GIcon';
 import { useNavigate } from 'react-router';
 import { useDispatch } from 'react-redux';
-import { setIdTerms } from '../redux/authSlice';
+import { setIdTerms } from '../redux/sessionSlice';
 
 export interface IPricingBenefitsItem {
   idBenefit: number;

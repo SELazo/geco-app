@@ -18,11 +18,16 @@ import {
 import { GLogoLetter } from '../../components/GLogoLetter';
 import { GBlack, GWhite } from '../../constants/palette';
 
-import { AuthService } from '../../services/authService';
+import { AuthService } from '../../services/authService/authService';
 import { GChevronRightIcon } from '../../constants/buttons';
 import { useNavigate } from 'react-router-dom';
 import { useDispatch } from 'react-redux';
-import { AuthState, loginSuccess } from '../../redux/authSlice';
+import {
+  Auth,
+  SessionState,
+  User,
+  loginSuccess,
+} from '../../redux/sessionSlice';
 import { Users } from './GSignUpPage';
 
 type LoginForm = {
@@ -54,29 +59,73 @@ export const GLoginPage = () => {
   const dispatch = useDispatch();
 
   const navigate = useNavigate();
+
   const onSubmit = async (data: LoginForm) => {
-    //TODO: use service
-    const dataBase = JSON.parse(
-      localStorage.getItem('users') || '[]'
-    ) as Users[];
-    const searchedUser = dataBase.find((user) => user.email === data.email);
-    if (searchedUser?.password === data.password) {
-      const index = dataBase.findIndex((user) => user.email === data.email);
-      const user: AuthState = {
-        user: { id: index, name: searchedUser.name, email: searchedUser.email },
-        token: 'some_token',
-        isAuthenticated: true,
-      };
-
-      dispatch(loginSuccess(user));
-
-      reset();
-      navigate('/home');
-    }
-    setError('password', {
-      type: 'manual',
-      message: 'El correo electrónico o la contraseña son incorrectos',
+    const response = await AuthService.login(data.email, data.password).catch (e => {
+      setError('password', {
+        type: 'manual',
+        message: 'El correo electrónico o la contraseña son incorrectos',
+      })
     });
+    
+    if (response && response.token){
+
+      try {
+        const validateSesion = await fetch('http://localhost:3000/validate-session',{
+          method: 'GET',
+          headers: {
+            'authorization': response.token
+          }
+        });
+        if (!validateSesion.ok) {
+          throw new Error('Failed to validate session');
+        }
+        const data = await validateSesion.json();
+        const user: User = data.user;
+
+        const token = response.token;
+
+        const auth: Auth = {
+          token,
+          isAuthenticated: true,
+        };
+        dispatch(loginSuccess({ user, auth }));
+
+        reset();
+        navigate('/home');
+
+        localStorage.setItem('token',response.token);
+
+      } catch (error) {
+        throw new Error('Failed to validate session');
+      }
+      }else {
+        setError('password', {
+          type: 'manual',
+          message: 'El correo electrónico o la contraseña son incorrectos',
+        });
+      };
+ 
+
+      //if (response.ok) {
+      //  const responseData = await response.json();
+      //  const { token, user } = responseData;
+//
+      //  const auth: Auth = {
+      //    token,
+      //    isAuthenticated: true,
+      //  };
+//
+      //  dispatch(loginSuccess({ user, auth }));
+//
+      //  reset();
+      //  navigate('/home');
+      //} else {
+      //  setError('password', {
+      //    type: 'manual',
+      //    message: 'El correo electrónico o la contraseña son incorrectos',
+      //  });
+      //}
   };
 
   return (

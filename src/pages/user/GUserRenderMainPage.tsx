@@ -1,6 +1,6 @@
 import { Outlet } from 'react-router-dom';
 
-export const GRenderMainPage = () => {
+export const GUserRenderMainPage = () => {
   return (
     <>
       <Outlet />

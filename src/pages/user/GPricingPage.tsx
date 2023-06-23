@@ -5,7 +5,7 @@ import('../../styles/gpricing.css');
 import { GCircularButton } from '../../components/GCircularButton';
 import { GIconButtonBack, GIconButtonSignIn } from '../../constants/buttons';
 import { GBlack, GRed, GWhite, GYellow } from '../../constants/palette';
-import { NavigationService } from '../../services/navigationService';
+import { NavigationService } from '../../services/navigationService/navigationService';
 import { GHeadCenterTitle } from '../../components/GHeadCenterTitle';
 import { PricingSectionTitle } from '../../constants/wording';
 import { GPricingCard, IPricing } from '../../components/GPricingCard';

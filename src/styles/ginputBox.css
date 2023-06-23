@@ -35,8 +35,44 @@
 .span-error {
   color: #f95a2c;
   font-size: 12px;
+  max-width: 325px;
 }
 
 .input-group textarea {
   height: 300px;
+}
+
+.custom-file-upload {
+  box-sizing: border-box;
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 14px 16px;
+  gap: 10px;
+
+  background: #18191f;
+  border: 2px solid #18191f;
+  border-radius: 16px;
+
+  width: 327px;
+  height: 60px;
+
+  font-family: 'Montserrat', sans-serif;
+  font-style: normal;
+  font-weight: 500;
+  font-size: 19px;
+  line-height: 28px;
+
+  color: #ffffff;
+}
+
+input[type='file'] {
+  display: none;
+}
+
+.file-upload-span-error {
+  color: #f95a2c;
+  font-size: 13px;
+  max-width: 325px;
 }

@@ -61,3 +61,8 @@
   color: #9fa4b4;
   margin-bottom: 1.5em;
 }
+
+.geco-edit-user-form {
+  display: flex;
+  align-self: center;
+}

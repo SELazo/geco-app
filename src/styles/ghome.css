@@ -40,6 +40,11 @@
   flex: 1;
   justify-content: flex-end;
   height: auto;
+  flex-direction: row;
+}
+
+.home-head-header-nav-bar geco-icon{
+  size: 1vh;
 }
 
 .home-head-img {

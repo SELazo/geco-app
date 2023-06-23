@@ -54,10 +54,25 @@ export const GChevronLeftIcon: IButtonIcon = {
   'icon-type': 'chevron-left',
 };
 
+export const GChevronRightBlackIcon: IButtonIcon = {
+  color: GBlack,
+  'icon-type': 'chevron-right',
+};
+
+export const GMoreInfoIcon: IButtonIcon = {
+  color: GBlack,
+  'icon-type': 'three-circles',
+};
+
 export const GPremiumStarIcon: IButtonIcon = {
   color: GYellow,
   'icon-type': 'star-fa',
 };
+
+export const GLogOutIcon: IButtonIcon = {
+  color: GWhite,
+  'icon-type': 'power-off'
+}
 
 export const GSuccessIcon: IButtonIcon = {
   color: GBlack,
@@ -72,4 +87,9 @@ export const GEditIcon: IButtonIcon = {
 export const GCommentIcon: IButtonIcon = {
   color: GBlack,
   'icon-type': 'comment',
+};
+
+export const GDeletetIcon: IButtonIcon = {
+  color: GBlack,
+  'icon-type': 'x',
 };

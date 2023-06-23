@@ -13,6 +13,7 @@ import {
   GStatisticsIcon,
   GStrategyIcon,
   GUserIcon,
+  GLogOutIcon
 } from '../constants/buttons';
 import { GLogoWord } from '../components/GLogoWord';
 import { GHeadCenterTitle } from '../components/GHeadCenterTitle';
@@ -23,25 +24,32 @@ import {
   StatisticsHeadCenterTitle,
   StrategyHeadCenterTitle,
 } from '../constants/wording';
-import { NavigationService } from '../services/navigationService';
+import { NavigationService } from '../services/navigationService/navigationService';
 
 export const GHomePage = () => {
-  return (
-    <div className='home-main'>
 
-      <div className='home-head'>
-        <div className='home-head-header'>
-          <div className='home-head-header-logo'>
+  return (
+    <div className="home-main">
+      <div className="home-head">
+        <div className="home-head-header">
+          <div className="home-head-header-logo">
             <GLogoWord />
           </div>
-          <div className='home-head-header-nav-bar'>
+          <div className="home-head-header-nav-bar">
+
+            <div className='home-head-header-nav-bar-logout'>
+              <GIcon
+                color={GLogOutIcon.color}
+                icon-type={GLogOutIcon['icon-type']}/>
+            </div>
+            
             <button className="geco-without-background-btn">
-                <Link to={'/user/pricing'}>
-                  <GIcon
-                    color={GPremiumStarIcon.color}
-                    icon-type={GPremiumStarIcon['icon-type']}
-                  />
-                </Link>
+              <Link to={'/user/pricing'}>
+                <GIcon
+                  color={GPremiumStarIcon.color}
+                  icon-type={GPremiumStarIcon['icon-type']}
+                />
+              </Link>
             </button>
 
             <GCircularButton
@@ -54,39 +62,39 @@ export const GHomePage = () => {
             />
           </div>
         </div>
-        <div className='home-head-img'></div>
+        <div className="home-head-img"></div>
       </div>
 
-      <div className='home-body'>
-        <div className='home-body-title'>
+      <div className="home-body">
+        <div className="home-body-title">
           <GHeadCenterTitle title={HomeHeadCenterTitle} color={GWhite} />
         </div>
-        <div className='home-body-container-columns'>
-          <div className='geco-services-column'>
-            <div className='geco-services-icon'>
+        <div className="home-body-container-columns">
+          <div className="geco-services-column">
+            <div className="geco-services-icon">
               <GCircularButton
-                  icon={GAdIcon}
-                  size="2em"
-                  width="70px"
-                  height="70px"
-                  colorBackground={GWhite}
-                  onClickAction={NavigationService.handleNavigation('/ad')}
+                icon={GAdIcon}
+                size="2em"
+                width="70px"
+                height="70px"
+                colorBackground={GWhite}
+                onClickAction={NavigationService.handleNavigation('/ad')}
               />
               <p>{AdHeadCenterTitle}</p>
             </div>
-            <div className='geco-services-icon'>
+            <div className="geco-services-icon">
               <GCircularButton
-                  icon={GStrategyIcon}
-                  size="2em"
-                  width="70px"
-                  height="70px"
-                  colorBackground={GWhite}
-                  onClickAction={NavigationService.handleNavigation('/strategy')}
+                icon={GStrategyIcon}
+                size="2em"
+                width="70px"
+                height="70px"
+                colorBackground={GWhite}
+                onClickAction={NavigationService.handleNavigation('/strategy')}
               />
               <p>{StrategyHeadCenterTitle}</p>
             </div>
           </div>
-          <div className='geco-services-column'>
+          <div className="geco-services-column">
             <div className="geco-services-icon">
               <GCircularButton
                 icon={GContactsIcon}
@@ -94,7 +102,9 @@ export const GHomePage = () => {
                 width="70px"
                 height="70px"
                 colorBackground={GWhite}
-                onClickAction={NavigationService.handleNavigation('/contacts')}
+                onClickAction={NavigationService.handleNavigation(
+                  '/contacts/options'
+                )}
               />
               <p>{ContactsHeadCenterTitle}</p>
             </div>
@@ -105,17 +115,15 @@ export const GHomePage = () => {
                 width="70px"
                 height="70px"
                 colorBackground={GWhite}
-                onClickAction={NavigationService.handleNavigation('/statistics')}
+                onClickAction={NavigationService.handleNavigation(
+                  '/statistics/options'
+                )}
               />
               <p>{StatisticsHeadCenterTitle}</p>
             </div>
           </div>
         </div>
-
-        
-
       </div>
-
     </div>
   );
 };

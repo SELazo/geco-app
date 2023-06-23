@@ -17,9 +17,9 @@ import {
   PricingTitle,
   UserOptionsSubtitle,
 } from '../../constants/wording';
-import { NavigationService } from '../../services/navigationService';
+import { NavigationService } from '../../services/navigationService/navigationService';
 import { GHeadCenterTitle } from '../../components/GHeadCenterTitle';
-import { User } from '../../redux/authSlice';
+import { User } from '../../redux/sessionSlice';
 import { GLogoLetter } from '../../components/GLogoLetter';
 import { Link } from 'react-router-dom';
 

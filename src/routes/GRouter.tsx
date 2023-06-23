@@ -9,10 +9,11 @@ import { GForgotPasswordPage } from '../pages/auth/GForgotPasswordPage';
 import { GRecoveryPage } from '../pages/auth/recovery/GRecoveryPage';
 import { GResetPasswordPage } from '../pages/auth/recovery/GResetPasswordPage';
 import { GFeedbackSuccessResetPassword } from '../pages/auth/recovery/GSuccessResetPassword';
+import { SessionState } from '../redux/sessionSlice';
 
 export const GRouter = () => {
   const isAuthenticated = useSelector(
-    (state: any) => state.auth.isAuthenticated
+    (state: any) => state.auth.auth.isAuthenticated
   );
 
   return (

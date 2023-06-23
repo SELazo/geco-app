@@ -17,7 +17,7 @@ export const GCircularButton: React.FC<ICircularButton> = (
   props: ICircularButton
 ) => {
   return (
-    <button
+    <div
       className="geco-circular-btn"
       style={{
         width: props.width,
@@ -27,7 +27,9 @@ export const GCircularButton: React.FC<ICircularButton> = (
       }}
       onClick={props.onClickAction ? props.onClickAction : undefined}
     >
-      <GIcon icon-type={props.icon['icon-type']} color={props.icon.color} />
-    </button>
+      <span>
+        <GIcon icon-type={props.icon['icon-type']} color={props.icon.color} />
+      </span>
+    </div>
   );
 };

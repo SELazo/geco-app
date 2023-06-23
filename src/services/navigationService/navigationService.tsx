@@ -1,11 +1,5 @@
 import { useNavigate } from 'react-router-dom';
-
-interface INavigationService {
-  goBack(): void;
-  goFoward(): void;
-  handleNavigation(route: string): () => void;
-  navigateTo(route: string): void;
-}
+import { INavigationService } from './navigationInterfaces';
 
 export const NavigationService: INavigationService = {
   goBack: (): void => {

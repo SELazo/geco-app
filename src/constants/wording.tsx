@@ -1,3 +1,5 @@
+import { IDropdownHelpProps } from '../components/GDropdownHelp';
+import { IMenuOption } from '../components/GMenuOption';
 import { IFeedback } from '../interfaces/IFeedback';
 import { IHeadSectionTitle } from '../interfaces/IHeadSectionTitle';
 import { ITextAction } from '../interfaces/ITextAction';
@@ -50,6 +52,16 @@ export const CommentsTitle: string = 'Contáctanos';
 
 export const PricingSectionTitle: string = 'Modalidades';
 
+export const ContactsSectionTitle: string = 'Agenda';
+
+export const StatisticsSectionTitle: string = 'Estadísticas';
+
+export const GroupGrowthSectionTitle: string =
+  'Crecimiento de los grupos en tu red';
+
+export const RedCompositionSectionTitle: string =
+  'Composición de tu red de contactos';
+
 /**
  * Wording
  */
@@ -62,6 +74,21 @@ export const Okay: string = 'Okay!';
 export const UserOptionsSubtitle: string = 'Opciones de usuario';
 
 export const UserEditInfoSubtitle: string = 'Edita tu información';
+
+export const Months: string[] = [
+  'Enero',
+  'Febrero',
+  'Marzo',
+  'Abril',
+  'Mayo',
+  'Junio',
+  'Julio',
+  'Agosto',
+  'Septiembre',
+  'Octubre',
+  'Noviembre',
+  'Diciembre',
+];
 
 /**
  * Head Section Titles
@@ -88,6 +115,22 @@ export const CommentsHeadSectionTitle: IHeadSectionTitle = {
   subtitle: 'Si tienés alguna duda no dudes en mensajearnos 😃',
 };
 
+export const AddContactSectionTitle: IHeadSectionTitle = {
+  title: 'Crear contacto',
+  subtitle: 'Crea un nuevo contacto. 😌',
+};
+
+export const AddNewGroupStep1SectionTitle: IHeadSectionTitle = {
+  title: 'Crear grupo',
+  subtitle:
+    'Crea un grupo de contactos para enviar comunicaciones.📢 \n Añade información sobre el mismo para poder identificarlo de forma rápida. 📋',
+};
+
+export const AddContactsExcelSectionTitle: IHeadSectionTitle = {
+  title: 'Importar contactos',
+  subtitle: 'Importar contactos desde un archivo Excel. 🧐',
+};
+
 /**
  * Feedbacks
  */
@@ -106,3 +149,65 @@ export const CommentSended: IFeedback = {
   buttonLabel: 'Okay!',
   buttonPath: '/home',
 };
+
+export const ContactAdded: IFeedback = {
+  title: 'El contacto ha sido añadido!',
+  subtitle: 'Ahora podrá administrar su nuevo contacto a través de la Agenda!',
+  buttonLabel: 'Okay!',
+  buttonPath: '/contacts/list',
+};
+
+export const ContactsExcelAdded: IFeedback = {
+  title: 'Los contactos han sido añadidos!',
+  subtitle:
+    'Ahora podrá administrar sus nuevo contactos a través de la Agenda!',
+  buttonLabel: 'Okay!',
+  buttonPath: '/contacts/list',
+};
+
+/**
+ * Menu Options
+ */
+
+export const AdminListContacts: IMenuOption = {
+  mainTitle: 'Administrar contactos',
+  description: 'Agrega, modifica o elimina tus contactos',
+  route: '/contacts/list',
+};
+
+export const GroupsContacts: IMenuOption = {
+  mainTitle: 'Administrar grupos',
+  description: 'Agrega, modifica o elimina tus grupos',
+  route: '/contacts/groups',
+};
+
+export const FeedbackStrategiesStatistics: IMenuOption = {
+  mainTitle: 'Feedback de estrategias de comunicación',
+  description: 'Consulta como le fue a tus estrategias de comunicación',
+  route: '/statistics/strategies',
+};
+
+export const FeedbackContactsStatistics: IMenuOption = {
+  mainTitle: 'Feedback de red de contactos',
+  description: 'Consulta como creció tu red de contactos',
+  route: '/statistics/contacts',
+};
+
+/**
+ * Dropdown Help
+ */
+
+export const ImportExcelHelp: IDropdownHelpProps = {
+  title: 'Importante!',
+  body: 'El Excel deberá estar compuesto por tres columnas: Nombres, números telefónicos y dirección de correos electrónicos.',
+  routeLabel: 'Descarga una muestra!',
+  route:
+    'https://docs.google.com/spreadsheets/d/1vqt6EbxHXypIU73HsWhpmGDQkzeN4zLh/edit?usp=share_link&ouid=104991212361139592910&rtpof=true&sd=true',
+};
+
+/**
+ * Form placeholders.
+ */
+
+export const NewGroupDescriptionPlaceholder: string =
+  'Añade una descripción que te ayude a identificar el proposito del grupo de forma rápida. 👀';
