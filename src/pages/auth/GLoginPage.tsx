@@ -18,7 +18,7 @@ import {
 import { GLogoLetter } from '../../components/GLogoLetter';
 import { GBlack, GWhite } from '../../constants/palette';
 
-import { AuthService } from '../../services/authService/authService';
+import { AuthService } from '../../services/authService';
 import { GChevronRightIcon } from '../../constants/buttons';
 import { useNavigate } from 'react-router-dom';
 import { useDispatch } from 'react-redux';

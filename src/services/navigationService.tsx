@@ -1,5 +1,5 @@
 import { useNavigate } from 'react-router-dom';
-import { INavigationService } from './navigationInterfaces';
+import { INavigationService } from '../interfaces/dtos/INavigation';
 
 export const NavigationService: INavigationService = {
   goBack: (): void => {

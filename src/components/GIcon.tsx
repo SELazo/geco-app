@@ -2,7 +2,7 @@ import { FC } from 'react';
 
 import '../styles/gicon.css';
 import { Icons } from '../constants/icons';
-import { IButtonIcon } from '../interfaces/IButtonIcon';
+import { IButtonIcon } from '../interfaces/components/IButtonIcon';
 
 export const GIcon: FC<IButtonIcon> = (props: IButtonIcon) => {
   function getIcon(value: string): JSX.Element {

@@ -14,7 +14,7 @@ import {
   GYellow,
 } from '../../../constants/palette';
 import { Months, StatisticsSectionTitle } from '../../../constants/wording';
-import { NavigationService } from '../../../services/navigationService/navigationService';
+import { NavigationService } from '../../../services/navigationService';
 
 import '../../../styles/gstatisticsContacts.css';
 import { GLineChart } from '../../../components/GLineChart';

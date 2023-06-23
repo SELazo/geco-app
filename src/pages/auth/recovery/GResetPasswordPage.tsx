@@ -15,7 +15,7 @@ import { GIconButtonSignIn, GIconButtonX } from '../../../constants/buttons';
 import { GSubmitButton } from '../../../components/GSubmitButton';
 import { ResetPasswordHeadSectionTitle } from '../../../constants/wording';
 import { GBlack, GWhite, GYellow } from '../../../constants/palette';
-import { NavigationService } from '../../../services/navigationService/navigationService';
+import { NavigationService } from '../../../services/navigationService';
 
 type ResetPasswordFormData = {
   password: string;

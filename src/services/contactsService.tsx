@@ -1,5 +1,5 @@
-import { IContactsService, IContactResponse } from './contactsInterfaces';
-import { IBasicSuccessResponse } from '../commonInterfaces';
+import { IContactsService, IContactResponse } from '../../interfaces/dtos/IContacts';
+import { IBasicSuccessResponse } from '../../interfaces/dtos/IBasicResponse';
 import { environment } from '../../environment/environment';
 
 const { contactsApiURI } = environment;

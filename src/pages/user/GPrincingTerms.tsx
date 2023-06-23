@@ -3,7 +3,7 @@ import('../../styles/gpricingterms.css');
 import { GCircularButton } from '../../components/GCircularButton';
 import { GIconButtonBack } from '../../constants/buttons';
 import { GBlack, GWhite, GYellow } from '../../constants/palette';
-import { NavigationService } from '../../services/navigationService/navigationService';
+import { NavigationService } from '../../services/navigationService';
 import { GHeadCenterTitle } from '../../components/GHeadCenterTitle';
 import { useSelector } from 'react-redux';
 

@@ -16,7 +16,7 @@ import {
   ContactsHeadCenterTitle,
   StatisticsSectionTitle,
 } from '../../../constants/wording';
-import { NavigationService } from '../../../services/navigationService/navigationService';
+import { NavigationService } from '../../../services/navigationService';
 
 import '../../../styles/gstatisticsContacts.css';
 import {

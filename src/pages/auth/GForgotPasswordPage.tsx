@@ -13,7 +13,7 @@ import { GIconButtonBack } from '../../constants/buttons';
 import { GSubmitButton } from '../../components/GSubmitButton';
 import { ForgotPasswordHeadSectionTitle } from '../../constants/wording';
 import { GBlack, GWhite, GYellow } from '../../constants/palette';
-import { NavigationService } from '../../services/navigationService/navigationService';
+import { NavigationService } from '../../services/navigationService';
 
 type ForgotPasswordFormData = {
   email: string;

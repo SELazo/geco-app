@@ -3,7 +3,7 @@ import { FC } from 'react';
 import('../styles/gcontactItem.css');
 
 import { GIcon } from './GIcon';
-import { IButtonIcon } from '../interfaces/IButtonIcon';
+import { IButtonIcon } from '../interfaces/components/IButtonIcon';
 
 export interface IContactItem {
   id: number;

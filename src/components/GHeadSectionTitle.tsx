@@ -1,5 +1,5 @@
 import { FC } from 'react';
-import { IHeadSectionTitle } from '../interfaces/IHeadSectionTitle';
+import { IHeadSectionTitle } from '../interfaces/components/IHeadSectionTitle';
 
 import '../styles/gheadSectionTitle.css';
 

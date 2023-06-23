@@ -1,7 +1,7 @@
 import { FC } from 'react';
 
 import('../styles/gfeedback.css');
-import { IButtonIcon } from '../interfaces/IButtonIcon';
+import { IButtonIcon } from '../interfaces/components/IButtonIcon';
 import { GHeadCenterTitle } from './GHeadCenterTitle';
 import { GSubmitButton } from './GSubmitButton';
 import { GCircularButton } from './GCircularButton';

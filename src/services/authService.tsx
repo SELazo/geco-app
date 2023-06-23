@@ -1,6 +1,6 @@
-import { IAuthService, ILoginResponse, IValidateSessionResponse } from './authInterfaces';
-import { IBasicSuccessResponse } from '../commonInterfaces';
-import { environment } from '../../environment/environment';
+import { IAuthService, ILoginResponse, IValidateSessionResponse } from '../interfaces/dtos/IAuth';
+import { IBasicSuccessResponse } from '../interfaces/dtos/IBasicResponse';
+import { environment } from '../environment/environment';
 
 const { authServiceURI } = environment;
 
