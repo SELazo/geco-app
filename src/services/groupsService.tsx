@@ -1,4 +1,4 @@
-import { IGroupService } from '../interfaces/dtos/IGroups';
+import { IGroupResponse, IGroupService } from '../interfaces/dtos/IGroups';
 import { IBasicSuccessResponse } from '../interfaces/dtos/IBasicResponse';
 import { environment } from '../environment/environment';
 
@@ -63,6 +63,36 @@ export const groupsService: IGroupService = {
         });
     
         const data: IBasicSuccessResponse = await response.json();
+        return data;
+    },
+
+    deleteGroup: async (groupId: number): Promise<IBasicSuccessResponse> => {
+        const token = localStorage.getItem('token');
+
+        const response = await fetch(`${contactsApiURI}/groups/${groupId}`, {
+            method: 'DELETE',
+            headers: {
+                'Content-Type': 'application/json',
+                'Authorization': `${token}`
+            },
+        });
+    
+        const data: IBasicSuccessResponse = await response.json();
+        return data;
+    },
+
+    getGroup: async (groupId: number): Promise<IGroupResponse> => {
+        const token = localStorage.getItem('token');
+
+        const response = await fetch(`${contactsApiURI}/groups/${groupId}`, {
+            method: 'GET',
+            headers: {
+                'Content-Type': 'application/json',
+                'Authorization': `${token}`
+            },
+        });
+    
+        const data: IGroupResponse = await response.json();
         return data;
     }
 };

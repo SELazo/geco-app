@@ -1,10 +1,15 @@
 import { IBasicSuccessResponse } from "./IBasicResponse";
+import { IContactResponse } from "./IContacts";
 
-export interface IContactResponse {
+export interface IGroup {
     id: number;
     name: string;
-    email: string;
-    phone: number;
+    description: string;
+}
+
+export interface IGroupResponse {
+    group: IGroup;
+    contacts: IContactResponse[];
 }
 
 export interface IGroupService {
@@ -12,4 +17,6 @@ export interface IGroupService {
     addContactToGroup(groupId: number, contactId: number): Promise<IBasicSuccessResponse>;
     deleteContactFromGroup(groupId: number, contactId: number): Promise<IBasicSuccessResponse>;
     editGroup(groupId: number): Promise<IBasicSuccessResponse>;
+    deleteGroup(groupId: number): Promise<IBasicSuccessResponse>;
+    getGroup(groupId: number): Promise<IGroupResponse>;
 }
