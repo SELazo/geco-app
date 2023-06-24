@@ -19,16 +19,21 @@ import { GLogoLetter } from '../../components/GLogoLetter';
 import { GBlack, GWhite } from '../../constants/palette';
 
 import { AuthService } from '../../services/external/authService';
+import { AuthTokenService } from '../../services/internal/authTokenService';
 import { GChevronRightIcon } from '../../constants/buttons';
 import { useNavigate } from 'react-router-dom';
 import { useDispatch } from 'react-redux';
 import {
   Auth,
-  SessionState,
   User,
   loginSuccess,
 } from '../../redux/sessionSlice';
-import { Users } from './GSignUpPage';
+import { ILoginResponse, IValidateSessionResponse } from '../../interfaces/dtos/external/IAuth';
+import { ApiResponse } from '../../interfaces/dtos/external/IResponse';
+import { ROUTES } from '../../constants/routes';
+
+const { login, validateSession } = AuthService;
+const { setToken, getToken } = AuthTokenService;
 
 type LoginForm = {
   email: string;
@@ -56,34 +61,27 @@ export const GLoginPage = () => {
     resolver: yupResolver(validationSchema),
   });
 
+  const manualError = {
+    type: 'manual',
+    message: 'El correo electrónico o la contraseña son incorrectos',
+  };
+
   const dispatch = useDispatch();
 
   const navigate = useNavigate();
 
-  const onSubmit = async (data: LoginForm) => {
-    const response = await AuthService.login(data.email, data.password).catch (e => {
-      setError('password', {
-        type: 'manual',
-        message: 'El correo electrónico o la contraseña son incorrectos',
+  const onSubmit = async ({ email, password }: LoginForm) => {
+    await login(email, password)
+      .then(async (response: ApiResponse<ILoginResponse>) => {
+          const loginResponse = response.data as ILoginResponse;
+          setToken(loginResponse.token);
+
+          return await validateSession();
       })
-    });
-    
-    if (response && response.token){
-
-      try {
-        const validateSesion = await fetch('http://localhost:3000/validate-session',{
-          method: 'GET',
-          headers: {
-            'authorization': response.token
-          }
-        });
-        if (!validateSesion.ok) {
-          throw new Error('Failed to validate session');
-        }
-        const data = await validateSesion.json();
-        const user: User = data.user;
-
-        const token = response.token;
+      .then(async (response: ApiResponse<IValidateSessionResponse>) => {
+        const session = response.data as IValidateSessionResponse;
+        const user: User = session.user;
+        const token = getToken();
 
         const auth: Auth = {
           token,
@@ -92,19 +90,11 @@ export const GLoginPage = () => {
         dispatch(loginSuccess({ user, auth }));
 
         reset();
-        navigate('/home');
-
-        localStorage.setItem('token',response.token);
-
-      } catch (error) {
-        throw new Error('Failed to validate session');
-      }
-      }else {
-        setError('password', {
-          type: 'manual',
-          message: 'El correo electrónico o la contraseña son incorrectos',
-        });
-      };
+        navigate(ROUTES.HOME);
+      })
+      .catch (e => {
+          setError('password', manualError);
+      });
   };
 
   return (
