@@ -10,13 +10,13 @@ import { GResetPasswordPage } from '../pages/auth/recovery/GResetPasswordPage';
 import { GFeedbackSuccessResetPassword } from '../pages/auth/recovery/GSuccessResetPassword';
 
 export const GRouter = ({
-    isAuthenticated,
-    handleLogin,
-    handleLogout,
-  }: {
-    isAuthenticated: boolean;
-    handleLogin: () => void;
-    handleLogout: () => void;
+  isAuthenticated,
+  handleLogin,
+  handleLogout,
+}: {
+  isAuthenticated: boolean;
+  handleLogin: () => void;
+  handleLogout: () => void;
 }) => {
   return (
     <BrowserRouter>
@@ -27,7 +27,10 @@ export const GRouter = ({
           <Route path="/*" element={<Navigate to="/login" />} />
         )}
         <Route path="/" element={<GBootPage />} />
-        <Route path="/login" element={<GLoginPage handleLogin={handleLogin}/>} />
+        <Route
+          path="/login"
+          element={<GLoginPage handleLogin={handleLogin} />}
+        />
         <Route path="/sign-up" element={<GSignUpPage />} />
         <Route path="/forgot-password" element={<GForgotPasswordPage />} />
         <Route path="/recovery" element={<GRecoveryPage />}>
