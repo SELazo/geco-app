@@ -1,4 +1,4 @@
-import { IGroupResponse, IGroupService } from '../interfaces/dtos/IGroups';
+import { IGroup, IGroupResponse, IGroupService } from '../interfaces/dtos/IGroups';
 import { IBasicSuccessResponse } from '../interfaces/dtos/IBasicResponse';
 import { environment } from '../environment/environment';
 
@@ -93,6 +93,27 @@ export const groupsService: IGroupService = {
         });
     
         const data: IGroupResponse = await response.json();
+        return data;
+    },
+
+    getGroups: async (name?: string): Promise<IGroup[]> => {
+        let url = `${contactsApiURI}/groups`;
+
+        if (name) {
+            url += `?name=${name}`;
+        }
+
+        const token = localStorage.getItem('token');
+
+        const response = await fetch(url, {
+            method: 'GET',
+            headers: {
+                'Content-Type': 'application/json',
+                'Authorization': `${token}`
+            },
+        });
+
+        const data: IGroup[] = await response.json();
         return data;
     }
 };

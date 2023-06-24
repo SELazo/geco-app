@@ -19,4 +19,5 @@ export interface IGroupService {
     editGroup(groupId: number): Promise<IBasicSuccessResponse>;
     deleteGroup(groupId: number): Promise<IBasicSuccessResponse>;
     getGroup(groupId: number): Promise<IGroupResponse>;
+    getGroups(name?: string): Promise<IGroup[]>;
 }
