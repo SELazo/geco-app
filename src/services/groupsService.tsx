@@ -35,4 +35,19 @@ export const groupsService: IGroupService = {
         const data: IBasicSuccessResponse = await response.json();
         return data;
     },
+
+    deleteContactFromGroup: async (groupId: number, contactId: number): Promise<IBasicSuccessResponse> => {
+        const token = localStorage.getItem('token');
+
+        const response = await fetch(`${contactsApiURI}/groups/${groupId}/contacts/${contactId}`, {
+            method: 'DELETE',
+            headers: {
+                'Content-Type': 'application/json',
+                'Authorization': `${token}`
+            },
+        });
+    
+        const data: IBasicSuccessResponse = await response.json();
+        return data;
+    }
 };
