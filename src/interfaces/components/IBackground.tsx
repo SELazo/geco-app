@@ -1,4 +1,4 @@
-interface IBackground {
+export interface IBackground {
   backgroundColor: string;
   gecoColor: string;
 }

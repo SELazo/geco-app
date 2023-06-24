@@ -2,6 +2,8 @@
  * Colors
  */
 
+import { IBackground } from "../interfaces/components/IBackground";
+
 export const GBlack: string = '#18191f';
 export const GBlue: string = '#1947E5';
 export const GGray: string = '#9FA4B4';
