@@ -87,7 +87,7 @@ export const AuthService: IAuthService = {
     return;
   }),
 
-  signUp: async (name: string, email: string, password: string): Promise<IBasicSuccessResponse> => {
+  signUp: async (name: string, email: string, password: string): Promise<ApiResponse<IBasicSuccessResponse>> => new Promise( async(resolve, reject) => {
     const response = await fetch(`${authServiceURI}/sign-up`, {
       method: 'POST',
       headers: {
@@ -96,9 +96,25 @@ export const AuthService: IAuthService = {
       body: JSON.stringify({ name, email, password }),
     });
 
+    if (!response.ok) {
+      const err: IError = await response.json();
+      console.error(err);
+      const errorResponse: ApiResponse<IBasicSuccessResponse> = {
+        success: false,
+        error: err,
+      };
+      reject(errorResponse);
+      return;
+    }
+
     const data: IBasicSuccessResponse = await response.json();
-    return data;
-  },
+    const successResponse: ApiResponse<IBasicSuccessResponse> = {
+      success: true,
+      data: data,
+    };
+    resolve(successResponse);
+    return;
+  }),
   
   resetPasswordRequest: async (email: string): Promise<IBasicSuccessResponse> => {
     const response = await fetch(`${authServiceURI}/reset-password-request`, {

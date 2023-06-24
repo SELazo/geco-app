@@ -14,10 +14,15 @@ import { SignUpHeadSectionTitle, SignInAction } from '../../constants/wording';
 
 import { GHeadSectionTitle } from '../../components/GHeadSectionTitle';
 import { GCircularButton } from '../../components/GCircularButton';
-import { GIconButtonBack, GIconButtonSignIn } from '../../constants/buttons';
+import { GIconButtonBack } from '../../constants/buttons';
 import { GBlack, GWhite, GYellow } from '../../constants/palette';
 import { NavigationService } from '../../services/internal/navigationService';
 import { useNavigate } from 'react-router-dom';
+import { AuthService } from '../../services/external/authService';
+import { IBasicSuccessResponse } from '../../interfaces/dtos/external/IBasicResponse';
+import { ApiResponse } from '../../interfaces/dtos/external/IResponse';
+
+const { signUp } = AuthService;
 
 type SignUpFormData = {
   name: string;
@@ -26,11 +31,9 @@ type SignUpFormData = {
   confirmedPassword: string;
 };
 
-/**temporal */
-export type Users = {
-  name: string;
-  email: string;
-  password: string;
+const manualError = {
+  type: 'manual',
+  message: 'El correo electrónico está en uso',
 };
 
 export const GSignUpPage = () => {
@@ -58,35 +61,13 @@ export const GSignUpPage = () => {
     resolver: yupResolver(validationSchema),
   });
 
-  const onSubmit = (data: SignUpFormData) => {
-    /**temporal */
-    const dataBase = JSON.parse(
-      localStorage.getItem('users') || '[]'
-    ) as Users[];
-
-    const searchedUser = dataBase.find((user) => user.email === data.email);
-
-    if (searchedUser === undefined) {
-      const newUser = {
-        id: dataBase.length + 1,
-        name: data.name,
-        email: data.email,
-        password: data.password,
-      };
-
-      dataBase.push(newUser);
-
-      localStorage.setItem('users', JSON.stringify(dataBase));
-
-      reset();
-
-      navigate('/login');
-    }
-
-    setError('email', {
-      type: 'manual',
-      message: 'El correo electrónico está en uso',
-    });
+  const onSubmit = async (data: SignUpFormData) => {
+    await signUp(data.name, data.email, data.password)
+      .then((response: ApiResponse<IBasicSuccessResponse>) => {
+        reset();
+        navigate('/login');
+      })
+      .catch(e => setError('email', manualError));
   };
 
   return (

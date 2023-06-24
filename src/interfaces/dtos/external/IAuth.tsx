@@ -19,7 +19,7 @@ export interface IAuthService {
     login(email: string, password: string): Promise<ApiResponse<ILoginResponse>>;
     logout(): Promise<IBasicSuccessResponse>;
     validateSession(): Promise<ApiResponse<IValidateSessionResponse>>
-    signUp(name: string, email: string, password: string): Promise<IBasicSuccessResponse>
+    signUp(name: string, email: string, password: string): Promise<ApiResponse<IBasicSuccessResponse>>
     resetPasswordRequest(email: string): Promise<IBasicSuccessResponse>
     resetPassword(newPassword: string, passwordToken: string): Promise<IBasicSuccessResponse>
 }
