@@ -19,28 +19,27 @@ import { GLogoLetter } from '../../components/GLogoLetter';
 import { GBlack, GWhite } from '../../constants/palette';
 
 import { AuthService } from '../../services/external/authService';
-import { AuthTokenService } from '../../services/internal/authTokenService';
+import { SessionService } from '../../services/internal/sessionService';
 import { GChevronRightIcon } from '../../constants/buttons';
 import { useNavigate } from 'react-router-dom';
 import { useDispatch } from 'react-redux';
+import { Auth, User, loginSuccess } from '../../redux/sessionSlice';
 import {
-  Auth,
-  User,
-  loginSuccess,
-} from '../../redux/sessionSlice';
-import { ILoginResponse, IValidateSessionResponse } from '../../interfaces/dtos/external/IAuth';
+  ILoginResponse,
+  IValidateSessionResponse,
+} from '../../interfaces/dtos/external/IAuth';
 import { ApiResponse } from '../../interfaces/dtos/external/IResponse';
 import { ROUTES } from '../../constants/routes';
 
 const { login, validateSession } = AuthService;
-const { setToken, getToken } = AuthTokenService;
+const { setToken, getToken } = SessionService;
 
 type LoginForm = {
   email: string;
   password: string;
 };
 
-export const GLoginPage = () => {
+export const GLoginPage = ({ handleLogin }: { handleLogin: () => void }) => {
   const validationSchema = Yup.object().shape({
     email: Yup.string()
       .email('Por favor ingrese un correo electrónico válido')
@@ -73,27 +72,18 @@ export const GLoginPage = () => {
   const onSubmit = async ({ email, password }: LoginForm) => {
     await login(email, password)
       .then(async (response: ApiResponse<ILoginResponse>) => {
-          const loginResponse = response.data as ILoginResponse;
-          setToken(loginResponse.token);
+        const loginResponse = response.data as ILoginResponse;
+        setToken(loginResponse.token);
 
-          return await validateSession();
+        return await validateSession();
       })
       .then(async (response: ApiResponse<IValidateSessionResponse>) => {
-        const session = response.data as IValidateSessionResponse;
-        const user: User = session.user;
-        const token = getToken();
-
-        const auth: Auth = {
-          token,
-          isAuthenticated: true,
-        };
-        dispatch(loginSuccess({ user, auth }));
-
         reset();
+        handleLogin();
         navigate(ROUTES.HOME);
       })
-      .catch (e => {
-          setError('password', manualError);
+      .catch((e) => {
+        setError('password', manualError);
       });
   };
 
