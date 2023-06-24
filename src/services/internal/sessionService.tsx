@@ -1,14 +1,12 @@
-import { useDispatch, useSelector } from 'react-redux';
-import { EMPTY_STRING, TOKEN_KEY } from '../../constants/auth';
+import { EMPTY_STRING, SESSION_KEY, TOKEN_KEY } from '../../constants/auth';
 import { IValidateSessionResponse } from '../../interfaces/dtos/external/IAuth';
 import { ApiResponse } from '../../interfaces/dtos/external/IResponse';
 import { ISessionService } from '../../interfaces/dtos/internal/ISessionService';
 import { AuthService } from '../external/authService';
-import { Auth, User, loginSuccess } from '../../redux/sessionSlice';
 
 export const SessionService: ISessionService = {
   getToken: (): string => {
-    const storedToken = null;// TODO: useSelector((state: any) => state.auth.token); buscar en store antes del local storage
+    const storedToken = null //useSelector((state: any) => state.auth.token);
     if (storedToken) {
       return storedToken;
     }
@@ -25,20 +23,28 @@ export const SessionService: ISessionService = {
     localStorage.removeItem(TOKEN_KEY);
   },
 
-  validateSession: async (): Promise<boolean> => {
-    const token = SessionService.getToken();
+  getSession: (): IValidateSessionResponse | null => {
+    const session = localStorage.getItem(SESSION_KEY);
+
+    if (!session) {
+      return null;
+    }
+    
+    const sessionObject = JSON.parse(session) as IValidateSessionResponse;
+    return sessionObject;
+  },
+
+  setSession: (session: IValidateSessionResponse): void => {
+    localStorage.setItem(SESSION_KEY, JSON.stringify(session));
+  },
+
+  validateSession: async (token: string): Promise<boolean> => {
     if (!token) return false;
 
     return await AuthService.validateSession()
       .then(async (response: ApiResponse<IValidateSessionResponse>) => {
-          const dispatch = useDispatch();
           const session = response.data as IValidateSessionResponse;
-          const user: User = session.user;  
-          const auth: Auth = {
-            token,
-            isAuthenticated: true,
-          };
-          dispatch(loginSuccess({ user, auth }));
+          SessionService.setSession(session);
           return true;
       })
       .catch(e => {

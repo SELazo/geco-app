@@ -40,7 +40,7 @@ type LoginForm = {
   password: string;
 };
 
-export const GLoginPage = () => {
+export const GLoginPage = ({ handleLogin }: { handleLogin: () => void }) => {
   const validationSchema = Yup.object().shape({
     email: Yup.string()
       .email('Por favor ingrese un correo electrónico válido')
@@ -89,7 +89,8 @@ export const GLoginPage = () => {
         };
         dispatch(loginSuccess({ user, auth }));
 
-        reset();        
+        reset();
+        handleLogin();
         navigate(ROUTES.HOME);
       })
       .catch (e => {
