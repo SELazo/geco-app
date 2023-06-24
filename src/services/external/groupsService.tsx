@@ -1,6 +1,6 @@
-import { IGroup, IGroupResponse, IGroupService } from '../interfaces/dtos/IGroups';
-import { IBasicSuccessResponse } from '../interfaces/dtos/IBasicResponse';
-import { environment } from '../environment/environment';
+import { IGroup, IGroupResponse, IGroupService } from '../../interfaces/dtos/external/IGroups';
+import { IBasicSuccessResponse } from '../../interfaces/dtos/external/IBasicResponse';
+import { environment } from '../../environment/environment';
 
 const { contactsApiURI } = environment;
 

@@ -18,7 +18,7 @@ import {
 import { GLogoLetter } from '../../components/GLogoLetter';
 import { GBlack, GWhite } from '../../constants/palette';
 
-import { AuthService } from '../../services/authService';
+import { AuthService } from '../../services/external/authService';
 import { GChevronRightIcon } from '../../constants/buttons';
 import { useNavigate } from 'react-router-dom';
 import { useDispatch } from 'react-redux';
@@ -105,27 +105,6 @@ export const GLoginPage = () => {
           message: 'El correo electrónico o la contraseña son incorrectos',
         });
       };
- 
-
-      //if (response.ok) {
-      //  const responseData = await response.json();
-      //  const { token, user } = responseData;
-//
-      //  const auth: Auth = {
-      //    token,
-      //    isAuthenticated: true,
-      //  };
-//
-      //  dispatch(loginSuccess({ user, auth }));
-//
-      //  reset();
-      //  navigate('/home');
-      //} else {
-      //  setError('password', {
-      //    type: 'manual',
-      //    message: 'El correo electrónico o la contraseña son incorrectos',
-      //  });
-      //}
   };
 
   return (

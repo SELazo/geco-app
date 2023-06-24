@@ -3,7 +3,7 @@ import { FC } from 'react';
 import('../styles/gmenuOption.css');
 
 import { GBlack, GWhite } from '../constants/palette';
-import { NavigationService } from '../services/navigationService';
+import { NavigationService } from '../services/internal/navigationService';
 
 export interface IMenuOption {
   mainTitle: string;

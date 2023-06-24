@@ -3,7 +3,7 @@ import('../../styles/gcontacts.css');
 import { GCircularButton } from '../../components/GCircularButton';
 import { GIconButtonBack } from '../../constants/buttons';
 import { GBlack, GWhite } from '../../constants/palette';
-import { NavigationService } from '../../services/navigationService';
+import { NavigationService } from '../../services/internal/navigationService';
 import { GHeadCenterTitle } from '../../components/GHeadCenterTitle';
 import {
   AdminListContacts,
