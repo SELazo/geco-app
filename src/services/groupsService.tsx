@@ -20,4 +20,19 @@ export const groupsService: IGroupService = {
         const data: IBasicSuccessResponse = await response.json();
         return data;
     },
+
+    addContactToGroup: async (groupId: number, contactId: number): Promise<IBasicSuccessResponse> => {
+        const token = localStorage.getItem('token');
+
+        const response = await fetch(`${contactsApiURI}/groups/${groupId}/contacts/${contactId}`, {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+                'Authorization': `${token}`
+            },
+        });
+    
+        const data: IBasicSuccessResponse = await response.json();
+        return data;
+    },
 };

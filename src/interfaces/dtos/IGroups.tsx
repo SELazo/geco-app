@@ -9,4 +9,5 @@ export interface IContactResponse {
 
 export interface IGroupService {
     newGroup(name: string, description: string, directories: number[]): Promise<IBasicSuccessResponse>;
+    addContactToGroup(groupId: number, contactId: number): Promise<IBasicSuccessResponse>;
 }
