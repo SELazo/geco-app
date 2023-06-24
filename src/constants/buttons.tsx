@@ -1,4 +1,4 @@
-import { IButtonIcon } from '../interfaces/IButtonIcon';
+import { IButtonIcon } from '../interfaces/components/IButtonIcon';
 import { GBlack, GGreen, GPink, GRed, GWhite, GYellow } from './palette';
 
 /**

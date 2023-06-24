@@ -1,7 +1,7 @@
 import { FC } from 'react';
 
 import '../styles/gbutton.css';
-import { IButtonIcon } from '../interfaces/IButtonIcon';
+import { IButtonIcon } from '../interfaces/components/IButtonIcon';
 import { GIcon } from './GIcon';
 
 interface ISubmitButtonProps {

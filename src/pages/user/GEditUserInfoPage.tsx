@@ -12,7 +12,7 @@ import { GSubmitButton } from '../../components/GSubmitButton';
 import { GCircularButton } from '../../components/GCircularButton';
 import { GIconButtonBack, GUserIcon } from '../../constants/buttons';
 import { GBlack, GWhite, GYellow } from '../../constants/palette';
-import { NavigationService } from '../../services/navigationService/navigationService';
+import { NavigationService } from '../../services/internal/navigationService';
 import { GHeadCenterTitle } from '../../components/GHeadCenterTitle';
 import { User, setUser } from '../../redux/sessionSlice';
 import { Users } from '../auth/GSignUpPage';

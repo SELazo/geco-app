@@ -16,7 +16,7 @@ import { GHeadSectionTitle } from '../../components/GHeadSectionTitle';
 import { GCircularButton } from '../../components/GCircularButton';
 import { GIconButtonBack, GIconButtonSignIn } from '../../constants/buttons';
 import { GBlack, GWhite, GYellow } from '../../constants/palette';
-import { NavigationService } from '../../services/navigationService/navigationService';
+import { NavigationService } from '../../services/internal/navigationService';
 import { useNavigate } from 'react-router-dom';
 
 type SignUpFormData = {

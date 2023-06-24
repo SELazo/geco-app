@@ -2,7 +2,7 @@ import { FC } from 'react';
 import { Link } from 'react-router-dom';
 
 import '../styles/gtextAction.css';
-import { ITextAction } from '../interfaces/ITextAction';
+import { ITextAction } from '../interfaces/components/ITextAction';
 
 interface ISubmitTextActionProps {
   textAction: ITextAction;

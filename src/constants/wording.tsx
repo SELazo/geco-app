@@ -1,8 +1,8 @@
 import { IDropdownHelpProps } from '../components/GDropdownHelp';
 import { IMenuOption } from '../components/GMenuOption';
-import { IFeedback } from '../interfaces/IFeedback';
-import { IHeadSectionTitle } from '../interfaces/IHeadSectionTitle';
-import { ITextAction } from '../interfaces/ITextAction';
+import { IFeedback } from '../interfaces/components/IFeedback';
+import { IHeadSectionTitle } from '../interfaces/components/IHeadSectionTitle';
+import { ITextAction } from '../interfaces/components/ITextAction';
 
 /**
  * Actions: A link that contains a description and a link to do an action.

@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 
 import '../styles/gerrorpopup.css';
-import { IButtonIcon } from '../interfaces/IButtonIcon';
+import { IButtonIcon } from '../interfaces/components/IButtonIcon';
 import { GIcon } from './GIcon';
 
 interface PopupProps {

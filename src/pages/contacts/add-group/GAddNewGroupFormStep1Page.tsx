@@ -27,7 +27,7 @@ import {
   NewGroupDescriptionPlaceholder,
 } from '../../../constants/wording';
 import { GBlack, GWhite, GYellow } from '../../../constants/palette';
-import { NavigationService } from '../../../services/navigationService/navigationService';
+import { NavigationService } from '../../../services/internal/navigationService';
 import { Link, useLocation, useNavigate } from 'react-router-dom';
 import { GLogoLetter } from '../../../components/GLogoLetter';
 import { useEffect } from 'react';
