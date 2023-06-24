@@ -1,6 +1,8 @@
 import { IAuthService, ILoginResponse, IValidateSessionResponse } from '../../interfaces/dtos/external/IAuth';
 import { IBasicSuccessResponse } from '../../interfaces/dtos/external/IBasicResponse';
 import { environment } from '../../environment/environment';
+import { IError } from '../../interfaces/dtos/external/IError';
+import { ApiResponse } from '../../interfaces/dtos/external/IResponse';
 
 const { authServiceURI } = environment;
 
@@ -10,7 +12,7 @@ export const AuthService: IAuthService = {
     return !!token;
   },
 
-  login: async (email: string, password: string): Promise<ILoginResponse> => {
+  login: async (email: string, password: string): Promise<ApiResponse<ILoginResponse>> => new Promise(async (resolve, reject) => {
     const response = await fetch(`${authServiceURI}/login`, {
       method: 'POST',
       headers: {
@@ -19,9 +21,25 @@ export const AuthService: IAuthService = {
       body: JSON.stringify({ email, password }),
     });
   
-    const data: ILoginResponse = await response.json();
-    return data;
-  },
+    if (!response.ok) {
+      const err: IError = await response.json();
+      console.error(err);
+      const errorResponse: ApiResponse<ILoginResponse> = {
+        success: false,
+        error: err,
+      };
+      reject(errorResponse);
+      return;
+    }
+  
+    const loginResponse: ILoginResponse = await response.json();
+    const successResponse: ApiResponse<ILoginResponse> = {
+      success: true,
+      data: loginResponse,
+    };
+    resolve(successResponse);
+    return;
+  }),
 
   logout: async (): Promise<IBasicSuccessResponse> => {
     const token = localStorage.getItem('token');
@@ -39,7 +57,7 @@ export const AuthService: IAuthService = {
     return data;
   },
 
-  validateSession: async (): Promise<IValidateSessionResponse> => {
+  validateSession: async (): Promise<ApiResponse<IValidateSessionResponse>> => new Promise( async(resolve, reject) => {
     const token = localStorage.getItem('token');
     const response = await fetch(`${authServiceURI}/validate-session`, {
       method: 'GET',
@@ -48,10 +66,26 @@ export const AuthService: IAuthService = {
         'Authorization': `${token}`
       },
     });
-
+  
+    if (!response.ok) {
+      const err: IError = await response.json();
+      console.error(err);
+      const errorResponse: ApiResponse<IValidateSessionResponse> = {
+        success: false,
+        error: err,
+      };
+      reject(errorResponse);
+      return;
+    }
+  
     const data: IValidateSessionResponse = await response.json();
-    return data;
-  },
+    const successResponse: ApiResponse<IValidateSessionResponse> = {
+      success: true,
+      data: data,
+    };
+    resolve(successResponse);
+    return;
+  }),
 
   signUp: async (name: string, email: string, password: string): Promise<IBasicSuccessResponse> => {
     const response = await fetch(`${authServiceURI}/sign-up`, {

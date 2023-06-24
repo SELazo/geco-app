@@ -1,4 +1,5 @@
 import { IBasicSuccessResponse } from "./IBasicResponse";
+import { ApiResponse } from "./IResponse";
 
 export interface ILoginResponse {
     token: string;
@@ -15,9 +16,9 @@ export interface IValidateSessionResponse {
 
 export interface IAuthService {
     isAuthenticated(): Promise<boolean>;
-    login(email: string, password: string): Promise<ILoginResponse>;
+    login(email: string, password: string): Promise<ApiResponse<ILoginResponse>>;
     logout(): Promise<IBasicSuccessResponse>;
-    validateSession(): Promise<IValidateSessionResponse>;
+    validateSession(): Promise<ApiResponse<IValidateSessionResponse>>
     signUp(name: string, email: string, password: string): Promise<IBasicSuccessResponse>
     resetPasswordRequest(email: string): Promise<IBasicSuccessResponse>
     resetPassword(newPassword: string, passwordToken: string): Promise<IBasicSuccessResponse>
