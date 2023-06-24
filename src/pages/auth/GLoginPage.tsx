@@ -19,7 +19,7 @@ import { GLogoLetter } from '../../components/GLogoLetter';
 import { GBlack, GWhite } from '../../constants/palette';
 
 import { AuthService } from '../../services/external/authService';
-import { AuthTokenService } from '../../services/internal/authTokenService';
+import { SessionService } from '../../services/internal/sessionService';
 import { GChevronRightIcon } from '../../constants/buttons';
 import { useNavigate } from 'react-router-dom';
 import { useDispatch } from 'react-redux';
@@ -33,7 +33,7 @@ import { ApiResponse } from '../../interfaces/dtos/external/IResponse';
 import { ROUTES } from '../../constants/routes';
 
 const { login, validateSession } = AuthService;
-const { setToken, getToken } = AuthTokenService;
+const { setToken, getToken } = SessionService;
 
 type LoginForm = {
   email: string;
@@ -89,7 +89,7 @@ export const GLoginPage = () => {
         };
         dispatch(loginSuccess({ user, auth }));
 
-        reset();
+        reset();        
         navigate(ROUTES.HOME);
       })
       .catch (e => {
