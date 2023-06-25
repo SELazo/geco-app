@@ -4,24 +4,41 @@ import { GCircularButton } from '../../../components/GCircularButton';
 import { GDeletetIcon, GIconButtonBack } from '../../../constants/buttons';
 import { GBlack, GRed, GWhite } from '../../../constants/palette';
 import { NavigationService } from '../../../services/internal/navigationService';
+import { ContactsService } from '../../../services/external/contactsService';
 import { GHeadCenterTitle } from '../../../components/GHeadCenterTitle';
 import { ContactsSectionTitle } from '../../../constants/wording';
 import { GContactItem, IContactItem } from '../../../components/GContactItem';
 import { GLogoLetter } from '../../../components/GLogoLetter';
 import { Link } from 'react-router-dom';
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
+import { IContactResponse } from '../../../interfaces/dtos/external/IContacts';
+import { ApiResponse } from '../../../interfaces/dtos/external/IResponse';
+
+const { getContacts, deleteContact } = ContactsService;
 
 export const GDeleteContactsListPage = () => {
-  const [contacts, setContacts] = useState<IContactItem[]>(() => {
-    const storedContacts = localStorage.getItem('contacts');
-    return storedContacts ? JSON.parse(storedContacts) : [];
-  });
+  const [contacts, setContacts] = useState<IContactResponse[]>([]);
 
-  const deleteContact = (id: number) => {
-    const newContacts = contacts.filter((c) => c.id !== id);
-    setContacts(newContacts);
+  useEffect( () => {
+    const fetchContacts = async () => {
+      try {
+        const response = await getContacts();
+        const contactsData = response as ApiResponse<IContactResponse[]>;
+        setContacts(contactsData.data ?? []);
+      } catch (error) {
+        console.error(error); // TODO: Mostrar error en pantalla
+      }
+    };
 
-    localStorage.setItem('contacts', JSON.stringify(newContacts));
+    fetchContacts();
+  }, [contacts])
+
+  const handleDeleteContact = async (id: number) => {
+    await deleteContact(id)
+      .then(() => {
+        setContacts(contacts);
+      })
+      .catch(e => console.log(e)) // TODO: Mostrar error en pantalla
   };
 
   return (
@@ -54,7 +71,7 @@ export const GDeleteContactsListPage = () => {
                   contact={item}
                   icon={GDeletetIcon}
                   iconBackgroundColor={GRed}
-                  onClickAction={() => deleteContact(item.id)}
+                  onClickAction={() => handleDeleteContact(item.id)}
                 />
               ))}
             </div>
