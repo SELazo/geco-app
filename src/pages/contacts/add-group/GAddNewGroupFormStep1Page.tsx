@@ -42,7 +42,6 @@ export const GAddNewGroupFormStep1Page = () => {
 
   useEffect(() => {
     const previousPath = location.state?.from;
-    console.log(previousPath);
     if (previousPath !== '/contacts/groups/add-group/members') {
       dispatch(clearNewGroupForm());
     }

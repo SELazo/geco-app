@@ -55,8 +55,10 @@ export const GAddNewGroupFormStep2Page = () => {
   useEffect(() => {
     const previousPath = location.state?.from;
 
-    if (previousPath === '/contacts/groups/add-group/sucess') {
-      navigate('/contacts/groups');
+    if (
+      previousPath === `${ROUTES.GROUPS.ROOT}${ROUTES.GROUPS.ADD_GROUP_SUCCESS}`
+    ) {
+      navigate(ROUTES.GROUPS.ROOT);
     }
   }, [location]);
 
@@ -82,9 +84,8 @@ export const GAddNewGroupFormStep2Page = () => {
         show: true,
         message: 'Selecciona al menos un contacto',
       });
-      console.log(error);
     } else {
-      dispatch(clearNewGroupForm);
+      dispatch(clearNewGroupForm());
       await newGroup(
         groupInfo.groupInfo.name,
         groupInfo.groupInfo.description,
@@ -92,11 +93,10 @@ export const GAddNewGroupFormStep2Page = () => {
       )
         .then(() => {
           reset();
-          navigate(ROUTES.GROUPS.ADD_GROUP_SUCCESS);
+          navigate(`${ROUTES.GROUPS.ROOT}${ROUTES.GROUPS.ADD_GROUP_SUCCESS}`);
         })
         .catch((e) => console.log(e)); //TODO: Mostrar error en pantalla
       reset();
-      navigate('/contacts/groups');
     }
   };
 

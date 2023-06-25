@@ -23,17 +23,19 @@ import { GHeadCenterTitle } from '../../components/GHeadCenterTitle';
 import { ContactsSectionTitle } from '../../constants/wording';
 import { GContactItem, IContactItem } from '../../components/GContactItem';
 import { GLogoLetter } from '../../components/GLogoLetter';
-import { Link } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 import { GDropdownMenu, IMenuItem } from '../../components/GDropdownMenu';
 import { GGroupItem } from '../../components/GGroupItem';
 import { GroupsService } from '../../services/external/groupsService';
 import { useEffect, useState } from 'react';
 import { IGroup } from '../../interfaces/dtos/external/IGroups';
+import { ROUTES } from '../../constants/routes';
 
 const { getGroups } = GroupsService;
 
 export const GContactsGroupPage = () => {
   const [groupsList, setGroupsList] = useState<IGroup[]>([]);
+  const navigate = useNavigate();
 
   useEffect(() => {
     const fetchContacts = async () => {
@@ -62,7 +64,7 @@ export const GContactsGroupPage = () => {
   ];
 
   const getRotatingColor = (() => {
-    const colors = [GPink, GBlue, GRed, GGreen];
+    const colors = [GYellow, GPink, GBlue, GRed, GGreen];
     let index = 0;
 
     return () => {
@@ -75,7 +77,12 @@ export const GContactsGroupPage = () => {
   })();
 
   const seeMoreGroup = (id: number) => {
-    console.log(id);
+    navigate(
+      `${ROUTES.GROUPS.ROOT}${ROUTES.GROUPS.GROUP_SEE_MORE.replace(
+        ':id',
+        id.toString()
+      )}`
+    );
   };
 
   return (

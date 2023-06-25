@@ -62,14 +62,12 @@ export const sessionSlice = createSlice({
       state.auth.token = null;
     },
     setNewFormGroupInfo: (state, action: PayloadAction<INewGoupInfo>) => {
-      console.log(action.payload);
       state.formNewGroup.groupInfo = action.payload;
     },
     setNewGroupContacts: (state, action: PayloadAction<number[]>) => {
       state.formNewGroup.contacts = action.payload;
     },
     clearNewGroupForm: (state) => {
-      console.log('si lo guarde, lo clearee tambien');
       state.formNewGroup = {} as INewGroupForm;
     },
   },

@@ -3,6 +3,7 @@ import { IMenuOption } from '../components/GMenuOption';
 import { IFeedback } from '../interfaces/components/IFeedback';
 import { IHeadSectionTitle } from '../interfaces/components/IHeadSectionTitle';
 import { ITextAction } from '../interfaces/components/ITextAction';
+import { ROUTES } from './routes';
 
 /**
  * Actions: A link that contains a description and a link to do an action.
@@ -162,6 +163,13 @@ export const ContactAdded: IFeedback = {
   subtitle: 'Ahora podrá administrar su nuevo contacto a través de la Agenda!',
   buttonLabel: 'Okay!',
   buttonPath: '/contacts/list',
+};
+
+export const NewGroupAdded: IFeedback = {
+  title: 'Grupo creado!',
+  subtitle: 'Ahora podrá administrar su nuevo grupo a través de la Agenda!',
+  buttonLabel: 'Okay!',
+  buttonPath: ROUTES.GROUPS.ROOT,
 };
 
 export const ContactsExcelAdded: IFeedback = {
