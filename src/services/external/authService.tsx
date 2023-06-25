@@ -3,15 +3,11 @@ import { IBasicSuccessResponse } from '../../interfaces/dtos/external/IBasicResp
 import { environment } from '../../environment/environment';
 import { IError } from '../../interfaces/dtos/external/IError';
 import { ApiResponse } from '../../interfaces/dtos/external/IResponse';
+import { SessionService } from '../internal/sessionService';
 
 const { authServiceURI } = environment;
 
 export const AuthService: IAuthService = {
-  isAuthenticated: async (): Promise<boolean> => {
-    const token = localStorage.getItem('token');
-    return !!token;
-  },
-
   login: async (email: string, password: string): Promise<ApiResponse<ILoginResponse>> => new Promise(async (resolve, reject) => {
     const response = await fetch(`${authServiceURI}/login`, {
       method: 'POST',
@@ -41,8 +37,8 @@ export const AuthService: IAuthService = {
     return;
   }),
 
-  logout: async (): Promise<IBasicSuccessResponse> => {
-    const token = localStorage.getItem('token');
+  logout: async (): Promise<ApiResponse<IBasicSuccessResponse>> => new Promise( async (resolve, reject) => {
+    const token = SessionService.getToken();
     const response = await fetch(`${authServiceURI}/logout`, {
       method: 'POST',
       headers: {
@@ -51,14 +47,30 @@ export const AuthService: IAuthService = {
       },
     });
 
-    localStorage.removeItem('token');
+    if (!response.ok) {
+      const err: IError = await response.json();
+      console.error(err);
+      const errorResponse: ApiResponse<IBasicSuccessResponse> = {
+        success: false,
+        error: err,
+      };
+      reject(errorResponse);
+      return;
+    }
+
+    SessionService.removeToken();
 
     const data: IBasicSuccessResponse = await response.json();
-    return data;
-  },
+    const successResponse: ApiResponse<IBasicSuccessResponse> = {
+      success: true,
+      data: data,
+    };
+    resolve(successResponse);
+    return;
+  }),
 
   validateSession: async (): Promise<ApiResponse<IValidateSessionResponse>> => new Promise( async(resolve, reject) => {
-    const token = localStorage.getItem('token');
+    const token = SessionService.getToken();
     const response = await fetch(`${authServiceURI}/validate-session`, {
       method: 'GET',
       headers: {
@@ -87,7 +99,7 @@ export const AuthService: IAuthService = {
     return;
   }),
 
-  signUp: async (name: string, email: string, password: string): Promise<IBasicSuccessResponse> => {
+  signUp: async (name: string, email: string, password: string): Promise<ApiResponse<IBasicSuccessResponse>> => new Promise( async(resolve, reject) => {
     const response = await fetch(`${authServiceURI}/sign-up`, {
       method: 'POST',
       headers: {
@@ -96,11 +108,27 @@ export const AuthService: IAuthService = {
       body: JSON.stringify({ name, email, password }),
     });
 
+    if (!response.ok) {
+      const err: IError = await response.json();
+      console.error(err);
+      const errorResponse: ApiResponse<IBasicSuccessResponse> = {
+        success: false,
+        error: err,
+      };
+      reject(errorResponse);
+      return;
+    }
+
     const data: IBasicSuccessResponse = await response.json();
-    return data;
-  },
+    const successResponse: ApiResponse<IBasicSuccessResponse> = {
+      success: true,
+      data: data,
+    };
+    resolve(successResponse);
+    return;
+  }),
   
-  resetPasswordRequest: async (email: string): Promise<IBasicSuccessResponse> => {
+  resetPasswordRequest: async (email: string): Promise<ApiResponse<IBasicSuccessResponse>> => new Promise( async(resolve, reject) => {
     const response = await fetch(`${authServiceURI}/reset-password-request`, {
       method: 'POST',
       headers: {
@@ -109,21 +137,53 @@ export const AuthService: IAuthService = {
       body: JSON.stringify({ email }),
     });
 
-    const data: IBasicSuccessResponse = await response.json();
-    return data;
-  },
+    if (!response.ok) {
+      const err: IError = await response.json();
+      console.error(err);
+      const errorResponse: ApiResponse<IBasicSuccessResponse> = {
+        success: false,
+        error: err,
+      };
+      reject(errorResponse);
+      return;
+    }
 
-  resetPassword: async (newPassword: string, passwordToken: string): Promise<IBasicSuccessResponse> => {
+    const data: IBasicSuccessResponse = await response.json();
+    const successResponse: ApiResponse<IBasicSuccessResponse> = {
+      success: true,
+      data: data,
+    };
+    resolve(successResponse);
+    return;
+  }),
+
+  resetPassword: async (newPassword: string, passwordToken: string): Promise<ApiResponse<IBasicSuccessResponse>> => new Promise( async (resolve, reject) => {
     const response = await fetch(`${authServiceURI}/reset-password`, {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
         'x-reset-password-token': `${passwordToken}`
       },
-      body: JSON.stringify({ newPassword }),
+      body: JSON.stringify({ new_password: newPassword }),
     });
 
+    if (!response.ok) {
+      const err: IError = await response.json();
+      console.error(err);
+      const errorResponse: ApiResponse<IBasicSuccessResponse> = {
+        success: false,
+        error: err,
+      };
+      reject(errorResponse);
+      return;
+    }
+
     const data: IBasicSuccessResponse = await response.json();
-    return data;
-  }
+    const successResponse: ApiResponse<IBasicSuccessResponse> = {
+      success: true,
+      data: data,
+    };
+    resolve(successResponse);
+    return;
+  })
 };

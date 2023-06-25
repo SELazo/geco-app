@@ -2,7 +2,7 @@ import React from 'react';
 import { useForm } from 'react-hook-form';
 import { yupResolver } from '@hookform/resolvers/yup';
 import * as Yup from 'yup';
-import { Navigate, useNavigate } from 'react-router-dom';
+import { useNavigate, useLocation } from 'react-router-dom';
 
 import '../../../styles/ginputBox.css';
 import '../../../styles/gform.css';
@@ -10,12 +10,17 @@ import '../../../styles/grecovery.css';
 
 import { GHeadSectionTitle } from '../../../components/GHeadSectionTitle';
 import { GCircularButton } from '../../../components/GCircularButton';
-import { GIconButtonSignIn, GIconButtonX } from '../../../constants/buttons';
+import { GIconButtonX } from '../../../constants/buttons';
 
 import { GSubmitButton } from '../../../components/GSubmitButton';
 import { ResetPasswordHeadSectionTitle } from '../../../constants/wording';
 import { GBlack, GWhite, GYellow } from '../../../constants/palette';
 import { NavigationService } from '../../../services/internal/navigationService';
+import { AuthService } from '../../../services/external/authService';
+import { EMPTY_STRING } from '../../../constants/auth';
+import { ROUTES } from '../../../constants/routes';
+
+const { resetPassword } = AuthService;
 
 type ResetPasswordFormData = {
   password: string;
@@ -23,6 +28,10 @@ type ResetPasswordFormData = {
 };
 
 export const GResetPasswordPage = () => {
+  const location = useLocation();
+  const queryParams = new URLSearchParams(location.search);
+  const token = queryParams.get('token') ?? EMPTY_STRING;
+
   const navigate = useNavigate();
 
   const validationSchema = Yup.object().shape({
@@ -35,10 +44,13 @@ export const GResetPasswordPage = () => {
       .oneOf([Yup.ref('password')], 'La contraseña no coincide.'),
   });
 
-  const onSubmit = (data: ResetPasswordFormData) => {
-    console.log(data);
-    reset();
-    navigate('/recovery/reset-success');
+  const onSubmit = async (data: ResetPasswordFormData) => {
+    await resetPassword(data.password, token)
+      .then(() => {
+        reset();
+        navigate(ROUTES.RESET_PASSWORD_SUCCESS);
+      })
+      .catch(e => console.log(e)) // TODO: Mostrar algun error en pantalla
   };
 
   const {

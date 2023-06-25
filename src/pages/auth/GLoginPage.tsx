@@ -22,8 +22,6 @@ import { AuthService } from '../../services/external/authService';
 import { SessionService } from '../../services/internal/sessionService';
 import { GChevronRightIcon } from '../../constants/buttons';
 import { useNavigate } from 'react-router-dom';
-import { useDispatch } from 'react-redux';
-import { Auth, User, loginSuccess } from '../../redux/sessionSlice';
 import {
   ILoginResponse,
   IValidateSessionResponse,
@@ -32,7 +30,7 @@ import { ApiResponse } from '../../interfaces/dtos/external/IResponse';
 import { ROUTES } from '../../constants/routes';
 
 const { login, validateSession } = AuthService;
-const { setToken, getToken } = SessionService;
+const { setToken } = SessionService;
 
 type LoginForm = {
   email: string;
@@ -64,8 +62,6 @@ export const GLoginPage = ({ handleLogin }: { handleLogin: () => void }) => {
     type: 'manual',
     message: 'El correo electrónico o la contraseña son incorrectos',
   };
-
-  const dispatch = useDispatch();
 
   const navigate = useNavigate();
 
