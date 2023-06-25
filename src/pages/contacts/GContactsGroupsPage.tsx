@@ -9,37 +9,46 @@ import {
   GEditIcon,
   GIconButtonBack,
 } from '../../constants/buttons';
-import { GBlack, GGreen, GRed, GWhite, GYellow } from '../../constants/palette';
+import {
+  GBlack,
+  GBlue,
+  GGreen,
+  GPink,
+  GRed,
+  GWhite,
+  GYellow,
+} from '../../constants/palette';
 import { NavigationService } from '../../services/internal/navigationService';
 import { GHeadCenterTitle } from '../../components/GHeadCenterTitle';
 import { ContactsSectionTitle } from '../../constants/wording';
 import { GContactItem, IContactItem } from '../../components/GContactItem';
 import { GLogoLetter } from '../../components/GLogoLetter';
-import { Link } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 import { GDropdownMenu, IMenuItem } from '../../components/GDropdownMenu';
-import { GGroupItem, IGroupItem } from '../../components/GGroupItem';
+import { GGroupItem } from '../../components/GGroupItem';
+import { GroupsService } from '../../services/external/groupsService';
+import { useEffect, useState } from 'react';
+import { IGroup } from '../../interfaces/dtos/external/IGroups';
+import { ROUTES } from '../../constants/routes';
+
+const { getGroups } = GroupsService;
 
 export const GContactsGroupPage = () => {
-  const contacts: IGroupItem[] = [
-    {
-      id: 1,
-      name: 'Mamás',
-      description: 'Grupo integrados por mamás',
-      color: GGreen,
-    },
-    {
-      id: 2,
-      name: 'Papás',
-      description: 'Grupo integrados por papás',
-      color: GRed,
-    },
-    {
-      id: 3,
-      name: 'Jovénes',
-      description: 'Grupo integrados por jovénes',
-      color: GYellow,
-    },
-  ];
+  const [groupsList, setGroupsList] = useState<IGroup[]>([]);
+  const navigate = useNavigate();
+
+  useEffect(() => {
+    const fetchContacts = async () => {
+      try {
+        const groupsData = await getGroups();
+        setGroupsList(groupsData ?? []);
+      } catch (error) {
+        console.log(error); // TODO: Mostrar error en pantalla
+      }
+    };
+
+    fetchContacts();
+  }, []);
 
   const menuGroups: IMenuItem[] = [
     {
@@ -54,8 +63,26 @@ export const GContactsGroupPage = () => {
     },
   ];
 
+  const getRotatingColor = (() => {
+    const colors = [GYellow, GPink, GBlue, GRed, GGreen];
+    let index = 0;
+
+    return () => {
+      const color = colors[index];
+
+      index = (index + 1) % colors.length;
+
+      return color;
+    };
+  })();
+
   const seeMoreGroup = (id: number) => {
-    console.log(id);
+    navigate(
+      `${ROUTES.GROUPS.ROOT}${ROUTES.GROUPS.GROUP_SEE_MORE.replace(
+        ':id',
+        id.toString()
+      )}`
+    );
   };
 
   return (
@@ -97,27 +124,31 @@ export const GContactsGroupPage = () => {
         <div className="geco-contacts-groups-title">
           <GHeadCenterTitle title={ContactsSectionTitle} color={GBlack} />
         </div>
-        {contacts.length > 0 && (
+        {groupsList.length > 0 && (
           <div className="geco-contacts-groups-container">
             <div className="geco-contacts-groups-ul">
               <div className="geco-contacts-groups-item">
-                {contacts.map((item) => (
-                  <GGroupItem
-                    key={item.id}
-                    group={item}
-                    icon={GChevronRightBlackIcon}
-                    iconBackgroundColor={GBlack}
-                    onClickAction={() => seeMoreGroup(item.id)}
-                  />
-                ))}
+                {groupsList.map((item) => {
+                  const rotatingColor = getRotatingColor(); // Invocar la función y almacenar el resultado en una variable
+                  return (
+                    <GGroupItem
+                      key={item.id}
+                      group={item}
+                      color={rotatingColor} // Usar el resultado almacenado como el valor de la prop "color"
+                      icon={GChevronRightBlackIcon}
+                      iconBackgroundColor={GBlack}
+                      onClickAction={() => seeMoreGroup(item.id)}
+                    />
+                  );
+                })}
               </div>
             </div>
           </div>
         )}
 
-        {contacts.length === 0 && (
+        {groupsList.length === 0 && (
           <div className="geco-contacts-groups-empty">
-            <p>No tiene contactos aún.</p>
+            <p>No tiene grupos aún.</p>
           </div>
         )}
       </div>

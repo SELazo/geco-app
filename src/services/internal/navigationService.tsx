@@ -12,6 +12,10 @@ export const NavigationService: INavigationService = {
     const navigate = useNavigate();
     return () => navigate(route);
   },
+  handleNavigationWithState: (route: string, state: any): (() => void) => {
+    const navigate = useNavigate();
+    return () => navigate(route, { state });
+  },
   navigateTo: (route: string): void => {
     const navigate = useNavigate();
     navigate(route);

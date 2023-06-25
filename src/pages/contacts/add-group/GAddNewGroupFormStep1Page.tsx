@@ -36,25 +36,25 @@ export const GAddNewGroupFormStep1Page = () => {
   const location = useLocation();
   const navigate = useNavigate();
   const dispatch = useDispatch();
-  let hasGroupInfo: INewGroupForm = {} as INewGroupForm;
+  let hasGroupInfo: INewGroupForm = useSelector(
+    (state: any) => state.auth.formNewGroup
+  );
 
   useEffect(() => {
     const previousPath = location.state?.from;
-
-    if (previousPath === '/contacts/groups/add-group/members') {
-      hasGroupInfo = useSelector((state: any) => state.auth.formNewGroup);
-    } else {
+    if (previousPath !== '/contacts/groups/add-group/members') {
       dispatch(clearNewGroupForm());
     }
   }, [location]);
 
   const validationSchema = Yup.object().shape({
     name: Yup.string().required('El nombre es requerido'),
-    description: Yup.string().required('La descripción es requerida'),
+    description: Yup.string()
+      .required('La descripción es requerida')
+      .max(45, 'La descripción no puede tener más de 45 caracteres'),
   });
 
   const onSubmit = (data: INewGoupInfo) => {
-    console.log(data);
     dispatch(setNewFormGroupInfo(data));
     reset();
     navigate('/contacts/groups/add-group/members');

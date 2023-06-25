@@ -1,9 +1,8 @@
 import { Link, useNavigate } from 'react-router-dom';
 
 import '../styles/ghome.css';
-import { BlueYelowPalette, GRed, GWhite } from '../constants/palette';
+import { GWhite } from '../constants/palette';
 
-import emailCampaign from '../assets/images/email_campaign_bro.svg';
 import { GIcon } from '../components/GIcon';
 import { GCircularButton } from '../components/GCircularButton';
 import {
@@ -13,7 +12,7 @@ import {
   GStatisticsIcon,
   GStrategyIcon,
   GUserIcon,
-  GLogOutIcon
+  GLogOutIcon,
 } from '../constants/buttons';
 import { GLogoWord } from '../components/GLogoWord';
 import { GHeadCenterTitle } from '../components/GHeadCenterTitle';
@@ -25,8 +24,18 @@ import {
   StrategyHeadCenterTitle,
 } from '../constants/wording';
 import { NavigationService } from '../services/internal/navigationService';
+import { AuthService } from '../services/external/authService';
+import { ROUTES } from '../constants/routes';
+
+const { logout } = AuthService;
 
 export const GHomePage = () => {
+  const navigate = useNavigate();
+
+  const handleLogout = () => {
+    logout();
+    navigate(ROUTES.GECO);
+  };
 
   return (
     <div className="home-main">
@@ -36,13 +45,13 @@ export const GHomePage = () => {
             <GLogoWord />
           </div>
           <div className="home-head-header-nav-bar">
-
-            <div className='home-head-header-nav-bar-logout'>
+            <div className="geco-logout-btn" onClick={handleLogout}>
               <GIcon
                 color={GLogOutIcon.color}
-                icon-type={GLogOutIcon['icon-type']}/>
+                icon-type={GLogOutIcon['icon-type']}
+              />
             </div>
-            
+
             <button className="geco-without-background-btn">
               <Link to={'/user/pricing'}>
                 <GIcon

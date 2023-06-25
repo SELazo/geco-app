@@ -28,6 +28,8 @@ import {
 } from '../../interfaces/dtos/external/IAuth';
 import { ApiResponse } from '../../interfaces/dtos/external/IResponse';
 import { ROUTES } from '../../constants/routes';
+import { useDispatch } from 'react-redux';
+import { Auth, User, loginSuccess } from '../../redux/sessionSlice';
 
 const { login, validateSession } = AuthService;
 const { setToken } = SessionService;
@@ -38,6 +40,7 @@ type LoginForm = {
 };
 
 export const GLoginPage = ({ handleLogin }: { handleLogin: () => void }) => {
+  const dispatch = useDispatch();
   const validationSchema = Yup.object().shape({
     email: Yup.string()
       .email('Por favor ingrese un correo electrónico válido')
@@ -70,8 +73,18 @@ export const GLoginPage = ({ handleLogin }: { handleLogin: () => void }) => {
       .then(async (response: ApiResponse<ILoginResponse>) => {
         const loginResponse = response.data as ILoginResponse;
         setToken(loginResponse.token);
+        const session = await validateSession();
+        if (session) {
+          const user: User = session.data?.user!;
+          const auth: Auth = {
+            token: loginResponse.token,
+            isAuthenticated: true,
+          };
 
-        return await validateSession();
+          dispatch(loginSuccess({ user, auth }));
+        }
+
+        return session;
       })
       .then(async (response: ApiResponse<IValidateSessionResponse>) => {
         reset();

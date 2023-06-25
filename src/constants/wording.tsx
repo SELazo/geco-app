@@ -3,6 +3,7 @@ import { IMenuOption } from '../components/GMenuOption';
 import { IFeedback } from '../interfaces/components/IFeedback';
 import { IHeadSectionTitle } from '../interfaces/components/IHeadSectionTitle';
 import { ITextAction } from '../interfaces/components/ITextAction';
+import { ROUTES } from './routes';
 
 /**
  * Actions: A link that contains a description and a link to do an action.
@@ -90,6 +91,8 @@ export const Months: string[] = [
   'Diciembre',
 ];
 
+export const NewGroupContactsEmpty: string =
+  'No tienes contactos aún. Agregalos antes de continuar haciendo click aquí. 👍';
 /**
  * Head Section Titles
  */
@@ -126,6 +129,11 @@ export const AddNewGroupStep1SectionTitle: IHeadSectionTitle = {
     'Crea un grupo de contactos para enviar comunicaciones.📢 \n Añade información sobre el mismo para poder identificarlo de forma rápida. 📋',
 };
 
+export const AddNewGroupStep2SectionTitle: IHeadSectionTitle = {
+  title: 'Agrega contactos ',
+  subtitle: 'Agrega los contactos que serán parte de tu nuevo grupo.👥',
+};
+
 export const AddContactsExcelSectionTitle: IHeadSectionTitle = {
   title: 'Importar contactos',
   subtitle: 'Importar contactos desde un archivo Excel. 🧐',
@@ -155,6 +163,13 @@ export const ContactAdded: IFeedback = {
   subtitle: 'Ahora podrá administrar su nuevo contacto a través de la Agenda!',
   buttonLabel: 'Okay!',
   buttonPath: '/contacts/list',
+};
+
+export const NewGroupAdded: IFeedback = {
+  title: 'Grupo creado!',
+  subtitle: 'Ahora podrá administrar su nuevo grupo a través de la Agenda!',
+  buttonLabel: 'Okay!',
+  buttonPath: ROUTES.GROUPS.ROOT,
 };
 
 export const ContactsExcelAdded: IFeedback = {

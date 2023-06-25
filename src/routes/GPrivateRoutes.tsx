@@ -24,6 +24,8 @@ import { GRedCompositionPage } from '../pages/statistics/contacts/GRedCompositio
 import { GContactsGroupPage } from '../pages/contacts/GContactsGroupsPage';
 import { GAddNewGroupFormStep1Page } from '../pages/contacts/add-group/GAddNewGroupFormStep1Page';
 import { GAddNewGroupFormStep2Page } from '../pages/contacts/add-group/GAddNewGroupFormStep2Page';
+import { GNewGroupSuccessPage } from '../pages/contacts/add-group/GNewGroupSuccessPage';
+import { GGroupPage } from '../pages/contacts/GGroupPage';
 
 export const GPrivateRoutes = () => {
   return (
@@ -64,6 +66,11 @@ export const GPrivateRoutes = () => {
           path="groups/add-group/members"
           element={<GAddNewGroupFormStep2Page />}
         />
+        <Route
+          path="groups/sucess-add-group"
+          element={<GNewGroupSuccessPage />}
+        />
+        <Route path="groups/:id" element={<GGroupPage />} />
         <Route path="list" element={<GContactsListPage />} />
         <Route path="*" element={<Navigate to="/contacts/options" />} />
       </Route>
