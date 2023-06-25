@@ -7,11 +7,6 @@ import { ApiResponse } from '../../interfaces/dtos/external/IResponse';
 const { authServiceURI } = environment;
 
 export const AuthService: IAuthService = {
-  isAuthenticated: async (): Promise<boolean> => {
-    const token = localStorage.getItem('token');
-    return !!token;
-  },
-
   login: async (email: string, password: string): Promise<ApiResponse<ILoginResponse>> => new Promise(async (resolve, reject) => {
     const response = await fetch(`${authServiceURI}/login`, {
       method: 'POST',
@@ -116,7 +111,7 @@ export const AuthService: IAuthService = {
     return;
   }),
   
-  resetPasswordRequest: async (email: string): Promise<IBasicSuccessResponse> => {
+  resetPasswordRequest: async (email: string): Promise<ApiResponse<IBasicSuccessResponse>> => new Promise( async(resolve, reject) => {
     const response = await fetch(`${authServiceURI}/reset-password-request`, {
       method: 'POST',
       headers: {
@@ -125,11 +120,27 @@ export const AuthService: IAuthService = {
       body: JSON.stringify({ email }),
     });
 
-    const data: IBasicSuccessResponse = await response.json();
-    return data;
-  },
+    if (!response.ok) {
+      const err: IError = await response.json();
+      console.error(err);
+      const errorResponse: ApiResponse<IBasicSuccessResponse> = {
+        success: false,
+        error: err,
+      };
+      reject(errorResponse);
+      return;
+    }
 
-  resetPassword: async (newPassword: string, passwordToken: string): Promise<IBasicSuccessResponse> => {
+    const data: IBasicSuccessResponse = await response.json();
+    const successResponse: ApiResponse<IBasicSuccessResponse> = {
+      success: true,
+      data: data,
+    };
+    resolve(successResponse);
+    return;
+  }),
+
+  resetPassword: async (newPassword: string, passwordToken: string): Promise<ApiResponse<IBasicSuccessResponse>> => new Promise( async (resolve, reject) => {
     const response = await fetch(`${authServiceURI}/reset-password`, {
       method: 'POST',
       headers: {
@@ -139,7 +150,23 @@ export const AuthService: IAuthService = {
       body: JSON.stringify({ newPassword }),
     });
 
+    if (!response.ok) {
+      const err: IError = await response.json();
+      console.error(err);
+      const errorResponse: ApiResponse<IBasicSuccessResponse> = {
+        success: false,
+        error: err,
+      };
+      reject(errorResponse);
+      return;
+    }
+
     const data: IBasicSuccessResponse = await response.json();
-    return data;
-  }
+    const successResponse: ApiResponse<IBasicSuccessResponse> = {
+      success: true,
+      data: data,
+    };
+    resolve(successResponse);
+    return;
+  })
 };

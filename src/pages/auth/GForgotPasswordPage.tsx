@@ -14,6 +14,11 @@ import { GSubmitButton } from '../../components/GSubmitButton';
 import { ForgotPasswordHeadSectionTitle } from '../../constants/wording';
 import { GBlack, GWhite, GYellow } from '../../constants/palette';
 import { NavigationService } from '../../services/internal/navigationService';
+import { AuthService } from '../../services/external/authService';
+import { useNavigate } from 'react-router-dom';
+import { ROUTES } from '../../constants/routes';
+
+const { resetPasswordRequest } = AuthService;
 
 type ForgotPasswordFormData = {
   email: string;
@@ -26,9 +31,15 @@ export const GForgotPasswordPage = () => {
       .required('Por favor ingrese su correo electrónico'),
   });
 
-  const onSubmit = (data: ForgotPasswordFormData) => {
-    console.log(data);
-    reset();
+  const navigate = useNavigate();
+
+  const onSubmit = async (data: ForgotPasswordFormData) => {
+    await resetPasswordRequest(data.email)
+      .then(() => {
+        navigate(ROUTES.LOGIN);
+        reset();
+      })
+      .catch(e => console.log(e)) //TODO: Mostrar algun error en pantalla
   };
 
   const {

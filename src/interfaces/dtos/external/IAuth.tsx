@@ -15,11 +15,10 @@ export interface IValidateSessionResponse {
 }
 
 export interface IAuthService {
-    isAuthenticated(): Promise<boolean>;
     login(email: string, password: string): Promise<ApiResponse<ILoginResponse>>;
     logout(): Promise<IBasicSuccessResponse>;
     validateSession(): Promise<ApiResponse<IValidateSessionResponse>>
     signUp(name: string, email: string, password: string): Promise<ApiResponse<IBasicSuccessResponse>>
-    resetPasswordRequest(email: string): Promise<IBasicSuccessResponse>
-    resetPassword(newPassword: string, passwordToken: string): Promise<IBasicSuccessResponse>
+    resetPasswordRequest(email: string): Promise<ApiResponse<IBasicSuccessResponse>>
+    resetPassword(newPassword: string, passwordToken: string): Promise<ApiResponse<IBasicSuccessResponse>>
 }
