@@ -40,8 +40,8 @@ export const ContactsService: IContactsService = {
           return;
     }),
 
-    deleteContact: async (id: number): Promise<IBasicSuccessResponse> => {
-        const token = localStorage.getItem('token');
+    deleteContact: async (id: number): Promise<ApiResponse<IBasicSuccessResponse>> => new Promise( async (resolve, reject) => {
+        const token = SessionService.getToken();
 
         const response = await fetch(`${contactsApiURI}/contacts/${id}`, {
             method: 'DELETE',
@@ -51,9 +51,25 @@ export const ContactsService: IContactsService = {
             },
         });
 
-        const data: IBasicSuccessResponse = await response.json();
-        return data;
-    },
+        if (!response.ok) {
+            const err: IError = await response.json();
+            console.error(err);
+            const errorResponse: ApiResponse<IBasicSuccessResponse> = {
+              success: false,
+              error: err,
+            };
+            reject(errorResponse);
+            return;
+          }
+
+          const data: IBasicSuccessResponse = await response.json();
+          const successResponse: ApiResponse<IBasicSuccessResponse> = {
+            success: true,
+            data: data,
+          };
+          resolve(successResponse);
+          return;
+    }),
 
     editContact: async (id: number): Promise<IBasicSuccessResponse> => {
         const token = localStorage.getItem('token');
