@@ -49,7 +49,9 @@ export const GAddNewGroupFormStep1Page = () => {
 
   const validationSchema = Yup.object().shape({
     name: Yup.string().required('El nombre es requerido'),
-    description: Yup.string().required('La descripción es requerida'),
+    description: Yup.string()
+      .required('La descripción es requerida')
+      .max(45, 'La descripción no puede tener más de 45 caracteres'),
   });
 
   const onSubmit = (data: INewGoupInfo) => {
