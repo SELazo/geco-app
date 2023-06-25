@@ -1,5 +1,7 @@
 import('../../styles/gcontactsList.css');
 
+import { useEffect, useState } from 'react';
+
 import { GCircularButton } from '../../components/GCircularButton';
 import {
   GContactsIcon,
@@ -8,17 +10,34 @@ import {
 } from '../../constants/buttons';
 import { GBlack, GGreen, GRed, GWhite, GYellow } from '../../constants/palette';
 import { NavigationService } from '../../services/internal/navigationService';
+import { ContactsService } from '../../services/external/contactsService';
 import { GHeadCenterTitle } from '../../components/GHeadCenterTitle';
 import { ContactsSectionTitle } from '../../constants/wording';
-import { GContactItem, IContactItem } from '../../components/GContactItem';
+import { GContactItem } from '../../components/GContactItem';
 import { GLogoLetter } from '../../components/GLogoLetter';
 import { Link } from 'react-router-dom';
 import { GDropdownMenu, IMenuItem } from '../../components/GDropdownMenu';
+import { IContactResponse } from '../../interfaces/dtos/external/IContacts';
+import { ApiResponse } from '../../interfaces/dtos/external/IResponse';
+
+const { getContacts } = ContactsService;
 
 export const GContactsListPage = () => {
-  const contacts: IContactItem[] = JSON.parse(
-    localStorage.getItem('contacts') || '[]'
-  );
+  const [contacts, setContacts] = useState<IContactResponse[]>([]);
+
+  useEffect( () => {
+    const fetchContacts = async () => {
+      try {
+        const response = await getContacts();
+        const contactsData = response as ApiResponse<IContactResponse[]>;
+        setContacts(contactsData.data ?? []);
+      } catch (error) {
+        console.error(error); // TODO: Mostrar error en pantalla
+      }
+    };
+
+    fetchContacts();
+  }, [])
 
   const menuContacts: IMenuItem[] = [
     {

@@ -85,7 +85,7 @@ export const ContactsService: IContactsService = {
         return data;
     },
 
-    getContacts: async (params?: { name?: string; email?: string; phone?: number }): Promise<IContactResponse[]> => {
+    getContacts: async (params?: { name?: string; email?: string; phone?: number }): Promise<ApiResponse<IContactResponse[]>> => new Promise( async (resolve, reject) => {
         let url = `${contactsApiURI}/contacts`;
 
         if (params) {
@@ -100,7 +100,7 @@ export const ContactsService: IContactsService = {
             }
         }
 
-        const token = localStorage.getItem('token');
+        const token = SessionService.getToken();
 
         const response = await fetch(url, {
             method: 'GET',
@@ -110,7 +110,23 @@ export const ContactsService: IContactsService = {
             },
         });
 
-        const data: IContactResponse[] = await response.json();
-        return data;
-    }
+        if (!response.ok) {
+            const err: IError = await response.json();
+            console.error(err);
+            const errorResponse: ApiResponse<IContactResponse[]> = {
+              success: false,
+              error: err,
+            };
+            reject(errorResponse);
+            return;
+          }
+        
+          const loginResponse: IContactResponse[] = await response.json();
+          const successResponse: ApiResponse<IContactResponse[]> = {
+            success: true,
+            data: loginResponse,
+          };
+          resolve(successResponse);
+          return;
+    })
 };
