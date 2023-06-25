@@ -30,20 +30,20 @@ import { GBlack, GWhite, GYellow } from '../../../constants/palette';
 import { NavigationService } from '../../../services/internal/navigationService';
 import { Link, useLocation, useNavigate } from 'react-router-dom';
 import { GLogoLetter } from '../../../components/GLogoLetter';
-import { useEffect } from 'react';
+import { useEffect, useState } from 'react';
 
 export const GAddNewGroupFormStep1Page = () => {
   const location = useLocation();
   const navigate = useNavigate();
   const dispatch = useDispatch();
-  let hasGroupInfo: INewGroupForm = {} as INewGroupForm;
+  let hasGroupInfo: INewGroupForm = useSelector(
+    (state: any) => state.auth.formNewGroup
+  );
 
   useEffect(() => {
     const previousPath = location.state?.from;
-
-    if (previousPath === '/contacts/groups/add-group/members') {
-      hasGroupInfo = useSelector((state: any) => state.auth.formNewGroup);
-    } else {
+    console.log(previousPath);
+    if (previousPath !== '/contacts/groups/add-group/members') {
       dispatch(clearNewGroupForm());
     }
   }, [location]);
@@ -54,7 +54,6 @@ export const GAddNewGroupFormStep1Page = () => {
   });
 
   const onSubmit = (data: INewGoupInfo) => {
-    console.log(data);
     dispatch(setNewFormGroupInfo(data));
     reset();
     navigate('/contacts/groups/add-group/members');

@@ -126,6 +126,11 @@ export const AddNewGroupStep1SectionTitle: IHeadSectionTitle = {
     'Crea un grupo de contactos para enviar comunicaciones.📢 \n Añade información sobre el mismo para poder identificarlo de forma rápida. 📋',
 };
 
+export const AddNewGroupStep2SectionTitle: IHeadSectionTitle = {
+  title: 'Agrega contactos ',
+  subtitle: 'Agrega los contactos que serán parte de tu nuevo grupo.👥',
+};
+
 export const AddContactsExcelSectionTitle: IHeadSectionTitle = {
   title: 'Importar contactos',
   subtitle: 'Importar contactos desde un archivo Excel. 🧐',

@@ -5,3 +5,14 @@
   align-items: center;
   max-width: 325px;
 }
+
+.geco-input-group {
+  align-items: center;
+  width: 100%;
+  max-width: 325px;
+}
+
+.geco-checkbox {
+  width: 25px;
+  height: 25px;
+}
