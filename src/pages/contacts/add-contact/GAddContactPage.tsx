@@ -14,10 +14,13 @@ import { GSubmitButton } from '../../../components/GSubmitButton';
 import { AddContactSectionTitle } from '../../../constants/wording';
 import { GBlack, GWhite, GYellow } from '../../../constants/palette';
 import { NavigationService } from '../../../services/internal/navigationService';
+import { ContactsService } from '../../../services/external/contactsService';
 import { Link, useNavigate } from 'react-router-dom';
 import { GLogoLetter } from '../../../components/GLogoLetter';
 import { IContactData } from '../../../interfaces/IContact';
-import { IContactItem } from '../../../components/GContactItem';
+import { ROUTES } from '../../../constants/routes';
+
+const { newContact } = ContactsService;
 
 export const GAddContactPage = () => {
   const validationSchema = Yup.object().shape({
@@ -44,27 +47,13 @@ export const GAddContactPage = () => {
 
   const navigate = useNavigate();
 
-  const onSubmit = (data: IContactData) => {
-    const contacts: IContactItem[] = JSON.parse(
-      localStorage.getItem('contacts') || '[]'
-    );
-
-    const id = contacts[contacts.length - 1]
-      ? contacts[contacts.length - 1].id + 1
-      : 0;
-
-    const newContact: IContactItem = {
-      id: id,
-      name: data.name,
-      mail: data.email ? data.email : undefined,
-      number: data.cellphone,
-    };
-
-    const newContacts = [...contacts, newContact];
-    localStorage.setItem('contacts', JSON.stringify(newContacts));
-
-    reset();
-    navigate('/contacts/success-add-contact');
+  const onSubmit = async ({ name, email, cellphone }: IContactData) => {
+    await newContact(name, email, cellphone)
+      .then(() => {       
+        reset();
+        navigate(ROUTES.ADD_CONTACT);
+      })
+      .catch(e => console.log(e)); //TODO: Mostrar error en pantalla
   };
 
   const {
