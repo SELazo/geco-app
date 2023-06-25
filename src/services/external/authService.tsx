@@ -147,7 +147,7 @@ export const AuthService: IAuthService = {
         'Content-Type': 'application/json',
         'x-reset-password-token': `${passwordToken}`
       },
-      body: JSON.stringify({ newPassword }),
+      body: JSON.stringify({ new_password: newPassword }),
     });
 
     if (!response.ok) {
