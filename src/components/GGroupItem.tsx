@@ -4,16 +4,11 @@ import('../styles/ggroupItem.css');
 
 import { GIcon } from './GIcon';
 import { IButtonIcon } from '../interfaces/components/IButtonIcon';
-
-export interface IGroupItem {
-  id: number;
-  name: string;
-  description: string;
-  color: string;
-}
+import { IGroup } from '../interfaces/dtos/external/IGroups';
 
 interface IGroupItemProps {
-  group: IGroupItem;
+  group: IGroup;
+  color: string;
   icon: IButtonIcon;
   iconBackgroundColor: string;
   onClickAction: () => void;
@@ -24,7 +19,7 @@ export const GGroupItem: FC<IGroupItemProps> = (props: IGroupItemProps) => {
     <>
       <div
         className="geco-group-item-card"
-        style={{ backgroundColor: props.group.color }}
+        style={{ backgroundColor: props.color }}
       >
         <div className="geco-group-body">
           <h1 className="geco-group-item-name">{props.group.name}</h1>

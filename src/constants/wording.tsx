@@ -90,6 +90,8 @@ export const Months: string[] = [
   'Diciembre',
 ];
 
+export const NewGroupContactsEmpty: string =
+  'No tienes contactos aún. Agregalos antes de continuar haciendo click aquí. 👍';
 /**
  * Head Section Titles
  */

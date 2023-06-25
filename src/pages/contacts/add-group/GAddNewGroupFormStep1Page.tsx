@@ -30,7 +30,7 @@ import { GBlack, GWhite, GYellow } from '../../../constants/palette';
 import { NavigationService } from '../../../services/internal/navigationService';
 import { Link, useLocation, useNavigate } from 'react-router-dom';
 import { GLogoLetter } from '../../../components/GLogoLetter';
-import { useEffect, useState } from 'react';
+import { useEffect } from 'react';
 
 export const GAddNewGroupFormStep1Page = () => {
   const location = useLocation();

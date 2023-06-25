@@ -24,22 +24,30 @@ import {
 } from '../../../constants/buttons';
 
 import { GSubmitButton } from '../../../components/GSubmitButton';
-import { AddNewGroupStep2SectionTitle } from '../../../constants/wording';
+import {
+  AddNewGroupStep2SectionTitle,
+  NewGroupContactsEmpty,
+} from '../../../constants/wording';
 import { GBlack, GWhite, GYellow } from '../../../constants/palette';
 import { NavigationService } from '../../../services/internal/navigationService';
 import { Link, useLocation, useNavigate } from 'react-router-dom';
 import { GLogoLetter } from '../../../components/GLogoLetter';
 import { useEffect, useState } from 'react';
-import { contactsService } from '../../../services/external/contactsService';
+import { ContactsService } from '../../../services/external/contactsService';
 import { IContactResponse } from '../../../interfaces/dtos/external/IContacts';
+import { GroupsService } from '../../../services/external/groupsService';
+import { ROUTES } from '../../../constants/routes';
+
+const { getContacts } = ContactsService;
+const { newGroup } = GroupsService;
 
 export const GAddNewGroupFormStep2Page = () => {
   const [selectedNumbers, setSelectedNumbers] = useState<number[]>([]);
+  const [contactsList, setContactsList] = useState<IContactResponse[]>([]);
+  const [error, setError] = useState({ show: false, message: '' });
   const location = useLocation();
   const navigate = useNavigate();
   const dispatch = useDispatch();
-  const [contactsList, setContactsList] = useState<IContactResponse[]>([]);
-  const [error, setError] = useState({ show: false, message: '' });
   const groupInfo: INewGroupForm = useSelector(
     (state: any) => state.auth.formNewGroup
   );
@@ -55,24 +63,10 @@ export const GAddNewGroupFormStep2Page = () => {
   useEffect(() => {
     const fetchContacts = async () => {
       try {
-        //const contacts = await contactsService.getContacts();
-        const contacts = [
-          {
-            id: 1,
-            name: 'Julia',
-            email: 'julia@email.com',
-            phone: 123123123123,
-          },
-          {
-            id: 2,
-            name: 'Julia',
-            email: 'julia@email.com',
-            phone: 123123123123,
-          },
-        ];
-        setContactsList(contacts);
+        const contactsData = await getContacts();
+        setContactsList(contactsData.data ?? []);
       } catch (error) {
-        console.log(error);
+        console.log(error); // TODO: Mostrar error en pantalla
       }
     };
 
@@ -81,7 +75,7 @@ export const GAddNewGroupFormStep2Page = () => {
 
   const validationSchema = Yup.object().shape({});
 
-  const onSubmit = () => {
+  const onSubmit = async () => {
     console.log('submit');
     if (selectedNumbers.length === 0) {
       setError({
@@ -90,10 +84,17 @@ export const GAddNewGroupFormStep2Page = () => {
       });
       console.log(error);
     } else {
-      console.log(groupInfo.groupInfo);
-      console.log(selectedNumbers);
-      dispatch(setNewFormGroupInfo(groupInfo.groupInfo));
-      dispatch(setNewGroupContacts(selectedNumbers));
+      dispatch(clearNewGroupForm);
+      await newGroup(
+        groupInfo.groupInfo.name,
+        groupInfo.groupInfo.description,
+        selectedNumbers
+      )
+        .then(() => {
+          reset();
+          navigate(ROUTES.GROUPS.ADD_GROUP_SUCCESS);
+        })
+        .catch((e) => console.log(e)); //TODO: Mostrar error en pantalla
       reset();
       navigate('/contacts/groups');
     }
@@ -139,8 +140,8 @@ export const GAddNewGroupFormStep2Page = () => {
           height="50px"
           colorBackground={GWhite}
           onClickAction={NavigationService.handleNavigationWithState(
-            '/contacts/groups/add-group/info',
-            { from: '/contacts/groups/add-group/members' }
+            `${ROUTES.GROUPS.ROOT}${ROUTES.GROUPS.ADD_GROUP_INFO}`,
+            { from: `${ROUTES.GROUPS.ROOT}${ROUTES.GROUPS.ADD_GROUP_MEMBERS}` }
           )}
         />
       </div>
@@ -150,30 +151,40 @@ export const GAddNewGroupFormStep2Page = () => {
           subtitle={AddNewGroupStep2SectionTitle.subtitle}
         />
       </div>
+
       <form className="geco-form " onSubmit={handleSubmit(onSubmit)}>
-        <div className="geco-input-group">
-          {contactsList.map((contact) => (
-            <div key={contact.id}>
-              <div className="geco-contact-item-card">
-                <div className="geco-contact-body">
-                  <h1 className="geco-contact-item-name">{contact.name}</h1>
-                  <div className="geco-contact-item-info">
-                    <p>{contact.phone}</p>
-                    {contact.email && <p>{contact.email}</p>}
+        {contactsList.length !== 0 ? (
+          <div className="geco-input-group">
+            {contactsList.map((contact) => (
+              <div key={contact.id}>
+                <div className="geco-contact-item-card">
+                  <div className="geco-contact-body">
+                    <h1 className="geco-contact-item-name">{contact.name}</h1>
+                    <div className="geco-contact-item-info">
+                      <p>{contact.phone}</p>
+                      {contact.email && <p>{contact.email}</p>}
+                    </div>
                   </div>
+                  <input
+                    className="geco-checkbox"
+                    type="checkbox"
+                    id={`contact-${contact.id}`}
+                    checked={selectedNumbers.includes(contact.id)}
+                    onChange={(e) => handleContactSelection(e, contact.id)}
+                  />
                 </div>
-                <input
-                  className="geco-checkbox"
-                  type="checkbox"
-                  id={`contact-${contact.id}`}
-                  checked={selectedNumbers.includes(contact.id)}
-                  onChange={(e) => handleContactSelection(e, contact.id)}
-                />
               </div>
+            ))}
+            {error.show && <span className="span-error">{error.message}</span>}
+          </div>
+        ) : (
+          <Link to={'/contacts/list'}>
+            <div className="geco-contacts-empty">
+              <p>{NewGroupContactsEmpty}</p>
             </div>
-          ))}
-          {error.show && <span className="span-error">{error.message}</span>}
-        </div>
+          </Link>
+        )}
+
         <GSubmitButton
           label="Siguiente"
           colorBackground={GYellow}
