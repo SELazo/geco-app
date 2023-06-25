@@ -13,5 +13,5 @@ export interface IContactsService {
     deleteContact(id: number): Promise<IBasicSuccessResponse>;
     editContact(id: number): Promise<IBasicSuccessResponse>;
     getContact(id: number): Promise<IContactResponse>;
-    getContacts(params?: { name?: string; email?: string; phone?: number }): Promise<IContactResponse[]>;
+    getContacts(params?: { name?: string; email?: string; phone?: number }): Promise<ApiResponse<IContactResponse[]>>;
 }
