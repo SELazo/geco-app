@@ -1,12 +1,15 @@
 import { IContactsService, IContactResponse } from '../../interfaces/dtos/external/IContacts';
 import { IBasicSuccessResponse } from '../../interfaces/dtos/external/IBasicResponse';
 import { environment } from '../../environment/environment';
+import { SessionService } from '../internal/sessionService';
+import { ApiResponse } from '../../interfaces/dtos/external/IResponse';
+import { IError } from '../../interfaces/dtos/external/IError';
 
 const { contactsApiURI } = environment;
 
-export const contactsService: IContactsService = {
-    newContact: async (name: string, email: string, phone: string): Promise<IBasicSuccessResponse> => {
-        const token = localStorage.getItem('token');
+export const ContactsService: IContactsService = {
+    newContact: async (name: string, email: string, phone: string): Promise<ApiResponse<IBasicSuccessResponse>> => new Promise( async (resolve, reject) => {
+        const token = SessionService.getToken();
 
         const response = await fetch(`${contactsApiURI}/directories/contacts`, {
             method: 'POST',
@@ -17,9 +20,25 @@ export const contactsService: IContactsService = {
             body: JSON.stringify({ name, email, phone }),
         });
     
-        const data: IBasicSuccessResponse = await response.json();
-        return data;
-    },
+        if (!response.ok) {
+            const err: IError = await response.json();
+            console.error(err);
+            const errorResponse: ApiResponse<IBasicSuccessResponse> = {
+              success: false,
+              error: err,
+            };
+            reject(errorResponse);
+            return;
+          }
+      
+          const data: IBasicSuccessResponse = await response.json();
+          const successResponse: ApiResponse<IBasicSuccessResponse> = {
+            success: true,
+            data: data,
+          };
+          resolve(successResponse);
+          return;
+    }),
 
     deleteContact: async (id: number): Promise<IBasicSuccessResponse> => {
         const token = localStorage.getItem('token');
