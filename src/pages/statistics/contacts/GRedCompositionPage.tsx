@@ -24,25 +24,52 @@ import {
   GPolarAreaChart,
 } from '../../../components/GPolarAreaChart';
 import { IContactsCompositionResponse } from '../../../interfaces/IContactsStatistics';
+import { GroupsService } from '../../../services/external/groupsService';
+import { useEffect, useState } from 'react';
+import { ContactsService } from '../../../services/external/contactsService';
 
 type ContactGrowthChartProps = {
   data: { label: string; values: number[]; color: string }[];
 };
 
+const { getGroups, getGroup } = GroupsService;
+const { getContacts } = ContactsService;
+
 export const GRedCompositionPage = () => {
   const labels: string[] = [];
   const data: DatasetPolarArea[] = [];
+  const [infoContactsComposition, setInfoContactsComposition] =
+    useState<IContactsCompositionResponse>({
+      groups: [],
+      total: 0,
+    });
 
-  const infoContactsComposition: IContactsCompositionResponse = {
-    groups: [
-      { label: 'Mamás', quantity: 50 },
-      { label: 'Papás', quantity: 60 },
-      { label: 'Universitarios', quantity: 70 },
-      { label: 'Niños', quantity: 40 },
-      { label: 'Jubilados', quantity: 90 },
-    ],
-    total: 500,
-  };
+  useEffect(() => {
+    const fetchData = async () => {
+      try {
+        const contactsData = await getContacts();
+        const groupsData = await getGroups();
+        const updatedGroups = await Promise.all(
+          groupsData.map(async (group) => {
+            const g = await getGroup(group.id);
+            return {
+              label: g.group.name,
+              quantity: g.contacts.length,
+            };
+          })
+        );
+
+        setInfoContactsComposition({
+          groups: updatedGroups,
+          total: contactsData.data?.length!,
+        });
+      } catch (error) {
+        console.log(error); // TODO: Mostrar error en pantalla
+      }
+    };
+
+    fetchData();
+  }, []);
 
   const generateColorList = (count: number): string[] => {
     const colors = [
