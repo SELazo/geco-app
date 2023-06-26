@@ -26,6 +26,7 @@ import { GIcon } from '../../../components/GIcon';
 import { GDropdownHelp } from '../../../components/GDropdownHelp';
 import { IContactData } from '../../../interfaces/IContact';
 import { GErrorPopup } from '../../../components/GErrorPopup';
+import { IContactResponse } from '../../../interfaces/dtos/external/IContacts';
 
 const EXAMPLE_URL =
   'https://docs.google.com/spreadsheets/d/1vqt6EbxHXypIU73HsWhpmGDQkzeN4zLh/edit?usp=share_link&ouid=104991212361139592910&rtpof=true&sd=true';
@@ -35,6 +36,7 @@ const MAX_FILENAME_LENGTH = 25;
 type ContactFromExcelForm = {
   file: File;
 };
+
 export const GAddContactsExcelPage = () => {
   const [selectedFile, setSelectedFile] = useState(null);
   const [fileError, setFileError] = useState('');
@@ -45,15 +47,15 @@ export const GAddContactsExcelPage = () => {
 
   const handleSubmit = (event: any) => {
     event.preventDefault();
-    //llamada al servicio
-    //si okey
+    // Llamada al servicio
+    // Si está bien
     if (!selectedFile) {
       setFileError('Por favor, seleccione un archivo Excel. 😔');
       setRequestError(true);
       return;
     }
 
-    let contacts: IContactData[] = [];
+    let contacts: IContactResponse[] = [];
 
     if (selectedFile) {
       const reader = new FileReader();
@@ -87,29 +89,30 @@ export const GAddContactsExcelPage = () => {
         } else {
           const contactRows = parsedData.slice(1);
 
-          const newContacts = contactRows.map((row) => {
+          const newContacts = contactRows.map((row, index) => {
             const [nombre, email, celular] = row as string[];
-            if (!nombre || !celular) {
+            if (!nombre || !celular || !email) {
               return null;
             }
             return {
+              id: index,
               name: nombre,
               email,
-              cellphone: celular,
+              phone: parseInt(celular),
             };
           });
 
-          contacts = newContacts.filter(
-            (contact) => contact !== null
-          ) as IContactData[];
+          contacts = newContacts
+            .filter((contact) => contact !== null)
+            .map((contact) => contact as IContactResponse);
 
+          console.log(contacts);
           if (contacts.length === 0) {
             setFileError('El archivo no tenía contactos. 😔');
             setRequestError(true);
             return;
           }
 
-          console.log('vamos bien');
           navigate('/contacts/list-contacts-to-import', {
             state: { contacts: contacts },
           });
