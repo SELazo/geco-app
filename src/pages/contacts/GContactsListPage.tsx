@@ -19,6 +19,7 @@ import { Link } from 'react-router-dom';
 import { GDropdownMenu, IMenuItem } from '../../components/GDropdownMenu';
 import { IContactResponse } from '../../interfaces/dtos/external/IContacts';
 import { ApiResponse } from '../../interfaces/dtos/external/IResponse';
+import { ROUTES } from '../../constants/routes';
 
 const { getContacts } = ContactsService;
 
@@ -87,7 +88,7 @@ export const GContactsListPage = () => {
               width="50px"
               height="50px"
               colorBackground={GWhite}
-              onClickAction={NavigationService.goBack}
+              onClickAction={NavigationService.handleNavigation(ROUTES.CONTACTS.OPTIONS)}
             />
           </div>
           <div

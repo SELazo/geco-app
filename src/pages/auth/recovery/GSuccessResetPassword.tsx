@@ -1,11 +1,7 @@
 import { GFeedback } from '../../../components/GFeedback';
 import { GSuccessIcon } from '../../../constants/buttons';
 import { GBlack, GWhite } from '../../../constants/palette';
-import {
-  Okay,
-  SuccessResetPasswordSubtitle,
-  SuccessResetPasswordTitle,
-} from '../../../constants/wording';
+import { PasswordChange } from '../../../constants/wording';
 
 import '../../../styles/gsuccessreset.css';
 
@@ -13,16 +9,16 @@ export const GFeedbackSuccessResetPassword = () => {
   return (
     <div className='successreset-main'>
       <GFeedback
-        title={SuccessResetPasswordTitle}
-        subtitle={SuccessResetPasswordSubtitle}
+        title={PasswordChange.title}
+        subtitle={PasswordChange.subtitle}
         colorFont={GBlack}
         icon={GSuccessIcon}
         iconWidth="160px"
         iconHeight="160px"
-        buttonLabel={Okay}
+        buttonLabel={PasswordChange.buttonLabel}
         colorButtonFont={GWhite}
         colorButtonBackground={GBlack}
-        route={'/login'}
+        route={PasswordChange.buttonPath}
       />
     </div>
   );

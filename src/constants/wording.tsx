@@ -43,8 +43,6 @@ export const ContactsHeadCenterTitle: string = 'Agenda';
 
 export const StatisticsHeadCenterTitle: string = 'Estadísticas';
 
-export const SuccessResetPasswordTitle: string = 'Contraseña modificada!';
-
 export const EditUserInfoTitle: string = 'Editar información';
 
 export const PricingTitle: string = 'Cambiar suscripción';
@@ -66,9 +64,6 @@ export const RedCompositionSectionTitle: string =
 /**
  * Wording
  */
-
-export const SuccessResetPasswordSubtitle: string =
-  'Ahora podrás ingresar a tu cuenta con tu nueva contraseña!';
 
 export const Okay: string = 'Okay!';
 
@@ -145,29 +140,29 @@ export const AddContactsExcelSectionTitle: IHeadSectionTitle = {
 
 export const PasswordChange: IFeedback = {
   title: 'Contraseña modificada!',
-  subtitle: 'Ahora podrás ingresar a tu cuenta con tu nueva contraseña!',
-  buttonLabel: 'Okay!',
+  subtitle: 'Ahora podes iniciar sesión con tu nueva contraseña',
+  buttonLabel: 'Aceptar',
   buttonPath: '/login',
 };
 
 export const CommentSended: IFeedback = {
   title: 'Tu mensaje ha sido enviado!',
   subtitle:
-    'En breve nos pondremos estaremos comunicando a través de un email!',
-  buttonLabel: 'Okay!',
+    'En breve nos estaremos comunicando con vos a través de un email',
+  buttonLabel: 'Aceptar',
   buttonPath: '/home',
 };
 
 export const ContactAdded: IFeedback = {
   title: 'El contacto ha sido añadido!',
-  subtitle: 'Ahora podrá administrar su nuevo contacto a través de la Agenda!',
-  buttonLabel: 'Okay!',
+  subtitle: 'Ahora podes administrar tu nuevo contacto desde la Agenda',
+  buttonLabel: 'Ver Agenda',
   buttonPath: '/contacts/list',
 };
 
 export const NewGroupAdded: IFeedback = {
   title: 'Grupo creado!',
-  subtitle: 'Ahora podrá administrar su nuevo grupo a través de la Agenda!',
+  subtitle: 'Ahora podrá administrar su nuevo grupo a través de la Agenda',
   buttonLabel: 'Okay!',
   buttonPath: ROUTES.GROUPS.ROOT,
 };
@@ -175,8 +170,8 @@ export const NewGroupAdded: IFeedback = {
 export const ContactsExcelAdded: IFeedback = {
   title: 'Los contactos han sido añadidos!',
   subtitle:
-    'Ahora podrá administrar sus nuevo contactos a través de la Agenda!',
-  buttonLabel: 'Okay!',
+    'Ahora podes administrar tus nuevos contactos desde la Agenda',
+  buttonLabel: 'Ver Agenda',
   buttonPath: '/contacts/list',
 };
 

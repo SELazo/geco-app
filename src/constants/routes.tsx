@@ -4,7 +4,11 @@ export const ROUTES = {
   LOGIN: '/login',
   RESET_PASSWORD: '/recovery/reset-password',
   RESET_PASSWORD_SUCCESS: '/recovery/reset-success',
-  ADD_CONTACT: '/contacts/success-add-contact',
+  CONTACTS: {
+    ADD_CONTACT: '/contacts/success-add-contact',
+    CONTACS_LIST: '/contacts/list',
+    OPTIONS: '/contacts/options'
+  },
   GROUPS: {
     ROOT: '/contacts/groups',
     ADD_GROUP_INFO: '/add-group/info',
