@@ -1,5 +1,6 @@
 import { IBasicSuccessResponse } from "./IBasicResponse";
 import { ApiResponse } from "./IResponse";
+import { IUser } from "./IUser";
 
 export interface ILoginResponse {
     token: string;
@@ -21,4 +22,5 @@ export interface IAuthService {
     signUp(name: string, email: string, password: string): Promise<ApiResponse<IBasicSuccessResponse>>
     resetPasswordRequest(email: string): Promise<ApiResponse<IBasicSuccessResponse>>
     resetPassword(newPassword: string, passwordToken: string): Promise<ApiResponse<IBasicSuccessResponse>>
+    editUser(user: IUser): Promise<ApiResponse<IBasicSuccessResponse>>
 }

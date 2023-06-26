@@ -180,6 +180,14 @@ export const ContactsExcelAdded: IFeedback = {
   buttonPath: '/contacts/list',
 };
 
+export const UserEdited: IFeedback = {
+  title: 'Perfil editado con éxito!',
+  subtitle:
+    'Hemos actualizado tus datos con las modificaciones que realizaste',
+  buttonLabel: 'Aceptar',
+  buttonPath: '/user/info',
+};
+
 /**
  * Menu Options
  */

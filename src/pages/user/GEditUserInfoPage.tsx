@@ -13,12 +13,16 @@ import { GCircularButton } from '../../components/GCircularButton';
 import { GIconButtonBack, GUserIcon } from '../../constants/buttons';
 import { GBlack, GWhite, GYellow } from '../../constants/palette';
 import { NavigationService } from '../../services/internal/navigationService';
+import { AuthService } from '../../services/external/authService';
 import { GHeadCenterTitle } from '../../components/GHeadCenterTitle';
 import { User, setUser } from '../../redux/sessionSlice';
-import { Users } from '../auth/GSignUpPage';
 import { Link, useNavigate } from 'react-router-dom';
 import { UserEditInfoSubtitle } from '../../constants/wording';
 import { GLogoLetter } from '../../components/GLogoLetter';
+import { IUser } from '../../interfaces/dtos/external/IUser';
+import { ROUTES } from '../../constants/routes';
+
+const { editUser } = AuthService;
 
 type SignUpFormData = {
   name: string;
@@ -30,6 +34,7 @@ type SignUpFormData = {
 export const GEditUserInfoPage = () => {
   let user: User = useSelector((state: any) => state.auth.user as User);
   const dispatch = useDispatch();
+  const navigate = useNavigate();
 
   const validationSchema = Yup.object().shape({
     name: Yup.string().required('Por favor ingrese un nombre completo.'),
@@ -58,25 +63,23 @@ export const GEditUserInfoPage = () => {
     },
   });
 
-  const onSubmit = (data: SignUpFormData) => {
-    /**temporal */
-    const dataBase = JSON.parse(
-      localStorage.getItem('users') || '[]'
-    ) as Users[];
-
-    const newInfoUser: Users = {
+  const onSubmit = async (data: SignUpFormData) => {
+    const userData: IUser = {
+      id: user.id,
       name: data.name,
       email: data.email,
-      password: data.password,
-    };
+      password: data.password
+    }
 
-    dataBase[user.id] = newInfoUser;
-
-    dispatch(
-      setUser({ id: user.id, name: newInfoUser.name, email: newInfoUser.email })
-    );
-    localStorage.setItem('users', JSON.stringify(dataBase));
-    reset();
+    await editUser(userData)
+      .then(() => {
+        dispatch(
+          setUser({id: userData.id, name: userData.name, email: userData.email})
+        );
+        reset();
+        navigate(ROUTES.USER.EDIT_SUCCESS);
+      })
+      .catch(e => console.log(e)) // TODO: Mostrar error en pantalla
   };
 
   return (

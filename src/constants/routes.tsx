@@ -12,4 +12,7 @@ export const ROUTES = {
     ADD_GROUP_SUCCESS: '/sucess-add-group',
     GROUP_SEE_MORE: '/:id',
   },
+  USER: {
+    EDIT_SUCCESS: '/user/edit-success'
+  }
 };

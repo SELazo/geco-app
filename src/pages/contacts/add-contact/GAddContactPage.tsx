@@ -48,7 +48,7 @@ export const GAddContactPage = () => {
   const navigate = useNavigate();
 
   const onSubmit = async ({ name, email, cellphone }: IContactData) => {
-    await newContact(name, email, cellphone)
+    await newContact(name, email, cellphone.toString())
       .then(() => {       
         reset();
         navigate(ROUTES.ADD_CONTACT);

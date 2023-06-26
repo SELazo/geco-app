@@ -22,6 +22,7 @@ import { GHeadCenterTitle } from '../../components/GHeadCenterTitle';
 import { User } from '../../redux/sessionSlice';
 import { GLogoLetter } from '../../components/GLogoLetter';
 import { Link } from 'react-router-dom';
+import { ROUTES } from '../../constants/routes';
 
 export const GUserPage = () => {
   const user: User = useSelector((state: any) => state.auth.user as User);
@@ -38,7 +39,7 @@ export const GUserPage = () => {
             width="50px"
             height="50px"
             colorBackground={GWhite}
-            onClickAction={NavigationService.goBack}
+            onClickAction={NavigationService.handleNavigation(ROUTES.HOME)}
           />
         </div>
         <div className="user-head-user-info">

@@ -4,6 +4,7 @@ import { environment } from '../../environment/environment';
 import { IError } from '../../interfaces/dtos/external/IError';
 import { ApiResponse } from '../../interfaces/dtos/external/IResponse';
 import { SessionService } from '../internal/sessionService';
+import { IUser } from '../../interfaces/dtos/external/IUser';
 
 const { authServiceURI } = environment;
 
@@ -165,6 +166,38 @@ export const AuthService: IAuthService = {
         'x-reset-password-token': `${passwordToken}`
       },
       body: JSON.stringify({ new_password: newPassword }),
+    });
+
+    if (!response.ok) {
+      const err: IError = await response.json();
+      console.error(err);
+      const errorResponse: ApiResponse<IBasicSuccessResponse> = {
+        success: false,
+        error: err,
+      };
+      reject(errorResponse);
+      return;
+    }
+
+    const data: IBasicSuccessResponse = await response.json();
+    const successResponse: ApiResponse<IBasicSuccessResponse> = {
+      success: true,
+      data: data,
+    };
+    resolve(successResponse);
+    return;
+  }),
+
+  editUser: async (user: IUser): Promise<ApiResponse<IBasicSuccessResponse>> => new Promise( async (resolve, reject) => {
+    const { id, name, email, password } = user;
+    const token = SessionService.getToken();
+    const response = await fetch(`${authServiceURI}/users/${id}`, {
+      method: 'PUT',
+      headers: {
+        'Content-Type': 'application/json',
+        'Authorization': `${token}`
+      },
+      body: JSON.stringify({ name, email, password }),
     });
 
     if (!response.ok) {
