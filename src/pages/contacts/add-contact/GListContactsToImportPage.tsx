@@ -35,12 +35,12 @@ export const GListContactsToImportPage = () => {
   };
 
   const addContacts = () => {
-    console.log(contacts);
     if (contacts.length > 0) {
-      contacts.map((contact) => {
+      contacts.map((contact) => { // TODO: cambiar por servicio que cree múltiples contactos
         newContact(contact.name, contact.email, contact.phone.toString());
       });
       navigate('/contacts/success-add-contacts-excel');
+      return;
     }
     navigate('/contacts/list');
   };

@@ -51,7 +51,7 @@ export const GAddContactPage = () => {
     await newContact(name, email, cellphone.toString())
       .then(() => {       
         reset();
-        navigate(ROUTES.ADD_CONTACT);
+        navigate(ROUTES.CONTACTS.ADD_CONTACT);
       })
       .catch(e => console.log(e)); //TODO: Mostrar error en pantalla
   };

@@ -180,7 +180,7 @@ export const GAddContactsExcelPage = () => {
       <form className="geco-form" onSubmit={handleSubmit}>
         <div className="input-group">
           <label htmlFor="file-upload" className="custom-file-upload">
-            Importar excel
+            Adjuntar archivo
             <GIcon icon-type="chevron-right" color={GWhite} />
           </label>
           <input
@@ -209,7 +209,7 @@ export const GAddContactsExcelPage = () => {
         )}
 
         <GSubmitButton
-          label="Importar contactos"
+          label="Importar"
           colorBackground={GYellow}
           colorFont={GBlack}
         />
