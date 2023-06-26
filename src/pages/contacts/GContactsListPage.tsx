@@ -37,7 +37,7 @@ export const GContactsListPage = () => {
     };
 
     fetchContacts();
-  }, [])
+  }, [contacts])
 
   const menuContacts: IMenuItem[] = [
     {
@@ -91,8 +91,7 @@ export const GContactsListPage = () => {
             />
           </div>
           <div
-            className="geco-contacts-list-head-nav-bar-right
-          "
+            className="geco-contacts-list-head-nav-bar-right"
           >
             <GDropdownMenu menu={menuContacts} />
           </div>
