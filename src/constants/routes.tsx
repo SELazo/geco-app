@@ -18,5 +18,8 @@ export const ROUTES = {
   },
   USER: {
     EDIT_SUCCESS: '/user/edit-success'
+  },
+  SIGN_UP: {
+    SIGN_UP_SUCCESSFUL: '/sign-up/sign-up-successful'
   }
 };

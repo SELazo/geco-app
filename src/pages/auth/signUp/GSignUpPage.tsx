@@ -3,24 +3,23 @@ import { useForm } from 'react-hook-form';
 import { yupResolver } from '@hookform/resolvers/yup';
 import * as Yup from 'yup';
 
-import '../../styles/ginputBox.css';
-import '../../styles/gform.css';
-import '../../styles/gsignup.css';
+import '../../../styles/ginputBox.css';
+import '../../../styles/gform.css';
+import '../../../styles/gsignup.css';
 
-import { GSubmitButton } from '../../components/GSubmitButton';
+import { GSubmitButton } from '../../../components/GSubmitButton';
 
-import { GTextAction } from '../../components/GTextAction';
-import { SignUpHeadSectionTitle, SignInAction } from '../../constants/wording';
+import { GTextAction } from '../../../components/GTextAction';
+import { SignUpHeadSectionTitle, SignInAction } from '../../../constants/wording';
 
-import { GHeadSectionTitle } from '../../components/GHeadSectionTitle';
-import { GCircularButton } from '../../components/GCircularButton';
-import { GIconButtonBack } from '../../constants/buttons';
-import { GBlack, GWhite, GYellow } from '../../constants/palette';
-import { NavigationService } from '../../services/internal/navigationService';
+import { GHeadSectionTitle } from '../../../components/GHeadSectionTitle';
+import { GCircularButton } from '../../../components/GCircularButton';
+import { GIconButtonBack } from '../../../constants/buttons';
+import { GBlack, GWhite, GYellow } from '../../../constants/palette';
+import { NavigationService } from '../../../services/internal/navigationService';
 import { useNavigate } from 'react-router-dom';
-import { AuthService } from '../../services/external/authService';
-import { IBasicSuccessResponse } from '../../interfaces/dtos/external/IBasicResponse';
-import { ApiResponse } from '../../interfaces/dtos/external/IResponse';
+import { AuthService } from '../../../services/external/authService';
+import { ROUTES } from '../../../constants/routes';
 
 const { signUp } = AuthService;
 
@@ -63,9 +62,9 @@ export const GSignUpPage = () => {
 
   const onSubmit = async (data: SignUpFormData) => {
     await signUp(data.name, data.email, data.password)
-      .then((response: ApiResponse<IBasicSuccessResponse>) => {
+      .then(() => {
         reset();
-        navigate('/login');
+        navigate(ROUTES.SIGN_UP.SIGN_UP_SUCCESSFUL);
       })
       .catch(e => setError('email', manualError));
   };
@@ -134,7 +133,7 @@ export const GSignUpPage = () => {
           </span>
         </div>
         <GSubmitButton
-          label="Sign Up"
+          label="Crear"
           colorBackground={GYellow}
           colorFont={GBlack}
         />

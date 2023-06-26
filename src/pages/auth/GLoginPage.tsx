@@ -86,7 +86,7 @@ export const GLoginPage = ({ handleLogin }: { handleLogin: () => void }) => {
 
         return session;
       })
-      .then(async (response: ApiResponse<IValidateSessionResponse>) => {
+      .then(async () => {
         reset();
         handleLogin();
         navigate(ROUTES.HOME);
@@ -127,7 +127,7 @@ export const GLoginPage = ({ handleLogin }: { handleLogin: () => void }) => {
         <GTextAction textAction={SignUpAction} />
 
         <GSubmitButton
-          label="Sign In"
+          label="Ingresar"
           icon={GChevronRightIcon}
           colorBackground={GBlack}
           colorFont={GWhite}
