@@ -16,59 +16,30 @@ import { ContactsSectionTitle } from '../../../constants/wording';
 import { GContactItem, IContactItem } from '../../../components/GContactItem';
 import { GLogoLetter } from '../../../components/GLogoLetter';
 import { GSubmitButton } from '../../../components/GSubmitButton';
-import { IContactData } from '../../../interfaces/IContact';
+import { IContactResponse } from '../../../interfaces/dtos/external/IContacts';
+import { ContactsService } from '../../../services/external/contactsService';
+
+const { newContact } = ContactsService;
 
 export const GListContactsToImportPage = () => {
   const location = useLocation();
   const navigate = useNavigate();
 
-  const [contacts, setContacts] = useState<IContactItem[]>(() => {
-    const stateContacts = location.state?.contacts || [];
-    let parseContacts: IContactItem[] = [];
-    stateContacts.map((c: IContactData, index: number) => {
-      parseContacts.push({
-        id: index,
-        name: c.name,
-        mail: c.email ? c.email : undefined,
-        number: c.cellphone,
-      });
-    });
-    return parseContacts;
-  });
+  const [contacts, setContacts] = useState<IContactResponse[]>(
+    () => location.state.contacts
+  );
 
   const deleteContact = (id: number) => {
     const newContacts = contacts.filter((c) => c.id !== id);
     setContacts(newContacts);
   };
 
-  const getRandomNumber = (min: number, max: number) => {
-    return Math.floor(Math.random() * (max - min + 1)) + min;
-  };
-
   const addContacts = () => {
     console.log(contacts);
     if (contacts.length > 0) {
-      const storedContacts: IContactItem[] = JSON.parse(
-        localStorage.getItem('contacts') || '[]'
-      );
-
-      let newContacts: IContactItem[] = [...storedContacts];
-
-      contacts.map((c) => {
-        const id = getRandomNumber(1, 999);
-
-        const newContact: IContactItem = {
-          id: id,
-          name: c.name,
-          mail: c.mail ? c.mail : undefined,
-          number: c.number,
-        };
-
-        newContacts = [...newContacts, newContact];
+      contacts.map((contact) => {
+        newContact(contact.name, contact.email, contact.phone.toString());
       });
-      console.log(newContacts);
-
-      localStorage.setItem('contacts', JSON.stringify(newContacts));
       navigate('/contacts/success-add-contacts-excel');
     }
     navigate('/contacts/list');
