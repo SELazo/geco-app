@@ -161,9 +161,9 @@ export const ContactAdded: IFeedback = {
 };
 
 export const NewGroupAdded: IFeedback = {
-  title: 'Grupo creado!',
-  subtitle: 'Ahora podrá administrar su nuevo grupo a través de la Agenda',
-  buttonLabel: 'Okay!',
+  title: 'Grupo creado con éxito!',
+  subtitle: 'Ahora podes administrar tu nuevo grupo desde la Agenda',
+  buttonLabel: 'Mis Grupos',
   buttonPath: ROUTES.GROUPS.ROOT,
 };
 
