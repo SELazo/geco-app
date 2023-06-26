@@ -26,6 +26,7 @@ import { GAddNewGroupFormStep1Page } from '../pages/contacts/add-group/GAddNewGr
 import { GAddNewGroupFormStep2Page } from '../pages/contacts/add-group/GAddNewGroupFormStep2Page';
 import { GNewGroupSuccessPage } from '../pages/contacts/add-group/GNewGroupSuccessPage';
 import { GGroupPage } from '../pages/contacts/GGroupPage';
+import { GEditUserInfoSuccessPage } from '../pages/user/GEditUserInfoSuccessPage';
 
 export const GPrivateRoutes = () => {
   return (
@@ -37,6 +38,7 @@ export const GPrivateRoutes = () => {
         <Route path="pricing/terms" element={<GPricingTermsPage />} />
         <Route path="comments" element={<GCommentsPage />} />
         <Route path="edit" element={<GEditUserInfoPage />} />
+        <Route path="edit-success" element={<GEditUserInfoSuccessPage />} />
         <Route path="message-sended" element={<GSuccessSendCommentPage />} />
         <Route path="*" element={<Navigate to="/use/info" />} />
       </Route>
