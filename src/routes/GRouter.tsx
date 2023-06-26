@@ -3,11 +3,13 @@ import { BrowserRouter, Navigate, Route, Routes } from 'react-router-dom';
 import { GPrivateRoutes } from './GPrivateRoutes';
 import { GBootPage } from '../pages/GBootPage';
 import { GLoginPage } from '../pages/auth/GLoginPage';
-import { GSignUpPage } from '../pages/auth/GSignUpPage';
+import { GSignUpPage } from '../pages/auth/signUp/GSignUpPage';
 import { GForgotPasswordPage } from '../pages/auth/GForgotPasswordPage';
 import { GRecoveryPage } from '../pages/auth/recovery/GRecoveryPage';
 import { GResetPasswordPage } from '../pages/auth/recovery/GResetPasswordPage';
 import { GFeedbackSuccessResetPassword } from '../pages/auth/recovery/GSuccessResetPassword';
+import { GSignUpSuccessPage } from '../pages/auth/signUp/GSignUpSuccessPage';
+import { GSignUpWrapperPage } from '../pages/auth/signUp/GSignUpWrapperPage';
 
 export const GRouter = ({
   isAuthenticated,
@@ -31,7 +33,10 @@ export const GRouter = ({
           path="/login"
           element={<GLoginPage handleLogin={handleLogin} />}
         />
-        <Route path="/sign-up" element={<GSignUpPage />} />
+        <Route path="/sign-up" element={<GSignUpWrapperPage />}>
+          <Route path="" element={<GSignUpPage />}/>
+          <Route path="sign-up-successful" element={<GSignUpSuccessPage />} />
+        </Route>
         <Route path="/forgot-password" element={<GForgotPasswordPage />} />
         <Route path="/recovery" element={<GRecoveryPage />}>
           <Route path="reset-password" element={<GResetPasswordPage />} />

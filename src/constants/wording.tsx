@@ -31,7 +31,7 @@ export const SignInAction: ITextAction = {
  * Head Center Titles
  */
 
-export const LoginHeadCenterTitle: string = 'Login';
+export const LoginHeadCenterTitle: string = 'Inicio de sesión';
 
 export const HomeHeadCenterTitle: string = 'Comienza a crecer';
 
@@ -93,8 +93,8 @@ export const NewGroupContactsEmpty: string =
  */
 
 export const SignUpHeadSectionTitle: IHeadSectionTitle = {
-  title: 'Sign Up',
-  subtitle: 'Crea tu cuenta para comenzar a comunicar tus mensajes!',
+  title: 'Crear cuenta',
+  subtitle: 'Completa los siguientes datos para comenzar a comunicar tus mensajes',
 };
 
 export const ForgotPasswordHeadSectionTitle: IHeadSectionTitle = {
@@ -181,6 +181,14 @@ export const UserEdited: IFeedback = {
     'Hemos actualizado tus datos con las modificaciones que realizaste',
   buttonLabel: 'Aceptar',
   buttonPath: '/user/info',
+};
+
+export const SignUpSuccessfull: IFeedback = {
+  title: 'Cuenta creada con éxito!',
+  subtitle:
+    'Ya podes comenzar a gestionar tus estrategias de comunicación',
+  buttonLabel: 'Comenzar',
+  buttonPath: '/login',
 };
 
 /**

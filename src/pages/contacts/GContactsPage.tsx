@@ -13,6 +13,7 @@ import {
 import { GMenuOption } from '../../components/GMenuOption';
 import { Link } from 'react-router-dom';
 import { GLogoLetter } from '../../components/GLogoLetter';
+import { ROUTES } from '../../constants/routes';
 
 export const GContactsPage = () => {
   return (
@@ -28,7 +29,7 @@ export const GContactsPage = () => {
             width="50px"
             height="50px"
             colorBackground={GWhite}
-            onClickAction={NavigationService.goBack}
+            onClickAction={NavigationService.handleNavigation(ROUTES.HOME)}
           />
         </div>
         <div className="geco-pricing-title">
