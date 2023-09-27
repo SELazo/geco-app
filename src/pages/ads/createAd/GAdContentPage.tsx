@@ -1,0 +1,120 @@
+import { useForm } from 'react-hook-form';
+import { Link, useNavigate } from 'react-router-dom';
+import { NavigationService } from '../../../services/internal/navigationService';
+import * as Yup from 'yup';
+
+import '../../../styles/ginputBox.css';
+import '../../../styles/gform.css';
+import '../../../styles/gcreatead.css';
+
+import { GHeadSectionTitle } from '../../../components/GHeadSectionTitle';
+import { GCircularButton } from '../../../components/GCircularButton';
+import { GAdIcon, GIconButtonBack } from '../../../constants/buttons';
+
+import {
+  AdContentHelp,
+  CreateAdContentTitle,
+} from '../../../constants/wording';
+import { GBlack, GWhite, GYellow } from '../../../constants/palette';
+import { GLogoLetter } from '../../../components/GLogoLetter';
+import { setNewAdContent } from '../../../redux/sessionSlice';
+import { yupResolver } from '@hookform/resolvers/yup';
+import { ROUTES } from '../../../constants/routes';
+import { GSubmitButton } from '../../../components/GSubmitButton';
+import { GDropdownHelp } from '../../../components/GDropdownHelp';
+import { useDispatch } from 'react-redux';
+
+type AdData = {
+  title: string;
+  text: string;
+};
+
+export const GAdContentPage = () => {
+  const validationSchema = Yup.object().shape({
+    titleAd: Yup.string(),
+    textAd: Yup.string(),
+  });
+
+  const navigate = useNavigate();
+  const dispatch = useDispatch();
+
+  const onSubmit = async (data: AdData) => {
+    dispatch(setNewAdContent({ title: data.title, text: data.text }));
+    navigate(
+      `${ROUTES.AD.ROOT}${ROUTES.AD.CREATE.ROOT}${ROUTES.AD.CREATE.IMAGE_TYPE}`
+    );
+    reset();
+  };
+
+  const { register, handleSubmit, reset } = useForm<{
+    title: string;
+    text: string;
+  }>({
+    resolver: yupResolver(validationSchema),
+  });
+
+  return (
+    <div className="geco-create-ad-main">
+      <div className="geco-create-ad-head-nav-bar">
+        <div className="geco-create-ad-nav-bar">
+          <Link className="geco-create-ad-nav-bar-logo" to="/home">
+            <GLogoLetter />
+          </Link>
+          <Link className="geco-add-contact-excel-nav-bar-section" to="/ad">
+            <GCircularButton
+              icon={GAdIcon}
+              size="1.5em"
+              width="50px"
+              height="50px"
+              colorBackground={GWhite}
+            />
+          </Link>
+          <GCircularButton
+            icon={GIconButtonBack}
+            size="1.5em"
+            width="50px"
+            height="50px"
+            colorBackground={GWhite}
+            onClickAction={NavigationService.goBack}
+          />
+        </div>
+        <div className="geco-create-ad-nav-bar-right">
+          <GDropdownHelp
+            title={AdContentHelp.title}
+            body={AdContentHelp.body}
+            body2={AdContentHelp.body2}
+          />
+        </div>
+      </div>
+      <div className="geco-create-ad-header-title">
+        <GHeadSectionTitle
+          title={CreateAdContentTitle.title}
+          subtitle={CreateAdContentTitle.subtitle}
+        />
+      </div>
+      <form className="geco-form" onSubmit={handleSubmit(onSubmit)}>
+        <div className="input-group">
+          <input
+            type="text"
+            {...register('title')}
+            placeholder="Escribe el titulo principal"
+            className="input-box form-control"
+          />
+        </div>
+        <div className="input-group">
+          <textarea
+            {...register('text')}
+            placeholder="Escribe cualquier texto adicional"
+            className="input-box form-control"
+          />
+        </div>
+
+        <GSubmitButton
+          label="Siguiente"
+          colorBackground={GYellow}
+          colorFont={GBlack}
+        />
+      </form>
+    </div>
+  );
+};

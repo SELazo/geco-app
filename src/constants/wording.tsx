@@ -88,13 +88,21 @@ export const Months: string[] = [
 
 export const NewGroupContactsEmpty: string =
   'No tienes contactos aún. Agregalos antes de continuar haciendo click aquí. 👍';
+
+/**
+ * Types Img
+ */
+
+export const AIImgType = { wording: 'Imagen inteligente.', code: 'ai' };
+export const OwnImgType = { wording: 'Adjuntar archivo.', code: 'own' };
 /**
  * Head Section Titles
  */
 
 export const SignUpHeadSectionTitle: IHeadSectionTitle = {
   title: 'Crear cuenta',
-  subtitle: 'Completa los siguientes datos para comenzar a comunicar tus mensajes',
+  subtitle:
+    'Completa los siguientes datos para comenzar a comunicar tus mensajes',
 };
 
 export const ForgotPasswordHeadSectionTitle: IHeadSectionTitle = {
@@ -134,6 +142,31 @@ export const AddContactsExcelSectionTitle: IHeadSectionTitle = {
   subtitle: 'Importar contactos desde un archivo Excel. 🧐',
 };
 
+export const CreateAdSectionTitle: IHeadSectionTitle = {
+  title: 'Crear publicidad',
+  subtitle: '¿Qué tamaño tiene que tener tu publicidad?',
+};
+
+export const CreateAdPatternTitle: IHeadSectionTitle = {
+  title: 'Crear publicidad',
+  subtitle: '¿Qué disposición debe tener el texto en tu publicidad?',
+};
+
+export const CreateAdOwnImgTitle: IHeadSectionTitle = {
+  title: 'Crear publicidad',
+  subtitle: '¿Qué imagen vas a utilizar para tu publicidad?',
+};
+
+export const CreateAdGeneratedTitle: IHeadSectionTitle = {
+  title: 'Crear publicidad',
+  subtitle: '¡Aquí esta tu publicidad!',
+};
+
+export const CreateAdContentTitle: IHeadSectionTitle = {
+  title: 'Crear publicidad',
+  subtitle: 'Añade texto a tu publicidad.',
+};
+
 /**
  * Feedbacks
  */
@@ -147,8 +180,7 @@ export const PasswordChange: IFeedback = {
 
 export const CommentSended: IFeedback = {
   title: 'Tu mensaje ha sido enviado!',
-  subtitle:
-    'En breve nos estaremos comunicando con vos a través de un email',
+  subtitle: 'En breve nos estaremos comunicando con vos a través de un email',
   buttonLabel: 'Aceptar',
   buttonPath: '/home',
 };
@@ -169,24 +201,21 @@ export const NewGroupAdded: IFeedback = {
 
 export const ContactsExcelAdded: IFeedback = {
   title: 'Los contactos han sido añadidos!',
-  subtitle:
-    'Ahora podes administrar tus nuevos contactos desde la Agenda',
+  subtitle: 'Ahora podes administrar tus nuevos contactos desde la Agenda',
   buttonLabel: 'Ver Agenda',
   buttonPath: '/contacts/list',
 };
 
 export const UserEdited: IFeedback = {
   title: 'Perfil editado con éxito!',
-  subtitle:
-    'Hemos actualizado tus datos con las modificaciones que realizaste',
+  subtitle: 'Hemos actualizado tus datos con las modificaciones que realizaste',
   buttonLabel: 'Aceptar',
   buttonPath: '/user/info',
 };
 
 export const SignUpSuccessfull: IFeedback = {
   title: 'Cuenta creada con éxito!',
-  subtitle:
-    'Ya podes comenzar a gestionar tus estrategias de comunicación',
+  subtitle: 'Ya podes comenzar a gestionar tus estrategias de comunicación',
   buttonLabel: 'Comenzar',
   buttonPath: '/login',
 };
@@ -219,9 +248,32 @@ export const FeedbackContactsStatistics: IMenuOption = {
   route: '/statistics/contacts',
 };
 
+export const CreateAd: IMenuOption = {
+  mainTitle: 'Crear publicidad',
+  description: 'Aquí podrás crear nuevas publicidades',
+  route: '/ad/create/size',
+};
+
+export const ListAds: IMenuOption = {
+  mainTitle: 'Ver tus publicidad',
+  description: 'Aquí podrás ver tus publicidades existentes',
+  route: '/ad/list',
+};
+
 /**
  * Dropdown Help
  */
+
+export const AdContentHelp: IDropdownHelpProps = {
+  title: 'Ejemplo:',
+  body: 'Mensaje principal: "El perfecto regalo para tu mamá"',
+  body2: 'Texto adicional: "2 x 1 en las tortas más ricas!"',
+};
+
+export const AdOwnImgHelp: IDropdownHelpProps = {
+  title: 'Recuerda:',
+  body: 'La imagen elegida debe tener menos de 5MB y estar en formato JPG o PNG.',
+};
 
 export const ImportExcelHelp: IDropdownHelpProps = {
   title: 'Importante!',

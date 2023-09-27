@@ -10,6 +10,7 @@ import { GIcon } from './GIcon';
 export type IDropdownHelpProps = {
   title: string;
   body: string;
+  body2?: string;
   routeLabel?: string;
   route?: string;
 };
@@ -59,6 +60,7 @@ export const GDropdownHelp: FC<IDropdownHelpProps> = (
           <div className="dropdown-help-modal-body">
             <h3>{props.title}</h3>
             <p>{props.body}</p>
+            {props.body2 ?? <p>{props.body2}</p>}
             {props.route && (
               <a href={props.route} target="_blank" download>
                 {props.routeLabel}

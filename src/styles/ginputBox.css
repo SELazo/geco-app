@@ -65,6 +65,8 @@
   line-height: 28px;
 
   color: #ffffff;
+
+  cursor: pointer;
 }
 
 input[type='file'] {

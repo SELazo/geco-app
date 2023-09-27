@@ -27,6 +27,12 @@ import { GAddNewGroupFormStep2Page } from '../pages/contacts/add-group/GAddNewGr
 import { GNewGroupSuccessPage } from '../pages/contacts/add-group/GNewGroupSuccessPage';
 import { GGroupPage } from '../pages/contacts/GGroupPage';
 import { GEditUserInfoSuccessPage } from '../pages/user/GEditUserInfoSuccessPage';
+import { GAdsPage } from '../pages/ads/GAdsPage';
+import { GAdSizePage } from '../pages/ads/createAd/GAdSizePage';
+import { GAdContentPage } from '../pages/ads/createAd/GAdContentPage';
+import { GAdImgTypePage } from '../pages/ads/createAd/GAdImgTypePage';
+import { GAdOwnImgPage } from '../pages/ads/createAd/GAdOwnImgPage';
+import { GAdPatternPage } from '../pages/ads/createAd/GAdPatternPage';
 
 export const GPrivateRoutes = () => {
   return (
@@ -87,7 +93,12 @@ export const GPrivateRoutes = () => {
         <Route path="*" element={<Navigate to="/statistics/options" />} />
       </Route>
       <Route path="/pricing" element={<GHomePage />} />
-      <Route path="/ad" element={<GHomePage />} />
+      <Route path="/ad" element={<GAdsPage />} />
+      <Route path="/ad/create/size" element={<GAdSizePage />} />
+      <Route path="/ad/create/content" element={<GAdContentPage />} />
+      <Route path="/ad/create/image" element={<GAdImgTypePage />} />
+      <Route path="/ad/create/image/own" element={<GAdOwnImgPage />} />
+      <Route path="/ad/create/pattern" element={<GAdPatternPage />} />
       <Route path="/strategy" element={<GHomePage />} />
       <Route path="/statistics" element={<GHomePage />} />
       <Route path="/*" element={<Navigate to="/home" />} />

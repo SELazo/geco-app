@@ -7,7 +7,7 @@ export const ROUTES = {
   CONTACTS: {
     ADD_CONTACT: '/contacts/success-add-contact',
     CONTACS_LIST: '/contacts/list',
-    OPTIONS: '/contacts/options'
+    OPTIONS: '/contacts/options',
   },
   GROUPS: {
     ROOT: '/contacts/groups',
@@ -17,9 +17,22 @@ export const ROUTES = {
     GROUP_SEE_MORE: '/:id',
   },
   USER: {
-    EDIT_SUCCESS: '/user/edit-success'
+    EDIT_SUCCESS: '/user/edit-success',
+  },
+  AD: {
+    ROOT: '/ad',
+    CREATE: {
+      ROOT: '/create',
+      SIZE: '/size',
+      CONTENT: '/content',
+      IMAGE_TYPE: '/image',
+      IMAGE_AI: '/image/ai',
+      IMAGE_OWN: '/image/own',
+      PATTERN: '/pattern',
+      AD_GENERATION: '/ad-generation',
+    },
   },
   SIGN_UP: {
-    SIGN_UP_SUCCESSFUL: '/sign-up/sign-up-successful'
-  }
+    SIGN_UP_SUCCESSFUL: '/sign-up/sign-up-successful',
+  },
 };

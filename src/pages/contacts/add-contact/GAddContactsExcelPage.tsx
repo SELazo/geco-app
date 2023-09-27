@@ -127,10 +127,6 @@ export const GAddContactsExcelPage = () => {
     setSelectedFile(file);
   };
 
-  const handleRequestError = () => {
-    setRequestError(true);
-  };
-
   return (
     <div className="geco-add-contacts-excel-main">
       <div className="geco-add-contacts-excel-head-nav-bar">
