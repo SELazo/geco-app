@@ -10,6 +10,16 @@ export interface IAdPattern {
   url: string;
 }
 
+export interface IAdColours {
+  id: string;
+  name: string;
+  hex: string;
+}
+
+export interface IAdsService {
+  getAdColours(): Promise<ApiResponse<IAdColours[]>>;
+}
+
 export interface IAdsService {
   getAdSizes(): Promise<ApiResponse<IAdSizes[]>>;
 }

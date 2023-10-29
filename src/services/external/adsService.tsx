@@ -1,14 +1,39 @@
 import { environment } from '../../environment/environment';
 import { ApiResponse } from '../../interfaces/dtos/external/IResponse';
 import {
+  IAdColours,
   IAdPattern,
   IAdSizes,
   IAdsService,
 } from '../../interfaces/dtos/external/IAds';
-
-const { contactsApiURI } = environment;
+import {
+  GBlack,
+  GBlue,
+  GGray,
+  GGreen,
+  GPink,
+  GRed,
+  GWhite,
+  GYellow,
+} from '../../constants/palette';
 
 export const AdsService: IAdsService = {
+  getAdColours: async (): Promise<ApiResponse<IAdColours[]>> => {
+    const response = {
+      success: true,
+      data: [
+        { id: 'black', name: 'Negro', hex: GBlack },
+        { id: 'gray', name: 'Gris', hex: GGray },
+        { id: 'white', name: 'Blanco', hex: GWhite },
+        { id: 'blue', name: 'Azul', hex: GBlue },
+        { id: 'green', name: 'Verde', hex: GGreen },
+        { id: 'pink', name: 'Rosa', hex: GPink },
+        { id: 'red', name: 'Rojo', hex: GRed },
+        { id: 'yellow', name: 'Amarillo', hex: GYellow },
+      ],
+    };
+    return response;
+  },
   getAdSizes: async (): Promise<ApiResponse<IAdSizes[]>> => {
     const response = {
       success: true,

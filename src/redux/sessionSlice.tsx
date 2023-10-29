@@ -23,7 +23,7 @@ export interface INewAdInfo {
   descriptionAd: string;
   img: File | string;
   template: string;
-  pallette: number;
+  pallette: string;
   titleHelper: string;
   descriptionHelper: string;
 }
@@ -121,7 +121,7 @@ export const sessionSlice = createSlice({
         template: action.payload,
       };
     },
-    setNewAdPallette: (state, action: PayloadAction<number>) => {
+    setNewAdPallette: (state, action: PayloadAction<string>) => {
       state.formNewAd = {
         ...state.formNewAd,
         pallette: action.payload,

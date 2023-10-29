@@ -29,6 +29,7 @@ export const ROUTES = {
       IMAGE_AI: '/image/ai',
       IMAGE_OWN: '/image/own',
       PATTERN: '/pattern',
+      PALLETTE: '/pallette',
       AD_GENERATION: '/ad-generation',
     },
   },

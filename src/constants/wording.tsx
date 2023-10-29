@@ -152,6 +152,11 @@ export const CreateAdPatternTitle: IHeadSectionTitle = {
   subtitle: '¿Qué disposición debe tener el texto en tu publicidad?',
 };
 
+export const CreateAdColoursTitle: IHeadSectionTitle = {
+  title: 'Crear publicidad',
+  subtitle: '¿Qué colores quieres que tenga el texto de tu publicidad?',
+};
+
 export const CreateAdOwnImgTitle: IHeadSectionTitle = {
   title: 'Crear publicidad',
   subtitle: '¿Qué imagen vas a utilizar para tu publicidad?',
