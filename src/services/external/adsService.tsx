@@ -31,15 +31,15 @@ export const AdsService: IAdsService = {
               url: '/src/assets/images/rh_01.svg',
             },
             {
-              id: 's2',
+              id: 'rh2',
               url: '/src/assets/images/rh_02.svg',
             },
             {
-              id: 's3',
+              id: 'rh3',
               url: '/src/assets/images/rh_03.svg',
             },
             {
-              id: 's4',
+              id: 'rh4',
               url: '/src/assets/images/rh_04.svg',
             },
           ],
@@ -50,19 +50,19 @@ export const AdsService: IAdsService = {
           success: true,
           data: [
             {
-              id: 'rh1',
+              id: 'rv1',
               url: '/src/assets/images/rv_01.svg',
             },
             {
-              id: 's2',
+              id: 'rv2',
               url: '/src/assets/images/rv_02.svg',
             },
             {
-              id: 's3',
+              id: 'rv3',
               url: '/src/assets/images/rv_03.svg',
             },
             {
-              id: 's4',
+              id: 'rv4',
               url: '/src/assets/images/rv_04.svg',
             },
           ],
