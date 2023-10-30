@@ -10,49 +10,29 @@ import { GHeadSectionTitle } from '../../../components/GHeadSectionTitle';
 import { GCircularButton } from '../../../components/GCircularButton';
 import { GAdIcon, GIconButtonBack } from '../../../constants/buttons';
 
-import { CreateAdPatternTitle } from '../../../constants/wording';
+import {
+  CreateAdGeneratedTitle,
+  CreateAdPatternTitle,
+} from '../../../constants/wording';
 import { GWhite } from '../../../constants/palette';
 import { GLogoLetter } from '../../../components/GLogoLetter';
-import { useDispatch } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 import { useEffect, useState } from 'react';
 import { ApiResponse } from '../../../interfaces/dtos/external/IResponse';
 import { IAdPattern } from '../../../interfaces/dtos/external/IAds';
 import { AdsService } from '../../../services/external/adsService';
 import { ROUTES } from '../../../constants/routes';
+import { RootState } from '../../../redux/gecoStore';
+import { GCustomAd } from '../../../components/GCustomAd';
 
-const { getAdPatterns } = AdsService;
+const { getGeneratedAd } = AdsService;
 
 export const GAdGenerationPage = () => {
-  const [patterns, setPatterns] = useState<IAdPattern[]>([]);
+  const formNewAd = useSelector((state: RootState) => state.auth.formNewAd);
 
-  const dispatch = useDispatch();
-  const navigate = useNavigate();
   const location = useLocation();
 
-  const size: string = location && location.state;
-
-  useEffect(() => {
-    const fetchPatterns = async () => {
-      try {
-        const response = await getAdPatterns(size);
-        const patternsData = response as ApiResponse<IAdPattern[]>;
-        setPatterns(patternsData.data ?? []);
-      } catch (error) {
-        console.error(error);
-      }
-    };
-
-    if (size) {
-      fetchPatterns();
-    }
-  }, [size]);
-
-  const handlePatternChange = (event: string) => {
-    dispatch(setNewAdTemplate(event));
-    navigate(
-      `${ROUTES.AD.ROOT}${ROUTES.AD.CREATE.ROOT}${ROUTES.AD.CREATE.CONTENT}`
-    );
-  };
+  const img: string = location && location.state;
 
   return (
     <div className="geco-create-ad-main">
@@ -82,33 +62,18 @@ export const GAdGenerationPage = () => {
       </div>
       <div className="geco-create-ad-header-title">
         <GHeadSectionTitle
-          title={CreateAdPatternTitle.title}
-          subtitle={CreateAdPatternTitle.subtitle}
+          title={CreateAdGeneratedTitle.title}
+          subtitle={CreateAdGeneratedTitle.subtitle}
         />
+        <div></div>
+        <GCustomAd
+          titleAd={formNewAd.titleAd}
+          textAd={formNewAd.textAd}
+          pallette={formNewAd.pallette}
+          template={formNewAd.template}
+          img={img}
+        ></GCustomAd>
       </div>
-      <form className="geco-form">
-        {size ? (
-          patterns.length > 0 ? (
-            <div className="geco-create-ad-container">
-              <div className="geco-create-ad-list-img">
-                {patterns.map((item) => (
-                  <img
-                    key={`pattern-${item.id.toString()}`}
-                    className="geco-create-ad-img"
-                    onClick={() => handlePatternChange(item.id)}
-                    src={item.url}
-                    alt=""
-                  />
-                ))}
-              </div>
-            </div>
-          ) : (
-            <p>No patterns available.</p>
-          )
-        ) : (
-          <p>Loading...</p>
-        )}
-      </form>
     </div>
   );
 };

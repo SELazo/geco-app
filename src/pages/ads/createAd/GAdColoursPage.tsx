@@ -93,7 +93,7 @@ export const GAdColoursPage = () => {
                     marginBottom: '10px',
                     backgroundColor: item.hex,
                   }}
-                  onClick={() => handlePatternChange(item.id)}
+                  onClick={() => handlePatternChange(item.hex)}
                 ></div>
               ))}
             </div>

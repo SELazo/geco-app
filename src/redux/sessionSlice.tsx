@@ -1,4 +1,5 @@
 import { createSlice, PayloadAction } from '@reduxjs/toolkit';
+import { IAdPattern } from '../interfaces/dtos/external/IAds';
 
 export interface User {
   id: number;
@@ -22,7 +23,7 @@ export interface INewAdInfo {
   textAd: string;
   descriptionAd: string;
   img: File | string;
-  template: string;
+  template: IAdPattern;
   pallette: string;
   titleHelper: string;
   descriptionHelper: string;
@@ -115,7 +116,7 @@ export const sessionSlice = createSlice({
         descriptionHelper: action.payload,
       };
     },
-    setNewAdTemplate: (state, action: PayloadAction<string>) => {
+    setNewAdTemplate: (state, action: PayloadAction<IAdPattern>) => {
       state.formNewAd = {
         ...state.formNewAd,
         template: action.payload,

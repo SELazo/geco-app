@@ -25,30 +25,38 @@ import { GDropdownHelp } from '../../../components/GDropdownHelp';
 import { useDispatch } from 'react-redux';
 
 type AdData = {
-  title: string;
-  text: string;
+  titleAd: string;
+  textAd: string;
 };
 
 export const GAdContentPage = () => {
   const validationSchema = Yup.object().shape({
     titleAd: Yup.string(),
-    textAd: Yup.string(),
+    textAd: Yup.string().max(
+      500,
+      'El texto no puede tener más de 500 caracteres'
+    ),
   });
 
   const navigate = useNavigate();
   const dispatch = useDispatch();
 
   const onSubmit = async (data: AdData) => {
-    dispatch(setNewAdContent({ title: data.title, text: data.text }));
+    dispatch(setNewAdContent({ title: data.titleAd, text: data.textAd }));
     navigate(
       `${ROUTES.AD.ROOT}${ROUTES.AD.CREATE.ROOT}${ROUTES.AD.CREATE.IMAGE_TYPE}`
     );
     reset();
   };
 
-  const { register, handleSubmit, reset } = useForm<{
-    title: string;
-    text: string;
+  const {
+    register,
+    handleSubmit,
+    reset,
+    formState: { errors },
+  } = useForm<{
+    titleAd: string;
+    textAd: string;
   }>({
     resolver: yupResolver(validationSchema),
   });
@@ -96,17 +104,20 @@ export const GAdContentPage = () => {
         <div className="input-group">
           <input
             type="text"
-            {...register('title')}
+            {...register('titleAd')}
             placeholder="Escribe el titulo principal"
             className="input-box form-control"
           />
         </div>
         <div className="input-group">
           <textarea
-            {...register('text')}
+            {...register('textAd')}
             placeholder="Escribe cualquier texto adicional"
-            className="input-box form-control"
+            className={`input-box form-control ${
+              errors.textAd ? 'is-invalid' : ''
+            }`}
           />
+          <span className="span-error">{errors.textAd?.message}</span>
         </div>
 
         <GSubmitButton

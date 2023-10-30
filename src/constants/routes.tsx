@@ -30,7 +30,7 @@ export const ROUTES = {
       IMAGE_OWN: '/image/own',
       PATTERN: '/pattern',
       PALLETTE: '/pallette',
-      AD_GENERATION: '/ad-generation',
+      AD_GENERATION: '/ad_generation',
     },
   },
   SIGN_UP: {

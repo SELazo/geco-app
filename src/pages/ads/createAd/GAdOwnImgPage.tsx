@@ -16,7 +16,6 @@ import {
 import { GSubmitButton } from '../../../components/GSubmitButton';
 import {
   AdOwnImgHelp,
-  AddContactsExcelSectionTitle,
   CreateAdGeneratedTitle,
   CreateAdOwnImgTitle,
 } from '../../../constants/wording';
@@ -26,8 +25,6 @@ import { useState } from 'react';
 import { GIcon } from '../../../components/GIcon';
 import { GDropdownHelp } from '../../../components/GDropdownHelp';
 import { GErrorPopup } from '../../../components/GErrorPopup';
-import { useDispatch } from 'react-redux';
-import { setNewAdImg } from '../../../redux/sessionSlice';
 import { ROUTES } from '../../../constants/routes';
 
 type OwnImgForm = {
@@ -43,7 +40,6 @@ export const GAdOwnImgPage = () => {
   const [requestError, setRequestError] = useState(false);
 
   const navigate = useNavigate();
-  const dispatch = useDispatch();
 
   const handleSubmit = async (event: any) => {
     event.preventDefault();
@@ -54,13 +50,10 @@ export const GAdOwnImgPage = () => {
       return;
     }
 
-    const base64String = await fileToBase64(selectedFile);
-    dispatch(setNewAdImg(base64String));
-    const file = 'algun file';
-    setGeneratedAd(file);
-    /* navigate(
-      `${ROUTES.AD.ROOT}${ROUTES.AD.CREATE.ROOT}${ROUTES.AD.CREATE.AD_GENERATION}`
-    ); */
+    navigate(
+      `${ROUTES.AD.ROOT}${ROUTES.AD.CREATE.ROOT}${ROUTES.AD.CREATE.AD_GENERATION}`,
+      { state: selectedFile }
+    );
   };
 
   const fileToBase64 = (file: File): Promise<string> => {

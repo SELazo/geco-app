@@ -50,7 +50,7 @@ export const GAdPatternPage = () => {
     }
   }, [size]);
 
-  const handlePatternChange = (event: string) => {
+  const handlePatternChange = (event: IAdPattern) => {
     dispatch(setNewAdTemplate(event));
     navigate(
       `${ROUTES.AD.ROOT}${ROUTES.AD.CREATE.ROOT}${ROUTES.AD.CREATE.PALLETTE}`
@@ -98,7 +98,7 @@ export const GAdPatternPage = () => {
                   <img
                     key={`pattern-${item.id.toString()}`}
                     className="geco-create-ad-img"
-                    onClick={() => handlePatternChange(item.id)}
+                    onClick={() => handlePatternChange(item)}
                     src={item.url}
                     alt=""
                   />
