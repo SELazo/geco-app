@@ -10,17 +10,9 @@ import { GCircularButton } from '../../../components/GCircularButton';
 import { GAdIcon, GIconButtonBack } from '../../../constants/buttons';
 
 import { CreateAdGeneratedTitle } from '../../../constants/wording';
-import {
-  GBlack,
-  GBlue,
-  GGreen,
-  GRed,
-  GWhite,
-  GYellow,
-} from '../../../constants/palette';
+import { GBlack, GWhite, GYellow } from '../../../constants/palette';
 import { GLogoLetter } from '../../../components/GLogoLetter';
 import { useSelector } from 'react-redux';
-import { AdsService } from '../../../services/external/adsService';
 import { ROUTES } from '../../../constants/routes';
 import { RootState } from '../../../redux/gecoStore';
 import { AdGenerationService } from '../../../services/internal/adGenerationService';

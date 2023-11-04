@@ -18,11 +18,12 @@ import { GLogoLetter } from '../../../components/GLogoLetter';
 import { Link } from 'react-router-dom';
 import { GDropdownMenu, IMenuItem } from '../../../components/GDropdownMenu';
 import { IContactResponse } from '../../../interfaces/dtos/external/IContacts';
+import { ApiResponse } from '../../../interfaces/dtos/external/IResponse';
 import { ROUTES } from '../../../constants/routes';
 
 const { getContacts } = ContactsService;
 
-export const GAdsListPage = () => {
+export const GStrategiesListPage = () => {
   const [contacts, setContacts] = useState<IContactResponse[]>([]);
 
   useEffect(() => {

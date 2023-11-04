@@ -1,9 +1,7 @@
-import React from 'react';
-
 import('../../styles/gpricing.css');
 
 import { GCircularButton } from '../../components/GCircularButton';
-import { GIconButtonBack, GIconButtonSignIn } from '../../constants/buttons';
+import { GIconButtonBack } from '../../constants/buttons';
 import { GBlack, GRed, GWhite, GYellow } from '../../constants/palette';
 import { NavigationService } from '../../services/internal/navigationService';
 import { GHeadCenterTitle } from '../../components/GHeadCenterTitle';

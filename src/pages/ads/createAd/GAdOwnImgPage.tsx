@@ -14,11 +14,7 @@ import {
 } from '../../../constants/buttons';
 
 import { GSubmitButton } from '../../../components/GSubmitButton';
-import {
-  AdOwnImgHelp,
-  CreateAdGeneratedTitle,
-  CreateAdOwnImgTitle,
-} from '../../../constants/wording';
+import { AdOwnImgHelp, CreateAdOwnImgTitle } from '../../../constants/wording';
 import { GBlack, GWhite, GYellow } from '../../../constants/palette';
 import { GLogoLetter } from '../../../components/GLogoLetter';
 import { useState } from 'react';

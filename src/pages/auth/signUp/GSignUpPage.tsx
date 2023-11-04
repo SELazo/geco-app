@@ -1,4 +1,3 @@
-import React from 'react';
 import { useForm } from 'react-hook-form';
 import { yupResolver } from '@hookform/resolvers/yup';
 import * as Yup from 'yup';
@@ -10,7 +9,10 @@ import '../../../styles/gsignup.css';
 import { GSubmitButton } from '../../../components/GSubmitButton';
 
 import { GTextAction } from '../../../components/GTextAction';
-import { SignUpHeadSectionTitle, SignInAction } from '../../../constants/wording';
+import {
+  SignUpHeadSectionTitle,
+  SignInAction,
+} from '../../../constants/wording';
 
 import { GHeadSectionTitle } from '../../../components/GHeadSectionTitle';
 import { GCircularButton } from '../../../components/GCircularButton';
@@ -66,7 +68,7 @@ export const GSignUpPage = () => {
         reset();
         navigate(ROUTES.SIGN_UP.SIGN_UP_SUCCESSFUL);
       })
-      .catch(e => setError('email', manualError));
+      .catch((e) => setError('email', manualError));
   };
 
   return (

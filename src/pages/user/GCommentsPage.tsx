@@ -31,10 +31,6 @@ export const GCommentsPage = () => {
   const navigate = useNavigate();
 
   const onSubmit = (data: CommentsFormData) => {
-    console.log(user.email);
-    console.log(data);
-    //llamada al servicio
-    //si okey
     reset();
     navigate('/user/message-sended');
   };

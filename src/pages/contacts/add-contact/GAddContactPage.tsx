@@ -24,13 +24,15 @@ const { newContact } = ContactsService;
 
 export const GAddContactPage = () => {
   const validationSchema = Yup.object().shape({
-    hasContactInfo: Yup.boolean(),
     name: Yup.string().required('Por favor ingrese un nombre completo.'),
-    email: Yup.string().email('Por favor ingrese un correo electrónico válido'),
+    email: Yup.string()
+      .required('Por favor ingrese un correo electrónico.')
+      .email('Por favor ingrese un correo electrónico válido'),
     cellphone: Yup.string()
+      .required('Por favor ingrese un correo electrónico.')
       .test(
         'has-contact-info',
-        'Por favor ingrese al menos número de celular',
+        'Por favor ingrese al menos un número de celular.',
         function (value) {
           const { email, cellphone } = this.parent;
           if (!email && !cellphone) {
@@ -41,7 +43,7 @@ export const GAddContactPage = () => {
       )
       .matches(
         /^\+[0-9]{1,3}\s?[0-9]{3}\s?[0-9]{3}\s?[0-9]{4}$/,
-        'Por favor ingrese un número de celular válido'
+        'Por favor ingrese un número de celular válido.'
       ),
   });
 
@@ -49,11 +51,11 @@ export const GAddContactPage = () => {
 
   const onSubmit = async ({ name, email, cellphone }: IContactData) => {
     await newContact(name, email, cellphone.toString())
-      .then(() => {       
+      .then(() => {
         reset();
         navigate(ROUTES.CONTACTS.ADD_CONTACT);
       })
-      .catch(e => console.log(e)); //TODO: Mostrar error en pantalla
+      .catch((e) => console.log(e)); //TODO: Mostrar error en pantalla
   };
 
   const {
@@ -61,7 +63,11 @@ export const GAddContactPage = () => {
     handleSubmit,
     reset,
     formState: { errors },
-  } = useForm<IContactData>({
+  } = useForm<{
+    name: string;
+    email: string;
+    cellphone: string;
+  }>({
     resolver: yupResolver(validationSchema),
   });
 

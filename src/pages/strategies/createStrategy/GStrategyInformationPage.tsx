@@ -9,7 +9,11 @@ import '../../../styles/gcreatead.css';
 
 import { GHeadSectionTitle } from '../../../components/GHeadSectionTitle';
 import { GCircularButton } from '../../../components/GCircularButton';
-import { GAdIcon, GIconButtonBack } from '../../../constants/buttons';
+import {
+  GAdIcon,
+  GIconButtonBack,
+  GStrategyIcon,
+} from '../../../constants/buttons';
 
 import {
   AdIdentificationHelp,
@@ -21,71 +25,24 @@ import { yupResolver } from '@hookform/resolvers/yup';
 import { ROUTES } from '../../../constants/routes';
 import { GSubmitButton } from '../../../components/GSubmitButton';
 import { GDropdownHelp } from '../../../components/GDropdownHelp';
-import { useSelector } from 'react-redux';
-import { AdsService } from '../../../services/external/adsService';
-import { RootState } from '../../../redux/gecoStore';
-import { IAd } from '../../../interfaces/dtos/external/IAds';
-import { useEffect, useState } from 'react';
+import { useState } from 'react';
 import { PacmanLoader } from 'react-spinners';
 
-type AdData = {
-  titleHelper: string;
-  descriptionHelper?: string;
-};
-
-export const GAdIdentificationPage = () => {
+export const GStrategyInformationPage = () => {
   const [loading, setLoading] = useState(false);
-  const formNewAd = useSelector((state: RootState) => state.auth.formNewAd);
   const validationSchema = Yup.object().shape({
-    titleHelper: Yup.string().required(
-      'Por favor ingrese un titulo identificativo para su publicidad, esto te ayudara a encontrarla para utillizarla en tus estrategias de comunicación.'
-    ),
-    descriptionHelper: Yup.string()
-      .optional()
-      .max(500, 'El texto no puede tener más de 500 caracteres'),
+    title: Yup.string()
+      .required(
+        'Por favor ingrese un titulo identificativo para su estrategia de comunicación, esto te ayudara a encontrarla para realizar modificaciones posteriores.'
+      )
+      .max(50, 'El título no puede tener más de 50 caracteres'),
   });
 
   const navigate = useNavigate();
-  const location = useLocation();
-  const base64Ad = location && location.state;
 
-  useEffect(() => {
-    if (
-      !formNewAd.descriptionHelper &&
-      !formNewAd.titleHelper &&
-      !formNewAd.template &&
-      !formNewAd.pallette &&
-      !base64Ad
-    ) {
-      navigate(`${ROUTES.AD.ROOT}${ROUTES.AD.CREATE.ROOT}`);
-    }
-  }, [formNewAd]);
-
-  const onSubmit = async (data: AdData) => {
-    const adInfo = { ...formNewAd };
-    const newAd: IAd = {
-      title: data.titleHelper,
-      description: data.descriptionHelper ? data.descriptionHelper : '',
-      size: adInfo.size,
-      ad_template: {
-        color_text: adInfo.pallette,
-        type: adInfo.size,
-        disposition_pattern: adInfo.template.id,
-      },
-    };
+  const onSubmit = async (data: any) => {
     setLoading(true);
-    const response = await AdsService.postGenerateAd(newAd);
-    if (!response) {
-      navigate(`${ROUTES.AD.ROOT}${ROUTES.AD.CREATE.ROOT}${ROUTES.AD.ERROR}`);
-    }
-    const sendImgResponse = await AdsService.sendBase64InChunks(
-      base64Ad.replace(/^data:image\/(png|jpeg|jpg);base64,/, ''),
-      response.data?.id!
-    );
-
-    if (!sendImgResponse) {
-      navigate(`${ROUTES.AD.ROOT}${ROUTES.AD.CREATE.ROOT}${ROUTES.AD.ERROR}`);
-    }
+    //request
     setLoading(false);
     navigate(
       `${ROUTES.AD.ROOT}${ROUTES.AD.CREATE.ROOT}${ROUTES.AD.CREATE.SUCCESS}`
@@ -99,8 +56,7 @@ export const GAdIdentificationPage = () => {
     reset,
     formState: { errors },
   } = useForm<{
-    titleHelper: string;
-    descriptionHelper?: string;
+    title: string;
   }>({
     resolver: yupResolver(validationSchema),
   });
@@ -114,7 +70,7 @@ export const GAdIdentificationPage = () => {
           </Link>
           <Link className="geco-add-contact-excel-nav-bar-section" to="/ad">
             <GCircularButton
-              icon={GAdIcon}
+              icon={GStrategyIcon}
               size="1.5em"
               width="50px"
               height="50px"
@@ -159,25 +115,13 @@ export const GAdIdentificationPage = () => {
             <div className="input-group">
               <input
                 type="text"
-                {...register('titleHelper')}
+                {...register('title')}
                 placeholder="Nombre de la publicidad"
                 className={`input-box form-control ${
-                  errors.titleHelper ? 'is-invalid' : ''
+                  errors.title ? 'is-invalid' : ''
                 }`}
               />
-              <span className="span-error">{errors.titleHelper?.message}</span>
-            </div>
-            <div className="input-group">
-              <textarea
-                {...register('descriptionHelper')}
-                placeholder="Escribe el mensaje que se adjuntará a la imagen de tu publicidad al difundirla."
-                className={`input-box form-control ${
-                  errors.descriptionHelper ? 'is-invalid' : ''
-                }`}
-              />
-              <span className="span-error">
-                {errors.descriptionHelper?.message}
-              </span>
+              <span className="span-error">{errors.title?.message}</span>
             </div>
 
             <GSubmitButton

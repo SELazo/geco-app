@@ -2,11 +2,8 @@ import('../../styles/gcontactsGroups.css');
 
 import { GCircularButton } from '../../components/GCircularButton';
 import {
-  GChevronLeftIcon,
   GChevronRightBlackIcon,
-  GChevronRightIcon,
   GContactsIcon,
-  GEditIcon,
   GIconButtonBack,
 } from '../../constants/buttons';
 import {
@@ -21,7 +18,6 @@ import {
 import { NavigationService } from '../../services/internal/navigationService';
 import { GHeadCenterTitle } from '../../components/GHeadCenterTitle';
 import { ContactsSectionTitle } from '../../constants/wording';
-import { GContactItem, IContactItem } from '../../components/GContactItem';
 import { GLogoLetter } from '../../components/GLogoLetter';
 import { Link, useNavigate } from 'react-router-dom';
 import { GDropdownMenu, IMenuItem } from '../../components/GDropdownMenu';

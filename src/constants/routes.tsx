@@ -40,6 +40,18 @@ export const ROUTES = {
     },
     ERROR: '/error',
   },
+  STRATEGY: {
+    ROOT: '/strategy',
+    CREATE: {
+      ROOT: '/create',
+      INFORMATION: '/information',
+      SUCCESS: '/success',
+    },
+    LIST: {
+      ROOT: 'list',
+    },
+    ERROR: '/error',
+  },
   SIGN_UP: {
     SIGN_UP_SUCCESSFUL: '/sign-up/sign-up-successful',
   },

@@ -78,7 +78,6 @@ export const GAddNewGroupFormStep2Page = () => {
   const validationSchema = Yup.object().shape({});
 
   const onSubmit = async () => {
-    console.log('submit');
     if (selectedNumbers.length === 0) {
       setError({
         show: true,
@@ -114,7 +113,7 @@ export const GAddNewGroupFormStep2Page = () => {
     });
   };
 
-  const { handleSubmit, reset } = useForm<INewGoupInfo>({
+  const { handleSubmit, reset } = useForm<INewGoupInfo | {}>({
     resolver: yupResolver(validationSchema),
   });
 

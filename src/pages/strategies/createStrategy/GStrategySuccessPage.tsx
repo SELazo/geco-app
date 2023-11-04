@@ -1,24 +1,24 @@
 import { GFeedback } from '../../../components/GFeedback';
 import { GSuccessIcon } from '../../../constants/buttons';
 import { GBlack, GWhite } from '../../../constants/palette';
-import { NewGroupAdded } from '../../../constants/wording';
+import { PostAdSuccessfull } from '../../../constants/wording';
 
 import '../../../styles/gsuccesssendmessage.css';
 
-export const GNewGroupSuccessPage = () => {
+export const GAdSuccessPage = () => {
   return (
     <div className="success-send-message-main">
       <GFeedback
-        title={NewGroupAdded.title}
-        subtitle={NewGroupAdded.subtitle}
+        title={PostAdSuccessfull.title}
+        subtitle={PostAdSuccessfull.subtitle}
         colorFont={GBlack}
         icon={GSuccessIcon}
         iconWidth="160px"
         iconHeight="160px"
-        buttonLabel={NewGroupAdded.buttonLabel}
+        buttonLabel={PostAdSuccessfull.buttonLabel}
         colorButtonFont={GWhite}
         colorButtonBackground={GBlack}
-        route={NewGroupAdded.buttonPath}
+        route={PostAdSuccessfull.buttonPath}
       />
     </div>
   );

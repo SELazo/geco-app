@@ -1,4 +1,3 @@
-import React from 'react';
 import { useForm } from 'react-hook-form';
 import { yupResolver } from '@hookform/resolvers/yup';
 import * as Yup from 'yup';
@@ -50,7 +49,7 @@ export const GResetPasswordPage = () => {
         reset();
         navigate(ROUTES.RESET_PASSWORD_SUCCESS);
       })
-      .catch(e => console.log(e)) // TODO: Mostrar algun error en pantalla
+      .catch((e) => console.log(e)); // TODO: Mostrar algun error en pantalla
   };
 
   const {
@@ -63,8 +62,8 @@ export const GResetPasswordPage = () => {
   });
 
   return (
-    <div className='recovery-main'>
-      <div className='recovery-head'>
+    <div className="recovery-main">
+      <div className="recovery-head">
         <GCircularButton
           icon={GIconButtonX}
           size="1.5em"

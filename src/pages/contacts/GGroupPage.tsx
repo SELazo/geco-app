@@ -8,7 +8,7 @@ import {
   GEditIcon,
   GIconButtonBack,
 } from '../../constants/buttons';
-import { GBlack, GGreen, GRed, GWhite, GYellow } from '../../constants/palette';
+import { GBlack, GWhite, GYellow } from '../../constants/palette';
 import { NavigationService } from '../../services/internal/navigationService';
 import { GroupsService } from '../../services/external/groupsService';
 import { GHeadCenterTitle } from '../../components/GHeadCenterTitle';

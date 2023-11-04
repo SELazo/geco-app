@@ -1,4 +1,4 @@
-import('../../styles/gstatistics.css');
+import('../../styles/gstrategy.css');
 
 import { GCircularButton } from '../../components/GCircularButton';
 import { GIconButtonBack } from '../../constants/buttons';
@@ -6,20 +6,21 @@ import { GBlack, GWhite } from '../../constants/palette';
 import { NavigationService } from '../../services/internal/navigationService';
 import { GHeadCenterTitle } from '../../components/GHeadCenterTitle';
 import {
-  FeedbackContactsStatistics,
-  FeedbackStrategiesStatistics,
-  StatisticsSectionTitle,
+  CreateStrategy,
+  ListStrategies,
+  StrategyHeadCenterTitle,
 } from '../../constants/wording';
 import { GMenuOption } from '../../components/GMenuOption';
 import { Link } from 'react-router-dom';
 import { GLogoLetter } from '../../components/GLogoLetter';
+import { ROUTES } from '../../constants/routes';
 
-export const GStatisticsPage = () => {
+export const GStrategyPage = () => {
   return (
-    <div className="geco-statistics">
-      <div className="geco-statistics-head">
-        <div className="geco-statistics-head-nav-bar">
-          <Link className="geco-statistics-head-nav-bar-logo" to="/home">
+    <div className="geco-strategy">
+      <div className="geco-strategy-head">
+        <div className="geco-strategy-head-nav-bar">
+          <Link className="geco-strategy-head-nav-bar-logo" to="/home">
             <GLogoLetter />
           </Link>
           <GCircularButton
@@ -28,17 +29,17 @@ export const GStatisticsPage = () => {
             width="50px"
             height="50px"
             colorBackground={GWhite}
-            onClickAction={NavigationService.goBack}
+            onClickAction={NavigationService.handleNavigation(ROUTES.HOME)}
           />
         </div>
+        <div className="geco-pricing-title">
+          <GHeadCenterTitle title={StrategyHeadCenterTitle} color={GBlack} />
+        </div>
       </div>
-      <div className="geco-statistics-title">
-        <GHeadCenterTitle title={StatisticsSectionTitle} color={GBlack} />
-      </div>
-      <div className="geco-statistics-body">
-        <div className="geco-statistics-options">
-          <GMenuOption option={FeedbackStrategiesStatistics} />
-          <GMenuOption option={FeedbackContactsStatistics} />
+      <div className="geco-strategy-body">
+        <div className="geco-strategy-options">
+          <GMenuOption option={CreateStrategy} />
+          <GMenuOption option={ListStrategies} />
         </div>
       </div>
     </div>

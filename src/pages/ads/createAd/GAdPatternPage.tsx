@@ -1,6 +1,6 @@
 import { Link, useLocation, useNavigate } from 'react-router-dom';
 import { NavigationService } from '../../../services/internal/navigationService';
-import { setNewAdSize, setNewAdTemplate } from '../../../redux/sessionSlice';
+import { setNewAdTemplate } from '../../../redux/sessionSlice';
 
 import '../../../styles/ginputBox.css';
 import '../../../styles/gform.css';
@@ -10,13 +10,10 @@ import { GHeadSectionTitle } from '../../../components/GHeadSectionTitle';
 import { GCircularButton } from '../../../components/GCircularButton';
 import { GAdIcon, GIconButtonBack } from '../../../constants/buttons';
 
-import {
-  CreateAdPatternTitle,
-  CreateAdSectionTitle,
-} from '../../../constants/wording';
+import { CreateAdPatternTitle } from '../../../constants/wording';
 import { GWhite } from '../../../constants/palette';
 import { GLogoLetter } from '../../../components/GLogoLetter';
-import { useDispatch, useSelector } from 'react-redux';
+import { useDispatch } from 'react-redux';
 import { useEffect, useState } from 'react';
 import { ApiResponse } from '../../../interfaces/dtos/external/IResponse';
 import { IAdPattern } from '../../../interfaces/dtos/external/IAds';

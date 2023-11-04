@@ -22,10 +22,7 @@ import { AuthService } from '../../services/external/authService';
 import { SessionService } from '../../services/internal/sessionService';
 import { GChevronRightIcon } from '../../constants/buttons';
 import { useNavigate } from 'react-router-dom';
-import {
-  ILoginResponse,
-  IValidateSessionResponse,
-} from '../../interfaces/dtos/external/IAuth';
+import { ILoginResponse } from '../../interfaces/dtos/external/IAuth';
 import { ApiResponse } from '../../interfaces/dtos/external/IResponse';
 import { ROUTES } from '../../constants/routes';
 import { useDispatch } from 'react-redux';

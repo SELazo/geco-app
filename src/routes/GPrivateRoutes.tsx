@@ -39,6 +39,10 @@ import { GAdIdentificationPage } from '../pages/ads/createAd/GAdIdentificationPa
 import { GAdSuccessPage } from '../pages/ads/createAd/GAdSuccessPage';
 import { GAdsListPage } from '../pages/ads/listAds/GAdsListPage';
 import { GAdErrorPage } from '../pages/ads/createAd/GAdErrorPage ';
+import { GStrategyPage } from '../pages/strategies/GStrategiesPage';
+import { GStrategyErrorPage } from '../pages/strategies/GStrategyErrorPage ';
+import { GStrategyInformationPage } from '../pages/strategies/createStrategy/GStrategyInformationPage';
+import { GStrategiesListPage } from '../pages/strategies/listStrategies/GStrategiesListPage';
 
 export const GPrivateRoutes = () => {
   return (
@@ -114,7 +118,13 @@ export const GPrivateRoutes = () => {
       <Route path="/ad/create/success" element={<GAdSuccessPage />} />
       <Route path="/ad/list" element={<GAdsListPage />} />
       <Route path="/ad/error" element={<GAdErrorPage />} />
-      <Route path="/strategy" element={<GHomePage />} />
+      <Route path="/strategy" element={<GStrategyPage />} />
+      <Route path="/strategy/error" element={<GStrategyErrorPage />} />
+      <Route
+        path="/strategy/create/information"
+        element={<GStrategyInformationPage />}
+      />
+      <Route path="/strategy/list" element={<GStrategiesListPage />} />
       <Route path="/statistics" element={<GHomePage />} />
       <Route path="/*" element={<Navigate to="/home" />} />
     </Routes>

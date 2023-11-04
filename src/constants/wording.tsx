@@ -246,6 +246,13 @@ export const AdError: IFeedback = {
   buttonPath: '/ad',
 };
 
+export const StrategyError: IFeedback = {
+  title: 'Hubo un error!',
+  subtitle: 'Sucedio algo inesperado 😥. Intenta de nuevo más tarde.',
+  buttonLabel: 'Okey',
+  buttonPath: '/strategy',
+};
+
 /**
  * Menu Options
  */
@@ -284,6 +291,18 @@ export const ListAds: IMenuOption = {
   mainTitle: 'Ver tus publicidad',
   description: 'Aquí podrás ver tus publicidades existentes',
   route: '/ad/list',
+};
+
+export const CreateStrategy: IMenuOption = {
+  mainTitle: 'Crear estrategia',
+  description: 'Aquí podrás crear nuevas estrategias de comunicación',
+  route: '/strategy/create/information',
+};
+
+export const ListStrategies: IMenuOption = {
+  mainTitle: 'Ver tus estrategias',
+  description: 'Aquí podrás ver tus estrategias de comunicación existentes',
+  route: '/strategy/list',
 };
 
 /**
