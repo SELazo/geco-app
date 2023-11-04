@@ -18,6 +18,8 @@ import {
 import {
   AdIdentificationHelp,
   CreateAdIdentificationTitle,
+  CreateStrategyInformationTitle,
+  StrategyInformationHelp,
 } from '../../../constants/wording';
 import { GBlack, GWhite, GYellow } from '../../../constants/palette';
 import { GLogoLetter } from '../../../components/GLogoLetter';
@@ -88,16 +90,16 @@ export const GStrategyInformationPage = () => {
         </div>
         <div className="geco-create-ad-nav-bar-right">
           <GDropdownHelp
-            title={AdIdentificationHelp.title}
-            body={AdIdentificationHelp.body}
-            body2={AdIdentificationHelp.body2}
+            title={StrategyInformationHelp.title}
+            body={StrategyInformationHelp.body}
+            body2={StrategyInformationHelp.body2}
           />
         </div>
       </div>
       <div className="geco-create-ad-header-title">
         <GHeadSectionTitle
-          title={CreateAdIdentificationTitle.title}
-          subtitle={CreateAdIdentificationTitle.subtitle}
+          title={CreateStrategyInformationTitle.title}
+          subtitle={CreateStrategyInformationTitle.subtitle}
         />
       </div>
       <form className="geco-form" onSubmit={handleSubmit(onSubmit)}>
@@ -116,7 +118,7 @@ export const GStrategyInformationPage = () => {
               <input
                 type="text"
                 {...register('title')}
-                placeholder="Nombre de la publicidad"
+                placeholder="Nombre de la estrategia"
                 className={`input-box form-control ${
                   errors.title ? 'is-invalid' : ''
                 }`}
@@ -125,7 +127,7 @@ export const GStrategyInformationPage = () => {
             </div>
 
             <GSubmitButton
-              label="Crear publicidad"
+              label="Siguiente"
               colorBackground={GYellow}
               colorFont={GBlack}
             />

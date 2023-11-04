@@ -34,12 +34,23 @@ export interface INewGroupForm {
   contacts: number[];
 }
 
+export interface INewStrategyForm {
+  title: string;
+  ads: number[];
+  groups: number[];
+  startDate: string;
+  endDate: string;
+  periodicity: string;
+  schedule: string; //5 caracteres
+}
+
 export interface SessionState {
   user: User;
   auth: Auth;
   terms?: number;
   formNewGroup: INewGroupForm;
   formNewAd: INewAdInfo;
+  formNewStrategy: INewStrategyForm;
 }
 
 const initialState: SessionState = {
@@ -47,6 +58,7 @@ const initialState: SessionState = {
   auth: { isAuthenticated: false, token: null },
   formNewGroup: {} as INewGroupForm,
   formNewAd: {} as INewAdInfo,
+  formNewStrategy: {} as INewStrategyForm,
 };
 
 export const sessionSlice = createSlice({
@@ -129,6 +141,49 @@ export const sessionSlice = createSlice({
     clearNewAdForm: (state) => {
       state.formNewAd = {} as INewAdInfo;
     },
+    setNewStrategyTitle: (state, action: PayloadAction<string>) => {
+      state.formNewStrategy = {
+        ...state.formNewStrategy,
+        title: action.payload,
+      };
+    },
+    setNewStrategyAds: (state, action: PayloadAction<number[]>) => {
+      state.formNewStrategy = {
+        ...state.formNewStrategy,
+        ads: action.payload,
+      };
+    },
+    setNewStrategyGroups: (state, action: PayloadAction<number[]>) => {
+      state.formNewStrategy = {
+        ...state.formNewStrategy,
+        groups: action.payload,
+      };
+    },
+    setNewStrategyDates: (
+      state,
+      action: PayloadAction<{ start: string; end: string }>
+    ) => {
+      state.formNewStrategy = {
+        ...state.formNewStrategy,
+        startDate: action.payload.start,
+        endDate: action.payload.end,
+      };
+    },
+    setNewStrategyPeriodicity: (state, action: PayloadAction<string>) => {
+      state.formNewStrategy = {
+        ...state.formNewStrategy,
+        periodicity: action.payload,
+      };
+    },
+    setNewStrategySchedule: (state, action: PayloadAction<string>) => {
+      state.formNewStrategy = {
+        ...state.formNewStrategy,
+        schedule: action.payload,
+      };
+    },
+    clearNewStrategyForm: (state) => {
+      state.formNewStrategy = {} as INewStrategyForm;
+    },
   },
 });
 
@@ -141,6 +196,7 @@ export const {
   setNewFormGroupInfo,
   setNewGroupContacts,
   clearNewGroupForm,
+  clearNewAdForm,
   setNewAdSize,
   setNewAdContent,
   setNewAdImg,

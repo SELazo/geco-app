@@ -21,12 +21,13 @@ import { yupResolver } from '@hookform/resolvers/yup';
 import { ROUTES } from '../../../constants/routes';
 import { GSubmitButton } from '../../../components/GSubmitButton';
 import { GDropdownHelp } from '../../../components/GDropdownHelp';
-import { useSelector } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 import { AdsService } from '../../../services/external/adsService';
 import { RootState } from '../../../redux/gecoStore';
 import { IAd } from '../../../interfaces/dtos/external/IAds';
 import { useEffect, useState } from 'react';
 import { PacmanLoader } from 'react-spinners';
+import { clearNewAdForm } from '../../../redux/sessionSlice';
 
 type AdData = {
   titleHelper: string;
@@ -47,16 +48,11 @@ export const GAdIdentificationPage = () => {
 
   const navigate = useNavigate();
   const location = useLocation();
+  const dispatch = useDispatch();
   const base64Ad = location && location.state;
 
   useEffect(() => {
-    if (
-      !formNewAd.descriptionHelper &&
-      !formNewAd.titleHelper &&
-      !formNewAd.template &&
-      !formNewAd.pallette &&
-      !base64Ad
-    ) {
+    if (!formNewAd.template || !formNewAd.pallette || !base64Ad) {
       navigate(`${ROUTES.AD.ROOT}`);
     }
   }, []);
@@ -91,6 +87,7 @@ export const GAdIdentificationPage = () => {
       `${ROUTES.AD.ROOT}${ROUTES.AD.CREATE.ROOT}${ROUTES.AD.CREATE.SUCCESS}`
     );
     reset();
+    dispatch(clearNewAdForm());
   };
 
   const {

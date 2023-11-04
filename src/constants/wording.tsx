@@ -178,6 +178,12 @@ export const CreateAdIdentificationTitle: IHeadSectionTitle = {
     'Ingresa la información para identificar tu publicidad. Esto te ayudará a encontrarla para asociarla a tus estrategias de comunicación!',
 };
 
+export const CreateStrategyInformationTitle: IHeadSectionTitle = {
+  title: 'Crear estrategia de comunicación',
+  subtitle:
+    '¡Empecemos! ¿Que oportunidad tiene tu nueva estrategia de comunicación?',
+};
+
 /**
  * Feedbacks
  */
@@ -320,6 +326,12 @@ export const AdIdentificationHelp: IDropdownHelpProps = {
   body: 'Mensaje principal: "Tortas 2 x 1 para día de la madre"',
   body2:
     'Texto que se adjuntará a tu mensaje difundido: "Las tortas incluidas en la promo son la Torta Selva Negra (Torta de chocolate ) y la de Frutillas (Torta de crama con frutillas. Mensajeanos por cualquier duda que tengas!"',
+};
+
+export const StrategyInformationHelp: IDropdownHelpProps = {
+  title: 'Ejemplos:',
+  body: '"Día de la madre 2023"',
+  body2: '"Promociones de fin de semana"',
 };
 
 export const AdOwnImgHelp: IDropdownHelpProps = {
