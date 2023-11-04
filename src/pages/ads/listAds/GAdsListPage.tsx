@@ -75,9 +75,7 @@ export const GAdsListPage = () => {
               width="50px"
               height="50px"
               colorBackground={GWhite}
-              onClickAction={NavigationService.handleNavigation(
-                ROUTES.CONTACTS.OPTIONS
-              )}
+              onClickAction={NavigationService.handleNavigation(ROUTES.AD.ROOT)}
             />
           </div>
           <div className="geco-contacts-list-head-nav-bar-right">

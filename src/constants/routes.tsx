@@ -36,6 +36,7 @@ export const ROUTES = {
     },
     LIST: {
       ROOT: 'list',
+      DELETE: '/delete-ads',
     },
     ERROR: '/error',
   },
