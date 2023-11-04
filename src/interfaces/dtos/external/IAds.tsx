@@ -60,10 +60,27 @@ export interface IPostAdResponse {
   };
 }
 
+export interface IGetAdResponse {
+  id: number;
+  description: string;
+  title: string;
+  size: string;
+  create_date: string;
+  deleted_date: string | null;
+  account_id: number;
+  ad_template: {
+    id: number;
+    color_text: string;
+    type: string;
+    disposition_pattern: string;
+  };
+}
+
 export interface IAdsService {
   getAdColours(): Promise<ApiResponse<IAdColours[]>>;
   getAdSizes(): Promise<ApiResponse<IAdSizes[]>>;
   getAdPatterns(type: string): Promise<ApiResponse<IAdPattern[]>>;
   postGenerateAd(newAdInfo: IAd): Promise<ApiResponse<IPostAdResponse>>;
   sendBase64InChunks(base64: string, id: number): Promise<boolean>;
+  getAds(): Promise<ApiResponse<IGetAdResponse[]>>;
 }

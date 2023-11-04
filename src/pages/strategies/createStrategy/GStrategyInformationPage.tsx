@@ -47,7 +47,7 @@ export const GStrategyInformationPage = () => {
     //request
     setLoading(false);
     navigate(
-      `${ROUTES.AD.ROOT}${ROUTES.AD.CREATE.ROOT}${ROUTES.AD.CREATE.SUCCESS}`
+      `${ROUTES.STRATEGY.ROOT}${ROUTES.STRATEGY.CREATE.ROOT}${ROUTES.STRATEGY.CREATE.ADS}`
     );
     reset();
   };

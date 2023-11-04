@@ -89,6 +89,9 @@ export const Months: string[] = [
 export const NewGroupContactsEmpty: string =
   'No tienes contactos aún. Agregalos antes de continuar haciendo click aquí. 👍';
 
+export const NewStrategyAdsEmpty: string =
+  'No tienes publicidades aún. Pero no te preocupes, crea tus propias publicidades antes de continuar haciendo click aquí. 👍';
+
 /**
  * Types Img
  */
@@ -182,6 +185,12 @@ export const CreateStrategyInformationTitle: IHeadSectionTitle = {
   title: 'Crear estrategia de comunicación',
   subtitle:
     '¡Empecemos! ¿Que oportunidad tiene tu nueva estrategia de comunicación?',
+};
+
+export const CreateStrategyAdsTitle: IHeadSectionTitle = {
+  title: 'Crear estrategia de comunicación',
+  subtitle:
+    'Agrega las publicidades que quieras difundir durante la duración de esta estrategia de comunicación! 📡',
 };
 
 /**

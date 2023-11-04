@@ -43,6 +43,8 @@ import { GStrategyPage } from '../pages/strategies/GStrategiesPage';
 import { GStrategyErrorPage } from '../pages/strategies/GStrategyErrorPage ';
 import { GStrategyInformationPage } from '../pages/strategies/createStrategy/GStrategyInformationPage';
 import { GStrategiesListPage } from '../pages/strategies/listStrategies/GStrategiesListPage';
+import { GStrategyAdsPage } from '../pages/strategies/createStrategy/GStrategyAdsPage';
+import { GStrategyGroupsPage } from '../pages/strategies/createStrategy/GStrategyGroupsPage';
 
 export const GPrivateRoutes = () => {
   return (
@@ -124,6 +126,8 @@ export const GPrivateRoutes = () => {
         path="/strategy/create/information"
         element={<GStrategyInformationPage />}
       />
+      <Route path="/strategy/create/ads" element={<GStrategyAdsPage />} />
+      <Route path="/strategy/create/groups" element={<GStrategyGroupsPage />} />
       <Route path="/strategy/list" element={<GStrategiesListPage />} />
       <Route path="/statistics" element={<GHomePage />} />
       <Route path="/*" element={<Navigate to="/home" />} />

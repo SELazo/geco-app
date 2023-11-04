@@ -45,6 +45,11 @@ export const ROUTES = {
     CREATE: {
       ROOT: '/create',
       INFORMATION: '/information',
+      ADS: '/ads',
+      GROUPS: '/groups',
+      PERIOD: '/period',
+      PERIODICITY: '/periodicity',
+      RESUME: '/resume',
       SUCCESS: '/success',
     },
     LIST: {

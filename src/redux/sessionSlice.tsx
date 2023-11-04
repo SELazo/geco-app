@@ -107,7 +107,7 @@ export const sessionSlice = createSlice({
       state.formNewAd = {
         ...state.formNewAd,
         titleAd: action.payload.title ? action.payload.title : undefined,
-        textAd: action.payload.text ? action.payload.title : undefined,
+        textAd: action.payload.text ? action.payload.text : undefined,
       };
     },
     setNewAdImg: (state, action: PayloadAction<File | string>) => {
@@ -169,16 +169,14 @@ export const sessionSlice = createSlice({
         endDate: action.payload.end,
       };
     },
-    setNewStrategyPeriodicity: (state, action: PayloadAction<string>) => {
+    setNewStrategyConfig: (
+      state,
+      action: PayloadAction<{ periodicity: string; schedule: string }>
+    ) => {
       state.formNewStrategy = {
         ...state.formNewStrategy,
-        periodicity: action.payload,
-      };
-    },
-    setNewStrategySchedule: (state, action: PayloadAction<string>) => {
-      state.formNewStrategy = {
-        ...state.formNewStrategy,
-        schedule: action.payload,
+        periodicity: action.payload.periodicity,
+        schedule: action.payload.schedule,
       };
     },
     clearNewStrategyForm: (state) => {
@@ -203,4 +201,9 @@ export const {
   setNewAdPallette,
   setNewAdTemplate,
   setNewAdIdentification,
+  setNewStrategyAds,
+  setNewStrategyGroups,
+  setNewStrategyDates,
+  setNewStrategyConfig,
+  clearNewStrategyForm,
 } = sessionSlice.actions;

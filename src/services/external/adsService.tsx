@@ -6,6 +6,7 @@ import {
   IAdPattern,
   IAdSizes,
   IAdsService,
+  IGetAdResponse,
   INewAd,
   IPostAdResponse,
 } from '../../interfaces/dtos/external/IAds';
@@ -206,7 +207,7 @@ export const AdsService: IAdsService = {
               titleDisposition: 'center',
               textDispostion: 'center',
               titleSize: '100px',
-              textSize: '25px',
+              textSize: '30px',
               titleWidth: '710px',
               textWidth: '572px',
             },
@@ -219,7 +220,7 @@ export const AdsService: IAdsService = {
               titleDisposition: 'top-left',
               textDispostion: 'bottom-right',
               titleSize: '100px',
-              textSize: '25px',
+              textSize: '30px',
               titleWidth: '710px',
               textWidth: '572px',
             },
@@ -232,7 +233,7 @@ export const AdsService: IAdsService = {
               titleDisposition: 'top-center',
               textDispostion: 'bottom-center',
               titleSize: '100px',
-              textSize: '25px',
+              textSize: '30px',
               titleWidth: '710px',
               textWidth: '572px',
             },
@@ -245,7 +246,7 @@ export const AdsService: IAdsService = {
               titleDisposition: 'bottom-right',
               textDispostion: 'bottom-right',
               titleSize: '100px',
-              textSize: '25px',
+              textSize: '30px',
               titleWidth: '710px',
               textWidth: '572px',
             },
@@ -260,9 +261,7 @@ export const AdsService: IAdsService = {
   },
   postGenerateAd: async (ad: IAd): Promise<ApiResponse<IPostAdResponse>> =>
     new Promise(async (resolve, reject) => {
-      console.log(ad);
       const token = SessionService.getToken();
-      console.log(token);
       const response = await fetch(`${environment.adsServiceURI}/ads`, {
         method: 'POST',
         headers: {
@@ -285,6 +284,36 @@ export const AdsService: IAdsService = {
 
       const data: IPostAdResponse = await response.json();
       const successResponse: ApiResponse<IPostAdResponse> = {
+        success: true,
+        data: data,
+      };
+      resolve(successResponse);
+      return;
+    }),
+  getAds: async (): Promise<ApiResponse<IGetAdResponse[]>> =>
+    new Promise(async (resolve, reject) => {
+      const token = SessionService.getToken();
+      const response = await fetch(`${environment.adsServiceURI}/ads`, {
+        method: 'GET',
+        headers: {
+          'Content-Type': 'application/json',
+          Authorization: `${token}`,
+        },
+      });
+
+      if (!response.ok) {
+        const err: IError = await response.json();
+        console.error(err);
+        const errorResponse: ApiResponse<IGetAdResponse[]> = {
+          success: false,
+          error: err,
+        };
+        reject(errorResponse);
+        return;
+      }
+
+      const data: IGetAdResponse[] = await response.json();
+      const successResponse: ApiResponse<IGetAdResponse[]> = {
         success: true,
         data: data,
       };
