@@ -57,9 +57,9 @@ export const GAdIdentificationPage = () => {
       !formNewAd.pallette &&
       !base64Ad
     ) {
-      navigate(`${ROUTES.AD.ROOT}${ROUTES.AD.CREATE.ROOT}`);
+      navigate(`${ROUTES.AD.ROOT}`);
     }
-  }, [formNewAd]);
+  }, []);
 
   const onSubmit = async (data: AdData) => {
     const adInfo = { ...formNewAd };

@@ -13,22 +13,27 @@ import { GAdIcon, GIconButtonBack } from '../../../constants/buttons';
 import { CreateAdColoursTitle } from '../../../constants/wording';
 import { GWhite } from '../../../constants/palette';
 import { GLogoLetter } from '../../../components/GLogoLetter';
-import { useDispatch } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 import { useEffect, useState } from 'react';
 import { ApiResponse } from '../../../interfaces/dtos/external/IResponse';
 import { IAdColours } from '../../../interfaces/dtos/external/IAds';
 import { AdsService } from '../../../services/external/adsService';
 import { ROUTES } from '../../../constants/routes';
+import { RootState } from '../../../redux/gecoStore';
 
 const { getAdColours } = AdsService;
 
 export const GAdColoursPage = () => {
   const [colours, setColours] = useState<IAdColours[]>([]);
+  const formNewAd = useSelector((state: RootState) => state.auth.formNewAd);
 
   const dispatch = useDispatch();
   const navigate = useNavigate();
 
   useEffect(() => {
+    if (!formNewAd.template) {
+      navigate(`${ROUTES.AD.ROOT}`);
+    }
     const fetchColours = async () => {
       try {
         const response = await getAdColours();

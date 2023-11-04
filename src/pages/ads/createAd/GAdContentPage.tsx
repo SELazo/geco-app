@@ -22,7 +22,9 @@ import { yupResolver } from '@hookform/resolvers/yup';
 import { ROUTES } from '../../../constants/routes';
 import { GSubmitButton } from '../../../components/GSubmitButton';
 import { GDropdownHelp } from '../../../components/GDropdownHelp';
-import { useDispatch } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
+import { useEffect } from 'react';
+import { RootState } from '../../../redux/gecoStore';
 
 type AdData = {
   titleAd?: string;
@@ -30,6 +32,8 @@ type AdData = {
 };
 
 export const GAdContentPage = () => {
+  const formNewAd = useSelector((state: RootState) => state.auth.formNewAd);
+
   const validationSchema = Yup.object().shape({
     titleAd: Yup.string(),
     textAd: Yup.string().max(
@@ -40,6 +44,12 @@ export const GAdContentPage = () => {
 
   const navigate = useNavigate();
   const dispatch = useDispatch();
+
+  useEffect(() => {
+    if (!formNewAd.template && !formNewAd.pallette) {
+      navigate(`${ROUTES.AD.ROOT}`);
+    }
+  }, [formNewAd]);
 
   const onSubmit = async (data: AdData) => {
     dispatch(setNewAdContent({ title: data.titleAd, text: data.textAd }));

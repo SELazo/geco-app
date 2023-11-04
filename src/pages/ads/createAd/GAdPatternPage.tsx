@@ -32,6 +32,9 @@ export const GAdPatternPage = () => {
   const size: string = location && location.state;
 
   useEffect(() => {
+    if (!size) {
+      navigate(`${ROUTES.AD.ROOT}`);
+    }
     const fetchPatterns = async () => {
       try {
         const response = await getAdPatterns(size);

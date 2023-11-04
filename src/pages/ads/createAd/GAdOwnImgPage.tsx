@@ -17,11 +17,13 @@ import { GSubmitButton } from '../../../components/GSubmitButton';
 import { AdOwnImgHelp, CreateAdOwnImgTitle } from '../../../constants/wording';
 import { GBlack, GWhite, GYellow } from '../../../constants/palette';
 import { GLogoLetter } from '../../../components/GLogoLetter';
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import { GIcon } from '../../../components/GIcon';
 import { GDropdownHelp } from '../../../components/GDropdownHelp';
 import { GErrorPopup } from '../../../components/GErrorPopup';
 import { ROUTES } from '../../../constants/routes';
+import { useSelector } from 'react-redux';
+import { RootState } from '../../../redux/gecoStore';
 
 type OwnImgForm = {
   file: File;
@@ -33,8 +35,15 @@ export const GAdOwnImgPage = () => {
   const [selectedFile, setSelectedFile] = useState(null);
   const [fileError, setFileError] = useState('');
   const [requestError, setRequestError] = useState(false);
+  const formNewAd = useSelector((state: RootState) => state.auth.formNewAd);
 
   const navigate = useNavigate();
+
+  useEffect(() => {
+    if (!formNewAd.template && !formNewAd.pallette) {
+      navigate(`${ROUTES.AD.ROOT}`);
+    }
+  }, []);
 
   const handleSubmit = async (event: any) => {
     event.preventDefault();

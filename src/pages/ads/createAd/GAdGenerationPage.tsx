@@ -31,6 +31,9 @@ export const GAdGenerationPage = () => {
   const img = location && location.state;
 
   useEffect(() => {
+    if (!formNewAd.template && !formNewAd.pallette) {
+      navigate(`${ROUTES.AD.ROOT}`);
+    }
     const generateAd = async () => {
       try {
         setLoading(true);
