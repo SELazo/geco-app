@@ -25,8 +25,8 @@ import { GDropdownHelp } from '../../../components/GDropdownHelp';
 import { useDispatch } from 'react-redux';
 
 type AdData = {
-  titleAd: string;
-  textAd: string;
+  titleAd?: string;
+  textAd?: string;
 };
 
 export const GAdContentPage = () => {
@@ -55,8 +55,8 @@ export const GAdContentPage = () => {
     reset,
     formState: { errors },
   } = useForm<{
-    titleAd: string;
-    textAd: string;
+    titleAd?: string;
+    textAd?: string;
   }>({
     resolver: yupResolver(validationSchema),
   });

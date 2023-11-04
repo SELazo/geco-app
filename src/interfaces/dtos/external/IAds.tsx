@@ -26,25 +26,44 @@ export interface IAdColours {
 }
 
 export interface INewAd {
-  titleAd: string;
-  textAd: string;
+  titleAd?: string;
+  textAd?: string;
   img: File | string;
   template: IAdPattern;
   pallette: string;
 }
 
+export interface IAd {
+  title: string;
+  description: string;
+  size: string;
+  image?: string;
+  ad_template: {
+    color_text: string;
+    type: string;
+    disposition_pattern: string;
+  };
+}
+
+export interface IPostAdResponse {
+  id: number;
+  description: string;
+  title: string;
+  size: string;
+  create_date: string;
+  deleted_date: string | null;
+  ad_template: {
+    id: number;
+    color_text: string;
+    type: string;
+    disposition_pattern: string;
+  };
+}
+
 export interface IAdsService {
   getAdColours(): Promise<ApiResponse<IAdColours[]>>;
-}
-
-export interface IAdsService {
   getAdSizes(): Promise<ApiResponse<IAdSizes[]>>;
-}
-
-export interface IAdsService {
   getAdPatterns(type: string): Promise<ApiResponse<IAdPattern[]>>;
-}
-
-export interface IAdsService {
-  getGeneratedAd(newAdInfo: INewAd): Promise<ApiResponse<string>>;
+  postGenerateAd(newAdInfo: IAd): Promise<ApiResponse<IPostAdResponse>>;
+  sendBase64InChunks(base64: string, id: number): Promise<boolean>;
 }

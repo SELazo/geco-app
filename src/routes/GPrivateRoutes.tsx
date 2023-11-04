@@ -35,6 +35,10 @@ import { GAdOwnImgPage } from '../pages/ads/createAd/GAdOwnImgPage';
 import { GAdPatternPage } from '../pages/ads/createAd/GAdPatternPage';
 import { GAdColoursPage } from '../pages/ads/createAd/GAdColoursPage';
 import { GAdGenerationPage } from '../pages/ads/createAd/GAdGenerationPage';
+import { GAdIdentificationPage } from '../pages/ads/createAd/GAdIdentificationPage';
+import { GAdSuccessPage } from '../pages/ads/createAd/GAdSuccessPage';
+import { GAdsListPage } from '../pages/ads/listAds/GAdsListPage';
+import { GAdErrorPage } from '../pages/ads/createAd/GAdErrorPage ';
 
 export const GPrivateRoutes = () => {
   return (
@@ -103,6 +107,13 @@ export const GPrivateRoutes = () => {
       <Route path="/ad/create/pattern" element={<GAdPatternPage />} />
       <Route path="/ad/create/pallette" element={<GAdColoursPage />} />
       <Route path="/ad/create/ad_generation" element={<GAdGenerationPage />} />
+      <Route
+        path="/ad/create/information"
+        element={<GAdIdentificationPage />}
+      />
+      <Route path="/ad/create/success" element={<GAdSuccessPage />} />
+      <Route path="/ad/list" element={<GAdsListPage />} />
+      <Route path="/ad/error" element={<GAdErrorPage />} />
       <Route path="/strategy" element={<GHomePage />} />
       <Route path="/statistics" element={<GHomePage />} />
       <Route path="/*" element={<Navigate to="/home" />} />

@@ -19,8 +19,8 @@ export interface INewGoupInfo {
 
 export interface INewAdInfo {
   size: string;
-  titleAd: string;
-  textAd: string;
+  titleAd: string | undefined;
+  textAd: string | undefined;
   descriptionAd: string;
   img: File | string;
   template: IAdPattern;
@@ -90,12 +90,12 @@ export const sessionSlice = createSlice({
     },
     setNewAdContent: (
       state,
-      action: PayloadAction<{ title: string; text: string }>
+      action: PayloadAction<{ title?: string; text?: string }>
     ) => {
       state.formNewAd = {
         ...state.formNewAd,
-        titleAd: action.payload.title,
-        textAd: action.payload.text,
+        titleAd: action.payload.title ? action.payload.title : undefined,
+        textAd: action.payload.text ? action.payload.title : undefined,
       };
     },
     setNewAdImg: (state, action: PayloadAction<File | string>) => {
@@ -104,16 +104,14 @@ export const sessionSlice = createSlice({
         img: action.payload,
       };
     },
-    setNewAdTitleHelper: (state, action: PayloadAction<string>) => {
+    setNewAdIdentification: (
+      state,
+      action: PayloadAction<{ titleHelper: string; descriptionHelper: string }>
+    ) => {
       state.formNewAd = {
         ...state.formNewAd,
-        titleHelper: action.payload,
-      };
-    },
-    setNewAdDescriptionHelper: (state, action: PayloadAction<string>) => {
-      state.formNewAd = {
-        ...state.formNewAd,
-        descriptionHelper: action.payload,
+        titleHelper: action.payload.titleHelper,
+        descriptionHelper: action.payload.descriptionHelper,
       };
     },
     setNewAdTemplate: (state, action: PayloadAction<IAdPattern>) => {
@@ -148,6 +146,5 @@ export const {
   setNewAdImg,
   setNewAdPallette,
   setNewAdTemplate,
-  setNewAdTitleHelper,
-  setNewAdDescriptionHelper,
+  setNewAdIdentification,
 } = sessionSlice.actions;

@@ -172,6 +172,12 @@ export const CreateAdContentTitle: IHeadSectionTitle = {
   subtitle: 'Añade texto a tu publicidad.',
 };
 
+export const CreateAdIdentificationTitle: IHeadSectionTitle = {
+  title: 'Crear publicidad',
+  subtitle:
+    'Ingresa la información para identificar tu publicidad. Esto te ayudará a encontrarla para asociarla a tus estrategias de comunicación!',
+};
+
 /**
  * Feedbacks
  */
@@ -225,6 +231,21 @@ export const SignUpSuccessfull: IFeedback = {
   buttonPath: '/login',
 };
 
+export const PostAdSuccessfull: IFeedback = {
+  title: 'Publicidad creada con éxito!',
+  subtitle:
+    'Podrás visualizala en Publicidades o elegirla para una de tus Estrategias de comunicación!',
+  buttonLabel: 'Okey',
+  buttonPath: '/ad',
+};
+
+export const AdError: IFeedback = {
+  title: 'Hubo un error!',
+  subtitle: 'Sucedio algo inesperado 😥. Intenta de nuevo más tarde.',
+  buttonLabel: 'Okey',
+  buttonPath: '/ad',
+};
+
 /**
  * Menu Options
  */
@@ -273,6 +294,13 @@ export const AdContentHelp: IDropdownHelpProps = {
   title: 'Ejemplo:',
   body: 'Mensaje principal: "El perfecto regalo para tu mamá"',
   body2: 'Texto adicional: "2 x 1 en las tortas más ricas!"',
+};
+
+export const AdIdentificationHelp: IDropdownHelpProps = {
+  title: 'Ejemplo:',
+  body: 'Mensaje principal: "Tortas 2 x 1 para día de la madre"',
+  body2:
+    'Texto que se adjuntará a tu mensaje difundido: "Las tortas incluidas en la promo son la Torta Selva Negra (Torta de chocolate ) y la de Frutillas (Torta de crama con frutillas. Mensajeanos por cualquier duda que tengas!"',
 };
 
 export const AdOwnImgHelp: IDropdownHelpProps = {

@@ -35,7 +35,6 @@ const MAX_FILE_SIZE_BYTES = 5 * 1024 * 1024;
 
 export const GAdOwnImgPage = () => {
   const [selectedFile, setSelectedFile] = useState(null);
-  const [generatedAd, setGeneratedAd] = useState('');
   const [fileError, setFileError] = useState('');
   const [requestError, setRequestError] = useState(false);
 
@@ -54,23 +53,6 @@ export const GAdOwnImgPage = () => {
       `${ROUTES.AD.ROOT}${ROUTES.AD.CREATE.ROOT}${ROUTES.AD.CREATE.AD_GENERATION}`,
       { state: selectedFile }
     );
-  };
-
-  const fileToBase64 = (file: File): Promise<string> => {
-    return new Promise((resolve, reject) => {
-      const reader = new FileReader();
-
-      reader.onload = () => {
-        const base64String = reader.result as string;
-        resolve(base64String.split(',')[1] || '');
-      };
-
-      reader.onerror = (error) => {
-        console.log(error);
-      };
-
-      reader.readAsDataURL(file);
-    });
   };
 
   const handleFileChange = (event: any) => {
@@ -120,59 +102,46 @@ export const GAdOwnImgPage = () => {
           <GDropdownHelp title={AdOwnImgHelp.title} body={AdOwnImgHelp.body} />
         </div>
       </div>
-      {generatedAd !== '' ? (
-        <>
-          <div className="geco-ad-header-title">
-            <GHeadSectionTitle
-              title={CreateAdGeneratedTitle.title}
-              subtitle={CreateAdGeneratedTitle.subtitle}
-            />
-          </div>
-          <div>Loading</div>{' '}
-        </>
-      ) : (
-        <>
-          <div className="geco-ad-header-title">
-            <GHeadSectionTitle
-              title={CreateAdOwnImgTitle.title}
-              subtitle={CreateAdOwnImgTitle.subtitle}
-            />
-          </div>
-          <form className="geco-form" onSubmit={handleSubmit}>
-            <div className="input-group">
-              <label htmlFor="file-upload" className="custom-file-upload">
-                Adjuntar archivo
-                <GIcon icon-type="chevron-right" color={GWhite} />
-              </label>
-              <input
-                id="file-upload"
-                name="file"
-                type="file"
-                accept=".jpg,.jpeg,.png"
-                onDragOver={(e) => e.preventDefault}
-                onDrop={(e) => e.preventDefault}
-                multiple={false}
-                onChange={handleFileChange}
-                className="input-box-excel form-control"
-              />
-            </div>
-            {selectedFile && (
-              <div className="file-preview">
-                <img
-                  src={URL.createObjectURL(selectedFile)}
-                  alt="Vista previa"
-                />
-              </div>
-            )}
 
-            <GSubmitButton
-              label="Importar"
-              colorBackground={GYellow}
-              colorFont={GBlack}
+      <>
+        <div className="geco-ad-header-title">
+          <GHeadSectionTitle
+            title={CreateAdOwnImgTitle.title}
+            subtitle={CreateAdOwnImgTitle.subtitle}
+          />
+        </div>
+        <form className="geco-form" onSubmit={handleSubmit}>
+          <div className="input-group">
+            <label htmlFor="file-upload" className="custom-file-upload">
+              Adjuntar archivo
+              <GIcon icon-type="chevron-right" color={GWhite} />
+            </label>
+            <input
+              id="file-upload"
+              name="file"
+              type="file"
+              accept=".jpg,.jpeg,.png"
+              onDragOver={(e) => e.preventDefault}
+              onDrop={(e) => e.preventDefault}
+              multiple={false}
+              onChange={handleFileChange}
+              className="input-box-excel form-control"
             />
-          </form>
-        </>
-      )}
+          </div>
+          {selectedFile && (
+            <div className="file-preview">
+              <img src={URL.createObjectURL(selectedFile)} alt="Vista previa" />
+            </div>
+          )}
+
+          <GSubmitButton
+            label="Importar"
+            colorBackground={GYellow}
+            colorFont={GBlack}
+          />
+        </form>
+      </>
+
       {requestError && (
         <GErrorPopup
           icon={GDeletetIcon}

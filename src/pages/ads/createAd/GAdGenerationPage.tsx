@@ -1,6 +1,5 @@
 import { Link, useLocation, useNavigate } from 'react-router-dom';
 import { NavigationService } from '../../../services/internal/navigationService';
-import { setNewAdTemplate } from '../../../redux/sessionSlice';
 
 import '../../../styles/ginputBox.css';
 import '../../../styles/gform.css';
@@ -10,29 +9,65 @@ import { GHeadSectionTitle } from '../../../components/GHeadSectionTitle';
 import { GCircularButton } from '../../../components/GCircularButton';
 import { GAdIcon, GIconButtonBack } from '../../../constants/buttons';
 
+import { CreateAdGeneratedTitle } from '../../../constants/wording';
 import {
-  CreateAdGeneratedTitle,
-  CreateAdPatternTitle,
-} from '../../../constants/wording';
-import { GWhite } from '../../../constants/palette';
+  GBlack,
+  GBlue,
+  GGreen,
+  GRed,
+  GWhite,
+  GYellow,
+} from '../../../constants/palette';
 import { GLogoLetter } from '../../../components/GLogoLetter';
-import { useDispatch, useSelector } from 'react-redux';
-import { useEffect, useState } from 'react';
-import { ApiResponse } from '../../../interfaces/dtos/external/IResponse';
-import { IAdPattern } from '../../../interfaces/dtos/external/IAds';
+import { useSelector } from 'react-redux';
 import { AdsService } from '../../../services/external/adsService';
 import { ROUTES } from '../../../constants/routes';
 import { RootState } from '../../../redux/gecoStore';
-import { GCustomAd } from '../../../components/GCustomAd';
-
-const { getGeneratedAd } = AdsService;
+import { AdGenerationService } from '../../../services/internal/adGenerationService';
+import { useEffect, useState } from 'react';
+import { GSubmitButton } from '../../../components/GSubmitButton';
+import { PacmanLoader } from 'react-spinners';
 
 export const GAdGenerationPage = () => {
+  const [generatedAd, setGeneratedAd] = useState<string>();
+  const [loading, setLoading] = useState(false);
   const formNewAd = useSelector((state: RootState) => state.auth.formNewAd);
 
   const location = useLocation();
+  const navigate = useNavigate();
 
-  const img: string = location && location.state;
+  const img = location && location.state;
+
+  useEffect(() => {
+    const generateAd = async () => {
+      try {
+        setLoading(true);
+        const base64Ad = await AdGenerationService.generation({
+          titleAd: formNewAd.titleAd ?? undefined,
+          textAd: formNewAd.textAd ?? undefined,
+          pallette: formNewAd.pallette,
+          template: formNewAd.template,
+          img: img,
+        });
+
+        setGeneratedAd(base64Ad);
+      } catch (error) {
+        navigate(`${ROUTES.AD.ROOT}${ROUTES.AD.CREATE.ROOT}`);
+      } finally {
+        setLoading(false);
+      }
+    };
+    generateAd();
+  }, [formNewAd, img]);
+
+  const handleSubmit = async (event: any) => {
+    event.preventDefault();
+
+    navigate(
+      `${ROUTES.AD.ROOT}${ROUTES.AD.CREATE.ROOT}${ROUTES.AD.CREATE.INFORMATION}`,
+      { state: generatedAd }
+    );
+  };
 
   return (
     <div className="geco-create-ad-main">
@@ -65,14 +100,35 @@ export const GAdGenerationPage = () => {
           title={CreateAdGeneratedTitle.title}
           subtitle={CreateAdGeneratedTitle.subtitle}
         />
-        <div></div>
-        <GCustomAd
-          titleAd={formNewAd.titleAd}
-          textAd={formNewAd.textAd}
-          pallette={formNewAd.pallette}
-          template={formNewAd.template}
-          img={img}
-        ></GCustomAd>
+        <form className="geco-form" onSubmit={handleSubmit}>
+          {loading ? (
+            <div
+              style={{
+                textAlign: 'start',
+                marginTop: '25vh',
+              }}
+            >
+              <PacmanLoader color={GYellow} />
+            </div>
+          ) : (
+            <>
+              {generatedAd && (
+                <>
+                  <img
+                    style={{ width: '100%' }}
+                    src={generatedAd}
+                    alt="Imagen desde Base64"
+                  />
+                  <GSubmitButton
+                    label="Siguiente"
+                    colorBackground={GYellow}
+                    colorFont={GBlack}
+                  />
+                </>
+              )}
+            </>
+          )}
+        </form>
       </div>
     </div>
   );

@@ -31,7 +31,13 @@ export const ROUTES = {
       PATTERN: '/pattern',
       PALLETTE: '/pallette',
       AD_GENERATION: '/ad_generation',
+      INFORMATION: '/information',
+      SUCCESS: '/success',
     },
+    LIST: {
+      ROOT: 'list',
+    },
+    ERROR: '/error',
   },
   SIGN_UP: {
     SIGN_UP_SUCCESSFUL: '/sign-up/sign-up-successful',

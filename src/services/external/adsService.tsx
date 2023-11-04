@@ -1,11 +1,13 @@
 import { environment } from '../../environment/environment';
 import { ApiResponse } from '../../interfaces/dtos/external/IResponse';
 import {
+  IAd,
   IAdColours,
   IAdPattern,
   IAdSizes,
   IAdsService,
   INewAd,
+  IPostAdResponse,
 } from '../../interfaces/dtos/external/IAds';
 import {
   GBlack,
@@ -17,16 +19,34 @@ import {
   GWhite,
   GYellow,
 } from '../../constants/palette';
+import { SessionService } from '../internal/sessionService';
+import { IError } from '../../interfaces/dtos/external/IError';
 
 export const AdsService: IAdsService = {
-  getGeneratedAd: async (newAdInfo: INewAd): Promise<ApiResponse<string>> => {
-    let img: string = '';
-    const response = {
-      success: true,
-      data: img,
-    };
-    return response;
+  sendBase64InChunks: async (base64: string, id: number): Promise<boolean> => {
+    const token = SessionService.getToken();
+    const chunks = splitBase64IntoChunks(base64, 100000);
+    const url = `${environment.adsServiceURI}/ads/${id}/upload-image-chunk`;
+
+    for (let i = 0; i < chunks.length; i++) {
+      try {
+        const chunk = chunks[i];
+        await fetch(url, {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+            Authorization: `${token}`,
+          },
+          body: JSON.stringify({ chunk }),
+        });
+      } catch (error) {
+        console.error(`Error en el envío del fragmento ${i + 1}:`, error);
+        return false;
+      }
+    }
+    return true;
   },
+
   getAdColours: async (): Promise<ApiResponse<IAdColours[]>> => {
     const response = {
       success: true,
@@ -66,10 +86,10 @@ export const AdsService: IAdsService = {
               width: '1920px',
               height: '1080px',
               padding: '108px',
-              titleDisposition: 'bottom-right',
-              textDispostion: 'bottom-right',
-              titleSize: '72px',
-              textSize: '25px',
+              titleDisposition: 'center',
+              textDispostion: 'center',
+              titleSize: '125px',
+              textSize: '35px',
               titleWidth: '1050px',
               textWidth: '1050px',
             },
@@ -81,8 +101,8 @@ export const AdsService: IAdsService = {
               padding: '108px',
               titleDisposition: 'top-left',
               textDispostion: 'bottom-right',
-              titleSize: '72px',
-              textSize: '25px',
+              titleSize: '125px',
+              textSize: '35px',
               titleWidth: '1050px',
               textWidth: '1050px',
             },
@@ -94,8 +114,8 @@ export const AdsService: IAdsService = {
               padding: '108px',
               titleDisposition: 'top-center',
               textDispostion: 'bottom-center',
-              titleSize: '72px',
-              textSize: '25px',
+              titleSize: '125px',
+              textSize: '35px',
               titleWidth: '1050px',
               textWidth: '1050px',
             },
@@ -105,10 +125,10 @@ export const AdsService: IAdsService = {
               width: '1920px',
               height: '1080px',
               padding: '108px',
-              titleDisposition: 'center',
-              textDispostion: 'center',
-              titleSize: '72px',
-              textSize: '25px',
+              titleDisposition: 'bottom-right',
+              textDispostion: 'bottom-right',
+              titleSize: '125px',
+              textSize: '35px',
               titleWidth: '1050px',
               textWidth: '1050px',
             },
@@ -123,12 +143,12 @@ export const AdsService: IAdsService = {
               id: 'rv1',
               url: '/src/assets/images/rv_01.svg',
               width: '1080px',
-              height: '1080px',
+              height: '1920px',
               padding: '108px',
               titleDisposition: 'center',
               textDispostion: 'center',
-              titleSize: '72px',
-              textSize: '25px',
+              titleSize: '125px',
+              textSize: '35px',
               titleWidth: '800px',
               textWidth: '665px',
             },
@@ -136,12 +156,12 @@ export const AdsService: IAdsService = {
               id: 'rv2',
               url: '/src/assets/images/rv_02.svg',
               width: '1080px',
-              height: '1080px',
+              height: '1920px',
               padding: '108px',
               titleDisposition: 'top-left',
               textDispostion: 'bottom-right',
-              titleSize: '72px',
-              textSize: '25px',
+              titleSize: '125px',
+              textSize: '35px',
               titleWidth: '800px',
               textWidth: '665px',
             },
@@ -149,12 +169,12 @@ export const AdsService: IAdsService = {
               id: 'rv3',
               url: '/src/assets/images/rv_03.svg',
               width: '1080px',
-              height: '1080px',
+              height: '1920px',
               padding: '108px',
               titleDisposition: 'top-center',
               textDispostion: 'bottom-center',
-              titleSize: '72px',
-              textSize: '25px',
+              titleSize: '125px',
+              textSize: '35px',
               titleWidth: '800px',
               textWidth: '665px',
             },
@@ -162,12 +182,12 @@ export const AdsService: IAdsService = {
               id: 'rv4',
               url: '/src/assets/images/rv_04.svg',
               width: '1080px',
-              height: '1080px',
+              height: '1920px',
               padding: '108px',
               titleDisposition: 'bottom-right',
               textDispostion: 'bottom-right',
-              titleSize: '72px',
-              textSize: '25px',
+              titleSize: '125px',
+              textSize: '35px',
               titleWidth: '800px',
               textWidth: '665px',
             },
@@ -181,12 +201,12 @@ export const AdsService: IAdsService = {
               id: 's1',
               url: '/src/assets/images/s_01.svg',
               width: '1080px',
-              height: '1920px',
+              height: '1080px',
               padding: '108px',
               titleDisposition: 'center',
               textDispostion: 'center',
-              titleSize: '62px',
-              textSize: '18px',
+              titleSize: '100px',
+              textSize: '25px',
               titleWidth: '710px',
               textWidth: '572px',
             },
@@ -194,12 +214,12 @@ export const AdsService: IAdsService = {
               id: 's2',
               url: '/src/assets/images/s_02.svg',
               width: '1080px',
-              height: '1920px',
+              height: '1080px',
               padding: '108px',
               titleDisposition: 'top-left',
               textDispostion: 'bottom-right',
-              titleSize: '62px',
-              textSize: '18px',
+              titleSize: '100px',
+              textSize: '25px',
               titleWidth: '710px',
               textWidth: '572px',
             },
@@ -207,12 +227,12 @@ export const AdsService: IAdsService = {
               id: 's3',
               url: '/src/assets/images/s_03.svg',
               width: '1080px',
-              height: '1920px',
+              height: '1080px',
               padding: '108px',
               titleDisposition: 'top-center',
               textDispostion: 'bottom-center',
-              titleSize: '62px',
-              textSize: '18px',
+              titleSize: '100px',
+              textSize: '25px',
               titleWidth: '710px',
               textWidth: '572px',
             },
@@ -220,12 +240,12 @@ export const AdsService: IAdsService = {
               id: 's4',
               url: '/src/assets/images/s_04.svg',
               width: '1080px',
-              height: '1920px',
+              height: '1080px',
               padding: '108px',
               titleDisposition: 'bottom-right',
               textDispostion: 'bottom-right',
-              titleSize: '62px',
-              textSize: '18px',
+              titleSize: '100px',
+              textSize: '25px',
               titleWidth: '710px',
               textWidth: '572px',
             },
@@ -238,4 +258,62 @@ export const AdsService: IAdsService = {
         };
     }
   },
+  postGenerateAd: async (ad: IAd): Promise<ApiResponse<IPostAdResponse>> =>
+    new Promise(async (resolve, reject) => {
+      console.log(ad);
+      const token = SessionService.getToken();
+      console.log(token);
+      const response = await fetch(`${environment.adsServiceURI}/ads`, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+          Authorization: `${token}`,
+        },
+        body: JSON.stringify({ ...ad }),
+      });
+
+      if (!response.ok) {
+        const err: IError = await response.json();
+        console.error(err);
+        const errorResponse: ApiResponse<IPostAdResponse> = {
+          success: false,
+          error: err,
+        };
+        reject(errorResponse);
+        return;
+      }
+
+      const data: IPostAdResponse = await response.json();
+      const successResponse: ApiResponse<IPostAdResponse> = {
+        success: true,
+        data: data,
+      };
+      resolve(successResponse);
+      return;
+    }),
 };
+
+function splitBase64IntoChunks(
+  base64String: string,
+  chunkSize: number
+): string[] {
+  const totalChunks = Math.ceil(base64String.length / chunkSize);
+  const chunks = [];
+
+  for (let i = 0; i < totalChunks; i++) {
+    const start = i * chunkSize;
+    const end = start + chunkSize;
+    const chunk = base64String.slice(start, end);
+    chunks.push(chunk);
+  }
+
+  return chunks;
+}
+
+async function compressImage(base64: string): Promise<string> {
+  const options = {
+    maxSizeMB: 1, // Tamaño máximo deseado en megabytes
+    maxWidthOrHeight: 800, // Ancho o alto máximo deseado
+  };
+  return '';
+}

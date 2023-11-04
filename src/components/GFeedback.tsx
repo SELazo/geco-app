@@ -12,6 +12,7 @@ interface IGFeedbackProps {
   title: string;
   subtitle: string;
   colorFont: string;
+  colorBackgroundCircularBtn?: string;
   //icon
   icon: IButtonIcon;
   iconWidth: string;
@@ -33,7 +34,7 @@ export const GFeedback: FC<IGFeedbackProps> = (props: IGFeedbackProps) => {
           size="3em"
           width="100px"
           height="100px"
-          colorBackground={GGreen}
+          colorBackground={props.colorBackgroundCircularBtn ?? GGreen}
         />
         <GHeadCenterTitle title={props.title} color={props.colorFont} />
         <p>{props.subtitle}</p>
