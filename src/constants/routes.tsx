@@ -53,7 +53,7 @@ export const ROUTES = {
       SUCCESS: '/success',
     },
     LIST: {
-      ROOT: 'list',
+      ROOT: '/list',
     },
     ERROR: '/error',
   },
