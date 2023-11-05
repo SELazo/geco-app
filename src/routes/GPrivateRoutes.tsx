@@ -45,6 +45,7 @@ import { GStrategyInformationPage } from '../pages/strategies/createStrategy/GSt
 import { GStrategiesListPage } from '../pages/strategies/listStrategies/GStrategiesListPage';
 import { GStrategyAdsPage } from '../pages/strategies/createStrategy/GStrategyAdsPage';
 import { GStrategyGroupsPage } from '../pages/strategies/createStrategy/GStrategyGroupsPage';
+import { GStrategyPeriodPage } from '../pages/strategies/createStrategy/GStrategyPeriodPage';
 
 export const GPrivateRoutes = () => {
   return (
@@ -128,6 +129,7 @@ export const GPrivateRoutes = () => {
       />
       <Route path="/strategy/create/ads" element={<GStrategyAdsPage />} />
       <Route path="/strategy/create/groups" element={<GStrategyGroupsPage />} />
+      <Route path="/strategy/create/period" element={<GStrategyPeriodPage />} />
       <Route path="/strategy/list" element={<GStrategiesListPage />} />
       <Route path="/statistics" element={<GHomePage />} />
       <Route path="/*" element={<Navigate to="/home" />} />

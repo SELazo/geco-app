@@ -92,6 +92,9 @@ export const NewGroupContactsEmpty: string =
 export const NewStrategyAdsEmpty: string =
   'No tienes publicidades aún. Pero no te preocupes, crea tus propias publicidades antes de continuar haciendo click aquí. 👍';
 
+export const NewStrategyGroupsEmpty: string =
+  'No tienes grupos de contactos aún. Pero no te preocupes, crea agrupa tus contactos para poder enviar tus comunicaciones antes de continuar haciendo click aquí. 👍';
+
 /**
  * Types Img
  */
@@ -341,6 +344,11 @@ export const StrategyInformationHelp: IDropdownHelpProps = {
   title: 'Ejemplos:',
   body: '"Día de la madre 2023"',
   body2: '"Promociones de fin de semana"',
+};
+
+export const StrategyDatesHelp: IDropdownHelpProps = {
+  title: 'Sobre fechas:',
+  body: 'Podrás elegir un día o un rango de fechas. Si eliges un rango, se enviarán las comunicaciones de la estrategia todos los días del rango de fechas.',
 };
 
 export const AdOwnImgHelp: IDropdownHelpProps = {

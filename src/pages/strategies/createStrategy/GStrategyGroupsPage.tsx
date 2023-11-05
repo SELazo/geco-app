@@ -6,6 +6,7 @@ import {
   INewGoupInfo,
   INewStrategyForm,
   setNewStrategyAds,
+  setNewStrategyGroups,
 } from '../../../redux/sessionSlice';
 
 import '../../../styles/ginputBox.css';
@@ -25,6 +26,7 @@ import {
   AddNewGroupStep2SectionTitle,
   CreateStrategyAdsTitle,
   NewStrategyAdsEmpty,
+  NewStrategyGroupsEmpty,
 } from '../../../constants/wording';
 import { GBlack, GWhite, GYellow } from '../../../constants/palette';
 import { NavigationService } from '../../../services/internal/navigationService';
@@ -35,13 +37,15 @@ import { ROUTES } from '../../../constants/routes';
 import { AdsService } from '../../../services/external/adsService';
 import { IGetAdResponse } from '../../../interfaces/dtos/external/IAds';
 import { DateService } from '../../../services/internal/dateService';
+import { GroupsService } from '../../../services/external/groupsService';
+import { IGroup } from '../../../interfaces/dtos/external/IGroups';
 
-const { getAds } = AdsService;
+const { getGroups } = GroupsService;
 const { getDateString } = DateService;
 
 export const GStrategyGroupsPage = () => {
   const [selectedNumbers, setSelectedNumbers] = useState<number[]>([]);
-  const [adsList, setAdsList] = useState<IGetAdResponse[]>([]);
+  const [groupsList, setGroupsList] = useState<IGroup[]>([]);
   const [error, setError] = useState({ show: false, message: '' });
   const navigate = useNavigate();
   const dispatch = useDispatch();
@@ -51,16 +55,16 @@ export const GStrategyGroupsPage = () => {
   );
 
   useEffect(() => {
-    const fetchAds = async () => {
+    const fetchGroups = async () => {
       try {
-        const adsData = await getAds();
-        setAdsList(adsData.data ?? []);
+        const groupsData = await getGroups();
+        setGroupsList(groupsData ?? []);
       } catch (error) {
         console.log(error); // TODO: Mostrar error en pantalla
       }
     };
 
-    fetchAds();
+    fetchGroups();
   }, []);
 
   const validationSchema = Yup.object().shape({});
@@ -70,12 +74,12 @@ export const GStrategyGroupsPage = () => {
       setError({
         show: true,
         message:
-          'Selecciona al menos un publicidad para que sea parte de tu estrategia de comunicación.',
+          'Selecciona al menos un grupo para que reciba las comunicaciones de tu estrategia.',
       });
     } else {
-      dispatch(setNewStrategyAds(selectedNumbers));
+      dispatch(setNewStrategyGroups(selectedNumbers));
       navigate(
-        `${ROUTES.STRATEGY.ROOT}${ROUTES.STRATEGY.CREATE.ROOT}${ROUTES.STRATEGY.CREATE.GROUPS}`
+        `${ROUTES.STRATEGY.ROOT}${ROUTES.STRATEGY.CREATE.ROOT}${ROUTES.STRATEGY.CREATE.PERIOD}`
       );
       reset();
     }
@@ -134,23 +138,23 @@ export const GStrategyGroupsPage = () => {
       </div>
 
       <form className="geco-form " onSubmit={handleSubmit(onSubmit)}>
-        {adsList.length !== 0 ? (
+        {groupsList.length !== 0 ? (
           <div className="geco-input-group">
-            {adsList.map((ad) => (
-              <div key={ad.id}>
+            {groupsList.map((group) => (
+              <div key={group.id}>
                 <div className="geco-strategy-item-card">
                   <div className="geco-strategy-item-body">
-                    <h1 className="geco-strategy-item-name">{ad.title}</h1>
+                    <h1 className="geco-strategy-item-name">{group.name}</h1>
                     <div className="geco-strategy-item-info">
-                      <p>{getDateString(ad.create_date)}</p>
+                      <p>{group.description}</p>
                     </div>
                   </div>
                   <input
                     className="geco-checkbox"
                     type="checkbox"
-                    id={`strategy-${ad.id}`}
-                    checked={selectedNumbers.includes(ad.id)}
-                    onChange={(e) => handleAdsSelection(e, ad.id)}
+                    id={`strategy-${group.id}`}
+                    checked={selectedNumbers.includes(group.id)}
+                    onChange={(e) => handleAdsSelection(e, group.id)}
                   />
                 </div>
               </div>
@@ -159,9 +163,9 @@ export const GStrategyGroupsPage = () => {
           </div>
         ) : (
           <div className="geco-strategy-empty">
-            <Link to={'/ad'}>
+            <Link to={'/contacts/groups'}>
               <div className="geco-strategys-empty">
-                <p>{NewStrategyAdsEmpty}</p>
+                <p>{NewStrategyGroupsEmpty}</p>
               </div>
             </Link>
           </div>
@@ -172,7 +176,7 @@ export const GStrategyGroupsPage = () => {
           colorBackground={GYellow}
           colorFont={GBlack}
           icon={GChevronRightBlackIcon}
-          disabled={adsList.length === 0}
+          disabled={groupsList.length === 0}
         />
       </form>
     </div>
