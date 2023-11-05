@@ -6,6 +6,7 @@ export interface IContactResponse {
     name: string;
     email: string;
     phone: number;
+    account_id: number;
 }
 
 export interface IContactsService {

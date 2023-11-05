@@ -5,6 +5,7 @@ export interface IGroup {
     id: number;
     name: string;
     description: string;
+    account_id: number;
 }
 
 export interface IGroupResponse {
@@ -13,7 +14,7 @@ export interface IGroupResponse {
 }
 
 export interface IGroupService {
-    newGroup(name: string, description: string, directories: number[]): Promise<IBasicSuccessResponse>;
+    newGroup(name: string, description: string, contacts: number[]): Promise<IBasicSuccessResponse>;
     addContactToGroup(groupId: number, contactId: number): Promise<IBasicSuccessResponse>;
     deleteContactFromGroup(groupId: number, contactId: number): Promise<IBasicSuccessResponse>;
     editGroup(groupId: number): Promise<IBasicSuccessResponse>;

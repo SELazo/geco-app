@@ -12,7 +12,7 @@ export const GroupsService: IGroupService = {
   newGroup: async (
     name: string,
     description: string,
-    directories: number[]
+    contacts: number[]
   ): Promise<IBasicSuccessResponse> => {
     const token = localStorage.getItem('token');
 
@@ -22,7 +22,7 @@ export const GroupsService: IGroupService = {
         'Content-Type': 'application/json',
         Authorization: `${token}`,
       },
-      body: JSON.stringify({ name, description, directories }),
+      body: JSON.stringify({ name, description, contacts }),
     });
 
     const data: IBasicSuccessResponse = await response.json();
