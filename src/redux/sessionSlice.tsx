@@ -201,6 +201,7 @@ export const {
   setNewAdPallette,
   setNewAdTemplate,
   setNewAdIdentification,
+  setNewStrategyTitle,
   setNewStrategyAds,
   setNewStrategyGroups,
   setNewStrategyDates,

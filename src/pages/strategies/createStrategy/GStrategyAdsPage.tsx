@@ -120,10 +120,7 @@ export const GStrategyAdsPage = () => {
           width="50px"
           height="50px"
           colorBackground={GWhite}
-          onClickAction={NavigationService.handleNavigationWithState(
-            `${ROUTES.GROUPS.ROOT}${ROUTES.GROUPS.ADD_GROUP_INFO}`,
-            { from: `${ROUTES.GROUPS.ROOT}${ROUTES.GROUPS.ADD_GROUP_MEMBERS}` }
-          )}
+          onClickAction={NavigationService.goBack}
         />
       </div>
       <div className="geco-strategy-header-title">

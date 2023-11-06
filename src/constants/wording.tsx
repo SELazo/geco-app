@@ -150,44 +150,44 @@ export const AddContactsExcelSectionTitle: IHeadSectionTitle = {
 
 export const CreateAdSectionTitle: IHeadSectionTitle = {
   title: 'Crear publicidad',
-  subtitle: '¿Qué tamaño tiene que tener tu publicidad?',
+  subtitle: '¿Qué tamaño tiene que tener tu publicidad? 📏',
 };
 
 export const CreateAdPatternTitle: IHeadSectionTitle = {
   title: 'Crear publicidad',
-  subtitle: '¿Qué disposición debe tener el texto en tu publicidad?',
+  subtitle: '¿Qué disposición debe tener el texto en tu publicidad? ✍',
 };
 
 export const CreateAdColoursTitle: IHeadSectionTitle = {
   title: 'Crear publicidad',
-  subtitle: '¿Qué colores quieres que tenga el texto de tu publicidad?',
+  subtitle: '¿Qué colores quieres que tenga el texto de tu publicidad? 🎨',
 };
 
 export const CreateAdOwnImgTitle: IHeadSectionTitle = {
   title: 'Crear publicidad',
-  subtitle: '¿Qué imagen vas a utilizar para tu publicidad?',
+  subtitle: '¿Qué imagen vas a utilizar para tu publicidad? 🖼',
 };
 
 export const CreateAdGeneratedTitle: IHeadSectionTitle = {
   title: 'Crear publicidad',
-  subtitle: '¡Aquí esta tu publicidad!',
+  subtitle: '¡Aquí esta tu publicidad! 🎊',
 };
 
 export const CreateAdContentTitle: IHeadSectionTitle = {
   title: 'Crear publicidad',
-  subtitle: 'Añade texto a tu publicidad.',
+  subtitle: 'Añade texto a tu publicidad. ✍',
 };
 
 export const CreateAdIdentificationTitle: IHeadSectionTitle = {
   title: 'Crear publicidad',
   subtitle:
-    'Ingresa la información para identificar tu publicidad. Esto te ayudará a encontrarla para asociarla a tus estrategias de comunicación!',
+    'Ingresa la información para identificar tu publicidad. Esto te ayudará a encontrarla para asociarla a tus estrategias de comunicación! 📄',
 };
 
 export const CreateStrategyInformationTitle: IHeadSectionTitle = {
   title: 'Crear estrategia de comunicación',
   subtitle:
-    '¡Empecemos! ¿Que oportunidad tiene tu nueva estrategia de comunicación?',
+    '¡Empecemos! ¿Que oportunidad tiene tu nueva estrategia de comunicación? 💡',
 };
 
 export const CreateStrategyAdsTitle: IHeadSectionTitle = {
@@ -195,6 +195,39 @@ export const CreateStrategyAdsTitle: IHeadSectionTitle = {
   subtitle:
     'Agrega las publicidades que quieras difundir durante la duración de esta estrategia de comunicación! 📡',
 };
+
+export const CreateStrategyGroupsTitle: IHeadSectionTitle = {
+  title: 'Crear estrategia de comunicación',
+  subtitle:
+    'Agrega los grupos a los cuales esta dirigida esta estrategia de comunicación! 👥',
+};
+
+export const CreateStrategyResumeTitle: IHeadSectionTitle = {
+  title: 'Crear estrategia de comunicación',
+  subtitle: 'Estamos listos! 🚀',
+};
+
+export const CreateStrategyPeriodTitle: IHeadSectionTitle = {
+  title: 'Crear estrategia de comunicación',
+  subtitle:
+    'Elige las fechas en las cuales tu estrategia de comunicación será difundida. Recuerda que puedes elegir un día o un rango de días. 📅',
+};
+
+export const CreateStrategyPeriodicityTitle: IHeadSectionTitle = {
+  title: 'Crear estrategia de comunicación',
+  subtitle:
+    '¿Cómo preferís que se realice la difución de tu estrategia de comunicación? ⏰',
+};
+
+/**
+ * Subtitles for sections
+ */
+
+export const PeriodicitySubtitleSectionForm =
+  '¿Cuántas veces quieres que se envie tu estrategia durante el periodo de tiempo que elegiste?';
+
+export const ScheduleSubtitleSectionForm =
+  '¿En qué momento del día preferís que se hagan las difusiones?';
 
 /**
  * Feedbacks
@@ -255,6 +288,13 @@ export const PostAdSuccessfull: IFeedback = {
     'Podrás visualizala en Publicidades o elegirla para una de tus Estrategias de comunicación!',
   buttonLabel: 'Okey',
   buttonPath: '/ad',
+};
+
+export const PostStrategySuccessfull: IFeedback = {
+  title: 'Estrategia de comunicación creada! 🙌✨',
+  subtitle: 'Podrás visualizala en Estrategias de comunicación!',
+  buttonLabel: 'Okey',
+  buttonPath: '/strategy',
 };
 
 export const AdError: IFeedback = {
@@ -349,6 +389,11 @@ export const StrategyInformationHelp: IDropdownHelpProps = {
 export const StrategyDatesHelp: IDropdownHelpProps = {
   title: 'Sobre fechas:',
   body: 'Podrás elegir un día o un rango de fechas. Si eliges un rango, se enviarán las comunicaciones de la estrategia todos los días del rango de fechas.',
+};
+
+export const StrategyConfigHelp: IDropdownHelpProps = {
+  title: 'Recuerda que:',
+  body: 'Podrás elegir más opciones accediendo a la modalidad premium! 🤯',
 };
 
 export const AdOwnImgHelp: IDropdownHelpProps = {
