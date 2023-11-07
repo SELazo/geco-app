@@ -46,6 +46,16 @@ import { GStrategiesListPage } from '../pages/strategies/listStrategies/GStrateg
 import { GStrategyAdsPage } from '../pages/strategies/createStrategy/GStrategyAdsPage';
 import { GStrategyGroupsPage } from '../pages/strategies/createStrategy/GStrategyGroupsPage';
 import { GStrategyPeriodPage } from '../pages/strategies/createStrategy/GStrategyPeriodPage';
+import { GStrategyPeriodicityPage } from '../pages/strategies/createStrategy/GStrategyPeriodicityPage';
+import { GStrategyResumePage } from '../pages/strategies/createStrategy/GStrategyResumePage';
+import { GStrategySuccessPage } from '../pages/strategies/createStrategy/GStrategySuccessPage';
+import { GStrategyEditInformationPage } from '../pages/strategies/editStrategy/GStrategyEditInformationPage';
+import { GStrategyEditAdsPage } from '../pages/strategies/editStrategy/GStrategyEditAdsPage';
+import { GStrategyEditGroupsPage } from '../pages/strategies/editStrategy/GStrategyEditGroupsPage';
+import { GStrategyEditPeriodPage } from '../pages/strategies/editStrategy/GStrategyEditPeriodPage';
+import { GStrategyEditPeriodicityPage } from '../pages/strategies/editStrategy/GStrategyEditPeriodicityPage';
+import { GStrategyEditResumePage } from '../pages/strategies/editStrategy/GStrategyEditResumePage';
+import { GStrategyEditSuccessPage } from '../pages/strategies/editStrategy/GStrategyEditSuccessPage';
 
 export const GPrivateRoutes = () => {
   return (
@@ -130,6 +140,40 @@ export const GPrivateRoutes = () => {
       <Route path="/strategy/create/ads" element={<GStrategyAdsPage />} />
       <Route path="/strategy/create/groups" element={<GStrategyGroupsPage />} />
       <Route path="/strategy/create/period" element={<GStrategyPeriodPage />} />
+      <Route
+        path="/strategy/create/periodicity"
+        element={<GStrategyPeriodicityPage />}
+      />
+      <Route path="/strategy/create/resume" element={<GStrategyResumePage />} />
+      <Route
+        path="/strategy/create/success"
+        element={<GStrategySuccessPage />}
+      />
+      <Route
+        path="/strategy/edit/information"
+        element={<GStrategyEditInformationPage />}
+      />
+      <Route path="/strategy/edit/ads" element={<GStrategyEditAdsPage />} />
+      <Route
+        path="/strategy/edit/groups"
+        element={<GStrategyEditGroupsPage />}
+      />
+      <Route
+        path="/strategy/edit/period"
+        element={<GStrategyEditPeriodPage />}
+      />
+      <Route
+        path="/strategy/edit/periodicity"
+        element={<GStrategyEditPeriodicityPage />}
+      />
+      <Route
+        path="/strategy/edit/resume"
+        element={<GStrategyEditResumePage />}
+      />
+      <Route
+        path="/strategy/edit/success"
+        element={<GStrategyEditSuccessPage />}
+      />
       <Route path="/strategy/list" element={<GStrategiesListPage />} />
       <Route path="/statistics" element={<GHomePage />} />
       <Route path="/*" element={<Navigate to="/home" />} />

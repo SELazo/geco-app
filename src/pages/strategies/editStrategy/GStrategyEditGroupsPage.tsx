@@ -1,11 +1,9 @@
 import { useForm } from 'react-hook-form';
 import { yupResolver } from '@hookform/resolvers/yup';
 import * as Yup from 'yup';
-import { useDispatch, useSelector } from 'react-redux';
 import {
   INewGoupInfo,
-  INewStrategyForm,
-  setNewStrategyAds,
+  setNewStrategyGroups,
 } from '../../../redux/sessionSlice';
 
 import '../../../styles/ginputBox.css';
@@ -22,45 +20,48 @@ import {
 
 import { GSubmitButton } from '../../../components/GSubmitButton';
 import {
-  AddNewGroupStep2SectionTitle,
-  CreateStrategyAdsTitle,
-  NewStrategyAdsEmpty,
+  EditStrategyGroupsTitle,
+  NewStrategyGroupsEmpty,
 } from '../../../constants/wording';
 import { GBlack, GWhite, GYellow } from '../../../constants/palette';
 import { NavigationService } from '../../../services/internal/navigationService';
-import { Link, useNavigate } from 'react-router-dom';
+import { Link, useLocation, useNavigate } from 'react-router-dom';
 import { GLogoLetter } from '../../../components/GLogoLetter';
 import { useEffect, useState } from 'react';
 import { ROUTES } from '../../../constants/routes';
-import { AdsService } from '../../../services/external/adsService';
-import { IGetAdResponse } from '../../../interfaces/dtos/external/IAds';
-import { DateService } from '../../../services/internal/dateService';
+import { GroupsService } from '../../../services/external/groupsService';
+import { IGroup } from '../../../interfaces/dtos/external/IGroups';
+import { IStrategyProps } from '../../../components/GStrategyCard';
 
-const { getAds } = AdsService;
-const { getDateString } = DateService;
+const { getGroups } = GroupsService;
 
-export const GStrategyAdsPage = () => {
+export const GStrategyEditGroupsPage = () => {
   const [selectedNumbers, setSelectedNumbers] = useState<number[]>([]);
-  const [adsList, setAdsList] = useState<IGetAdResponse[]>([]);
+  const [groupsList, setGroupsList] = useState<IGroup[]>([]);
   const [error, setError] = useState({ show: false, message: '' });
   const navigate = useNavigate();
-  const dispatch = useDispatch();
+  const location = useLocation();
 
-  const strategyForm: INewStrategyForm = useSelector(
-    (state: any) => state.auth.formNewStrategy
-  );
+  let strategyToEdit: IStrategyProps = location && location.state;
 
   useEffect(() => {
-    const fetchAds = async () => {
+    if (!strategyToEdit) {
+      navigate(`${ROUTES.STRATEGY.ROOT}`);
+    }
+  });
+
+  useEffect(() => {
+    const fetchGroups = async () => {
       try {
-        const adsData = await getAds();
-        setAdsList(adsData.data ?? []);
+        const groupsData = await getGroups();
+        setGroupsList(groupsData ?? []);
+        setSelectedNumbers(strategyToEdit.groups);
       } catch (error) {
         console.log(error); // TODO: Mostrar error en pantalla
       }
     };
 
-    fetchAds();
+    fetchGroups();
   }, []);
 
   const validationSchema = Yup.object().shape({});
@@ -70,12 +71,13 @@ export const GStrategyAdsPage = () => {
       setError({
         show: true,
         message:
-          'Selecciona al menos un publicidad para que sea parte de tu estrategia de comunicación.',
+          'Selecciona al menos un grupo para que reciba las comunicaciones de tu estrategia.',
       });
     } else {
-      dispatch(setNewStrategyAds(selectedNumbers));
+      strategyToEdit = { ...strategyToEdit, groups: selectedNumbers };
       navigate(
-        `${ROUTES.STRATEGY.ROOT}${ROUTES.STRATEGY.CREATE.ROOT}${ROUTES.STRATEGY.CREATE.GROUPS}`
+        `${ROUTES.STRATEGY.ROOT}${ROUTES.STRATEGY.EDIT.ROOT}${ROUTES.STRATEGY.EDIT.PERIOD}`,
+        { state: strategyToEdit }
       );
       reset();
     }
@@ -125,29 +127,29 @@ export const GStrategyAdsPage = () => {
       </div>
       <div className="geco-strategy-header-title">
         <GHeadSectionTitle
-          title={CreateStrategyAdsTitle.title}
-          subtitle={CreateStrategyAdsTitle.subtitle}
+          title={EditStrategyGroupsTitle.title}
+          subtitle={EditStrategyGroupsTitle.subtitle}
         />
       </div>
 
       <form className="geco-form " onSubmit={handleSubmit(onSubmit)}>
-        {adsList.length !== 0 ? (
+        {groupsList.length !== 0 ? (
           <div className="geco-input-group">
-            {adsList.map((ad) => (
-              <div key={ad.id}>
+            {groupsList.map((group) => (
+              <div key={group.id}>
                 <div className="geco-strategy-item-card">
                   <div className="geco-strategy-item-body">
-                    <h1 className="geco-strategy-item-name">{ad.title}</h1>
+                    <h1 className="geco-strategy-item-name">{group.name}</h1>
                     <div className="geco-strategy-item-info">
-                      <p>{getDateString(ad.create_date)}</p>
+                      <p>{group.description}</p>
                     </div>
                   </div>
                   <input
                     className="geco-checkbox"
                     type="checkbox"
-                    id={`strategy-${ad.id}`}
-                    checked={selectedNumbers.includes(ad.id)}
-                    onChange={(e) => handleAdsSelection(e, ad.id)}
+                    id={`strategy-${group.id}`}
+                    checked={selectedNumbers.includes(group.id)}
+                    onChange={(e) => handleAdsSelection(e, group.id)}
                   />
                 </div>
               </div>
@@ -156,9 +158,9 @@ export const GStrategyAdsPage = () => {
           </div>
         ) : (
           <div className="geco-strategy-empty">
-            <Link to={'/ad'}>
+            <Link to={'/contacts/groups'}>
               <div className="geco-strategys-empty">
-                <p>{NewStrategyAdsEmpty}</p>
+                <p>{NewStrategyGroupsEmpty}</p>
               </div>
             </Link>
           </div>
@@ -169,7 +171,7 @@ export const GStrategyAdsPage = () => {
           colorBackground={GYellow}
           colorFont={GBlack}
           icon={GChevronRightBlackIcon}
-          disabled={adsList.length === 0}
+          disabled={groupsList.length === 0}
         />
       </form>
     </div>

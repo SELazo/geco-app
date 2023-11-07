@@ -1,12 +1,7 @@
 import { useForm } from 'react-hook-form';
 import { yupResolver } from '@hookform/resolvers/yup';
 import * as Yup from 'yup';
-import { useDispatch, useSelector } from 'react-redux';
-import {
-  INewGoupInfo,
-  INewStrategyForm,
-  setNewStrategyAds,
-} from '../../../redux/sessionSlice';
+import { INewGoupInfo } from '../../../redux/sessionSlice';
 
 import '../../../styles/ginputBox.css';
 import '../../../styles/gform.css';
@@ -22,39 +17,44 @@ import {
 
 import { GSubmitButton } from '../../../components/GSubmitButton';
 import {
-  AddNewGroupStep2SectionTitle,
   CreateStrategyAdsTitle,
   NewStrategyAdsEmpty,
 } from '../../../constants/wording';
 import { GBlack, GWhite, GYellow } from '../../../constants/palette';
 import { NavigationService } from '../../../services/internal/navigationService';
-import { Link, useNavigate } from 'react-router-dom';
+import { Link, useLocation, useNavigate } from 'react-router-dom';
 import { GLogoLetter } from '../../../components/GLogoLetter';
 import { useEffect, useState } from 'react';
 import { ROUTES } from '../../../constants/routes';
 import { AdsService } from '../../../services/external/adsService';
 import { IGetAdResponse } from '../../../interfaces/dtos/external/IAds';
 import { DateService } from '../../../services/internal/dateService';
+import { IStrategyProps } from '../../../components/GStrategyCard';
 
 const { getAds } = AdsService;
 const { getDateString } = DateService;
 
-export const GStrategyAdsPage = () => {
+export const GStrategyEditAdsPage = () => {
   const [selectedNumbers, setSelectedNumbers] = useState<number[]>([]);
   const [adsList, setAdsList] = useState<IGetAdResponse[]>([]);
   const [error, setError] = useState({ show: false, message: '' });
   const navigate = useNavigate();
-  const dispatch = useDispatch();
+  const location = useLocation();
 
-  const strategyForm: INewStrategyForm = useSelector(
-    (state: any) => state.auth.formNewStrategy
-  );
+  let strategyToEdit: IStrategyProps = location && location.state;
+
+  useEffect(() => {
+    if (!strategyToEdit) {
+      navigate(`${ROUTES.STRATEGY.ROOT}`);
+    }
+  });
 
   useEffect(() => {
     const fetchAds = async () => {
       try {
         const adsData = await getAds();
         setAdsList(adsData.data ?? []);
+        setSelectedNumbers(strategyToEdit.ads);
       } catch (error) {
         console.log(error); // TODO: Mostrar error en pantalla
       }
@@ -73,9 +73,10 @@ export const GStrategyAdsPage = () => {
           'Selecciona al menos un publicidad para que sea parte de tu estrategia de comunicación.',
       });
     } else {
-      dispatch(setNewStrategyAds(selectedNumbers));
+      strategyToEdit = { ...strategyToEdit, ads: selectedNumbers };
       navigate(
-        `${ROUTES.STRATEGY.ROOT}${ROUTES.STRATEGY.CREATE.ROOT}${ROUTES.STRATEGY.CREATE.GROUPS}`
+        `${ROUTES.STRATEGY.ROOT}${ROUTES.STRATEGY.EDIT.ROOT}${ROUTES.STRATEGY.EDIT.GROUPS}`,
+        { state: strategyToEdit }
       );
       reset();
     }

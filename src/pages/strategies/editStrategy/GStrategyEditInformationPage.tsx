@@ -9,16 +9,11 @@ import '../../../styles/gcreatead.css';
 
 import { GHeadSectionTitle } from '../../../components/GHeadSectionTitle';
 import { GCircularButton } from '../../../components/GCircularButton';
-import {
-  GAdIcon,
-  GIconButtonBack,
-  GStrategyIcon,
-} from '../../../constants/buttons';
+import { GIconButtonBack, GStrategyIcon } from '../../../constants/buttons';
 
 import {
-  AdIdentificationHelp,
-  CreateAdIdentificationTitle,
   CreateStrategyInformationTitle,
+  EditStrategyInformationTitle,
   StrategyInformationHelp,
 } from '../../../constants/wording';
 import { GBlack, GWhite, GYellow } from '../../../constants/palette';
@@ -27,15 +22,12 @@ import { yupResolver } from '@hookform/resolvers/yup';
 import { ROUTES } from '../../../constants/routes';
 import { GSubmitButton } from '../../../components/GSubmitButton';
 import { GDropdownHelp } from '../../../components/GDropdownHelp';
-import { useState } from 'react';
-import { PacmanLoader } from 'react-spinners';
 import { useDispatch } from 'react-redux';
-import {
-  setNewAdIdentification,
-  setNewStrategyTitle,
-} from '../../../redux/sessionSlice';
+import { setNewStrategyTitle } from '../../../redux/sessionSlice';
+import { IStrategyProps } from '../../../components/GStrategyCard';
+import { useEffect } from 'react';
 
-export const GStrategyInformationPage = () => {
+export const GStrategyEditInformationPage = () => {
   const validationSchema = Yup.object().shape({
     title: Yup.string()
       .required(
@@ -45,15 +37,14 @@ export const GStrategyInformationPage = () => {
   });
 
   const navigate = useNavigate();
-  const dispatch = useDispatch();
+  const location = useLocation();
+  let strategyToEdit: IStrategyProps = location && location.state;
 
-  const onSubmit = async (data: any) => {
-    dispatch(setNewStrategyTitle(data.title));
-    navigate(
-      `${ROUTES.STRATEGY.ROOT}${ROUTES.STRATEGY.CREATE.ROOT}${ROUTES.STRATEGY.CREATE.ADS}`
-    );
-    reset();
-  };
+  useEffect(() => {
+    if (!strategyToEdit) {
+      navigate(`${ROUTES.STRATEGY.ROOT}`);
+    }
+  });
 
   const {
     register,
@@ -65,6 +56,15 @@ export const GStrategyInformationPage = () => {
   }>({
     resolver: yupResolver(validationSchema),
   });
+
+  const onSubmit = async (data: any) => {
+    strategyToEdit = { ...strategyToEdit, name: data.title };
+    navigate(
+      `${ROUTES.STRATEGY.ROOT}${ROUTES.STRATEGY.EDIT.ROOT}${ROUTES.STRATEGY.EDIT.ADS}`,
+      { state: strategyToEdit }
+    );
+    reset();
+  };
 
   return (
     <div className="geco-create-ad-main">
@@ -104,8 +104,8 @@ export const GStrategyInformationPage = () => {
       </div>
       <div className="geco-create-ad-header-title">
         <GHeadSectionTitle
-          title={CreateStrategyInformationTitle.title}
-          subtitle={CreateStrategyInformationTitle.subtitle}
+          title={EditStrategyInformationTitle.title}
+          subtitle={EditStrategyInformationTitle.subtitle}
         />
       </div>
       <form className="geco-form" onSubmit={handleSubmit(onSubmit)}>
@@ -114,6 +114,7 @@ export const GStrategyInformationPage = () => {
             type="text"
             {...register('title')}
             placeholder="Nombre de la estrategia"
+            defaultValue={strategyToEdit ? strategyToEdit.name : ''}
             className={`input-box form-control ${
               errors.title ? 'is-invalid' : ''
             }`}

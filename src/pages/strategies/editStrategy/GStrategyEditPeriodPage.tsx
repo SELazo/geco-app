@@ -1,4 +1,4 @@
-import { Link, useNavigate } from 'react-router-dom';
+import { Link, useLocation, useNavigate } from 'react-router-dom';
 import { NavigationService } from '../../../services/internal/navigationService';
 
 import { DateRange, DayPicker } from 'react-day-picker';
@@ -15,6 +15,7 @@ import { GIconButtonBack, GStrategyIcon } from '../../../constants/buttons';
 
 import {
   CreateStrategyPeriodTitle,
+  EditStrategyPeriodTitle,
   StrategyDatesHelp,
 } from '../../../constants/wording';
 import { GBlack, GWhite, GYellow } from '../../../constants/palette';
@@ -22,19 +23,28 @@ import { GLogoLetter } from '../../../components/GLogoLetter';
 import { ROUTES } from '../../../constants/routes';
 import { GSubmitButton } from '../../../components/GSubmitButton';
 import { GDropdownHelp } from '../../../components/GDropdownHelp';
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import { FormControlLabel, Switch } from '@mui/material';
 import { useDispatch } from 'react-redux';
 import { setNewStrategyDates } from '../../../redux/sessionSlice';
+import { IStrategyProps } from '../../../components/GStrategyCard';
 
-export const GStrategyPeriodPage = () => {
+export const GStrategyEditPeriodPage = () => {
   const today = new Date();
   const [isRangePicker, setIsRangePicker] = useState(false);
   const [selectedDay, setSelectedDay] = useState<Date | undefined>(today);
   const [selectedRange, setSelectedRange] = useState<DateRange | undefined>();
   const [validationError, setValidationError] = useState('');
   const navigate = useNavigate();
-  const dispatch = useDispatch();
+  const location = useLocation();
+
+  let strategyToEdit: IStrategyProps = location && location.state;
+
+  useEffect(() => {
+    if (!strategyToEdit) {
+      navigate(`${ROUTES.STRATEGY.ROOT}`);
+    }
+  });
 
   const handleSwitchChange = () => {
     setIsRangePicker(!isRangePicker);
@@ -44,14 +54,14 @@ export const GStrategyPeriodPage = () => {
     event.preventDefault();
     if (isRangePicker) {
       if (selectedRange && selectedRange.from && selectedRange.to) {
-        dispatch(
-          setNewStrategyDates({
-            start: selectedRange.from.toISOString(),
-            end: selectedRange.to.toISOString(),
-          })
-        );
+        strategyToEdit = {
+          ...strategyToEdit,
+          start_date: selectedRange.from,
+          end_date: selectedRange.to,
+        };
         navigate(
-          `${ROUTES.STRATEGY.ROOT}${ROUTES.STRATEGY.CREATE.ROOT}${ROUTES.STRATEGY.CREATE.PERIODICITY}`
+          `${ROUTES.STRATEGY.ROOT}${ROUTES.STRATEGY.EDIT.ROOT}${ROUTES.STRATEGY.EDIT.PERIODICITY}`,
+          { state: strategyToEdit }
         );
         return;
       }
@@ -60,14 +70,14 @@ export const GStrategyPeriodPage = () => {
       );
     } else {
       if (selectedDay) {
-        dispatch(
-          setNewStrategyDates({
-            start: selectedDay.toISOString(),
-            end: selectedDay.toISOString(),
-          })
-        );
+        strategyToEdit = {
+          ...strategyToEdit,
+          start_date: selectedDay,
+          end_date: selectedDay,
+        };
         navigate(
-          `${ROUTES.STRATEGY.ROOT}${ROUTES.STRATEGY.CREATE.ROOT}${ROUTES.STRATEGY.CREATE.PERIODICITY}`
+          `${ROUTES.STRATEGY.ROOT}${ROUTES.STRATEGY.EDIT.ROOT}${ROUTES.STRATEGY.EDIT.PERIODICITY}`,
+          { state: strategyToEdit }
         );
       }
       return;
@@ -112,8 +122,8 @@ export const GStrategyPeriodPage = () => {
       </div>
       <div className="geco-create-ad-header-title">
         <GHeadSectionTitle
-          title={CreateStrategyPeriodTitle.title}
-          subtitle={CreateStrategyPeriodTitle.subtitle}
+          title={EditStrategyPeriodTitle.title}
+          subtitle={EditStrategyPeriodTitle.subtitle}
         />
       </div>
 

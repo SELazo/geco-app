@@ -199,8 +199,8 @@ export const AdsService: IAdsService = {
           success: true,
           data: [
             {
-              id: 's1',
-              url: '/src/assets/images/s_01.svg',
+              id: 's4',
+              url: '/src/assets/images/s_04.svg',
               width: '1080px',
               height: '1080px',
               padding: '108px',
@@ -238,8 +238,8 @@ export const AdsService: IAdsService = {
               textWidth: '572px',
             },
             {
-              id: 's4',
-              url: '/src/assets/images/s_04.svg',
+              id: 's1',
+              url: '/src/assets/images/s_01.svg',
               width: '1080px',
               height: '1080px',
               padding: '108px',
@@ -337,12 +337,4 @@ function splitBase64IntoChunks(
   }
 
   return chunks;
-}
-
-async function compressImage(base64: string): Promise<string> {
-  const options = {
-    maxSizeMB: 1, // Tamaño máximo deseado en megabytes
-    maxWidthOrHeight: 800, // Ancho o alto máximo deseado
-  };
-  return '';
 }

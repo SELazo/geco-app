@@ -57,3 +57,67 @@
   max-width: 49%;
   margin-top: 5px;
 }
+
+.geco-strategy-subtitle {
+  font-family: Montserrat;
+  font-size: 15px;
+  font-style: normal;
+  font-weight: 700;
+  color: #9fa4b4;
+  text-align: start;
+}
+
+.geco-strategy-options-group {
+  flex-direction: column;
+  text-align: start;
+  display: flex;
+}
+
+.geco-strategy-resume {
+  border: 2px solid #18191f;
+  box-shadow: 0px 2px 0px #18191f;
+  border-radius: 16px;
+  background: #00c6ae;
+  max-width: 280px;
+  min-width: 280px;
+  width: 280px;
+  padding: 20px;
+
+  justify-content: center;
+  display: flex;
+  flex-direction: column;
+}
+
+.geco-strategy-resume-title {
+  font-family: Montserrat;
+  font-size: 25px;
+  font-style: normal;
+  font-weight: 900;
+  color: #ffffff;
+  margin: 10px 0;
+  align-self: center;
+}
+
+.geco-strategy-resume-item {
+  font-family: Montserrat;
+  font-size: 20px;
+  font-weight: 700;
+  color: #ffffff;
+  margin: 10px 0;
+}
+
+.geco-strategy-resume-item-list {
+  font-family: Montserrat;
+  font-size: 20px;
+  font-weight: 700;
+  color: #ffffff;
+  margin: 5px;
+}
+
+.geco-strategy-resume-item-title {
+  font-family: Montserrat;
+  font-size: 15px;
+  font-weight: 500;
+  color: #ffffff;
+  margin: 10px 0;
+}

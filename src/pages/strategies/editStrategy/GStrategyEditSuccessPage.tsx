@@ -1,24 +1,24 @@
 import { GFeedback } from '../../../components/GFeedback';
 import { GSuccessIcon } from '../../../constants/buttons';
 import { GBlack, GWhite } from '../../../constants/palette';
-import { PostStrategySuccessfull } from '../../../constants/wording';
+import { PostStrategyEditSuccessfull } from '../../../constants/wording';
 
 import '../../../styles/gsuccesssendmessage.css';
 
-export const GStrategySuccessPage = () => {
+export const GStrategyEditSuccessPage = () => {
   return (
     <div className="success-send-message-main">
       <GFeedback
-        title={PostStrategySuccessfull.title}
-        subtitle={PostStrategySuccessfull.subtitle}
+        title={PostStrategyEditSuccessfull.title}
+        subtitle={PostStrategyEditSuccessfull.subtitle}
         colorFont={GBlack}
         icon={GSuccessIcon}
         iconWidth="160px"
         iconHeight="160px"
-        buttonLabel={PostStrategySuccessfull.buttonLabel}
+        buttonLabel={PostStrategyEditSuccessfull.buttonLabel}
         colorButtonFont={GWhite}
         colorButtonBackground={GBlack}
-        route={PostStrategySuccessfull.buttonPath}
+        route={PostStrategyEditSuccessfull.buttonPath}
       />
     </div>
   );

@@ -5,7 +5,6 @@ import { useDispatch, useSelector } from 'react-redux';
 import {
   INewGoupInfo,
   INewStrategyForm,
-  setNewStrategyAds,
   setNewStrategyGroups,
 } from '../../../redux/sessionSlice';
 
@@ -23,9 +22,7 @@ import {
 
 import { GSubmitButton } from '../../../components/GSubmitButton';
 import {
-  AddNewGroupStep2SectionTitle,
-  CreateStrategyAdsTitle,
-  NewStrategyAdsEmpty,
+  CreateStrategyGroupsTitle,
   NewStrategyGroupsEmpty,
 } from '../../../constants/wording';
 import { GBlack, GWhite, GYellow } from '../../../constants/palette';
@@ -34,14 +31,11 @@ import { Link, useNavigate } from 'react-router-dom';
 import { GLogoLetter } from '../../../components/GLogoLetter';
 import { useEffect, useState } from 'react';
 import { ROUTES } from '../../../constants/routes';
-import { AdsService } from '../../../services/external/adsService';
-import { IGetAdResponse } from '../../../interfaces/dtos/external/IAds';
 import { DateService } from '../../../services/internal/dateService';
 import { GroupsService } from '../../../services/external/groupsService';
 import { IGroup } from '../../../interfaces/dtos/external/IGroups';
 
 const { getGroups } = GroupsService;
-const { getDateString } = DateService;
 
 export const GStrategyGroupsPage = () => {
   const [selectedNumbers, setSelectedNumbers] = useState<number[]>([]);
@@ -124,16 +118,13 @@ export const GStrategyGroupsPage = () => {
           width="50px"
           height="50px"
           colorBackground={GWhite}
-          onClickAction={NavigationService.handleNavigationWithState(
-            `${ROUTES.GROUPS.ROOT}${ROUTES.GROUPS.ADD_GROUP_INFO}`,
-            { from: `${ROUTES.GROUPS.ROOT}${ROUTES.GROUPS.ADD_GROUP_MEMBERS}` }
-          )}
+          onClickAction={NavigationService.goBack}
         />
       </div>
       <div className="geco-strategy-header-title">
         <GHeadSectionTitle
-          title={CreateStrategyAdsTitle.title}
-          subtitle={CreateStrategyAdsTitle.subtitle}
+          title={CreateStrategyGroupsTitle.title}
+          subtitle={CreateStrategyGroupsTitle.subtitle}
         />
       </div>
 
