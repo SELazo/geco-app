@@ -1,4 +1,4 @@
-import { Link, useNavigate } from 'react-router-dom';
+import { Link, useLocation, useNavigate } from 'react-router-dom';
 import { NavigationService } from '../../../services/internal/navigationService';
 
 import 'react-day-picker/dist/style.css';
@@ -14,7 +14,7 @@ import { GCircularButton } from '../../../components/GCircularButton';
 import { GIconButtonBack, GStrategyIcon } from '../../../constants/buttons';
 
 import {
-  CreateStrategyPeriodicityTitle,
+  EditStrategyPeriodicityTitle,
   PeriodicitySubtitleSectionForm,
   ScheduleSubtitleSectionForm,
   StrategyConfigHelp,
@@ -26,7 +26,7 @@ import { GSubmitButton } from '../../../components/GSubmitButton';
 import { GDropdownHelp } from '../../../components/GDropdownHelp';
 import { useEffect, useState } from 'react';
 import { FormControlLabel, Radio, RadioGroup, Switch } from '@mui/material';
-import { useDispatch, useSelector } from 'react-redux';
+import { useSelector } from 'react-redux';
 import {
   IPeriodicity,
   ISchedule,
@@ -36,10 +36,11 @@ import { RootState } from '../../../redux/gecoStore';
 import { LocalizationProvider, TimeField } from '@mui/x-date-pickers';
 import dayjs, { Dayjs } from 'dayjs';
 import { setNewStrategyConfig } from '../../../redux/sessionSlice';
+import { IStrategyProps } from '../../../components/GStrategyCard';
 
 const { getPeriodicities, getSchedules } = StrategyService;
 
-export const GStrategyPeriodicityPage = () => {
+export const GStrategyEditPeriodicityPage = () => {
   const userStatus = useSelector((state: RootState) => state.auth.user.id);
   const [periodicities, setPeriodicities] = useState<IPeriodicity[]>([]);
   const [schedules, setSchedules] = useState<ISchedule[]>([]);
@@ -51,7 +52,15 @@ export const GStrategyPeriodicityPage = () => {
   >();
   const [isCustom, setIsCustom] = useState(false);
   const navigate = useNavigate();
-  const dispatch = useDispatch();
+  const location = useLocation();
+
+  let strategyToEdit: IStrategyProps = location && location.state;
+
+  useEffect(() => {
+    if (!strategyToEdit) {
+      navigate(`${ROUTES.STRATEGY.ROOT}`);
+    }
+  });
 
   useEffect(() => {
     const fetchData = async () => {
@@ -103,14 +112,14 @@ export const GStrategyPeriodicityPage = () => {
     event.preventDefault();
 
     if (selectedSchedule && selectedPeriodicity) {
-      dispatch(
-        setNewStrategyConfig({
-          periodicity: selectedPeriodicity,
-          schedule: selectedSchedule,
-        })
-      );
+      strategyToEdit = {
+        ...strategyToEdit,
+        periodicity: selectedPeriodicity,
+        schedule: selectedSchedule,
+      };
       navigate(
-        `${ROUTES.STRATEGY.ROOT}${ROUTES.STRATEGY.CREATE.ROOT}${ROUTES.STRATEGY.CREATE.RESUME}`
+        `${ROUTES.STRATEGY.ROOT}${ROUTES.STRATEGY.EDIT.ROOT}${ROUTES.STRATEGY.EDIT.RESUME}`,
+        { state: strategyToEdit }
       );
     }
   };
@@ -153,8 +162,8 @@ export const GStrategyPeriodicityPage = () => {
       </div>
       <div className="geco-create-ad-header-title">
         <GHeadSectionTitle
-          title={CreateStrategyPeriodicityTitle.title}
-          subtitle={CreateStrategyPeriodicityTitle.subtitle}
+          title={EditStrategyPeriodicityTitle.title}
+          subtitle={EditStrategyPeriodicityTitle.subtitle}
         />
       </div>
 
@@ -166,9 +175,9 @@ export const GStrategyPeriodicityPage = () => {
           <RadioGroup>
             {periodicities.map((periodicity) => (
               <FormControlLabel
-                key={`periodicity-${periodicity.id}`}
                 control={
                   <Radio
+                    key={`periodicity-${periodicity.id}`}
                     checked={periodicity.value === selectedPeriodicity}
                     onChange={handlePeriodicityChange}
                     value={periodicity.value}
@@ -224,9 +233,9 @@ export const GStrategyPeriodicityPage = () => {
             >
               {schedules.map((schedule) => (
                 <FormControlLabel
-                  key={`schedule-${schedule.id}`}
                   control={
                     <Radio
+                      key={`schedule-${schedule.id}`}
                       checked={schedule.value === selectedSchedule}
                       onChange={handleScheduleChange}
                       value={schedule.value}

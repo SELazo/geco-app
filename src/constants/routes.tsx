@@ -52,6 +52,16 @@ export const ROUTES = {
       RESUME: '/resume',
       SUCCESS: '/success',
     },
+    EDIT: {
+      ROOT: '/edit',
+      INFORMATION: '/information',
+      ADS: '/ads',
+      GROUPS: '/groups',
+      PERIOD: '/period',
+      PERIODICITY: '/periodicity',
+      RESUME: '/resume',
+      SUCCESS: '/success',
+    },
     LIST: {
       ROOT: '/list',
     },

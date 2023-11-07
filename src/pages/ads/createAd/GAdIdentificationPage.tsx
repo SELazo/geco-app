@@ -42,7 +42,9 @@ export const GAdIdentificationPage = () => {
       'Por favor ingrese un titulo identificativo para su publicidad, esto te ayudara a encontrarla para utillizarla en tus estrategias de comunicación.'
     ),
     descriptionHelper: Yup.string()
-      .optional()
+      .required(
+        'Por favor ingrese el mensaje con el cual se enviará la publicidad'
+      )
       .max(500, 'El texto no puede tener más de 500 caracteres'),
   });
 
@@ -97,7 +99,7 @@ export const GAdIdentificationPage = () => {
     formState: { errors },
   } = useForm<{
     titleHelper: string;
-    descriptionHelper?: string;
+    descriptionHelper: string;
   }>({
     resolver: yupResolver(validationSchema),
   });

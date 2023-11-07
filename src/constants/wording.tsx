@@ -219,6 +219,41 @@ export const CreateStrategyPeriodicityTitle: IHeadSectionTitle = {
     '¿Cómo preferís que se realice la difución de tu estrategia de comunicación? ⏰',
 };
 
+export const EditStrategyInformationTitle: IHeadSectionTitle = {
+  title: 'Editar estrategia de comunicación',
+  subtitle:
+    '¡Empecemos! ¿Que oportunidad tiene tu nueva estrategia de comunicación? 💡',
+};
+
+export const EditStrategyAdsTitle: IHeadSectionTitle = {
+  title: 'Editar estrategia de comunicación',
+  subtitle:
+    'Agrega las publicidades que quieras difundir durante la duración de esta estrategia de comunicación! 📡',
+};
+
+export const EditStrategyGroupsTitle: IHeadSectionTitle = {
+  title: 'Editar estrategia de comunicación',
+  subtitle:
+    'Agrega los grupos a los cuales esta dirigida esta estrategia de comunicación! 👥',
+};
+
+export const EditStrategyResumeTitle: IHeadSectionTitle = {
+  title: 'Editar estrategia de comunicación',
+  subtitle: 'Estamos listos! 🚀',
+};
+
+export const EditStrategyPeriodTitle: IHeadSectionTitle = {
+  title: 'Editar estrategia de comunicación',
+  subtitle:
+    'Elige las fechas en las cuales tu estrategia de comunicación será difundida. Recuerda que puedes elegir un día o un rango de días. 📅',
+};
+
+export const EditStrategyPeriodicityTitle: IHeadSectionTitle = {
+  title: 'Editar estrategia de comunicación',
+  subtitle:
+    '¿Cómo preferís que se realice la difución de tu estrategia de comunicación? ⏰',
+};
+
 /**
  * Subtitles for sections
  */
@@ -244,7 +279,7 @@ export const CommentSended: IFeedback = {
   title: 'Tu mensaje ha sido enviado!',
   subtitle: 'En breve nos estaremos comunicando con vos a través de un email',
   buttonLabel: 'Aceptar',
-  buttonPath: '/home',
+  buttonPath: '/user/info',
 };
 
 export const ContactAdded: IFeedback = {
@@ -292,6 +327,13 @@ export const PostAdSuccessfull: IFeedback = {
 
 export const PostStrategySuccessfull: IFeedback = {
   title: 'Estrategia de comunicación creada! 🙌✨',
+  subtitle: 'Podrás visualizala en Estrategias de comunicación!',
+  buttonLabel: 'Okey',
+  buttonPath: '/strategy',
+};
+
+export const PostStrategyEditSuccessfull: IFeedback = {
+  title: 'Estrategia de comunicación editada! 🙌✨',
   subtitle: 'Podrás visualizala en Estrategias de comunicación!',
   buttonLabel: 'Okey',
   buttonPath: '/strategy',

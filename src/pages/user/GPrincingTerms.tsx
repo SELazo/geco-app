@@ -1,4 +1,5 @@
 import('../../styles/gpricingterms.css');
+import('../../styles/gpricing.css');
 
 import { GCircularButton } from '../../components/GCircularButton';
 import { GIconButtonBack } from '../../constants/buttons';
@@ -6,6 +7,8 @@ import { GBlack, GWhite } from '../../constants/palette';
 import { NavigationService } from '../../services/internal/navigationService';
 import { GHeadCenterTitle } from '../../components/GHeadCenterTitle';
 import { useSelector } from 'react-redux';
+import { GLogoLetter } from '../../components/GLogoLetter';
+import { Link } from 'react-router-dom';
 
 interface Terms {
   id: number;
@@ -56,18 +59,23 @@ Al utilizar nuestro servicio, usted acepta estos términos y condiciones. Si no 
     return termsOptions.find((term) => term.id === idTerms);
   };
   return (
-    <div className="geco-pricing-terms-main">
-      <div className="geco-pricing-terms-header">
-        <GCircularButton
-          icon={GIconButtonBack}
-          size="1.5em"
-          width="50px"
-          height="50px"
-          colorBackground={GWhite}
-          onClickAction={NavigationService.goBack}
-        />
-        <div className="geco-pricing-terms-title">
-          <GHeadCenterTitle title="Términos y condiciones" color={GBlack} />
+    <div className="geco-pricing-main">
+      <div className="geco-pricing-header">
+        <div className="geco-pricing-header-nav-bar">
+          <Link className="geco-pricing-header-nav-bar-logo" to="/home">
+            <GLogoLetter />
+          </Link>
+          <GCircularButton
+            icon={GIconButtonBack}
+            size="1.5em"
+            width="50px"
+            height="50px"
+            colorBackground={GWhite}
+            onClickAction={NavigationService.goBack}
+          />
+        </div>
+        <div className="geco-pricing-title">
+          <GHeadCenterTitle title="Términos y Condiciones" color={GBlack} />
         </div>
       </div>
       <div className="geco-pricing-terms-info">
