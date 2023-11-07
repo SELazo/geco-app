@@ -338,11 +338,3 @@ function splitBase64IntoChunks(
 
   return chunks;
 }
-
-async function compressImage(base64: string): Promise<string> {
-  const options = {
-    maxSizeMB: 1, // Tamaño máximo deseado en megabytes
-    maxWidthOrHeight: 800, // Ancho o alto máximo deseado
-  };
-  return '';
-}

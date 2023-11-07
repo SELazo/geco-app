@@ -29,9 +29,13 @@ import { GSubmitButton } from '../../../components/GSubmitButton';
 import { GDropdownHelp } from '../../../components/GDropdownHelp';
 import { useState } from 'react';
 import { PacmanLoader } from 'react-spinners';
+import { useDispatch } from 'react-redux';
+import {
+  setNewAdIdentification,
+  setNewStrategyTitle,
+} from '../../../redux/sessionSlice';
 
 export const GStrategyInformationPage = () => {
-  const [loading, setLoading] = useState(false);
   const validationSchema = Yup.object().shape({
     title: Yup.string()
       .required(
@@ -41,11 +45,10 @@ export const GStrategyInformationPage = () => {
   });
 
   const navigate = useNavigate();
+  const dispatch = useDispatch();
 
   const onSubmit = async (data: any) => {
-    setLoading(true);
-    //request
-    setLoading(false);
+    dispatch(setNewStrategyTitle(data.title));
     navigate(
       `${ROUTES.STRATEGY.ROOT}${ROUTES.STRATEGY.CREATE.ROOT}${ROUTES.STRATEGY.CREATE.ADS}`
     );
@@ -70,7 +73,10 @@ export const GStrategyInformationPage = () => {
           <Link className="geco-create-ad-nav-bar-logo" to="/home">
             <GLogoLetter />
           </Link>
-          <Link className="geco-add-contact-excel-nav-bar-section" to="/ad">
+          <Link
+            className="geco-add-contact-excel-nav-bar-section"
+            to="/strategy"
+          >
             <GCircularButton
               icon={GStrategyIcon}
               size="1.5em"
@@ -103,36 +109,23 @@ export const GStrategyInformationPage = () => {
         />
       </div>
       <form className="geco-form" onSubmit={handleSubmit(onSubmit)}>
-        {loading ? (
-          <div
-            style={{
-              textAlign: 'start',
-              marginTop: '25vh',
-            }}
-          >
-            <PacmanLoader color={GYellow} />
-          </div>
-        ) : (
-          <>
-            <div className="input-group">
-              <input
-                type="text"
-                {...register('title')}
-                placeholder="Nombre de la estrategia"
-                className={`input-box form-control ${
-                  errors.title ? 'is-invalid' : ''
-                }`}
-              />
-              <span className="span-error">{errors.title?.message}</span>
-            </div>
+        <div className="input-group">
+          <input
+            type="text"
+            {...register('title')}
+            placeholder="Nombre de la estrategia"
+            className={`input-box form-control ${
+              errors.title ? 'is-invalid' : ''
+            }`}
+          />
+          <span className="span-error">{errors.title?.message}</span>
+        </div>
 
-            <GSubmitButton
-              label="Siguiente"
-              colorBackground={GYellow}
-              colorFont={GBlack}
-            />
-          </>
-        )}
+        <GSubmitButton
+          label="Siguiente"
+          colorBackground={GYellow}
+          colorFont={GBlack}
+        />
       </form>
     </div>
   );

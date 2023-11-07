@@ -1,4 +1,3 @@
-import { useForm } from 'react-hook-form';
 import { Link, useNavigate } from 'react-router-dom';
 import { NavigationService } from '../../../services/internal/navigationService';
 
@@ -15,9 +14,8 @@ import { GCircularButton } from '../../../components/GCircularButton';
 import { GIconButtonBack, GStrategyIcon } from '../../../constants/buttons';
 
 import {
-  CreateStrategyInformationTitle,
+  CreateStrategyPeriodTitle,
   StrategyDatesHelp,
-  StrategyInformationHelp,
 } from '../../../constants/wording';
 import { GBlack, GWhite, GYellow } from '../../../constants/palette';
 import { GLogoLetter } from '../../../components/GLogoLetter';
@@ -26,6 +24,8 @@ import { GSubmitButton } from '../../../components/GSubmitButton';
 import { GDropdownHelp } from '../../../components/GDropdownHelp';
 import { useState } from 'react';
 import { FormControlLabel, Switch } from '@mui/material';
+import { useDispatch } from 'react-redux';
+import { setNewStrategyDates } from '../../../redux/sessionSlice';
 
 export const GStrategyPeriodPage = () => {
   const today = new Date();
@@ -34,16 +34,43 @@ export const GStrategyPeriodPage = () => {
   const [selectedRange, setSelectedRange] = useState<DateRange | undefined>();
   const [validationError, setValidationError] = useState('');
   const navigate = useNavigate();
+  const dispatch = useDispatch();
 
   const handleSwitchChange = () => {
     setIsRangePicker(!isRangePicker);
   };
 
-  const handleSubmit = () => {
+  const handleSubmit = (event: any) => {
+    event.preventDefault();
     if (isRangePicker) {
-      console.log('is', selectedDay, selectedRange);
+      if (selectedRange && selectedRange.from && selectedRange.to) {
+        dispatch(
+          setNewStrategyDates({
+            start: selectedRange.from.toISOString(),
+            end: selectedRange.to.toISOString(),
+          })
+        );
+        navigate(
+          `${ROUTES.STRATEGY.ROOT}${ROUTES.STRATEGY.CREATE.ROOT}${ROUTES.STRATEGY.CREATE.PERIODICITY}`
+        );
+        return;
+      }
+      setValidationError(
+        'Debés especificar una fecha de inicio y de fin si quieres utilizar un rango de fechas.'
+      );
     } else {
-      console.log('isnot', selectedDay, selectedRange);
+      if (selectedDay) {
+        dispatch(
+          setNewStrategyDates({
+            start: selectedDay.toISOString(),
+            end: selectedDay.toISOString(),
+          })
+        );
+        navigate(
+          `${ROUTES.STRATEGY.ROOT}${ROUTES.STRATEGY.CREATE.ROOT}${ROUTES.STRATEGY.CREATE.PERIODICITY}`
+        );
+      }
+      return;
     }
   };
 
@@ -54,7 +81,10 @@ export const GStrategyPeriodPage = () => {
           <Link className="geco-create-ad-nav-bar-logo" to="/home">
             <GLogoLetter />
           </Link>
-          <Link className="geco-add-contact-excel-nav-bar-section" to="/ad">
+          <Link
+            className="geco-add-contact-excel-nav-bar-section"
+            to="/strategy"
+          >
             <GCircularButton
               icon={GStrategyIcon}
               size="1.5em"
@@ -82,8 +112,8 @@ export const GStrategyPeriodPage = () => {
       </div>
       <div className="geco-create-ad-header-title">
         <GHeadSectionTitle
-          title={CreateStrategyInformationTitle.title}
-          subtitle={CreateStrategyInformationTitle.subtitle}
+          title={CreateStrategyPeriodTitle.title}
+          subtitle={CreateStrategyPeriodTitle.subtitle}
         />
       </div>
 
@@ -109,16 +139,21 @@ export const GStrategyPeriodPage = () => {
             selected={selectedDay}
             onSelect={setSelectedDay}
             locale={es}
-            disabled={(date) => date < today}
+            disabled={{ before: today }}
           />
         ) : (
-          <DayPicker
-            mode="range"
-            selected={selectedRange}
-            onSelect={setSelectedRange}
-            locale={es}
-            disabled={(date) => date < today}
-          />
+          <>
+            <DayPicker
+              mode="range"
+              selected={selectedRange}
+              onSelect={setSelectedRange}
+              locale={es}
+              disabled={{ before: today }}
+            />
+            {validationError && (
+              <span className="span-error">{validationError}</span>
+            )}
+          </>
         )}
         <GSubmitButton
           label="Siguiente"
