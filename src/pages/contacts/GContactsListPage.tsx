@@ -26,7 +26,7 @@ const { getContacts } = ContactsService;
 export const GContactsListPage = () => {
   const [contacts, setContacts] = useState<IContactResponse[]>([]);
 
-  useEffect( () => {
+  useEffect(() => {
     const fetchContacts = async () => {
       try {
         const response = await getContacts();
@@ -38,7 +38,7 @@ export const GContactsListPage = () => {
     };
 
     fetchContacts();
-  }, [contacts])
+  }, []);
 
   const menuContacts: IMenuItem[] = [
     {
@@ -88,12 +88,12 @@ export const GContactsListPage = () => {
               width="50px"
               height="50px"
               colorBackground={GWhite}
-              onClickAction={NavigationService.handleNavigation(ROUTES.CONTACTS.OPTIONS)}
+              onClickAction={NavigationService.handleNavigation(
+                ROUTES.CONTACTS.OPTIONS
+              )}
             />
           </div>
-          <div
-            className="geco-contacts-list-head-nav-bar-right"
-          >
+          <div className="geco-contacts-list-head-nav-bar-right">
             <GDropdownMenu menu={menuContacts} />
           </div>
         </div>
