@@ -1,9 +1,3 @@
-import { useDispatch, useSelector } from 'react-redux';
-import {
-  INewStrategyForm,
-  clearNewStrategyForm,
-} from '../../../redux/sessionSlice';
-
 import '../../../styles/ginputBox.css';
 import '../../../styles/gform.css';
 import('../../../styles/gstrategyItem.css');
@@ -16,59 +10,74 @@ import { GSubmitButton } from '../../../components/GSubmitButton';
 import { CreateStrategyResumeTitle } from '../../../constants/wording';
 import { GBlack, GWhite, GYellow } from '../../../constants/palette';
 import { NavigationService } from '../../../services/internal/navigationService';
-import { Link, useNavigate } from 'react-router-dom';
+import { Link, useLocation, useNavigate } from 'react-router-dom';
 import { GLogoLetter } from '../../../components/GLogoLetter';
 import { useEffect, useState } from 'react';
 import { ROUTES } from '../../../constants/routes';
 import { GroupsService } from '../../../services/external/groupsService';
 import { IGroup } from '../../../interfaces/dtos/external/IGroups';
-import { RootState } from '../../../redux/gecoStore';
 import { IGetAdResponse } from '../../../interfaces/dtos/external/IAds';
 import { AdsService } from '../../../services/external/adsService';
 import { PacmanLoader } from 'react-spinners';
 import dayjs from 'dayjs';
 import { StrategyService } from '../../../services/internal/strategyService';
 import { StrategiesService } from '../../../services/external/strategiesService';
+import { IStrategyProps } from '../../../components/GStrategyCard';
 
 const { getGroups } = GroupsService;
 const { getAds } = AdsService;
 const { getPeriodicity } = StrategyService;
-const { newStrategy } = StrategiesService;
+const { editStrategy } = StrategiesService;
 
-export const GStrategyResumePage = () => {
+export const GStrategyEditResumePage = () => {
   const [loading, setLoading] = useState<boolean>(false);
   const [groupsList, setGroupsList] = useState<IGroup[]>([]);
   const [adsList, setAdsList] = useState<IGetAdResponse[]>([]);
   const navigate = useNavigate();
+  const location = useLocation();
 
-  const strategyForm: INewStrategyForm = useSelector(
-    (state: RootState) => state.auth.formNewStrategy
-  );
-
-  const dispatch = useDispatch();
+  let strategyToEdit: IStrategyProps = location && location.state;
 
   useEffect(() => {
+    console.log();
+    if (
+      !strategyToEdit ||
+      strategyToEdit.name !== null ||
+      strategyToEdit.id !== null ||
+      strategyToEdit.ads !== null ||
+      strategyToEdit.groups !== null ||
+      strategyToEdit.end_date !== null ||
+      strategyToEdit.start_date !== null ||
+      strategyToEdit.periodicity !== null ||
+      strategyToEdit.schedule !== null
+    ) {
+      navigate(`${ROUTES.STRATEGY.ROOT}`);
+    }
     const fetchGroups = async () => {
       setLoading(true);
-      if (strategyForm) {
+      if (strategyToEdit) {
         try {
           const groups: IGroup[] = [];
           const groupsData = await getGroups();
           const ads: IGetAdResponse[] = [];
           const adsData = await getAds();
 
-          if (strategyForm.ads && strategyForm.ads.length > 0 && adsData.data) {
+          if (
+            strategyToEdit.ads &&
+            strategyToEdit.ads.length > 0 &&
+            adsData.data
+          ) {
             adsData.data.map((ad) => {
-              const findAd = strategyForm.ads.find((adId) => adId === ad.id);
+              const findAd = strategyToEdit.ads.find((adId) => adId === ad.id);
 
               if (findAd) {
                 ads.push(ad);
               }
             });
           }
-          if (strategyForm.groups && strategyForm.groups.length > 0) {
+          if (strategyToEdit.groups && strategyToEdit.groups.length > 0) {
             groupsData.map((group) => {
-              const findGroup = strategyForm.groups.find(
+              const findGroup = strategyToEdit.groups.find(
                 (groupId) => groupId === group.id
               );
 
@@ -88,33 +97,32 @@ export const GStrategyResumePage = () => {
     };
 
     fetchGroups();
-  }, [strategyForm]);
+  }, [strategyToEdit]);
 
   const handleSubmit = async () => {
-    setLoading(true);
-    await newStrategy(
-      strategyForm.title,
-      new Date(strategyForm.startDate),
-      new Date(strategyForm.endDate),
-      strategyForm.periodicity,
-      strategyForm.schedule,
-      strategyForm.ads,
-      strategyForm.groups
+    await editStrategy(
+      strategyToEdit.id,
+      strategyToEdit.name,
+      strategyToEdit.start_date,
+      strategyToEdit.end_date,
+      strategyToEdit.periodicity,
+      strategyToEdit.schedule,
+      strategyToEdit.ads,
+      strategyToEdit.groups
     )
       .then((response) => {
         if (!response) {
-          dispatch(clearNewStrategyForm());
           navigate(
-            `${ROUTES.AD.ROOT}${ROUTES.AD.CREATE.ROOT}${ROUTES.AD.CREATE.SUCCESS}`
+            `${ROUTES.STRATEGY.ROOT}${ROUTES.STRATEGY.EDIT.ROOT}${ROUTES.STRATEGY.EDIT.SUCCESS}`
           );
         }
       })
       .catch(() => {
-        navigate(`${ROUTES.AD.ROOT}${ROUTES.AD.CREATE.ROOT}${ROUTES.AD.ERROR}`);
+        navigate(`${ROUTES.STRATEGY.ROOT}${ROUTES.STRATEGY.ERROR}`);
       });
     setLoading(false);
     navigate(
-      `${ROUTES.STRATEGY.ROOT}${ROUTES.STRATEGY.CREATE.ROOT}${ROUTES.STRATEGY.CREATE.SUCCESS}`
+      `${ROUTES.STRATEGY.ROOT}${ROUTES.STRATEGY.EDIT.ROOT}${ROUTES.STRATEGY.EDIT.SUCCESS}`
     );
   };
 
@@ -161,7 +169,7 @@ export const GStrategyResumePage = () => {
         <form className="geco-form" onSubmit={handleSubmit}>
           <div className="geco-strategy-resume">
             <h3 className="geco-strategy-resume-title">
-              {strategyForm.title.toUpperCase()}
+              {strategyToEdit.name.toUpperCase()}
             </h3>
             <div>
               <div className="geco-strategy-resume-item">
@@ -190,27 +198,27 @@ export const GStrategyResumePage = () => {
               <div className="geco-strategy-resume-item">
                 <p className="geco-strategy-resume-item-title">Duración:</p>
                 <p className="geco-strategy-resume-item">
-                  {dayjs(strategyForm.startDate).format('DD/MM/YYYY')}
+                  {dayjs(strategyToEdit.start_date).format('DD/MM/YYYY')}
                   {' - '}
-                  {dayjs(strategyForm.endDate).format('DD/MM/YYYY')}
+                  {dayjs(strategyToEdit.end_date).format('DD/MM/YYYY')}
                 </p>
               </div>
               <div>
                 <p className="geco-strategy-resume-item-title">Difusión:</p>
                 <p className="geco-strategy-resume-item">
-                  {strategyForm.schedule}
+                  {strategyToEdit.schedule}
                 </p>
               </div>
               <div className="geco-strategy-resume-item">
                 <p className="geco-strategy-resume-item-title">Periodicidad:</p>
                 <p className="geco-strategy-resume-item">
-                  {getPeriodicity(strategyForm.periodicity)}
+                  {getPeriodicity(strategyToEdit.periodicity)}
                 </p>
               </div>
             </div>
           </div>
           <GSubmitButton
-            label="Crear estrategia! ✨"
+            label="Editar estrategia! ✨"
             colorBackground={GYellow}
             colorFont={GBlack}
           />

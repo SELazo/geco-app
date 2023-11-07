@@ -82,17 +82,6 @@ export const GHomePage = () => {
           <div className="geco-services-column">
             <div className="geco-services-icon">
               <GCircularButton
-                icon={GAdIcon}
-                size="2em"
-                width="70px"
-                height="70px"
-                colorBackground={GWhite}
-                onClickAction={NavigationService.handleNavigation('/ad')}
-              />
-              <p>{AdHeadCenterTitle}</p>
-            </div>
-            <div className="geco-services-icon">
-              <GCircularButton
                 icon={GStrategyIcon}
                 size="2em"
                 width="70px"
@@ -102,8 +91,6 @@ export const GHomePage = () => {
               />
               <p>{StrategyHeadCenterTitle}</p>
             </div>
-          </div>
-          <div className="geco-services-column">
             <div className="geco-services-icon">
               <GCircularButton
                 icon={GContactsIcon}
@@ -116,6 +103,19 @@ export const GHomePage = () => {
                 )}
               />
               <p>{ContactsHeadCenterTitle}</p>
+            </div>
+          </div>
+          <div className="geco-services-column">
+            <div className="geco-services-icon">
+              <GCircularButton
+                icon={GAdIcon}
+                size="2em"
+                width="70px"
+                height="70px"
+                colorBackground={GWhite}
+                onClickAction={NavigationService.handleNavigation('/ad')}
+              />
+              <p>{AdHeadCenterTitle}</p>
             </div>
             <div className="geco-services-icon">
               <GCircularButton

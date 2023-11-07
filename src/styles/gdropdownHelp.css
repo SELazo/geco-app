@@ -38,3 +38,21 @@
   color: #18191f;
   text-decoration: underline;
 }
+
+/* gpopup.css */
+.gpopup-center {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 100vh;
+}
+
+.overlay-custom {
+  background: rgba(0, 0, 0, 0.7); /* Color de fondo con opacidad */
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  z-index: 999; /* Asegura que esté por encima de otros elementos */
+}
