@@ -90,7 +90,6 @@ export const GStrategyEditResumePage = () => {
   }, [strategyToEdit]);
 
   const handleSubmit = async () => {
-    console.log(strategyToEdit);
     setLoading(true);
     await editStrategy(strategyToEdit.id, {
       name: strategyToEdit.name,
