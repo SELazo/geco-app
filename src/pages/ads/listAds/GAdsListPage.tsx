@@ -1,4 +1,4 @@
-import('../../../styles/gcontactsList.css');
+import('../../../styles/gads.css');
 
 import { useEffect, useState } from 'react';
 
@@ -10,56 +10,48 @@ import {
 } from '../../../constants/buttons';
 import { GBlack, GRed, GWhite, GYellow } from '../../../constants/palette';
 import { NavigationService } from '../../../services/internal/navigationService';
-import { ContactsService } from '../../../services/external/contactsService';
+import { AdsService } from '../../../services/external/adsService';
 import { GHeadCenterTitle } from '../../../components/GHeadCenterTitle';
 import { AdHeadCenterTitle } from '../../../constants/wording';
-import { GContactItem } from '../../../components/GContactItem';
+import { GAdListItem, IAdListItem } from '../../../components/GAdListItem';
 import { GLogoLetter } from '../../../components/GLogoLetter';
 import { Link } from 'react-router-dom';
-import { GDropdownMenu, IMenuItem } from '../../../components/GDropdownMenu';
-import { IContactResponse } from '../../../interfaces/dtos/external/IContacts';
+import { IGetAdResponse } from '../../../interfaces/dtos/external/IAds';
 import { ROUTES } from '../../../constants/routes';
+import { ApiResponse } from '../../../interfaces/dtos/external/IResponse';
 
-const { getContacts } = ContactsService;
+const { getAds } = AdsService;
 
 export const GAdsListPage = () => {
-  const [contacts, setContacts] = useState<IContactResponse[]>([]);
+  const [ads, setAds] = useState<IGetAdResponse[]>([]);
 
   useEffect(() => {
-    const fetchContacts = async () => {
+    const fetchAds = async () => {
       try {
-        // const response = await getContacts();
-        // const contactsData = response as ApiResponse<IContactResponse[]>;
-        // setContacts(contactsData.data ?? []);
+        const response = await getAds();
+        const adsData = response as ApiResponse<IGetAdResponse[]>;
+        setAds(adsData.data ?? []);
       } catch (error) {
         console.error(error); // TODO: Mostrar error en pantalla
       }
     };
 
-    fetchContacts();
-  }, [contacts]);
+    fetchAds();
+  }, [ads]);
 
-  const menuContacts: IMenuItem[] = [
-    {
-      label: 'Eliminar contactos',
-      route: '/ad/delete-ads',
-      color: GRed,
-    },
-  ];
-
-  const editContact = (id: number) => {
-    console.log(contacts.find((c) => c.id === id));
+  const viewAd = (id: number) => {
+    console.log(ads.find((c) => c.id === id));
   };
 
   return (
     <>
-      <div className="geco-contacts-list">
-        <div className="geco-contacts-list-head">
-          <div className="geco-contacts-list-head-nav-bar">
-            <Link className="geco-contacts-head-nav-bar-logo" to="/home">
+      <div className="geco-ads-list">
+        <div className="geco-ads-list-head">
+          <div className="geco-ads-list-head-nav-bar">
+            <Link className="geco-ads-head-nav-bar-logo" to="/home">
               <GLogoLetter />
             </Link>
-            <Link className="geco-contacts-list-nav-bar-section" to="/ad">
+            <Link className="geco-ads-list-nav-bar-section" to="/ad">
               <GCircularButton
                 icon={GAdIcon}
                 size="1.5em"
@@ -77,24 +69,21 @@ export const GAdsListPage = () => {
               onClickAction={NavigationService.handleNavigation(ROUTES.AD.ROOT)}
             />
           </div>
-          <div className="geco-contacts-list-head-nav-bar-right">
-            <GDropdownMenu menu={menuContacts} />
-          </div>
         </div>
-        <div className="geco-contacts-list-title">
+        <div className="geco-ads-list-title">
           <GHeadCenterTitle title={AdHeadCenterTitle} color={GBlack} />
         </div>
-        {contacts.length > 0 && (
-          <div className="geco-contacts-list-container">
-            <div className="geco-contacts-list-ul">
-              <div className="geco-contacts-list-item">
-                {contacts.map((item) => (
-                  <GContactItem
+        {ads.length > 0 && (
+          <div className="geco-ads-list-container">
+            <div className="geco-ads-list-ul">
+              <div className="geco-ads-list-item">
+                {ads.map((item) => (
+                  <GAdListItem
                     key={item.id}
-                    contact={item}
+                    ad={item}
                     icon={GEditIcon}
                     iconBackgroundColor={GYellow}
-                    onClickAction={() => editContact(item.id)}
+                    onClickAction={() => viewAd(item.id)}
                   />
                 ))}
               </div>
@@ -102,8 +91,8 @@ export const GAdsListPage = () => {
           </div>
         )}
 
-        {contacts.length === 0 && (
-          <div className="geco-contacts-empty">
+        {ads.length === 0 && (
+          <div className="geco-ads-empty">
             <p>No tiene publicidades aún.</p>
           </div>
         )}
