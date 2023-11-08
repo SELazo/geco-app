@@ -321,6 +321,29 @@ export const AdsService: IAdsService = {
       resolve(successResponse);
       return;
     }),
+  getAdImg: async (id: number) => {
+    const token = SessionService.getToken();
+    return await fetch(`${environment.adsServiceURI}/ads/${id}/image`, {
+      method: 'GET',
+      headers: {
+        Accept: 'image/jpg',
+        'Content-Type': 'image/jpg',
+        Authorization: `${token}`,
+      },
+    })
+      .then((response) => {
+        if (response.ok) {
+          return response.blob();
+        } else {
+          throw new Error('No se pudo cargar la imagen');
+        }
+      })
+      .then((blob) => {
+        // Crear una URL de datos para la imagen y establecerla como fuente de la imagen
+        const imageUrl = URL.createObjectURL(blob);
+        return imageUrl;
+      });
+  },
   deleteAd: async (id: number): Promise<ApiResponse<IBasicSuccessResponse>> =>
     new Promise(async (resolve, reject) => {
       const token = SessionService.getToken();
@@ -331,6 +354,46 @@ export const AdsService: IAdsService = {
           'Content-Type': 'application/json',
           Authorization: `${token}`,
         },
+      });
+
+      if (!response.ok) {
+        const err: IError = await response.json();
+        console.error(err);
+        const errorResponse: ApiResponse<IBasicSuccessResponse> = {
+          success: false,
+          error: err,
+        };
+        reject(errorResponse);
+        return;
+      }
+
+      const data: IBasicSuccessResponse = await response.json();
+      const successResponse: ApiResponse<IBasicSuccessResponse> = {
+        success: true,
+        data: data,
+      };
+      resolve(successResponse);
+      return;
+    }),
+
+  editAd: async (
+    id: number,
+    title: string,
+    description: string
+  ): Promise<ApiResponse<IBasicSuccessResponse>> =>
+    new Promise(async (resolve, reject) => {
+      const token = SessionService.getToken();
+
+      const response = await fetch(`${environment.adsServiceURI}/ads/${id}`, {
+        method: 'PUT',
+        headers: {
+          'Content-Type': 'application/json',
+          Authorization: `${token}`,
+        },
+        body: JSON.stringify({
+          title,
+          description,
+        }),
       });
 
       if (!response.ok) {

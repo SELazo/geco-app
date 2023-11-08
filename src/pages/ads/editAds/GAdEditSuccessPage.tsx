@@ -1,7 +1,7 @@
 import { GFeedback } from '../../../components/GFeedback';
 import { GSuccessIcon } from '../../../constants/buttons';
 import { GBlack, GWhite } from '../../../constants/palette';
-import { PostAdSuccessfull } from '../../../constants/wording';
+import { PostEditAdSuccessfull } from '../../../constants/wording';
 
 import '../../../styles/gsuccesssendmessage.css';
 
@@ -9,16 +9,16 @@ export const GAdEditSuccessPage = () => {
   return (
     <div className="success-send-message-main">
       <GFeedback
-        title={PostAdSuccessfull.title}
-        subtitle={PostAdSuccessfull.subtitle}
+        title={PostEditAdSuccessfull.title}
+        subtitle={PostEditAdSuccessfull.subtitle}
         colorFont={GBlack}
         icon={GSuccessIcon}
         iconWidth="160px"
         iconHeight="160px"
-        buttonLabel={PostAdSuccessfull.buttonLabel}
+        buttonLabel={PostEditAdSuccessfull.buttonLabel}
         colorButtonFont={GWhite}
         colorButtonBackground={GBlack}
-        route={PostAdSuccessfull.buttonPath}
+        route={PostEditAdSuccessfull.buttonPath}
       />
     </div>
   );

@@ -75,3 +75,14 @@
 .file-preview img {
   width: 250px;
 }
+
+.file-preview-ad-view {
+  max-width: 325px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.file-preview-ad-view img {
+  width: 100%;
+}

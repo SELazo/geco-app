@@ -184,6 +184,12 @@ export const CreateAdIdentificationTitle: IHeadSectionTitle = {
     'Ingresa la información para identificar tu publicidad. Esto te ayudará a encontrarla para asociarla a tus estrategias de comunicación! 📄',
 };
 
+export const EditAdIdentificationTitle: IHeadSectionTitle = {
+  title: 'Editar publicidad',
+  subtitle:
+    'Ingresa la información para identificar tu publicidad. Esto te ayudará a encontrarla para asociarla a tus estrategias de comunicación! 📄',
+};
+
 export const CreateStrategyInformationTitle: IHeadSectionTitle = {
   title: 'Crear estrategia de comunicación',
   subtitle:
@@ -323,6 +329,14 @@ export const PostAdSuccessfull: IFeedback = {
     'Podrás visualizala en Publicidades o elegirla para una de tus Estrategias de comunicación!',
   buttonLabel: 'Okey',
   buttonPath: '/ad',
+};
+
+export const PostEditAdSuccessfull: IFeedback = {
+  title: 'Publicidad editada con éxito!',
+  subtitle:
+    'Podrás visualizala en Publicidades o elegirla para una de tus Estrategias de comunicación!',
+  buttonLabel: 'Okey',
+  buttonPath: '/ad/list',
 };
 
 export const PostStrategySuccessfull: IFeedback = {

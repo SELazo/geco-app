@@ -56,6 +56,9 @@ import { GStrategyEditPeriodPage } from '../pages/strategies/editStrategy/GStrat
 import { GStrategyEditPeriodicityPage } from '../pages/strategies/editStrategy/GStrategyEditPeriodicityPage';
 import { GStrategyEditResumePage } from '../pages/strategies/editStrategy/GStrategyEditResumePage';
 import { GStrategyEditSuccessPage } from '../pages/strategies/editStrategy/GStrategyEditSuccessPage';
+import { GAdViewPage } from '../pages/ads/listAds/GAdViewPage';
+import { GAdEditSuccessPage } from '../pages/ads/editAds/GAdEditSuccessPage';
+import { GAdEditIdentificationPage } from '../pages/ads/editAds/GAdEditIdentificationPage';
 
 export const GPrivateRoutes = () => {
   return (
@@ -130,6 +133,12 @@ export const GPrivateRoutes = () => {
       />
       <Route path="/ad/create/success" element={<GAdSuccessPage />} />
       <Route path="/ad/list" element={<GAdsListPage />} />
+      <Route path="/ad/view" element={<GAdViewPage />} />
+      <Route
+        path="/ad/edit/information"
+        element={<GAdEditIdentificationPage />}
+      />
+      <Route path="/ad/edit/success" element={<GAdEditSuccessPage />} />
       <Route path="/ad/error" element={<GAdErrorPage />} />
       <Route path="/strategy" element={<GStrategyPage />} />
       <Route path="/strategy/error" element={<GStrategyErrorPage />} />

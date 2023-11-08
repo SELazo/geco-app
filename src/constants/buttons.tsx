@@ -84,6 +84,11 @@ export const GEditIcon: IButtonIcon = {
   'icon-type': 'edit',
 };
 
+export const GViewIcon: IButtonIcon = {
+  color: GBlack,
+  'icon-type': 'eye',
+};
+
 export const GCommentIcon: IButtonIcon = {
   color: GBlack,
   'icon-type': 'comment',

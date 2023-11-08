@@ -38,9 +38,11 @@ export const GAdIdentificationPage = () => {
   const [loading, setLoading] = useState(false);
   const formNewAd = useSelector((state: RootState) => state.auth.formNewAd);
   const validationSchema = Yup.object().shape({
-    titleHelper: Yup.string().required(
-      'Por favor ingrese un titulo identificativo para su publicidad, esto te ayudara a encontrarla para utillizarla en tus estrategias de comunicación.'
-    ),
+    titleHelper: Yup.string()
+      .required(
+        'Por favor ingrese un titulo identificativo para su publicidad, esto te ayudara a encontrarla para utillizarla en tus estrategias de comunicación.'
+      )
+      .max(45, 'El texto no puede tener más de 50 caracteres'),
     descriptionHelper: Yup.string()
       .required(
         'Por favor ingrese el mensaje con el cual se enviará la publicidad'

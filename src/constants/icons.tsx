@@ -25,6 +25,7 @@ import {
   FiUser,
   FiXCircle,
   FiXSquare,
+  FiEye,
 } from 'react-icons/fi';
 
 import {
@@ -71,6 +72,7 @@ export const Icons: IconsMap = {
   'chevron-left': <FaChevronLeft />,
   clock: <FiClock />,
   'credit-card': <FiCreditCard />,
+  eye: <FiEye />,
   comment: <FaComment />,
   edit: <FaPencilAlt />,
   'new-ad': <FiEdit />,

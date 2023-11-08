@@ -35,8 +35,13 @@ export const ROUTES = {
       SUCCESS: '/success',
     },
     LIST: {
-      ROOT: 'list',
-      DELETE: '/delete-ads',
+      ROOT: '/list',
+      VIEW: '/view',
+    },
+    EDIT: {
+      ROOT: '/edit',
+      INFORMATION: '/information',
+      SUCCESS: '/success',
     },
     ERROR: '/error',
   },

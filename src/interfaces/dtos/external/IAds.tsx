@@ -84,5 +84,11 @@ export interface IAdsService {
   postGenerateAd(newAdInfo: IAd): Promise<ApiResponse<IPostAdResponse>>;
   sendBase64InChunks(base64: string, id: number): Promise<boolean>;
   getAds(): Promise<ApiResponse<IGetAdResponse[]>>;
+  getAdImg(id: number): any;
   deleteAd(id: number): Promise<ApiResponse<IBasicSuccessResponse>>;
+  editAd(
+    id: number,
+    description: string,
+    title: string
+  ): Promise<ApiResponse<IBasicSuccessResponse>>;
 }

@@ -6,17 +6,17 @@ import { GCircularButton } from '../../../components/GCircularButton';
 import {
   GAdIcon,
   GDeletetIcon,
-  GEditIcon,
   GIconButtonBack,
+  GViewIcon,
 } from '../../../constants/buttons';
 import { GBlack, GRed, GWhite, GYellow } from '../../../constants/palette';
 import { NavigationService } from '../../../services/internal/navigationService';
 import { AdsService } from '../../../services/external/adsService';
 import { GHeadCenterTitle } from '../../../components/GHeadCenterTitle';
 import { AdHeadCenterTitle } from '../../../constants/wording';
-import { GAdListItem, IAdListItem } from '../../../components/GAdListItem';
+import { GAdListItem } from '../../../components/GAdListItem';
 import { GLogoLetter } from '../../../components/GLogoLetter';
-import { Link } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 import { IGetAdResponse } from '../../../interfaces/dtos/external/IAds';
 import { ROUTES } from '../../../constants/routes';
 import { ApiResponse } from '../../../interfaces/dtos/external/IResponse';
@@ -30,6 +30,7 @@ export const GAdsListPage = () => {
   const [isDeleteErrorPopupOpen, setDeleteErrorPopupOpen] = useState(false);
   const [selectedId, setSelectedId] = useState<number | null>(null);
 
+  const navigate = useNavigate();
   useEffect(() => {
     const fetchAds = async () => {
       try {
@@ -45,7 +46,9 @@ export const GAdsListPage = () => {
   }, []);
 
   const viewAd = (id: number) => {
-    console.log(ads.find((c) => c.id === id));
+    navigate(`${ROUTES.AD.ROOT}${ROUTES.AD.LIST.VIEW}`, {
+      state: ads.find((ad) => ad.id === id),
+    });
   };
 
   const handleDeleteAd = async () => {
@@ -106,7 +109,7 @@ export const GAdsListPage = () => {
                   <GAdListItem
                     key={item.id}
                     ad={item}
-                    icon={GEditIcon}
+                    icon={GViewIcon}
                     iconBackgroundColor={GYellow}
                     onClickAction={() => viewAd(item.id)}
                     icon2={GDeletetIcon}

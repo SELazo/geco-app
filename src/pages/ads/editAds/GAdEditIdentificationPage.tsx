@@ -14,6 +14,7 @@ import { GAdIcon, GIconButtonBack } from '../../../constants/buttons';
 import {
   AdIdentificationHelp,
   CreateAdIdentificationTitle,
+  EditAdIdentificationTitle,
 } from '../../../constants/wording';
 import { GBlack, GWhite, GYellow } from '../../../constants/palette';
 import { GLogoLetter } from '../../../components/GLogoLetter';
@@ -24,23 +25,24 @@ import { GDropdownHelp } from '../../../components/GDropdownHelp';
 import { useDispatch, useSelector } from 'react-redux';
 import { AdsService } from '../../../services/external/adsService';
 import { RootState } from '../../../redux/gecoStore';
-import { IAd } from '../../../interfaces/dtos/external/IAds';
+import { IAd, IGetAdResponse } from '../../../interfaces/dtos/external/IAds';
 import { useEffect, useState } from 'react';
 import { PacmanLoader } from 'react-spinners';
 import { clearNewAdForm } from '../../../redux/sessionSlice';
 
 type AdData = {
   titleHelper: string;
-  descriptionHelper?: string;
+  descriptionHelper: string;
 };
 
-export const GAdIdentificationPage = () => {
+export const GAdEditIdentificationPage = () => {
   const [loading, setLoading] = useState(false);
-  const formNewAd = useSelector((state: RootState) => state.auth.formNewAd);
   const validationSchema = Yup.object().shape({
-    titleHelper: Yup.string().required(
-      'Por favor ingrese un titulo identificativo para su publicidad, esto te ayudara a encontrarla para utillizarla en tus estrategias de comunicación.'
-    ),
+    titleHelper: Yup.string()
+      .required(
+        'Por favor ingrese un titulo identificativo para su publicidad, esto te ayudara a encontrarla para utillizarla en tus estrategias de comunicación.'
+      )
+      .max(40, 'El texto no puede tener más de 40 caracteres'),
     descriptionHelper: Yup.string()
       .required(
         'Por favor ingrese el mensaje con el cual se enviará la publicidad'
@@ -50,46 +52,29 @@ export const GAdIdentificationPage = () => {
 
   const navigate = useNavigate();
   const location = useLocation();
-  const dispatch = useDispatch();
-  const base64Ad = location && location.state;
+
+  const ad: IGetAdResponse = location && location.state;
 
   useEffect(() => {
-    if (!formNewAd.template || !formNewAd.pallette || !base64Ad) {
+    if (!ad || !ad.id || !ad.description || !ad.title) {
       navigate(`${ROUTES.AD.ROOT}`);
     }
   }, []);
 
   const onSubmit = async (data: AdData) => {
-    const adInfo = { ...formNewAd };
-    const newAd: IAd = {
-      title: data.titleHelper,
-      description: data.descriptionHelper ? data.descriptionHelper : '',
-      size: adInfo.size,
-      ad_template: {
-        color_text: adInfo.pallette,
-        type: adInfo.size,
-        disposition_pattern: adInfo.template.id,
-      },
-    };
-    setLoading(true);
-    const response = await AdsService.postGenerateAd(newAd);
-    if (!response) {
-      navigate(`${ROUTES.AD.ROOT}${ROUTES.AD.CREATE.ROOT}${ROUTES.AD.ERROR}`);
-    }
-    const sendImgResponse = await AdsService.sendBase64InChunks(
-      base64Ad.replace(/^data:image\/(png|jpeg|jpg);base64,/, ''),
-      response.data?.id!
-    );
-
-    if (!sendImgResponse) {
-      navigate(`${ROUTES.AD.ROOT}${ROUTES.AD.CREATE.ROOT}${ROUTES.AD.ERROR}`);
-    }
-    setLoading(false);
-    navigate(
-      `${ROUTES.AD.ROOT}${ROUTES.AD.CREATE.ROOT}${ROUTES.AD.CREATE.SUCCESS}`
-    );
-    reset();
-    dispatch(clearNewAdForm());
+    const response = await AdsService.editAd(
+      ad.id,
+      data.titleHelper,
+      data.descriptionHelper
+    )
+      .then(() => {
+        navigate(
+          `${ROUTES.AD.ROOT}${ROUTES.AD.EDIT.ROOT}${ROUTES.AD.EDIT.SUCCESS}`
+        );
+      })
+      .catch(() => {
+        navigate(`${ROUTES.AD.ROOT}${ROUTES.AD.ERROR}`);
+      });
   };
 
   const {
@@ -139,8 +124,8 @@ export const GAdIdentificationPage = () => {
       </div>
       <div className="geco-create-ad-header-title">
         <GHeadSectionTitle
-          title={CreateAdIdentificationTitle.title}
-          subtitle={CreateAdIdentificationTitle.subtitle}
+          title={EditAdIdentificationTitle.title}
+          subtitle={EditAdIdentificationTitle.subtitle}
         />
       </div>
       <form className="geco-form" onSubmit={handleSubmit(onSubmit)}>
@@ -160,6 +145,7 @@ export const GAdIdentificationPage = () => {
                 type="text"
                 {...register('titleHelper')}
                 placeholder="Nombre de la publicidad"
+                defaultValue={ad.title}
                 className={`input-box form-control ${
                   errors.titleHelper ? 'is-invalid' : ''
                 }`}
@@ -170,6 +156,7 @@ export const GAdIdentificationPage = () => {
               <textarea
                 {...register('descriptionHelper')}
                 placeholder="Escribe el mensaje que se adjuntará a la imagen de tu publicidad al difundirla."
+                defaultValue={ad.description}
                 className={`input-box form-control ${
                   errors.descriptionHelper ? 'is-invalid' : ''
                 }`}
@@ -180,7 +167,7 @@ export const GAdIdentificationPage = () => {
             </div>
 
             <GSubmitButton
-              label="Crear publicidad"
+              label="Editar publicidad"
               colorBackground={GYellow}
               colorFont={GBlack}
             />
