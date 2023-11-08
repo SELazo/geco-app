@@ -39,17 +39,8 @@ export const GStrategyEditResumePage = () => {
   const strategyToEdit: IStrategyProps = location && location.state;
 
   useEffect(() => {
-    if (
-      !strategyToEdit ||
-      strategyToEdit.name === null ||
-      strategyToEdit.id === null ||
-      strategyToEdit.ads === null ||
-      strategyToEdit.groups === null ||
-      strategyToEdit.end_date === null ||
-      strategyToEdit.start_date === null ||
-      strategyToEdit.periodicity === null ||
-      strategyToEdit.schedule === null
-    ) {
+    console.log(strategyToEdit);
+    if (!strategyToEdit) {
       navigate(`${ROUTES.STRATEGY.ROOT}`);
     }
     const fetchGroups = async () => {
@@ -111,7 +102,7 @@ export const GStrategyEditResumePage = () => {
       ads: strategyToEdit.ads,
     })
       .then((response) => {
-        if (!response) {
+        if (response.success) {
           navigate(
             `${ROUTES.STRATEGY.ROOT}${ROUTES.STRATEGY.EDIT.ROOT}${ROUTES.STRATEGY.EDIT.SUCCESS}`
           );
@@ -120,6 +111,7 @@ export const GStrategyEditResumePage = () => {
       .catch(() => {
         navigate(`${ROUTES.STRATEGY.ROOT}${ROUTES.STRATEGY.ERROR}`);
       });
+
     setLoading(false);
   };
 
@@ -163,7 +155,7 @@ export const GStrategyEditResumePage = () => {
           <PacmanLoader color={GYellow} />
         </div>
       ) : (
-        <form className="geco-form" onSubmit={handleSubmit}>
+        <div className="geco-form">
           <div className="geco-strategy-resume">
             <h3 className="geco-strategy-resume-title">
               {strategyToEdit.name.toUpperCase()}
@@ -214,12 +206,14 @@ export const GStrategyEditResumePage = () => {
               </div>
             </div>
           </div>
-          <GSubmitButton
-            label="Editar estrategia! ✨"
-            colorBackground={GYellow}
-            colorFont={GBlack}
-          />
-        </form>
+          <div onClick={handleSubmit}>
+            <GSubmitButton
+              label="Editar estrategia! ✨"
+              colorBackground={GYellow}
+              colorFont={GBlack}
+            />
+          </div>
+        </div>
       )}
     </div>
   );

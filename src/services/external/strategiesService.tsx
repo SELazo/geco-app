@@ -113,16 +113,16 @@ export const StrategiesService: IStrategyService = {
       headers: {
         'Content-Type': 'application/json',
         Authorization: `${token}`,
-        body: JSON.stringify({
-          name: strategy.name,
-          start_date: strategy.start_date,
-          end_date: strategy.end_date,
-          periodicity: strategy.periodicity,
-          schedule: strategy.schedule,
-          groups: strategy.groups,
-          ads: strategy.ads,
-        }),
       },
+      body: JSON.stringify({
+        name: strategy.name,
+        start_date: strategy.start_date,
+        end_date: strategy.end_date,
+        periodicity: strategy.periodicity,
+        schedule: strategy.schedule,
+        groups: strategy.groups,
+        ads: strategy.ads,
+      }),
     });
 
     if (!response.ok) {
