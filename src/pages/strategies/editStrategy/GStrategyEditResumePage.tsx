@@ -36,20 +36,19 @@ export const GStrategyEditResumePage = () => {
   const navigate = useNavigate();
   const location = useLocation();
 
-  let strategyToEdit: IStrategyProps = location && location.state;
+  const strategyToEdit: IStrategyProps = location && location.state;
 
   useEffect(() => {
-    console.log();
     if (
       !strategyToEdit ||
-      strategyToEdit.name !== null ||
-      strategyToEdit.id !== null ||
-      strategyToEdit.ads !== null ||
-      strategyToEdit.groups !== null ||
-      strategyToEdit.end_date !== null ||
-      strategyToEdit.start_date !== null ||
-      strategyToEdit.periodicity !== null ||
-      strategyToEdit.schedule !== null
+      strategyToEdit.name === null ||
+      strategyToEdit.id === null ||
+      strategyToEdit.ads === null ||
+      strategyToEdit.groups === null ||
+      strategyToEdit.end_date === null ||
+      strategyToEdit.start_date === null ||
+      strategyToEdit.periodicity === null ||
+      strategyToEdit.schedule === null
     ) {
       navigate(`${ROUTES.STRATEGY.ROOT}`);
     }
@@ -100,16 +99,17 @@ export const GStrategyEditResumePage = () => {
   }, [strategyToEdit]);
 
   const handleSubmit = async () => {
-    await editStrategy(
-      strategyToEdit.id,
-      strategyToEdit.name,
-      strategyToEdit.start_date,
-      strategyToEdit.end_date,
-      strategyToEdit.periodicity,
-      strategyToEdit.schedule,
-      strategyToEdit.ads,
-      strategyToEdit.groups
-    )
+    console.log(strategyToEdit);
+    setLoading(true);
+    await editStrategy(strategyToEdit.id, {
+      name: strategyToEdit.name,
+      start_date: strategyToEdit.start_date,
+      end_date: strategyToEdit.end_date,
+      periodicity: strategyToEdit.periodicity,
+      schedule: strategyToEdit.schedule,
+      groups: strategyToEdit.groups,
+      ads: strategyToEdit.ads,
+    })
       .then((response) => {
         if (!response) {
           navigate(
@@ -121,9 +121,6 @@ export const GStrategyEditResumePage = () => {
         navigate(`${ROUTES.STRATEGY.ROOT}${ROUTES.STRATEGY.ERROR}`);
       });
     setLoading(false);
-    navigate(
-      `${ROUTES.STRATEGY.ROOT}${ROUTES.STRATEGY.EDIT.ROOT}${ROUTES.STRATEGY.EDIT.SUCCESS}`
-    );
   };
 
   return (

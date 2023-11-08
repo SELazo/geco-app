@@ -26,13 +26,15 @@ export interface IStrategyService {
   deleteStrategy(id: number): Promise<ApiResponse<IBasicSuccessResponse>>;
   editStrategy(
     id: number,
-    name: string,
-    start_date: Date,
-    end_date: Date,
-    periodicity: string,
-    schedule: string,
-    ads: number[],
-    groups: number[]
+    strategy: {
+      name: string;
+      start_date: Date;
+      end_date: Date;
+      periodicity: string;
+      schedule: string;
+      ads: number[];
+      groups: number[];
+    }
   ): Promise<ApiResponse<IBasicSuccessResponse>>;
   getStrategy(id: number): Promise<IStrategyResponse>;
   getStrategies(params?: {

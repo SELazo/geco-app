@@ -35,7 +35,6 @@ import {
 import { RootState } from '../../../redux/gecoStore';
 import { LocalizationProvider, TimeField } from '@mui/x-date-pickers';
 import dayjs, { Dayjs } from 'dayjs';
-import { setNewStrategyConfig } from '../../../redux/sessionSlice';
 import { IStrategyProps } from '../../../components/GStrategyCard';
 
 const { getPeriodicities, getSchedules } = StrategyService;
@@ -175,9 +174,9 @@ export const GStrategyEditPeriodicityPage = () => {
           <RadioGroup>
             {periodicities.map((periodicity) => (
               <FormControlLabel
+                key={`periodicity-${periodicity.id}`}
                 control={
                   <Radio
-                    key={`periodicity-${periodicity.id}`}
                     checked={periodicity.value === selectedPeriodicity}
                     onChange={handlePeriodicityChange}
                     value={periodicity.value}
@@ -233,9 +232,9 @@ export const GStrategyEditPeriodicityPage = () => {
             >
               {schedules.map((schedule) => (
                 <FormControlLabel
+                  key={`schedule-${schedule.id}`}
                   control={
                     <Radio
-                      key={`schedule-${schedule.id}`}
                       checked={schedule.value === selectedSchedule}
                       onChange={handleScheduleChange}
                       value={schedule.value}

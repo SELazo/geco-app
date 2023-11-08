@@ -97,39 +97,30 @@ export const StrategiesService: IStrategyService = {
 
   editStrategy: async (
     id: number,
-    name: string,
-    start_date: Date,
-    end_date: Date,
-    periodicity: string,
-    schedule: string,
-    ads: number[],
-    groups: number[]
+    strategy: {
+      name: string;
+      start_date: Date;
+      end_date: Date;
+      periodicity: string;
+      schedule: string;
+      groups: number[];
+      ads: number[];
+    }
   ): Promise<ApiResponse<IBasicSuccessResponse>> => {
     const token = localStorage.getItem('token');
-    console.log(
-      JSON.stringify({
-        name,
-        start_date,
-        end_date,
-        periodicity,
-        schedule,
-        groups,
-        ads,
-      })
-    );
     const response = await fetch(`${strategiesServiceURI}/strategies/${id}`, {
       method: 'PUT',
       headers: {
         'Content-Type': 'application/json',
         Authorization: `${token}`,
         body: JSON.stringify({
-          name,
-          start_date,
-          end_date,
-          periodicity,
-          schedule,
-          groups,
-          ads,
+          name: strategy.name,
+          start_date: strategy.start_date,
+          end_date: strategy.end_date,
+          periodicity: strategy.periodicity,
+          schedule: strategy.schedule,
+          groups: strategy.groups,
+          ads: strategy.ads,
         }),
       },
     });
