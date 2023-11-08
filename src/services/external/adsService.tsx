@@ -22,6 +22,7 @@ import {
 } from '../../constants/palette';
 import { SessionService } from '../internal/sessionService';
 import { IError } from '../../interfaces/dtos/external/IError';
+import { IBasicSuccessResponse } from '../../interfaces/dtos/external/IBasicResponse';
 
 export const AdsService: IAdsService = {
   sendBase64InChunks: async (base64: string, id: number): Promise<boolean> => {
@@ -314,6 +315,37 @@ export const AdsService: IAdsService = {
 
       const data: IGetAdResponse[] = await response.json();
       const successResponse: ApiResponse<IGetAdResponse[]> = {
+        success: true,
+        data: data,
+      };
+      resolve(successResponse);
+      return;
+    }),
+  deleteAd: async (id: number): Promise<ApiResponse<IBasicSuccessResponse>> =>
+    new Promise(async (resolve, reject) => {
+      const token = SessionService.getToken();
+
+      const response = await fetch(`${environment.adsServiceURI}/ads/${id}`, {
+        method: 'DELETE',
+        headers: {
+          'Content-Type': 'application/json',
+          Authorization: `${token}`,
+        },
+      });
+
+      if (!response.ok) {
+        const err: IError = await response.json();
+        console.error(err);
+        const errorResponse: ApiResponse<IBasicSuccessResponse> = {
+          success: false,
+          error: err,
+        };
+        reject(errorResponse);
+        return;
+      }
+
+      const data: IBasicSuccessResponse = await response.json();
+      const successResponse: ApiResponse<IBasicSuccessResponse> = {
         success: true,
         data: data,
       };

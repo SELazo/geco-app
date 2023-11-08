@@ -1,3 +1,4 @@
+import { IBasicSuccessResponse } from './IBasicResponse';
 import { ApiResponse } from './IResponse';
 
 export interface IAdSizes {
@@ -83,4 +84,5 @@ export interface IAdsService {
   postGenerateAd(newAdInfo: IAd): Promise<ApiResponse<IPostAdResponse>>;
   sendBase64InChunks(base64: string, id: number): Promise<boolean>;
   getAds(): Promise<ApiResponse<IGetAdResponse[]>>;
+  deleteAd(id: number): Promise<ApiResponse<IBasicSuccessResponse>>;
 }

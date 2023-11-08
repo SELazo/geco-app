@@ -5,6 +5,7 @@ import { useEffect, useState } from 'react';
 import { GCircularButton } from '../../../components/GCircularButton';
 import {
   GAdIcon,
+  GDeletetIcon,
   GEditIcon,
   GIconButtonBack,
 } from '../../../constants/buttons';
@@ -19,11 +20,15 @@ import { Link } from 'react-router-dom';
 import { IGetAdResponse } from '../../../interfaces/dtos/external/IAds';
 import { ROUTES } from '../../../constants/routes';
 import { ApiResponse } from '../../../interfaces/dtos/external/IResponse';
+import { GPopUpMessage } from '../../../components/GPopUpMessage';
 
-const { getAds } = AdsService;
+const { getAds, deleteAd } = AdsService;
 
 export const GAdsListPage = () => {
   const [ads, setAds] = useState<IGetAdResponse[]>([]);
+  const [isDeletePopupOpen, setDeletePopupOpen] = useState(false);
+  const [isDeleteErrorPopupOpen, setDeleteErrorPopupOpen] = useState(false);
+  const [selectedId, setSelectedId] = useState<number | null>(null);
 
   useEffect(() => {
     const fetchAds = async () => {
@@ -37,10 +42,30 @@ export const GAdsListPage = () => {
     };
 
     fetchAds();
-  }, [ads]);
+  }, []);
 
   const viewAd = (id: number) => {
     console.log(ads.find((c) => c.id === id));
+  };
+
+  const handleDeleteAd = async () => {
+    if (selectedId !== null) {
+      await deleteAd(selectedId)
+        .then((response) => {
+          if (response.success) {
+            window.location.reload();
+          }
+        })
+        .catch(() => {
+          setDeletePopupOpen(false);
+          setDeleteErrorPopupOpen(true);
+        });
+    }
+  };
+
+  const handleDelete = (id: number) => {
+    setSelectedId(id);
+    setDeletePopupOpen(true);
   };
 
   return (
@@ -84,6 +109,9 @@ export const GAdsListPage = () => {
                     icon={GEditIcon}
                     iconBackgroundColor={GYellow}
                     onClickAction={() => viewAd(item.id)}
+                    icon2={GDeletetIcon}
+                    iconBackgroundColor2={GRed}
+                    onClickAction2={() => handleDelete(item.id)}
                   />
                 ))}
               </div>
@@ -97,6 +125,35 @@ export const GAdsListPage = () => {
           </div>
         )}
       </div>
+
+      {isDeletePopupOpen && (
+        <GPopUpMessage
+          isOpen={isDeletePopupOpen}
+          title="¿Estás seguro de borrar esta publicidad?"
+          body="Una publicidad borrada no será posible de recuperar."
+          btn1="Confirmar"
+          btn1Action={() => {
+            handleDeleteAd();
+            setDeletePopupOpen(false);
+          }}
+          btn2="Cancelar"
+          btn2Action={() => {
+            setDeletePopupOpen(false);
+          }}
+        />
+      )}
+
+      {isDeleteErrorPopupOpen && (
+        <GPopUpMessage
+          isOpen={isDeleteErrorPopupOpen}
+          title="Hubo un error"
+          body="Una publicidad es parte de una estrategia por lo que no puede ser borrada."
+          btn1="Confirmar"
+          btn1Action={() => {
+            setDeleteErrorPopupOpen(false);
+          }}
+        />
+      )}
     </>
   );
 };
