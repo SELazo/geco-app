@@ -1,0 +1,27 @@
+{
+  "compilerOptions": {
+    "module": "CommonJS", // <--- ¡CAMBIO CRÍTICO! Genera módulos CommonJS, compatible con Firebase Functions.
+    "target": "es2020",   // Target de ECMAScript. Puedes usar "es2017" si quieres mantenerlo.
+    "lib": [
+      "es2020",           // Incluye las características de ES2020
+      "dom"               // Útil para algunos polyfills o si alguna lib lo requiere
+    ],
+    "strict": true,       // Habilita todas las opciones de verificación de tipos estrictas
+    "esModuleInterop": true, // Permite importar módulos CommonJS (como Express y tus APIs) usando la sintaxis import de ES.
+    "allowSyntheticDefaultImports": true, // Complementa esModuleInterop para importar default exports
+    "skipLibCheck": true, // Acelera la compilación al omitir la verificación de tipos de los archivos de definición de librerías
+    "forceConsistentCasingInFileNames": true,
+    "resolveJsonModule": true,
+    "outDir": "lib",      // Directorio de salida para los archivos compilados
+    "sourceMap": true,    // Genera source maps para facilitar la depuración
+    "allowJs": true,      // <--- ¡AÑADIR ESTA LÍNEA! Permite a TypeScript procesar tus archivos .js
+    "checkJs": false      // <--- ¡AÑADIR ESTA LÍNEA! Deshabilita la verificación de tipos en archivos .js (silencia TS7016)
+  },
+  "compileOnSave": true,
+  "include": [
+    "src" // Incluye todos los archivos bajo la carpeta 'src'
+  ],
+  "exclude": [
+    "node_modules" // Excluye la carpeta node_modules de la compilación
+  ]
+}
