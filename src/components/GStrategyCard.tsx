@@ -95,16 +95,39 @@ export const GStrategyCard: FC<IStrategyProps> = (props: IStrategyProps) => {
   };
 
   const handleSendStrategy = async () => {
-    await sendStrategy(props.id);
+    try {
+      const response = await sendStrategy(props.id);
+      console.log('Estrategia enviada:', response);
+      if (response && response.success) {
+        setSendPopupOpen(false);
+        // Aquí podrías mostrar un mensaje de éxito o actualizar el estado
+        alert('Estrategia enviada exitosamente!');
+      } else {
+        console.error('Error al enviar estrategia:', response);
+        alert('Error al enviar la estrategia');
+      }
+    } catch (error) {
+      console.error('Error en el envío:', error);
+      alert('Error al enviar la estrategia');
+    }
   };
 
   const handleDeleteStrategy = async () => {
-    await deleteStrategy(props.id).then((response) => {
-      console.log(response);
-      if (response.success) {
+    try {
+      const response = await deleteStrategy(props.id);
+      console.log('Estrategia eliminada:', response);
+      if (response && response.success) {
+        setDeletePopupOpen(false);
+        // Recargar la página actual para actualizar la lista
         window.location.reload();
+      } else {
+        console.error('Error al eliminar estrategia:', response);
+        alert('Error al eliminar la estrategia');
       }
-    });
+    } catch (error) {
+      console.error('Error en la eliminación:', error);
+      alert('Error al eliminar la estrategia');
+    }
   };
 
   return (

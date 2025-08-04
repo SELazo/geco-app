@@ -32,8 +32,8 @@ export const StrategiesService: IStrategyService = {
         },
         body: JSON.stringify({
           name,
-          start_date,
-          end_date,
+          start_date: start_date.toISOString(),
+          end_date: end_date.toISOString(),
           periodicity,
           schedule,
           ads,
@@ -116,8 +116,8 @@ export const StrategiesService: IStrategyService = {
       },
       body: JSON.stringify({
         name: strategy.name,
-        start_date: strategy.start_date,
-        end_date: strategy.end_date,
+        start_date: strategy.start_date.toISOString(),
+        end_date: strategy.end_date.toISOString(),
         periodicity: strategy.periodicity,
         schedule: strategy.schedule,
         groups: strategy.groups,

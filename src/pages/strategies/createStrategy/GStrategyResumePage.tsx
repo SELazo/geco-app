@@ -90,32 +90,47 @@ export const GStrategyResumePage = () => {
     fetchGroups();
   }, [strategyForm]);
 
-  const handleSubmit = async () => {
+  const handleSubmit = async (event: React.FormEvent<HTMLFormElement>) => {
+    event.preventDefault();
     setLoading(true);
-    await newStrategy(
-      strategyForm.title,
-      new Date(strategyForm.startDate),
-      new Date(strategyForm.endDate),
-      strategyForm.periodicity,
-      strategyForm.schedule,
-      strategyForm.ads,
-      strategyForm.groups
-    )
-      .then((response) => {
-        if (!response) {
-          dispatch(clearNewStrategyForm());
-          navigate(
-            `${ROUTES.AD.ROOT}${ROUTES.AD.CREATE.ROOT}${ROUTES.AD.CREATE.SUCCESS}`
-          );
-        }
-      })
-      .catch(() => {
-        navigate(`${ROUTES.AD.ROOT}${ROUTES.AD.CREATE.ROOT}${ROUTES.AD.ERROR}`);
-      });
+const startDate = new Date(strategyForm.startDate);
+    const endDate = new Date(strategyForm.endDate);
+    console.log('Creando estrategia:', {
+      name: strategyForm.title,
+      start_date: startDate.toISOString(),
+      end_date: endDate.toISOString(),
+      periodicity: strategyForm.periodicity,
+      schedule: strategyForm.schedule,
+      ads: strategyForm.ads,
+      groups: strategyForm.groups
+    });
+    try {
+      const response = await newStrategy(
+        strategyForm.title,
+        startDate,
+        endDate,
+        strategyForm.periodicity,
+        strategyForm.schedule,
+        strategyForm.ads,
+        strategyForm.groups
+      );
+      
+      console.log('Respuesta del backend:', response);
+      
+      if (response && response.success) {
+        dispatch(clearNewStrategyForm());
+        navigate(
+          `${ROUTES.STRATEGY.ROOT}${ROUTES.STRATEGY.CREATE.ROOT}${ROUTES.STRATEGY.CREATE.SUCCESS}`
+        );
+      } else {
+        console.error('Error al crear estrategia:', response);
+        navigate(`${ROUTES.STRATEGY.ROOT}${ROUTES.STRATEGY.CREATE.ROOT}${ROUTES.STRATEGY.ERROR}`);
+      }
+    } catch (error) {
+      console.error('Error en la creación de estrategia:', error);
+      navigate(`${ROUTES.STRATEGY.ROOT}${ROUTES.STRATEGY.CREATE.ROOT}${ROUTES.STRATEGY.ERROR}`);
+    }
     setLoading(false);
-    navigate(
-      `${ROUTES.STRATEGY.ROOT}${ROUTES.STRATEGY.CREATE.ROOT}${ROUTES.STRATEGY.CREATE.SUCCESS}`
-    );
   };
 
   return (
@@ -161,7 +176,7 @@ export const GStrategyResumePage = () => {
         <form className="geco-form" onSubmit={handleSubmit}>
           <div className="geco-strategy-resume">
             <h3 className="geco-strategy-resume-title">
-              {strategyForm.title.toUpperCase()}
+              {strategyForm?.title?.toUpperCase() || 'ESTRATEGIA SIN NOMBRE'}
             </h3>
             <div>
               <div className="geco-strategy-resume-item">
@@ -190,21 +205,21 @@ export const GStrategyResumePage = () => {
               <div className="geco-strategy-resume-item">
                 <p className="geco-strategy-resume-item-title">Duración:</p>
                 <p className="geco-strategy-resume-item">
-                  {dayjs(strategyForm.startDate).format('DD/MM/YYYY')}
+                  {strategyForm?.startDate ? dayjs(strategyForm.startDate).format('DD/MM/YYYY') : 'Fecha no definida'}
                   {' - '}
-                  {dayjs(strategyForm.endDate).format('DD/MM/YYYY')}
+                  {strategyForm?.endDate ? dayjs(strategyForm.endDate).format('DD/MM/YYYY') : 'Fecha no definida'}
                 </p>
               </div>
               <div>
                 <p className="geco-strategy-resume-item-title">Difusión:</p>
                 <p className="geco-strategy-resume-item">
-                  {strategyForm.schedule}
+                  {strategyForm?.schedule || 'Horario no definido'}
                 </p>
               </div>
               <div className="geco-strategy-resume-item">
                 <p className="geco-strategy-resume-item-title">Periodicidad:</p>
                 <p className="geco-strategy-resume-item">
-                  {getPeriodicity(strategyForm.periodicity)}
+                  {strategyForm?.periodicity ? getPeriodicity(strategyForm.periodicity) : 'Periodicidad no definida'}
                 </p>
               </div>
             </div>

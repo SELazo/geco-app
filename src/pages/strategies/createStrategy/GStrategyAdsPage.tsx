@@ -54,9 +54,16 @@ export const GStrategyAdsPage = () => {
     const fetchAds = async () => {
       try {
         const adsData = await getAds();
-        setAdsList(adsData.data ?? []);
+        // Asegurar que adsData.data sea un array
+        if (adsData && adsData.data && Array.isArray(adsData.data)) {
+          setAdsList(adsData.data);
+        } else {
+          console.warn('API response is not an array:', adsData);
+          setAdsList([]);
+        }
       } catch (error) {
-        console.log(error); // TODO: Mostrar error en pantalla
+        console.log('Error fetching ads:', error);
+        setAdsList([]); // Asegurar que siempre sea un array
       }
     };
 
@@ -131,7 +138,7 @@ export const GStrategyAdsPage = () => {
       </div>
 
       <form className="geco-form " onSubmit={handleSubmit(onSubmit)}>
-        {adsList.length !== 0 ? (
+        {Array.isArray(adsList) && adsList.length !== 0 ? (
           <div className="geco-input-group">
             {adsList.map((ad) => (
               <div key={ad.id}>
