@@ -1,0 +1,12 @@
+.geco-feedback {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  text-align: center;
+  max-width: 325px;
+}
+
+.geco-feedback p {
+  margin: 1vh 0 2vh 0;
+}

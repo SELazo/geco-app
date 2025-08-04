@@ -1,0 +1,12 @@
+<svg width="250" height="507" viewBox="0 0 250 507" fill="none" xmlns="http://www.w3.org/2000/svg">
+<g clip-path="url(#clip0_712_5002)">
+<rect y="507" width="507" height="250" transform="rotate(-90 0 507)" fill="#1947E5"/>
+<path d="M59 48H186.529V94.1647H59V48ZM59 386H191.424V468.259H59V386Z" fill="#D9D9D9" stroke="#18191F" stroke-width="4"/>
+</g>
+<rect x="2" y="505" width="503" height="246" transform="rotate(-90 2 505)" stroke="#18191F" stroke-width="4"/>
+<defs>
+<clipPath id="clip0_712_5002">
+<rect y="507" width="507" height="250" transform="rotate(-90 0 507)" fill="white"/>
+</clipPath>
+</defs>
+</svg>
