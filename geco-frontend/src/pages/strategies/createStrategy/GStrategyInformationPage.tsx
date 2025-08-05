@@ -1,0 +1,132 @@
+import { useForm } from 'react-hook-form';
+import { Link, useLocation, useNavigate } from 'react-router-dom';
+import { NavigationService } from '../../../services/internal/navigationService';
+import * as Yup from 'yup';
+
+import '../../../styles/ginputBox.css';
+import '../../../styles/gform.css';
+import '../../../styles/gcreatead.css';
+
+import { GHeadSectionTitle } from '../../../components/GHeadSectionTitle';
+import { GCircularButton } from '../../../components/GCircularButton';
+import {
+  GAdIcon,
+  GIconButtonBack,
+  GStrategyIcon,
+} from '../../../constants/buttons';
+
+import {
+  AdIdentificationHelp,
+  CreateAdIdentificationTitle,
+  CreateStrategyInformationTitle,
+  StrategyInformationHelp,
+} from '../../../constants/wording';
+import { GBlack, GWhite, GYellow } from '../../../constants/palette';
+import { GLogoLetter } from '../../../components/GLogoLetter';
+import { yupResolver } from '@hookform/resolvers/yup';
+import { ROUTES } from '../../../constants/routes';
+import { GSubmitButton } from '../../../components/GSubmitButton';
+import { GDropdownHelp } from '../../../components/GDropdownHelp';
+import { useState } from 'react';
+import { PacmanLoader } from 'react-spinners';
+import { useDispatch } from 'react-redux';
+import {
+  setNewAdIdentification,
+  setNewStrategyTitle,
+} from '../../../redux/sessionSlice';
+
+export const GStrategyInformationPage = () => {
+  const validationSchema = Yup.object().shape({
+    title: Yup.string()
+      .required(
+        'Por favor ingrese un titulo identificativo para su estrategia de comunicación, esto te ayudara a encontrarla para realizar modificaciones posteriores.'
+      )
+      .max(50, 'El título no puede tener más de 50 caracteres'),
+  });
+
+  const navigate = useNavigate();
+  const dispatch = useDispatch();
+
+  const onSubmit = async (data: any) => {
+    dispatch(setNewStrategyTitle(data.title));
+    navigate(
+      `${ROUTES.STRATEGY.ROOT}${ROUTES.STRATEGY.CREATE.ROOT}${ROUTES.STRATEGY.CREATE.ADS}`
+    );
+    reset();
+  };
+
+  const {
+    register,
+    handleSubmit,
+    reset,
+    formState: { errors },
+  } = useForm<{
+    title: string;
+  }>({
+    resolver: yupResolver(validationSchema),
+  });
+
+  return (
+    <div className="geco-create-ad-main">
+      <div className="geco-create-ad-head-nav-bar">
+        <div className="geco-create-ad-nav-bar">
+          <Link className="geco-create-ad-nav-bar-logo" to="/home">
+            <GLogoLetter />
+          </Link>
+          <Link
+            className="geco-add-contact-excel-nav-bar-section"
+            to="/strategy"
+          >
+            <GCircularButton
+              icon={GStrategyIcon}
+              size="1.5em"
+              width="50px"
+              height="50px"
+              colorBackground={GWhite}
+            />
+          </Link>
+          <GCircularButton
+            icon={GIconButtonBack}
+            size="1.5em"
+            width="50px"
+            height="50px"
+            colorBackground={GWhite}
+            onClickAction={NavigationService.goBack}
+          />
+        </div>
+        <div className="geco-create-ad-nav-bar-right">
+          <GDropdownHelp
+            title={StrategyInformationHelp.title}
+            body={StrategyInformationHelp.body}
+            body2={StrategyInformationHelp.body2}
+          />
+        </div>
+      </div>
+      <div className="geco-create-ad-header-title">
+        <GHeadSectionTitle
+          title={CreateStrategyInformationTitle.title}
+          subtitle={CreateStrategyInformationTitle.subtitle}
+        />
+      </div>
+      <form className="geco-form" onSubmit={handleSubmit(onSubmit)}>
+        <div className="input-group">
+          <input
+            type="text"
+            {...register('title')}
+            placeholder="Nombre de la estrategia"
+            className={`input-box form-control ${
+              errors.title ? 'is-invalid' : ''
+            }`}
+          />
+          <span className="span-error">{errors.title?.message}</span>
+        </div>
+
+        <GSubmitButton
+          label="Siguiente"
+          colorBackground={GYellow}
+          colorFont={GBlack}
+        />
+      </form>
+    </div>
+  );
+};

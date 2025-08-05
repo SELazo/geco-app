@@ -1,0 +1,31 @@
+{
+  "name": "contacts-api",
+  "version": "1.0.0",
+  "description": "This application intends to brings support to contacts and groups management.",
+  "main": "index.js",
+  "scripts": {
+    "start-dev": "nodemon index.js",
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+ssh://git@gitlab.com/geco-project/contacts-api.git"
+  },
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://gitlab.com/geco-project/contacts-api/issues"
+  },
+  "homepage": "https://gitlab.com/geco-project/contacts-api#readme",
+  "dependencies": {
+    "axios": "^1.11.0",
+    "cors": "2.8.5",
+    "dotenv": "16.0.3",
+    "express": "^4.21.2",
+    "mysql2": "^3.14.2",
+    "sequelize": "6.31.0"
+  },
+  "devDependencies": {
+    "nodemon": "^3.1.10"
+  }
+}

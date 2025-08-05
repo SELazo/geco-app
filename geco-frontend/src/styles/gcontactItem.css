@@ -1,0 +1,58 @@
+.geco-contact-item-card {
+  text-align: start;
+  box-sizing: border-box;
+  background-color: #ffffff;
+  border: 2px solid #18191f;
+  border-radius: 16px;
+  padding: 5%;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  width: 100%;
+  margin-bottom: 15px;
+}
+
+.geco-contact-item-name {
+  font-family: 'Montserrat';
+  font-style: normal;
+  font-weight: 800;
+  font-size: 21px;
+  margin: 0;
+  color: #18191f;
+}
+
+.geco-contact-item-info {
+  display: flex;
+  flex-direction: column;
+}
+
+.geco-contact-item-info p {
+  font-family: 'Montserrat';
+  font-style: normal;
+  font-weight: 500;
+  font-size: 13px;
+  color: #9fa4b4;
+  margin: 0;
+}
+
+.geco-edit-btn {
+  width: 15%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 16px;
+  gap: 10px;
+  height: 40px;
+
+  background: #ffbd12;
+  border-radius: 12px;
+  border: 2px solid #18191f;
+
+  font-family: 'Montserrat', sans-serif;
+  font-style: normal;
+  font-weight: 700;
+  font-size: 15px;
+  line-height: 28px;
+
+  text-align: center;
+}

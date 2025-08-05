@@ -1,0 +1,38 @@
+.geco-develop {
+  color: #ffffff;
+  margin: 5px;
+}
+
+.boot-main{
+  display: flex;
+  flex-direction: column;
+  border: none;
+  height: 100vh;
+  background-image: url('src/assets/images/geco_animal_crop.svg');
+  /*background-size: 80vh;*/
+  background-repeat: no-repeat;
+  background-position: bottom right;
+  background-color: #1947E5;
+}
+
+.buttom-login{
+  display: flex;
+  height: 60vh;
+  justify-content: center;
+  align-items: center;
+}
+
+.dev-by{
+  display: flex;
+  height: 40vh;
+  justify-content: center;
+  align-items: flex-end;
+  margin-bottom: 60px;
+}
+
+.div-dev-by{
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+}

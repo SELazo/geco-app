@@ -1,0 +1,78 @@
+export const ROUTES = {
+  GECO: '/',
+  HOME: '/home',
+  LOGIN: '/login',
+  RESET_PASSWORD: '/recovery/reset-password',
+  RESET_PASSWORD_SUCCESS: '/recovery/reset-success',
+  CONTACTS: {
+    ADD_CONTACT: '/contacts/success-add-contact',
+    CONTACS_LIST: '/contacts/list',
+    OPTIONS: '/contacts/options',
+  },
+  GROUPS: {
+    ROOT: '/contacts/groups',
+    ADD_GROUP_INFO: '/add-group/info',
+    ADD_GROUP_MEMBERS: '/add-group/members',
+    ADD_GROUP_SUCCESS: '/sucess-add-group',
+    GROUP_SEE_MORE: '/:id',
+  },
+  USER: {
+    EDIT_SUCCESS: '/user/edit-success',
+  },
+  AD: {
+    ROOT: '/ad',
+    CREATE: {
+      ROOT: '/create',
+      SIZE: '/size',
+      CONTENT: '/content',
+      IMAGE_TYPE: '/image',
+      IMAGE_AI: '/image/ai',
+      IMAGE_OWN: '/image/own',
+      PATTERN: '/pattern',
+      PALLETTE: '/pallette',
+      AD_GENERATION: '/ad_generation',
+      INFORMATION: '/information',
+      SUCCESS: '/success',
+    },
+    LIST: {
+      ROOT: '/list',
+      VIEW: '/view',
+    },
+    EDIT: {
+      ROOT: '/edit',
+      INFORMATION: '/information',
+      SUCCESS: '/success',
+    },
+    ERROR: '/error',
+  },
+  STRATEGY: {
+    ROOT: '/strategy',
+    CREATE: {
+      ROOT: '/create',
+      INFORMATION: '/information',
+      ADS: '/ads',
+      GROUPS: '/groups',
+      PERIOD: '/period',
+      PERIODICITY: '/periodicity',
+      RESUME: '/resume',
+      SUCCESS: '/success',
+    },
+    EDIT: {
+      ROOT: '/edit',
+      INFORMATION: '/information',
+      ADS: '/ads',
+      GROUPS: '/groups',
+      PERIOD: '/period',
+      PERIODICITY: '/periodicity',
+      RESUME: '/resume',
+      SUCCESS: '/success',
+    },
+    LIST: {
+      ROOT: '/list',
+    },
+    ERROR: '/error',
+  },
+  SIGN_UP: {
+    SIGN_UP_SUCCESSFUL: '/sign-up/sign-up-successful',
+  },
+};
