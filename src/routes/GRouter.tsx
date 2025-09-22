@@ -2,6 +2,7 @@ import { BrowserRouter, Navigate, Route, Routes } from 'react-router-dom';
 
 import { GPrivateRoutes } from './GPrivateRoutes';
 import { GBootPage } from '../pages/GBootPage';
+import { GLandingPage } from '../pages/marketing/GLandingPage';
 import { GLoginPage } from '../pages/auth/GLoginPage';
 import { GSignUpPage } from '../pages/auth/signUp/GSignUpPage';
 import { GForgotPasswordPage } from '../pages/auth/GForgotPasswordPage';
@@ -28,7 +29,7 @@ export const GRouter = ({
         ) : (
           <Route path="/*" element={<Navigate to="/login" />} />
         )}
-        <Route path="/" element={<GBootPage />} />
+        <Route path="/" element={<GLandingPage />} />
         <Route
           path="/login"
           element={<GLoginPage handleLogin={handleLogin} />}
