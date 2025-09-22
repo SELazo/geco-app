@@ -93,16 +93,46 @@ export const GStrategyResumePage = () => {
   const handleSubmit = async (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();
     setLoading(true);
-const startDate = new Date(strategyForm.startDate);
+    const startDate = new Date(strategyForm.startDate);
     const endDate = new Date(strategyForm.endDate);
-    console.log('Creando estrategia:', {
+    console.log('Creando estrategia (antes de payload):', {
       name: strategyForm.title,
       start_date: startDate.toISOString(),
       end_date: endDate.toISOString(),
       periodicity: strategyForm.periodicity,
       schedule: strategyForm.schedule,
       ads: strategyForm.ads,
-      groups: strategyForm.groups
+      groups: strategyForm.groups,
+      formTypeUI: strategyForm.formType,
+      formConfigUI: strategyForm.formConfig,
+    });
+
+    const mapFormType = (t?: string): string | undefined => {
+      switch (t) {
+        case 'Pedido rápido':
+          return 'quick_order';
+        case 'Contacto simple':
+          return 'simple_contact';
+        case 'Reservas / turnos':
+          return 'booking';
+        case 'Catálogo':
+          return 'catalog';
+        default:
+          return undefined;
+      }
+    };
+    const form_type = strategyForm?.enableForm ? mapFormType(strategyForm?.formType) : undefined;
+    const form_config = strategyForm.formConfig;
+    console.log('Payload a enviar (newStrategy):', {
+      name: strategyForm.title,
+      start_date: startDate,
+      end_date: endDate,
+      periodicity: strategyForm.periodicity,
+      schedule: strategyForm.schedule,
+      ads: strategyForm.ads,
+      groups: strategyForm.groups,
+      form_type,
+      form_config,
     });
     try {
       const response = await newStrategy(
@@ -112,11 +142,13 @@ const startDate = new Date(strategyForm.startDate);
         strategyForm.periodicity,
         strategyForm.schedule,
         strategyForm.ads,
-        strategyForm.groups
+        strategyForm.groups,
+        form_type,
+        form_config
       );
-      
+
       console.log('Respuesta del backend:', response);
-      
+
       if (response && response.success) {
         dispatch(clearNewStrategyForm());
         navigate(
@@ -124,11 +156,15 @@ const startDate = new Date(strategyForm.startDate);
         );
       } else {
         console.error('Error al crear estrategia:', response);
-        navigate(`${ROUTES.STRATEGY.ROOT}${ROUTES.STRATEGY.CREATE.ROOT}${ROUTES.STRATEGY.ERROR}`);
+        navigate(
+          `${ROUTES.STRATEGY.ROOT}${ROUTES.STRATEGY.CREATE.ROOT}${ROUTES.STRATEGY.ERROR}`
+        );
       }
     } catch (error) {
       console.error('Error en la creación de estrategia:', error);
-      navigate(`${ROUTES.STRATEGY.ROOT}${ROUTES.STRATEGY.CREATE.ROOT}${ROUTES.STRATEGY.ERROR}`);
+      navigate(
+        `${ROUTES.STRATEGY.ROOT}${ROUTES.STRATEGY.CREATE.ROOT}${ROUTES.STRATEGY.ERROR}`
+      );
     }
     setLoading(false);
   };
@@ -186,7 +222,7 @@ const startDate = new Date(strategyForm.startDate);
                     key={`ad${ad.id}`}
                     className="geco-strategy-resume-item-list"
                   >
-                    • {ad.title}
+                    {ad.title}
                   </p>
                 ))}
               </div>
@@ -198,16 +234,20 @@ const startDate = new Date(strategyForm.startDate);
                     key={`group${group.id}`}
                     className="geco-strategy-resume-item-list"
                   >
-                    • {group.name}
+                    {group.name}
                   </p>
                 ))}
               </div>
               <div className="geco-strategy-resume-item">
                 <p className="geco-strategy-resume-item-title">Duración:</p>
                 <p className="geco-strategy-resume-item">
-                  {strategyForm?.startDate ? dayjs(strategyForm.startDate).format('DD/MM/YYYY') : 'Fecha no definida'}
+                  {strategyForm?.startDate
+                    ? dayjs(strategyForm.startDate).format('DD/MM/YYYY')
+                    : 'Fecha no definida'}
                   {' - '}
-                  {strategyForm?.endDate ? dayjs(strategyForm.endDate).format('DD/MM/YYYY') : 'Fecha no definida'}
+                  {strategyForm?.endDate
+                    ? dayjs(strategyForm.endDate).format('DD/MM/YYYY')
+                    : 'Fecha no definida'}
                 </p>
               </div>
               <div>
@@ -219,9 +259,99 @@ const startDate = new Date(strategyForm.startDate);
               <div className="geco-strategy-resume-item">
                 <p className="geco-strategy-resume-item-title">Periodicidad:</p>
                 <p className="geco-strategy-resume-item">
-                  {strategyForm?.periodicity ? getPeriodicity(strategyForm.periodicity) : 'Periodicidad no definida'}
+                  {strategyForm?.periodicity
+                    ? getPeriodicity(strategyForm.periodicity)
+                    : 'Periodicidad no definida'}
                 </p>
               </div>
+              {strategyForm?.enableForm ? (
+                <div className="geco-strategy-resume-item">
+                  <p className="geco-strategy-resume-item-title">
+                    Tipo de formulario:
+                  </p>
+                  <p className="geco-strategy-resume-item">
+                    {strategyForm?.formType || 'No especificado'}
+                  </p>
+                  {/* Configuración detallada */}
+                  {strategyForm?.formType === 'Reservas / turnos' &&
+                  strategyForm?.formConfig ? (
+                    <div className="geco-strategy-resume-item">
+                      <p className="geco-strategy-resume-item-title">
+                        Configuración de reservas:
+                      </p>
+                      <p className="geco-strategy-resume-item">
+                        Días hacia adelante:{' '}
+                        {strategyForm.formConfig.allow_days_ahead ?? '-'}
+                      </p>
+                      <p className="geco-strategy-resume-item">
+                        Duración turno (min):{' '}
+                        {strategyForm.formConfig.time_slot_minutes ?? '-'}
+                      </p>
+                      <p className="geco-strategy-resume-item">
+                        Requerir nombre:{' '}
+                        {strategyForm.formConfig.require_name ? 'Sí' : 'No'}
+                      </p>
+                      <p className="geco-strategy-resume-item">
+                        Requerir teléfono:{' '}
+                        {strategyForm.formConfig.require_phone ? 'Sí' : 'No'}
+                      </p>
+                      {Array.isArray(strategyForm.formConfig.services) &&
+                      strategyForm.formConfig.services.length > 0 ? (
+                        <div>
+                          <p className="geco-strategy-resume-item-title">
+                            Servicios:
+                          </p>
+                          {strategyForm.formConfig.services.map(
+                            (s: string, idx: number) => (
+                              <p
+                                key={`service-${idx}`}
+                                className="geco-strategy-resume-item"
+                              >
+                                {s}
+                              </p>
+                            )
+                          )}
+                        </div>
+                      ) : null}
+                    </div>
+                  ) : null}
+
+                  {strategyForm?.formType === 'Catálogo' &&
+                  strategyForm?.formConfig ? (
+                    <div className="geco-strategy-resume-item">
+                      <p className="geco-strategy-resume-item-title">
+                        Configuración de catálogo:
+                      </p>
+                      {Array.isArray(strategyForm.formConfig.categories) &&
+                      strategyForm.formConfig.categories.length > 0 ? (
+                        <div>
+                          <p className="geco-strategy-resume-item-title">
+                            Categorías:
+                          </p>
+                          {strategyForm.formConfig.categories.map(
+                            (c: string, idx: number) => (
+                              <p
+                                key={`cat-${idx}`}
+                                className="geco-strategy-resume-item"
+                              >
+                                • {c}
+                              </p>
+                            )
+                          )}
+                        </div>
+                      ) : (
+                        <p className="geco-strategy-resume-item">
+                          Sin categorías
+                        </p>
+                      )}
+                      <p className="geco-strategy-resume-item">
+                        Permitir cantidad:{' '}
+                        {strategyForm.formConfig.allow_quantity ? 'Sí' : 'No'}
+                      </p>
+                    </div>
+                  ) : null}
+                </div>
+              ) : null}
             </div>
           </div>
           <GSubmitButton

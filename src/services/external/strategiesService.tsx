@@ -19,10 +19,24 @@ export const StrategiesService: IStrategyService = {
     periodicity: string,
     schedule: string,
     ads: number[],
-    groups: number[]
+    groups: number[],
+    form_type?: string,
+    form_config?: any
   ): Promise<ApiResponse<IBasicSuccessResponse>> =>
     new Promise(async (resolve, reject) => {
       const token = SessionService.getToken();
+
+      const payload: any = {
+        name,
+        start_date: start_date.toISOString(),
+        end_date: end_date.toISOString(),
+        periodicity,
+        schedule,
+        ads,
+        groups,
+      };
+      if (form_type) payload.form_type = form_type;
+      if (form_config) payload.form_config = form_config;
 
       const response = await fetch(`${strategiesServiceURI}/strategies`, {
         method: 'POST',
@@ -30,15 +44,7 @@ export const StrategiesService: IStrategyService = {
           'Content-Type': 'application/json',
           Authorization: `${token}`,
         },
-        body: JSON.stringify({
-          name,
-          start_date: start_date.toISOString(),
-          end_date: end_date.toISOString(),
-          periodicity,
-          schedule,
-          ads,
-          groups,
-        }),
+        body: JSON.stringify(payload),
       });
 
       if (!response.ok) {
@@ -105,24 +111,28 @@ export const StrategiesService: IStrategyService = {
       schedule: string;
       groups: number[];
       ads: number[];
+      form_type?: string;
     }
   ): Promise<ApiResponse<IBasicSuccessResponse>> => {
     const token = localStorage.getItem('token');
+    const payload: any = {
+      name: strategy.name,
+      start_date: strategy.start_date.toISOString(),
+      end_date: strategy.end_date.toISOString(),
+      periodicity: strategy.periodicity,
+      schedule: strategy.schedule,
+      groups: strategy.groups,
+      ads: strategy.ads,
+    };
+    if (strategy.form_type) payload.form_type = strategy.form_type;
+
     const response = await fetch(`${strategiesServiceURI}/strategies/${id}`, {
       method: 'PUT',
       headers: {
         'Content-Type': 'application/json',
         Authorization: `${token}`,
       },
-      body: JSON.stringify({
-        name: strategy.name,
-        start_date: strategy.start_date.toISOString(),
-        end_date: strategy.end_date.toISOString(),
-        periodicity: strategy.periodicity,
-        schedule: strategy.schedule,
-        groups: strategy.groups,
-        ads: strategy.ads,
-      }),
+      body: JSON.stringify(payload),
     });
 
     if (!response.ok) {

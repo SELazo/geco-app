@@ -42,6 +42,9 @@ export interface INewStrategyForm {
   endDate: string;
   periodicity: string;
   schedule: string; //5 caracteres
+  enableForm?: boolean;
+  formType?: 'Pedido rápido' | 'Contacto simple' | 'Reservas / turnos' | 'Catálogo';
+  formConfig?: any;
 }
 
 export interface SessionState {
@@ -179,6 +182,25 @@ export const sessionSlice = createSlice({
         schedule: action.payload.schedule,
       };
     },
+    setNewStrategyForm: (
+      state,
+      action: PayloadAction<{ enableForm: boolean; formType?: 'Pedido rápido' | 'Contacto simple' | 'Reservas / turnos' | 'Catálogo' }>
+    ) => {
+      state.formNewStrategy = {
+        ...state.formNewStrategy,
+        enableForm: action.payload.enableForm,
+        formType: action.payload.formType,
+      };
+    },
+    setNewStrategyFormConfig: (
+      state,
+      action: PayloadAction<any>
+    ) => {
+      state.formNewStrategy = {
+        ...state.formNewStrategy,
+        formConfig: action.payload,
+      };
+    },
     clearNewStrategyForm: (state) => {
       state.formNewStrategy = {} as INewStrategyForm;
     },
@@ -206,5 +228,7 @@ export const {
   setNewStrategyGroups,
   setNewStrategyDates,
   setNewStrategyConfig,
+  setNewStrategyForm,
+  setNewStrategyFormConfig,
   clearNewStrategyForm,
 } = sessionSlice.actions;

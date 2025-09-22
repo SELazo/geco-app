@@ -117,7 +117,7 @@ export const GStrategyEditPeriodicityPage = () => {
         schedule: selectedSchedule,
       };
       navigate(
-        `${ROUTES.STRATEGY.ROOT}${ROUTES.STRATEGY.EDIT.ROOT}${ROUTES.STRATEGY.EDIT.RESUME}`,
+        `${ROUTES.STRATEGY.ROOT}${ROUTES.STRATEGY.EDIT.ROOT}${ROUTES.STRATEGY.EDIT.FORM}`,
         { state: strategyToEdit }
       );
     }

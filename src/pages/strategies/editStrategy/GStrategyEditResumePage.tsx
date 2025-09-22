@@ -91,6 +91,46 @@ export const GStrategyEditResumePage = () => {
 
   const handleSubmit = async () => {
     setLoading(true);
+    console.log('Editando estrategia (antes de payload):', {
+      id: strategyToEdit.id,
+      name: strategyToEdit.name,
+      start_date: strategyToEdit.start_date,
+      end_date: strategyToEdit.end_date,
+      periodicity: strategyToEdit.periodicity,
+      schedule: strategyToEdit.schedule,
+      groups: strategyToEdit.groups,
+      ads: strategyToEdit.ads,
+      formTypeUI: (strategyToEdit as any)?.formType,
+      formConfigUI: (strategyToEdit as any)?.formConfig,
+    });
+    const mapFormType = (t?: string): string | undefined => {
+      switch (t) {
+        case 'Pedido rápido':
+          return 'quick_order';
+        case 'Contacto simple':
+          return 'simple_contact';
+        case 'Reservas / turnos':
+          return 'booking';
+        case 'Catálogo':
+          return 'catalog';
+        default:
+          return undefined;
+      }
+    };
+    const form_type = (strategyToEdit as any)?.enableForm ? mapFormType((strategyToEdit as any)?.formType) : undefined;
+    const form_config = (strategyToEdit as any)?.formConfig;
+    console.log('Payload a enviar (editStrategy):', {
+      id: strategyToEdit.id,
+      name: strategyToEdit.name,
+      start_date: strategyToEdit.start_date,
+      end_date: strategyToEdit.end_date,
+      periodicity: strategyToEdit.periodicity,
+      schedule: strategyToEdit.schedule,
+      groups: strategyToEdit.groups,
+      ads: strategyToEdit.ads,
+      form_type,
+      form_config,
+    });
     await editStrategy(strategyToEdit.id, {
       name: strategyToEdit.name,
       start_date: strategyToEdit.start_date,
@@ -99,6 +139,8 @@ export const GStrategyEditResumePage = () => {
       schedule: strategyToEdit.schedule,
       groups: strategyToEdit.groups,
       ads: strategyToEdit.ads,
+      form_type,
+      form_config,
     })
       .then((response) => {
         if (response.success) {
@@ -203,6 +245,51 @@ export const GStrategyEditResumePage = () => {
                   {getPeriodicity(strategyToEdit.periodicity)}
                 </p>
               </div>
+              <div className="geco-strategy-resume-item">
+                <p className="geco-strategy-resume-item-title">Formulario:</p>
+                <p className="geco-strategy-resume-item">
+                  {(strategyToEdit as any)?.enableForm ? 'Sí' : 'No'}
+                </p>
+              </div>
+              {(strategyToEdit as any)?.enableForm ? (
+                <div className="geco-strategy-resume-item">
+                  <p className="geco-strategy-resume-item-title">Tipo de formulario:</p>
+                  <p className="geco-strategy-resume-item">{(strategyToEdit as any)?.formType || 'No especificado'}</p>
+                  {(strategyToEdit as any)?.formType === 'Reservas / turnos' && (strategyToEdit as any)?.formConfig ? (
+                    <div className="geco-strategy-resume-item">
+                      <p className="geco-strategy-resume-item-title">Configuración de reservas:</p>
+                      <p className="geco-strategy-resume-item">Días hacia adelante: {(strategyToEdit as any).formConfig.allow_days_ahead ?? '-'}</p>
+                      <p className="geco-strategy-resume-item">Duración turno (min): {(strategyToEdit as any).formConfig.time_slot_minutes ?? '-'}</p>
+                      <p className="geco-strategy-resume-item">Requerir nombre: {(strategyToEdit as any).formConfig.require_name ? 'Sí' : 'No'}</p>
+                      <p className="geco-strategy-resume-item">Requerir teléfono: {(strategyToEdit as any).formConfig.require_phone ? 'Sí' : 'No'}</p>
+                      {Array.isArray((strategyToEdit as any).formConfig.services) && (strategyToEdit as any).formConfig.services.length > 0 ? (
+                        <div>
+                          <p className="geco-strategy-resume-item-title">Servicios:</p>
+                          {(strategyToEdit as any).formConfig.services.map((s: string, idx: number) => (
+                            <p key={`service-${idx}`} className="geco-strategy-resume-item">• {s}</p>
+                          ))}
+                        </div>
+                      ) : null}
+                    </div>
+                  ) : null}
+                  {(strategyToEdit as any)?.formType === 'Catálogo' && (strategyToEdit as any)?.formConfig ? (
+                    <div className="geco-strategy-resume-item">
+                      <p className="geco-strategy-resume-item-title">Configuración de catálogo:</p>
+                      {Array.isArray((strategyToEdit as any).formConfig.categories) && (strategyToEdit as any).formConfig.categories.length > 0 ? (
+                        <div>
+                          <p className="geco-strategy-resume-item-title">Categorías:</p>
+                          {(strategyToEdit as any).formConfig.categories.map((c: string, idx: number) => (
+                            <p key={`cat-${idx}`} className="geco-strategy-resume-item">• {c}</p>
+                          ))}
+                        </div>
+                      ) : (
+                        <p className="geco-strategy-resume-item">Sin categorías</p>
+                      )}
+                      <p className="geco-strategy-resume-item">Permitir cantidad: {(strategyToEdit as any).formConfig.allow_quantity ? 'Sí' : 'No'}</p>
+                    </div>
+                  ) : null}
+                </div>
+              ) : null}
             </div>
           </div>
           <div onClick={handleSubmit}>
