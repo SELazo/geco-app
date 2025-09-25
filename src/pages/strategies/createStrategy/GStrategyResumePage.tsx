@@ -121,7 +121,9 @@ export const GStrategyResumePage = () => {
           return undefined;
       }
     };
-    const form_type = strategyForm?.enableForm ? mapFormType(strategyForm?.formType) : undefined;
+    const form_type = strategyForm?.enableForm
+      ? mapFormType(strategyForm?.formType)
+      : undefined;
     const form_config = strategyForm.formConfig;
     console.log('Payload a enviar (newStrategy):', {
       name: strategyForm.title,
@@ -214,7 +216,7 @@ export const GStrategyResumePage = () => {
             <h3 className="geco-strategy-resume-title">
               {strategyForm?.title?.toUpperCase() || 'ESTRATEGIA SIN NOMBRE'}
             </h3>
-            <div>
+            <div style={{ textAlign: 'left' }}>
               <div className="geco-strategy-resume-item">
                 <p className="geco-strategy-resume-item-title">Publicidades:</p>
                 {adsList.map((ad) => (

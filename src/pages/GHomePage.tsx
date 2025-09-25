@@ -1,7 +1,7 @@
 import { Link, useNavigate } from 'react-router-dom';
 
 import '../styles/ghome.css';
-import { GWhite } from '../constants/palette';
+import { GBlack, GWhite } from '../constants/palette';
 
 import { GIcon } from '../components/GIcon';
 import { GCircularButton } from '../components/GCircularButton';
@@ -76,7 +76,7 @@ export const GHomePage = () => {
 
       <div className="home-body">
         <div className="home-body-title">
-          <GHeadCenterTitle title={HomeHeadCenterTitle} color={GWhite} />
+          <GHeadCenterTitle title={HomeHeadCenterTitle} color={GBlack} />
         </div>
         <div className="home-body-container-columns">
           <div className="geco-services-column">

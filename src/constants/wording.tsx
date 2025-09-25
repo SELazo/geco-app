@@ -33,11 +33,11 @@ export const SignInAction: ITextAction = {
 
 export const LoginHeadCenterTitle: string = 'Inicio de sesión';
 
-export const HomeHeadCenterTitle: string = 'Comienza a crecer';
+export const HomeHeadCenterTitle: string = 'Comenzá a crecer';
 
 export const AdHeadCenterTitle: string = 'Publicidades';
 
-export const StrategyHeadCenterTitle: string = 'Estrategias de comunicación';
+export const StrategyHeadCenterTitle: string = 'Difusión';
 
 export const ContactsHeadCenterTitle: string = 'Agenda';
 

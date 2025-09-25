@@ -225,6 +225,10 @@ export const GStrategyPeriodicityPage = () => {
               {schedules.map((schedule) => (
                 <FormControlLabel
                   key={`schedule-${schedule.id}`}
+                  sx={{
+                    display: 'flex',
+                    flexDirection: 'column',
+                  }}
                   control={
                     <Radio
                       checked={schedule.value === selectedSchedule}
@@ -237,6 +241,7 @@ export const GStrategyPeriodicityPage = () => {
                         },
                         padding: '5px',
                         display: 'none',
+                        width: '100%',
                       }}
                     />
                   }

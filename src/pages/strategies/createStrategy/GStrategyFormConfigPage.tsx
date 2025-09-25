@@ -1,7 +1,16 @@
 import React, { useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import { useDispatch } from 'react-redux';
-import { FormControlLabel, Radio, RadioGroup, Switch, TextField, Stack, Autocomplete, Chip } from '@mui/material';
+import {
+  FormControlLabel,
+  Radio,
+  RadioGroup,
+  Switch,
+  TextField,
+  Stack,
+  Autocomplete,
+  Chip,
+} from '@mui/material';
 
 import '../../../styles/ginputBox.css';
 import '../../../styles/gform.css';
@@ -15,7 +24,10 @@ import { GBlack, GWhite, GYellow } from '../../../constants/palette';
 import { GLogoLetter } from '../../../components/GLogoLetter';
 import { ROUTES } from '../../../constants/routes';
 import { NavigationService } from '../../../services/internal/navigationService';
-import { setNewStrategyForm, setNewStrategyFormConfig } from '../../../redux/sessionSlice';
+import {
+  setNewStrategyForm,
+  setNewStrategyFormConfig,
+} from '../../../redux/sessionSlice';
 
 const FORM_TYPES = [
   'Pedido rápido',
@@ -47,7 +59,9 @@ export const GStrategyFormConfigPage = () => {
   const navigate = useNavigate();
 
   const [enableForm, setEnableForm] = useState(false);
-  const [formType, setFormType] = useState<(typeof FORM_TYPES)[number] | undefined>(FORM_TYPES[0]);
+  const [formType, setFormType] = useState<
+    (typeof FORM_TYPES)[number] | undefined
+  >(FORM_TYPES[0]);
   // Booking config
   const [allowDaysAhead, setAllowDaysAhead] = useState<number>(7);
   const [timeSlotMinutes, setTimeSlotMinutes] = useState<number>(30);
@@ -89,7 +103,12 @@ export const GStrategyFormConfigPage = () => {
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
-    dispatch(setNewStrategyForm({ enableForm, formType: enableForm ? formType : undefined }));
+    dispatch(
+      setNewStrategyForm({
+        enableForm,
+        formType: enableForm ? formType : undefined,
+      })
+    );
     // Build formConfig only for booking/catalog
     let formConfig: any = undefined;
     // Reset errors
@@ -103,7 +122,12 @@ export const GStrategyFormConfigPage = () => {
         setAllowDaysAheadError('Debe ser 0 o mayor');
         hasError = true;
       }
-      if (isNaN(timeSlotMinutes) || timeSlotMinutes < 5 || timeSlotMinutes > 480 || timeSlotMinutes % 5 !== 0) {
+      if (
+        isNaN(timeSlotMinutes) ||
+        timeSlotMinutes < 5 ||
+        timeSlotMinutes > 480 ||
+        timeSlotMinutes % 5 !== 0
+      ) {
         setTimeSlotMinutesError('Debe ser múltiplo de 5, entre 5 y 480');
         hasError = true;
       }
@@ -133,7 +157,9 @@ export const GStrategyFormConfigPage = () => {
     }
     if (hasError) return;
     dispatch(setNewStrategyFormConfig(formConfig));
-    navigate(`${ROUTES.STRATEGY.ROOT}${ROUTES.STRATEGY.CREATE.ROOT}${ROUTES.STRATEGY.CREATE.RESUME}`);
+    navigate(
+      `${ROUTES.STRATEGY.ROOT}${ROUTES.STRATEGY.CREATE.ROOT}${ROUTES.STRATEGY.CREATE.RESUME}`
+    );
   };
 
   return (
@@ -143,28 +169,69 @@ export const GStrategyFormConfigPage = () => {
           <Link className="geco-create-ad-nav-bar-logo" to="/home">
             <GLogoLetter />
           </Link>
-          <Link className="geco-add-contact-excel-nav-bar-section" to="/strategy">
-            <GCircularButton icon={GStrategyIcon} size="1.5em" width="50px" height="50px" colorBackground={GWhite} />
+          <Link
+            className="geco-add-contact-excel-nav-bar-section"
+            to="/strategy"
+          >
+            <GCircularButton
+              icon={GStrategyIcon}
+              size="1.5em"
+              width="50px"
+              height="50px"
+              colorBackground={GWhite}
+            />
           </Link>
-          <GCircularButton icon={GIconButtonBack} size="1.5em" width="50px" height="50px" colorBackground={GWhite} onClickAction={NavigationService.goBack} />
+          <GCircularButton
+            icon={GIconButtonBack}
+            size="1.5em"
+            width="50px"
+            height="50px"
+            colorBackground={GWhite}
+            onClickAction={NavigationService.goBack}
+          />
         </div>
       </div>
       <div className="geco-create-ad-header-title">
-        <GHeadSectionTitle title="Configuración de formulario" subtitle="Querés que agregar un formulario? 📝" />
+        <GHeadSectionTitle
+          title="Configuración de formulario"
+          subtitle="Querés que agregar un formulario? 📝"
+        />
       </div>
 
       <form className="geco-form" onSubmit={handleSubmit}>
-        <h3 className="geco-strategy-subtitle">¿Querés agregar un formulario?</h3>
+        <h3 className="geco-strategy-subtitle">
+          ¿Querés agregar un formulario?
+        </h3>
         <FormControlLabel
           value="start"
-          control={<Switch checked={enableForm} color="primary" onChange={() => setEnableForm((v) => !v)} />}
+          control={
+            <Switch
+              checked={enableForm}
+              color="primary"
+              onChange={() => setEnableForm((v) => !v)}
+            />
+          }
           label={<span style={{ fontFamily: 'Montserrat' }}>Sí</span>}
           labelPlacement="start"
         />
 
-        <h3 className="geco-strategy-subtitle" style={{ opacity: enableForm ? 1 : 0.5 }}>¿Qué tipo de formulario querés agregar?</h3>
+        <h3
+          className="geco-strategy-subtitle"
+          style={{ opacity: enableForm ? 1 : 0.5 }}
+        >
+          ¿Qué tipo de formulario querés agregar?
+        </h3>
         <div className="geco-strategy-options-group">
-          <RadioGroup row value={formType} onChange={(e) => setFormType(e.target.value as any)}>
+          <RadioGroup
+            row
+            value={formType}
+            onChange={(e) => setFormType(e.target.value as any)}
+            sx={{
+              display: 'flex',
+              flexDirection: 'column',
+              justifyContent: 'center',
+            }}
+          >
             {FORM_TYPES.map((opt) => (
               <FormControlLabel
                 key={opt}
@@ -177,12 +244,21 @@ export const GStrategyFormConfigPage = () => {
         </div>
 
         {enableForm && formType === 'Reservas / turnos' ? (
-          <Stack spacing={2} sx={{ mt: 2 }}>
+          <Stack
+            spacing={2}
+            sx={{
+              mt: 2,
+              width: '100%',
+              justifyContent: 'center',
+            }}
+          >
             <TextField
               type="number"
               label="Días permitidos hacia adelante"
               value={allowDaysAhead}
-              onChange={(e) => setAllowDaysAhead(parseInt(e.target.value || '0', 10))}
+              onChange={(e) =>
+                setAllowDaysAhead(parseInt(e.target.value || '0', 10))
+              }
               inputProps={{ min: 0, max: 365 }}
               error={!!allowDaysAheadError}
               helperText={allowDaysAheadError}
@@ -191,19 +267,48 @@ export const GStrategyFormConfigPage = () => {
               type="number"
               label="Duración de turno (minutos)"
               value={timeSlotMinutes}
-              onChange={(e) => setTimeSlotMinutes(parseInt(e.target.value || '0', 10))}
+              onChange={(e) =>
+                setTimeSlotMinutes(parseInt(e.target.value || '0', 10))
+              }
               inputProps={{ min: 5, max: 480, step: 5 }}
               error={!!timeSlotMinutesError}
               helperText={timeSlotMinutesError}
             />
-            <FormControlLabel
-              control={<Switch checked={requireName} onChange={() => setRequireName((v) => !v)} />}
-              label={<span style={{ fontFamily: 'Montserrat' }}>Requerir nombre</span>}
-            />
-            <FormControlLabel
-              control={<Switch checked={requirePhone} onChange={() => setRequirePhone((v) => !v)} />}
-              label={<span style={{ fontFamily: 'Montserrat' }}>Requerir teléfono</span>}
-            />
+            <div
+              style={{
+                display: 'flex',
+                flexDirection: 'column',
+                justifyContent: 'center',
+                alignItems: 'center',
+              }}
+            >
+              <FormControlLabel
+                control={
+                  <Switch
+                    checked={requireName}
+                    onChange={() => setRequireName((v) => !v)}
+                  />
+                }
+                label={
+                  <span style={{ fontFamily: 'Montserrat' }}>
+                    Requerir nombre
+                  </span>
+                }
+              />
+              <FormControlLabel
+                control={
+                  <Switch
+                    checked={requirePhone}
+                    onChange={() => setRequirePhone((v) => !v)}
+                  />
+                }
+                label={
+                  <span style={{ fontFamily: 'Montserrat' }}>
+                    Requerir teléfono
+                  </span>
+                }
+              />
+            </div>
             <Autocomplete
               multiple
               freeSolo
@@ -212,7 +317,9 @@ export const GStrategyFormConfigPage = () => {
               onChange={(event, newValue) =>
                 setServices(() => {
                   const normalized = newValue
-                    .map((v) => (typeof v === 'string' ? normalizeLabel(v) : ''))
+                    .map((v) =>
+                      typeof v === 'string' ? normalizeLabel(v) : ''
+                    )
                     .filter((v) => v);
                   const seen = new Set<string>();
                   const result: string[] = [];
@@ -228,7 +335,11 @@ export const GStrategyFormConfigPage = () => {
               }
               renderTags={(value: readonly string[], getTagProps) =>
                 value.map((option: string, index: number) => (
-                  <Chip variant="outlined" label={option} {...getTagProps({ index })} />
+                  <Chip
+                    variant="outlined"
+                    label={option}
+                    {...getTagProps({ index })}
+                  />
                 ))
               }
               renderInput={(params) => (
@@ -245,7 +356,7 @@ export const GStrategyFormConfigPage = () => {
         ) : null}
 
         {enableForm && formType === 'Catálogo' ? (
-          <Stack spacing={2} sx={{ mt: 2 }}>
+          <Stack spacing={2} sx={{ mt: 2, width: '100%' }}>
             <Autocomplete
               multiple
               freeSolo
@@ -254,7 +365,9 @@ export const GStrategyFormConfigPage = () => {
               onChange={(event, newValue) =>
                 setCategoriesList(() => {
                   const normalized = newValue
-                    .map((v) => (typeof v === 'string' ? normalizeLabel(v) : ''))
+                    .map((v) =>
+                      typeof v === 'string' ? normalizeLabel(v) : ''
+                    )
                     .filter((v) => v);
                   const seen = new Set<string>();
                   const result: string[] = [];
@@ -270,7 +383,11 @@ export const GStrategyFormConfigPage = () => {
               }
               renderTags={(value: readonly string[], getTagProps) =>
                 value.map((option: string, index: number) => (
-                  <Chip variant="outlined" label={option} {...getTagProps({ index })} />
+                  <Chip
+                    variant="outlined"
+                    label={option}
+                    {...getTagProps({ index })}
+                  />
                 ))
               }
               renderInput={(params) => (
@@ -283,14 +400,36 @@ export const GStrategyFormConfigPage = () => {
                 />
               )}
             />
-            <FormControlLabel
-              control={<Switch checked={allowQuantity} onChange={() => setAllowQuantity((v) => !v)} />}
-              label={<span style={{ fontFamily: 'Montserrat' }}>Permitir cantidad</span>}
-            />
+            <div
+              style={{
+                display: 'flex',
+                flexDirection: 'column',
+                justifyContent: 'center',
+                alignItems: 'center',
+              }}
+            >
+              <FormControlLabel
+                control={
+                  <Switch
+                    checked={allowQuantity}
+                    onChange={() => setAllowQuantity((v) => !v)}
+                  />
+                }
+                label={
+                  <span style={{ fontFamily: 'Montserrat' }}>
+                    Permitir cantidad
+                  </span>
+                }
+              />
+            </div>
           </Stack>
         ) : null}
 
-        <GSubmitButton label="Siguiente" colorBackground={GYellow} colorFont={GBlack} />
+        <GSubmitButton
+          label="Siguiente"
+          colorBackground={GYellow}
+          colorFont={GBlack}
+        />
       </form>
     </div>
   );

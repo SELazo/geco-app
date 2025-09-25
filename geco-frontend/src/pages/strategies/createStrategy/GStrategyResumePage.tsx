@@ -93,7 +93,7 @@ export const GStrategyResumePage = () => {
   const handleSubmit = async (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();
     setLoading(true);
-const startDate = new Date(strategyForm.startDate);
+    const startDate = new Date(strategyForm.startDate);
     const endDate = new Date(strategyForm.endDate);
     console.log('Creando estrategia:', {
       name: strategyForm.title,
@@ -102,7 +102,7 @@ const startDate = new Date(strategyForm.startDate);
       periodicity: strategyForm.periodicity,
       schedule: strategyForm.schedule,
       ads: strategyForm.ads,
-      groups: strategyForm.groups
+      groups: strategyForm.groups,
     });
     try {
       const response = await newStrategy(
@@ -114,9 +114,9 @@ const startDate = new Date(strategyForm.startDate);
         strategyForm.ads,
         strategyForm.groups
       );
-      
+
       console.log('Respuesta del backend:', response);
-      
+
       if (response && response.success) {
         dispatch(clearNewStrategyForm());
         navigate(
@@ -124,11 +124,15 @@ const startDate = new Date(strategyForm.startDate);
         );
       } else {
         console.error('Error al crear estrategia:', response);
-        navigate(`${ROUTES.STRATEGY.ROOT}${ROUTES.STRATEGY.CREATE.ROOT}${ROUTES.STRATEGY.ERROR}`);
+        navigate(
+          `${ROUTES.STRATEGY.ROOT}${ROUTES.STRATEGY.CREATE.ROOT}${ROUTES.STRATEGY.ERROR}`
+        );
       }
     } catch (error) {
       console.error('Error en la creación de estrategia:', error);
-      navigate(`${ROUTES.STRATEGY.ROOT}${ROUTES.STRATEGY.CREATE.ROOT}${ROUTES.STRATEGY.ERROR}`);
+      navigate(
+        `${ROUTES.STRATEGY.ROOT}${ROUTES.STRATEGY.CREATE.ROOT}${ROUTES.STRATEGY.ERROR}`
+      );
     }
     setLoading(false);
   };
@@ -178,7 +182,13 @@ const startDate = new Date(strategyForm.startDate);
             <h3 className="geco-strategy-resume-title">
               {strategyForm?.title?.toUpperCase() || 'ESTRATEGIA SIN NOMBRE'}
             </h3>
-            <div>
+            <div
+              style={{
+                display: 'flex',
+                flexDirection: 'column',
+                alignItems: 'start',
+              }}
+            >
               <div className="geco-strategy-resume-item">
                 <p className="geco-strategy-resume-item-title">Publicidades:</p>
                 {adsList.map((ad) => (
@@ -205,9 +215,13 @@ const startDate = new Date(strategyForm.startDate);
               <div className="geco-strategy-resume-item">
                 <p className="geco-strategy-resume-item-title">Duración:</p>
                 <p className="geco-strategy-resume-item">
-                  {strategyForm?.startDate ? dayjs(strategyForm.startDate).format('DD/MM/YYYY') : 'Fecha no definida'}
+                  {strategyForm?.startDate
+                    ? dayjs(strategyForm.startDate).format('DD/MM/YYYY')
+                    : 'Fecha no definida'}
                   {' - '}
-                  {strategyForm?.endDate ? dayjs(strategyForm.endDate).format('DD/MM/YYYY') : 'Fecha no definida'}
+                  {strategyForm?.endDate
+                    ? dayjs(strategyForm.endDate).format('DD/MM/YYYY')
+                    : 'Fecha no definida'}
                 </p>
               </div>
               <div>
@@ -219,7 +233,9 @@ const startDate = new Date(strategyForm.startDate);
               <div className="geco-strategy-resume-item">
                 <p className="geco-strategy-resume-item-title">Periodicidad:</p>
                 <p className="geco-strategy-resume-item">
-                  {strategyForm?.periodicity ? getPeriodicity(strategyForm.periodicity) : 'Periodicidad no definida'}
+                  {strategyForm?.periodicity
+                    ? getPeriodicity(strategyForm.periodicity)
+                    : 'Periodicidad no definida'}
                 </p>
               </div>
             </div>

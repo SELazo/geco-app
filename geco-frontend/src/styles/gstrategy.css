@@ -104,6 +104,7 @@
   font-weight: 500;
   color: #ffffff;
   margin: 10px 0;
+  text-align: left;
 }
 
 .geco-strategy-resume-item-list {
@@ -112,6 +113,7 @@
   font-weight: 500;
   color: #ffffff;
   margin: 5px;
+  text-align: left;
 }
 
 .geco-strategy-resume-item-title {
@@ -120,4 +122,5 @@
   font-weight: 700;
   color: #ffffff;
   margin: 10px 0;
+  text-align: left;
 }

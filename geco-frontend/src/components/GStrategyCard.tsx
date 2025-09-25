@@ -133,7 +133,7 @@ export const GStrategyCard: FC<IStrategyProps> = (props: IStrategyProps) => {
   return (
     <div className="geco-strategy-resume" style={{ marginBottom: '10px' }}>
       <h3 className="geco-strategy-resume-title">{props.name.toUpperCase()}</h3>
-      <div>
+      <div style={{ justifyItems: 'left' }}>
         <div className="geco-strategy-resume-item">
           <p className="geco-strategy-resume-item-title">Publicidades:</p>
           {adsList &&
