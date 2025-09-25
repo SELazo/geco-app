@@ -211,7 +211,7 @@ export const GStrategyFormConfigPage = () => {
               onChange={() => setEnableForm((v) => !v)}
             />
           }
-          label={<span style={{ fontFamily: 'Montserrat' }}>Sí</span>}
+          label={<span style={{ fontFamily: 'Montserrat' }}>{enableForm ? 'Sí' : 'No'}</span>}
           labelPlacement="start"
         />
 
