@@ -116,6 +116,33 @@
   color: #6b7280;
 }
 
+/* Phone row (country code + phone) */
+.public-phone-row {
+  display: grid;
+  grid-template-columns: 120px 1fr;
+  gap: 8px;
+  align-items: center;
+}
+
+/* Validation feedback (controlled by JS via .is-invalid) */
+.was-submitted .public-form-input.is-invalid {
+  border-color: #b91c1c;
+  box-shadow: 0 0 0 2px rgba(185, 28, 28, 0.15);
+}
+.was-submitted .public-form-input.is-valid {
+  border-color: #059669;
+  box-shadow: 0 0 0 2px rgba(5, 150, 105, 0.15);
+}
+.public-form-error {
+  display: none;
+}
+.was-submitted .public-form-group .public-form-input.is-invalid ~ .public-form-error {
+  display: block;
+  color: #b91c1c;
+  font-size: 12px;
+  font-weight: 600;
+}
+
 @media (max-width: 900px) {
   .public-strategy-columns {
     grid-template-columns: 1fr;
@@ -125,6 +152,9 @@
     height: 48vh;
   }
   .public-form-row {
+    grid-template-columns: 1fr;
+  }
+  .public-phone-row {
     grid-template-columns: 1fr;
   }
 }
