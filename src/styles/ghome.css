@@ -4,7 +4,7 @@
   border: none;
   height: 100vh;
   width: 100vw;
-  background-color: #1947e5;
+  background-color: #d9d9d9;
 }
 
 .home-head {
@@ -12,7 +12,7 @@
   border: none;
   flex-direction: column;
   height: 40vh;
-  background-color: #f95a2c;
+  background-color: #1947e5;
   overflow: hidden;
   border-radius: 0 0 1.2em 1.2em;
 }
@@ -69,11 +69,9 @@
 }
 
 .home-body-container-columns {
-  display: flex;
-  align-items: flex-start;
-  max-width: 90%;
-  max-height: 350;
-  min-height: 350;
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 16px;
 }
 
 .geco-services-column {
@@ -100,7 +98,7 @@
   font-weight: 600;
   font-size: 20px;
   height: 5vh;
-  color: #ffffff;
+  color: #18191f;
 }
 
 .geco-nav-bar-right {

@@ -78,9 +78,9 @@
   box-shadow: 0px 2px 0px #18191f;
   border-radius: 16px;
   background: #00c6ae;
-  max-width: 280px;
-  min-width: 280px;
-  width: 280px;
+  max-width: 325px;
+  min-width: 325px;
+  width: 325px;
   padding: 20px;
 
   justify-content: center;
@@ -100,24 +100,27 @@
 
 .geco-strategy-resume-item {
   font-family: Montserrat;
-  font-size: 20px;
-  font-weight: 700;
+  font-size: 16px;
+  font-weight: 500;
   color: #ffffff;
   margin: 10px 0;
+  text-align: left;
 }
 
 .geco-strategy-resume-item-list {
   font-family: Montserrat;
-  font-size: 20px;
-  font-weight: 700;
+  font-size: 16px;
+  font-weight: 500;
   color: #ffffff;
   margin: 5px;
+  text-align: left;
 }
 
 .geco-strategy-resume-item-title {
   font-family: Montserrat;
-  font-size: 15px;
-  font-weight: 500;
+  font-size: 20px;
+  font-weight: 700;
   color: #ffffff;
   margin: 10px 0;
+  text-align: left;
 }

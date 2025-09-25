@@ -21,7 +21,9 @@ export interface IStrategyService {
     periodicity: string,
     schedule: string,
     ads: number[],
-    groups: number[]
+    groups: number[],
+    form_type?: string,
+    form_config?: any
   ): Promise<ApiResponse<IBasicSuccessResponse>>;
   deleteStrategy(id: number): Promise<ApiResponse<IBasicSuccessResponse>>;
   editStrategy(
@@ -34,6 +36,8 @@ export interface IStrategyService {
       schedule: string;
       ads: number[];
       groups: number[];
+      form_type?: string;
+      form_config?: any;
     }
   ): Promise<ApiResponse<IBasicSuccessResponse>>;
   getStrategy(id: number): Promise<IStrategyResponse>;

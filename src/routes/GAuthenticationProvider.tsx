@@ -1,8 +1,11 @@
 import { useEffect, useState } from 'react';
+import { Box } from '@mui/material';
+import { PacmanLoader } from 'react-spinners';
 import { GRouter } from './GRouter';
 import { SessionService } from '../services/internal/sessionService';
 import { Auth, User, loginSuccess } from '../redux/sessionSlice';
 import { useDispatch } from 'react-redux';
+import { GYellow } from '../constants/palette';
 
 const getAuthenticationStatus = async (): Promise<boolean> => {
   const storedToken = SessionService.getToken();
@@ -51,7 +54,19 @@ export const GAuthenticationProvider = () => {
   };
 
   if (isLoading) {
-    return <div>Loading...</div>;
+    return (
+      <Box
+        sx={{
+          minHeight: '100vh',
+          bgcolor: '#D9D9D9',
+          display: 'flex',
+          justifyContent: 'center',
+          alignItems: 'center'
+        }}
+      >
+        <PacmanLoader color={GYellow} size={30} loading={true} />
+      </Box>
+    );
   }
 
   return (

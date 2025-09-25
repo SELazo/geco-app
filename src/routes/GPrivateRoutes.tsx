@@ -49,6 +49,7 @@ import { GStrategyPeriodPage } from '../pages/strategies/createStrategy/GStrateg
 import { GStrategyPeriodicityPage } from '../pages/strategies/createStrategy/GStrategyPeriodicityPage';
 import { GStrategyResumePage } from '../pages/strategies/createStrategy/GStrategyResumePage';
 import { GStrategySuccessPage } from '../pages/strategies/createStrategy/GStrategySuccessPage';
+import { GStrategyFormConfigPage } from '../pages/strategies/createStrategy/GStrategyFormConfigPage';
 import { GStrategyEditInformationPage } from '../pages/strategies/editStrategy/GStrategyEditInformationPage';
 import { GStrategyEditAdsPage } from '../pages/strategies/editStrategy/GStrategyEditAdsPage';
 import { GStrategyEditGroupsPage } from '../pages/strategies/editStrategy/GStrategyEditGroupsPage';
@@ -56,9 +57,11 @@ import { GStrategyEditPeriodPage } from '../pages/strategies/editStrategy/GStrat
 import { GStrategyEditPeriodicityPage } from '../pages/strategies/editStrategy/GStrategyEditPeriodicityPage';
 import { GStrategyEditResumePage } from '../pages/strategies/editStrategy/GStrategyEditResumePage';
 import { GStrategyEditSuccessPage } from '../pages/strategies/editStrategy/GStrategyEditSuccessPage';
+import { GStrategyEditFormConfigPage } from '../pages/strategies/editStrategy/GStrategyEditFormConfigPage';
 import { GAdViewPage } from '../pages/ads/listAds/GAdViewPage';
 import { GAdEditSuccessPage } from '../pages/ads/editAds/GAdEditSuccessPage';
 import { GAdEditIdentificationPage } from '../pages/ads/editAds/GAdEditIdentificationPage';
+import { GPublicStrategyPage } from '../pages/marketing/GPublicStrategyPage';
 
 export const GPrivateRoutes = () => {
   return (
@@ -153,6 +156,10 @@ export const GPrivateRoutes = () => {
         path="/strategy/create/periodicity"
         element={<GStrategyPeriodicityPage />}
       />
+      <Route
+        path="/strategy/create/form"
+        element={<GStrategyFormConfigPage />}
+      />
       <Route path="/strategy/create/resume" element={<GStrategyResumePage />} />
       <Route
         path="/strategy/create/success"
@@ -176,6 +183,10 @@ export const GPrivateRoutes = () => {
         element={<GStrategyEditPeriodicityPage />}
       />
       <Route
+        path="/strategy/edit/form"
+        element={<GStrategyEditFormConfigPage />}
+      />
+      <Route
         path="/strategy/edit/resume"
         element={<GStrategyEditResumePage />}
       />
@@ -185,6 +196,7 @@ export const GPrivateRoutes = () => {
       />
       <Route path="/strategy/list" element={<GStrategiesListPage />} />
       <Route path="/statistics" element={<GHomePage />} />
+      <Route path="/public/strategy/:id" element={<GPublicStrategyPage />} />
       <Route path="/*" element={<Navigate to="/home" />} />
     </Routes>
   );

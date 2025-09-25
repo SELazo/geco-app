@@ -110,7 +110,7 @@ export const GStrategyPeriodicityPage = () => {
         })
       );
       navigate(
-        `${ROUTES.STRATEGY.ROOT}${ROUTES.STRATEGY.CREATE.ROOT}${ROUTES.STRATEGY.CREATE.RESUME}`
+        `${ROUTES.STRATEGY.ROOT}${ROUTES.STRATEGY.CREATE.ROOT}${ROUTES.STRATEGY.CREATE.FORM}`
       );
     }
   };
