@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
-import { useDispatch } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 import {
   FormControlLabel,
   Radio,
@@ -10,6 +10,8 @@ import {
   Stack,
   Autocomplete,
   Chip,
+  Alert,
+  CircularProgress,
 } from '@mui/material';
 
 import '../../../styles/ginputBox.css';
@@ -27,7 +29,10 @@ import { NavigationService } from '../../../services/internal/navigationService'
 import {
   setNewStrategyForm,
   setNewStrategyFormConfig,
+  SessionState,
 } from '../../../redux/sessionSlice';
+import { StrategiesFirestoreService } from '../../../services/external/strategiesFirestoreService';
+import { IStrategy } from '../../../interfaces/dtos/external/IFirestore';
 
 const FORM_TYPES = [
   'Pedido rápido',
@@ -57,6 +62,16 @@ const DEFAULT_CATEGORY_OPTIONS = [
 export const GStrategyFormConfigPage = () => {
   const dispatch = useDispatch();
   const navigate = useNavigate();
+  
+  // Obtener datos del usuario y estrategia desde Redux
+  const { user, formNewStrategy } = useSelector((state: SessionState) => ({
+    user: state.user,
+    formNewStrategy: state.formNewStrategy,
+  }));
+  
+  // Estados para manejo de carga y errores
+  const [saving, setSaving] = useState(false);
+  const [saveError, setSaveError] = useState<string>('');
 
   const [enableForm, setEnableForm] = useState(false);
   const [formType, setFormType] = useState<
@@ -101,8 +116,47 @@ export const GStrategyFormConfigPage = () => {
     return result;
   };
 
-  const handleSubmit = (e: React.FormEvent) => {
+  const saveStrategyToFirestore = async (formConfig: any) => {
+    try {
+      setSaving(true);
+      setSaveError('');
+
+      // Construir objeto de estrategia completo
+      const strategyData: Omit<IStrategy, 'id' | 'createdAt' | 'updatedAt'> = {
+        title: formNewStrategy.title || 'Nueva Estrategia',
+        description: `Estrategia creada el ${new Date().toLocaleDateString()}`,
+        ads: formNewStrategy.ads?.map(String) || [],
+        groups: formNewStrategy.groups?.map(String) || [],
+        startDate: formNewStrategy.startDate ? new Date(formNewStrategy.startDate) : new Date(),
+        endDate: formNewStrategy.endDate ? new Date(formNewStrategy.endDate) : new Date(),
+        periodicity: formNewStrategy.periodicity || 'daily',
+        schedule: formNewStrategy.schedule || '09:00',
+        enableForm,
+        formType: enableForm ? formType : undefined,
+        formConfig,
+        status: 'draft',
+        userId: user.id.toString(),
+      };
+
+      // Guardar en Firestore
+      const strategyId = await StrategiesFirestoreService.createStrategy(strategyData);
+      
+      console.log('✅ Estrategia guardada en Firestore con ID:', strategyId);
+      return strategyId;
+      
+    } catch (error) {
+      console.error('❌ Error guardando estrategia:', error);
+      setSaveError(error instanceof Error ? error.message : 'Error desconocido');
+      throw error;
+    } finally {
+      setSaving(false);
+    }
+  };
+
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
+    
+    // Actualizar Redux primero
     dispatch(
       setNewStrategyForm({
         enableForm,
@@ -156,10 +210,22 @@ export const GStrategyFormConfigPage = () => {
       };
     }
     if (hasError) return;
+    
+    // Guardar configuración en Redux
     dispatch(setNewStrategyFormConfig(formConfig));
-    navigate(
-      `${ROUTES.STRATEGY.ROOT}${ROUTES.STRATEGY.CREATE.ROOT}${ROUTES.STRATEGY.CREATE.RESUME}`
-    );
+    
+    try {
+      // Guardar estrategia completa en Firestore
+      await saveStrategyToFirestore(formConfig);
+      
+      // Navegar a la página de resumen
+      navigate(
+        `${ROUTES.STRATEGY.ROOT}${ROUTES.STRATEGY.CREATE.ROOT}${ROUTES.STRATEGY.CREATE.RESUME}`
+      );
+    } catch (error) {
+      // El error ya se maneja en saveStrategyToFirestore
+      console.error('Error en handleSubmit:', error);
+    }
   };
 
   return (
@@ -425,11 +491,34 @@ export const GStrategyFormConfigPage = () => {
           </Stack>
         ) : null}
 
-        <GSubmitButton
-          label="Siguiente"
-          colorBackground={GYellow}
-          colorFont={GBlack}
-        />
+        {/* Mostrar error si existe */}
+        {saveError && (
+          <Alert severity="error" sx={{ mt: 2 }}>
+            Error al guardar: {saveError}
+          </Alert>
+        )}
+
+        {/* Botón de submit con indicador de carga */}
+        <div style={{ position: 'relative', marginTop: '16px' }}>
+          <GSubmitButton
+            label={saving ? "Guardando..." : "Siguiente"}
+            colorBackground={saving ? '#ccc' : GYellow}
+            colorFont={GBlack}
+            disabled={saving}
+          />
+          {saving && (
+            <CircularProgress
+              size={24}
+              sx={{
+                position: 'absolute',
+                top: '50%',
+                left: '50%',
+                marginTop: '-12px',
+                marginLeft: '-12px',
+              }}
+            />
+          )}
+        </div>
       </form>
     </div>
   );

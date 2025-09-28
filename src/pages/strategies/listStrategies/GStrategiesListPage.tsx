@@ -1,6 +1,8 @@
 import('../../../styles/gcontactsList.css');
 
 import { useEffect, useState } from 'react';
+import { useSelector } from 'react-redux';
+import { Alert, CircularProgress, Box } from '@mui/material';
 
 import { GCircularButton } from '../../../components/GCircularButton';
 import { GIconButtonBack, GStrategyIcon } from '../../../constants/buttons';
@@ -13,27 +15,41 @@ import { Link } from 'react-router-dom';
 import { ApiResponse } from '../../../interfaces/dtos/external/IResponse';
 import { ROUTES } from '../../../constants/routes';
 import { IStrategyResponse } from '../../../interfaces/dtos/external/IStrategies';
-import { StrategiesService } from '../../../services/external/strategiesService';
+import { StrategiesFirestoreService } from '../../../services/external/strategiesFirestoreService';
+import { IStrategy } from '../../../interfaces/dtos/external/IFirestore';
+import { SessionState } from '../../../redux/sessionSlice';
 import { GStrategyCard } from '../../../components/GStrategyCard';
 
-const { getStrategies } = StrategiesService;
-
 export const GStrategiesListPage = () => {
-  const [strategies, setStrategies] = useState<IStrategyResponse[]>([]);
+  const [strategies, setStrategies] = useState<IStrategy[]>([]);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState<string>('');
+  
+  // Obtener usuario desde Redux
+  const user = useSelector((state: SessionState) => state.user);
 
   useEffect(() => {
-    const fetchContacts = async () => {
+    const fetchStrategies = async () => {
       try {
-        const response = await getStrategies();
-        const contactsData = response as ApiResponse<IStrategyResponse[]>;
-        setStrategies(contactsData.data ?? []);
+        setLoading(true);
+        setError('');
+        
+        // Obtener estrategias del usuario desde Firestore
+        const userStrategies = await StrategiesFirestoreService.getUserStrategies(user.id.toString());
+        setStrategies(userStrategies);
+        
       } catch (error) {
-        console.error(error); // TODO: Mostrar error en pantalla
+        console.error('Error cargando estrategias:', error);
+        setError(error instanceof Error ? error.message : 'Error desconocido');
+      } finally {
+        setLoading(false);
       }
     };
 
-    fetchContacts();
-  }, []);
+    if (user.id) {
+      fetchStrategies();
+    }
+  }, [user.id]);
 
   return (
     <>
@@ -65,21 +81,36 @@ export const GStrategiesListPage = () => {
         <div className="geco-contacts-list-title">
           <GHeadCenterTitle title={StrategyHeadCenterTitle} color={GBlack} />
         </div>
-        {strategies.length > 0 && (
+        {/* Mostrar indicador de carga */}
+        {loading && (
+          <Box display="flex" justifyContent="center" alignItems="center" minHeight="200px">
+            <CircularProgress />
+          </Box>
+        )}
+
+        {/* Mostrar error si existe */}
+        {error && (
+          <Alert severity="error" sx={{ m: 2 }}>
+            Error al cargar estrategias: {error}
+          </Alert>
+        )}
+
+        {/* Mostrar estrategias */}
+        {!loading && !error && strategies.length > 0 && (
           <div className="geco-contacts-list-container">
             <div className="geco-contacts-list-ul">
               <div className="geco-contacts-list-item">
                 {strategies.map((item) => (
                   <div key={`strategyCard${item.id}`}>
                     <GStrategyCard
-                      id={item.id}
-                      name={item.name}
-                      start_date={item.start_date}
-                      end_date={item.end_date}
+                      id={item.id ? parseInt(item.id.slice(-6), 16) : Math.random()} // Convertir string a number
+                      name={item.title} // Usar title en lugar de name
+                      start_date={item.startDate instanceof Date ? item.startDate.toISOString().split('T')[0] : item.startDate as any}
+                      end_date={item.endDate instanceof Date ? item.endDate.toISOString().split('T')[0] : item.endDate as any}
                       periodicity={item.periodicity}
                       schedule={item.schedule}
-                      ads={item.ads}
-                      groups={item.groups}
+                      ads={item.ads.map(ad => parseInt(ad) || 0)} // Convertir strings a numbers
+                      groups={item.groups.map(group => parseInt(group) || 0)} // Convertir strings a numbers
                     />
                   </div>
                 ))}
@@ -88,10 +119,13 @@ export const GStrategiesListPage = () => {
           </div>
         )}
 
-        {strategies.length === 0 && (
-          <div className="geco-contacts-empty">
-            <p>No tiene estrategias aún.</p>
-          </div>
+        {/* Mostrar mensaje cuando no hay estrategias */}
+        {!loading && !error && strategies.length === 0 && (
+          <Box display="flex" justifyContent="center" alignItems="center" minHeight="200px">
+            <Alert severity="info">
+              No tienes estrategias creadas aún. ¡Crea tu primera estrategia!
+            </Alert>
+          </Box>
         )}
       </div>
     </>
