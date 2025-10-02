@@ -1,39 +1,6 @@
 const express = require('express');
 const router = express.Router();
-
-// Array global para persistir publicidades en memoria durante la sesión del servidor
-let adsDatabase = [
-  {
-    id: 1,
-    title: 'Promoción Verano 2024',
-    description: 'Descuentos especiales para la temporada de verano',
-    imageUrl: '/assets/ad1.jpg',
-    size: '1080x1080',
-    status: 'active',
-    create_date: new Date().toISOString(),
-    update_date: new Date().toISOString()
-  },
-  {
-    id: 2,
-    title: 'Lanzamiento Nuevo Producto',
-    description: 'Presentamos nuestro producto revolucionario',
-    imageUrl: '/assets/ad2.jpg',
-    size: '1200x628',
-    status: 'draft',
-    create_date: new Date().toISOString(),
-    update_date: new Date().toISOString()
-  },
-  {
-    id: 3,
-    title: 'Oferta Especial Black Friday',
-    description: 'No te pierdas nuestras ofertas exclusivas',
-    imageUrl: '/assets/ad3.jpg',
-    size: '1080x1920',
-    status: 'active',
-    create_date: new Date().toISOString(),
-    update_date: new Date().toISOString()
-  }
-];
+const { adsRepo } = require('../../../shared/inMemoryStore');
 
 // Ruta base para probar
 router.get('/', (req, res) => {
@@ -48,128 +15,211 @@ router.get('/ping', (req, res) => {
 // ===== RUTAS DE PUBLICIDADES =====
 
 // GET /ads - Obtener lista de publicidades
-router.get('/ads', (req, res) => {
+router.get('/ads', async (req, res) => {
   try {
-    console.log('GET /ads - Devolviendo', adsDatabase.length, 'publicidades');
-    // Devolver el array global directamente
-    res.json(adsDatabase);
+    const ads = await adsRepo.list();
+    console.log('GET /ads - Devolviendo', ads.length, 'publicidades');
+    res.json(ads);
   } catch (error) {
-    res.status(500).json({ success: false, error: { message: 'Error interno del servidor' } });
+    console.error('Error en GET /ads:', error);
+    res.status(500).json({ success: false, error: { message: 'Error al obtener las publicidades' } });
   }
 });
 
 // GET /ads/:id - Obtener publicidad específica
-router.get('/ads/:id', (req, res) => {
+router.get('/ads/:id', async (req, res) => {
   try {
     const { id } = req.params;
-    const mockAd = {
-      id: parseInt(id),
-      title: `Publicidad ${id}`,
-      description: `Descripción de la publicidad ${id}`,
-      imageUrl: `/assets/ad${id}.jpg`,
-      size: '1080x1080',
-      status: 'active',
-      targetAudience: 'General',
-      budget: 500,
-      impressions: Math.floor(Math.random() * 10000) + 1000,
-      clicks: Math.floor(Math.random() * 500) + 50,
-      createdAt: new Date(),
-      updatedAt: new Date()
-    };
-    res.json({ success: true, data: mockAd });
+    const ad = await adsRepo.getById(id);
+    
+    if (!ad) {
+      return res.status(404).json({ 
+        success: false, 
+        error: { message: `Publicidad con ID ${id} no encontrada` } 
+      });
+    }
+    
+    res.json({ success: true, data: ad });
   } catch (error) {
-    res.status(500).json({ success: false, error: { message: 'Error interno del servidor' } });
+    console.error(`Error en GET /ads/${req.params.id}:`, error);
+    res.status(500).json({ 
+      success: false, 
+      error: { message: 'Error al obtener la publicidad' } 
+    });
   }
 });
 
 // POST /ads - Crear nueva publicidad
-router.post('/ads', (req, res) => {
+router.post('/ads', async (req, res) => {
   try {
     const { title, description, size, targetAudience, budget } = req.body;
-    if (title && description) {
-      const newAd = {
-        id: Date.now(),
-        title,
-        description,
-        size: size || '1080x1080',
-        targetAudience: targetAudience || 'General',
-        budget: budget || 0,
-        status: 'draft',
-        imageUrl: null,
-        impressions: 0,
-        clicks: 0,
-        create_date: new Date().toISOString(),
-        update_date: new Date().toISOString()
-      };
-      
-      // Agregar la nueva publicidad al array global para persistencia
-      adsDatabase.push(newAd);
-      console.log('Nueva publicidad agregada. Total publicidades:', adsDatabase.length);
-      
-      res.json({ success: true, data: newAd, message: 'Publicidad creada exitosamente' });
-    } else {
-      res.status(400).json({ success: false, error: { message: 'Título y descripción son requeridos' } });
+    
+    if (!title || !description) {
+      return res.status(400).json({ 
+        success: false, 
+        error: { message: 'Título y descripción son requeridos' } 
+      });
     }
+    
+    // Verificar si ya existe una publicidad con el mismo título
+    const existingAd = await adsRepo.findOne({ title });
+    if (existingAd) {
+      return res.status(400).json({ 
+        success: false, 
+        error: { message: 'Ya existe una publicidad con este título' } 
+      });
+    }
+    
+    const newAd = await adsRepo.create({
+      title,
+      description,
+      size: size || '1080x1080',
+      targetAudience: targetAudience || 'General',
+      budget: budget || 0,
+      status: 'draft',
+      imageUrl: null,
+      impressions: 0,
+      clicks: 0,
+      create_date: new Date().toISOString(),
+      update_date: new Date().toISOString()
+    });
+    
+    console.log('Nueva publicidad creada con ID:', newAd.id);
+    
+    res.status(201).json({ 
+      success: true, 
+      data: newAd, 
+      message: 'Publicidad creada exitosamente' 
+    });
   } catch (error) {
-    res.status(500).json({ success: false, error: { message: 'Error interno del servidor' } });
+    console.error('Error en POST /ads:', error);
+    res.status(500).json({ 
+      success: false, 
+      error: { message: 'Error al crear la publicidad' } 
+    });
   }
 });
 
 // PUT /ads/:id - Editar publicidad
-router.put('/ads/:id', (req, res) => {
+router.put('/ads/:id', async (req, res) => {
   try {
     const { id } = req.params;
-    const { title, description, size, targetAudience, budget, status } = req.body;
-    const updatedAd = {
-      id: parseInt(id),
-      title: title || `Publicidad ${id}`,
-      description: description || `Descripción de la publicidad ${id}`,
-      size: size || '1080x1080',
-      targetAudience: targetAudience || 'General',
-      budget: budget || 0,
-      status: status || 'draft',
-      updatedAt: new Date()
-    };
-    res.json({ success: true, data: updatedAd, message: 'Publicidad actualizada exitosamente' });
+    const { title, description, size, targetAudience, budget, status, imageUrl } = req.body;
+    
+    // Verificar si la publicidad existe
+    const existingAd = await adsRepo.getById(id);
+    if (!existingAd) {
+      return res.status(404).json({ 
+        success: false, 
+        error: { message: `Publicidad con ID ${id} no encontrada` } 
+      });
+    }
+    
+    // Verificar si ya existe otra publicidad con el mismo título
+    if (title && title !== existingAd.title) {
+      const adWithSameTitle = await adsRepo.findOne({ title });
+      if (adWithSameTitle && adWithSameTitle.id !== id) {
+        return res.status(400).json({ 
+          success: false, 
+          error: { message: 'Ya existe una publicidad con este título' } 
+        });
+      }
+    }
+    
+    // Actualizar solo los campos proporcionados
+    const updateData = {};
+    if (title !== undefined) updateData.title = title;
+    if (description !== undefined) updateData.description = description;
+    if (size !== undefined) updateData.size = size;
+    if (targetAudience !== undefined) updateData.targetAudience = targetAudience;
+    if (budget !== undefined) updateData.budget = budget;
+    if (status !== undefined) updateData.status = status;
+    if (imageUrl !== undefined) updateData.imageUrl = imageUrl;
+    
+    // Actualizar la fecha de modificación
+    updateData.update_date = new Date().toISOString();
+    
+    const updatedAd = await adsRepo.update(id, updateData);
+    
+    if (!updatedAd) {
+      return res.status(500).json({ 
+        success: false, 
+        error: { message: 'Error al actualizar la publicidad' } 
+      });
+    }
+    
+    res.json({ 
+      success: true, 
+      data: updatedAd, 
+      message: 'Publicidad actualizada exitosamente' 
+    });
   } catch (error) {
-    res.status(500).json({ success: false, error: { message: 'Error interno del servidor' } });
+    console.error(`Error en PUT /ads/${req.params.id}:`, error);
+    res.status(500).json({ 
+      success: false, 
+      error: { message: 'Error al actualizar la publicidad' } 
+    });
   }
 });
 
 // DELETE /ads/:id - Eliminar publicidad
-router.delete('/ads/:id', (req, res) => {
+router.delete('/ads/:id', async (req, res) => {
   try {
     const { id } = req.params;
-    const adId = parseInt(id);
     
-    // Buscar el índice de la publicidad a eliminar
-    const adIndex = adsDatabase.findIndex(ad => ad.id === adId);
-    
-    if (adIndex !== -1) {
-      // Eliminar la publicidad del array
-      const deletedAd = adsDatabase.splice(adIndex, 1)[0];
-      console.log(`Publicidad eliminada: ${deletedAd.title}. Total publicidades restantes:`, adsDatabase.length);
-      res.json({ success: true, message: `Publicidad ${deletedAd.title} eliminada exitosamente` });
-    } else {
-      res.status(404).json({ success: false, error: { message: `Publicidad con ID ${id} no encontrada` } });
+    // Verificar si la publicidad existe
+    const ad = await adsRepo.getById(id);
+    if (!ad) {
+      return res.status(404).json({ 
+        success: false, 
+        error: { message: `Publicidad con ID ${id} no encontrada` } 
+      });
     }
+    
+    // Eliminar la publicidad
+    const success = await adsRepo.delete(id);
+    
+    if (!success) {
+      return res.status(500).json({ 
+        success: false, 
+        error: { message: 'Error al eliminar la publicidad' } 
+      });
+    }
+    
+    console.log(`Publicidad eliminada: ${ad.title}`);
+    res.json({ 
+      success: true, 
+      message: `Publicidad "${ad.title}" eliminada exitosamente` 
+    });
   } catch (error) {
-    console.error('Error al eliminar publicidad:', error);
-    res.status(500).json({ success: false, error: { message: 'Error interno del servidor' } });
+    console.error(`Error en DELETE /ads/${req.params.id}:`, error);
+    res.status(500).json({ 
+      success: false, 
+      error: { message: 'Error al eliminar la publicidad' } 
+    });
   }
 });
 
 // ===== RUTAS DE IMÁGENES =====
 
 // POST /ads/:id/upload-image-chunk - Subir imagen por chunks
-router.post('/ads/:id/upload-image-chunk', (req, res) => {
+router.post('/ads/:id/upload-image-chunk', async (req, res) => {
   try {
     const { id } = req.params;
     const { chunkIndex, totalChunks, fileName } = req.body;
     
+    // Verificar si la publicidad existe
+    const ad = await adsRepo.getById(id);
+    if (!ad) {
+      return res.status(404).json({ 
+        success: false, 
+        error: { message: `Publicidad con ID ${id} no encontrada` } 
+      });
+    }
+    
     // Simular subida de chunk
     const chunkInfo = {
-      adId: parseInt(id),
+      adId: id,
       chunkIndex: parseInt(chunkIndex) || 0,
       totalChunks: parseInt(totalChunks) || 1,
       fileName: fileName || 'image.jpg',
@@ -178,42 +228,74 @@ router.post('/ads/:id/upload-image-chunk', (req, res) => {
     
     // Simular que es el último chunk
     if (chunkIndex === totalChunks - 1) {
+      // Actualizar la URL de la imagen en la publicidad
+      const imageUrl = `/assets/ads/${id}/${fileName || 'image.jpg'}`;
+      await adsRepo.update(id, { 
+        imageUrl,
+        update_date: new Date().toISOString() 
+      });
+      
       res.json({ 
         success: true, 
-        data: chunkInfo,
+        data: { ...chunkInfo, imageUrl },
         message: 'Imagen subida completamente',
-        imageUrl: `/assets/ads/${id}/${fileName}`,
         completed: true
       });
     } else {
       res.json({ 
         success: true, 
         data: chunkInfo,
-        message: `Chunk ${chunkIndex + 1}/${totalChunks} subido exitosamente`,
+        message: `Chunk ${parseInt(chunkIndex) + 1}/${parseInt(totalChunks) || 1} subido exitosamente`,
         completed: false
       });
     }
   } catch (error) {
-    res.status(500).json({ success: false, error: { message: 'Error interno del servidor' } });
+    console.error('Error en POST /ads/:id/upload-image-chunk:', error);
+    res.status(500).json({ 
+      success: false, 
+      error: { message: 'Error al subir el chunk de la imagen' } 
+    });
   }
 });
 
 // GET /ads/:id/image - Obtener imagen de publicidad
-router.get('/ads/:id/image', (req, res) => {
+router.get('/ads/:id/image', async (req, res) => {
   try {
     const { id } = req.params;
-    // Simular respuesta de imagen
+    
+    // Obtener la publicidad
+    const ad = await adsRepo.getById(id);
+    if (!ad) {
+      return res.status(404).json({ 
+        success: false, 
+        error: { message: `Publicidad con ID ${id} no encontrada` } 
+      });
+    }
+    
+    if (!ad.imageUrl) {
+      return res.status(404).json({ 
+        success: false, 
+        error: { message: 'Esta publicidad no tiene una imagen asociada' } 
+      });
+    }
+    
+    // Simular información de la imagen
     const imageInfo = {
-      adId: parseInt(id),
-      imageUrl: `/assets/ads/${id}/image.jpg`,
-      fileName: 'image.jpg',
-      size: '1080x1080',
+      adId: id,
+      imageUrl: ad.imageUrl,
+      fileName: ad.imageUrl.split('/').pop() || 'image.jpg',
+      size: ad.size || '1080x1080',
       fileSize: '245KB',
-      uploadedAt: new Date()
+      uploadedAt: ad.update_date || new Date().toISOString()
     };
+    
     res.json({ success: true, data: imageInfo });
   } catch (error) {
-    res.status(500).json({ success: false, error: { message: 'Error interno del servidor' } });
+    console.error(`Error en GET /ads/${req.params.id}/image:`, error);
+    res.status(500).json({ 
+      success: false, 
+      error: { message: 'Error al obtener la imagen de la publicidad' } 
+    });
   }
 });
 
