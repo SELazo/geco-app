@@ -27,6 +27,7 @@ import { GAddNewGroupFormStep2Page } from '../pages/contacts/add-group/GAddNewGr
 import { GNewGroupSuccessPage } from '../pages/contacts/add-group/GNewGroupSuccessPage';
 import { GGroupPage } from '../pages/contacts/GGroupPage';
 import { GEditUserInfoSuccessPage } from '../pages/user/GEditUserInfoSuccessPage';
+import { GEditContactPage } from '../pages/contacts/edit-contact/GEditContactPage';
 import { GAdsPage } from '../pages/ads/GAdsPage';
 import { GAdSizePage } from '../pages/ads/createAd/GAdSizePage';
 import { GAdContentPage } from '../pages/ads/createAd/GAdContentPage';
@@ -109,6 +110,7 @@ export const GPrivateRoutes = () => {
         />
         <Route path="groups/:id" element={<GGroupPage />} />
         <Route path="list" element={<GContactsListPage />} />
+        <Route path="edit/:id" element={<GEditContactPage />} />
         <Route path="*" element={<Navigate to="/contacts/options" />} />
       </Route>
       <Route path="/statistics" element={<GStatisticsRenderMainPage />}>

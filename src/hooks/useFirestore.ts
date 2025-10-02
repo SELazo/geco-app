@@ -250,4 +250,131 @@ export const useContacts = (userId: string, autoLoad = true) => {
   };
 };
 
+// Hook específico para anuncios
+export const useAds = (userId: string, autoLoad = true) => {
+  const hook = useFirestore('ads', { autoLoad, dependencies: [userId] });
+  
+  const loadUserAds = useCallback(async () => {
+    return hook.findBy('userId', '==', userId);
+  }, [hook.findBy, userId]);
+
+  const loadActiveAds = useCallback(async () => {
+    return hook.loadAll({
+      where: [
+        { field: 'userId', operator: '==', value: userId },
+        { field: 'status', operator: '==', value: 'active' }
+      ],
+      orderBy: [{ field: 'createdAt', direction: 'desc' }]
+    });
+  }, [hook.loadAll, userId]);
+
+  const loadAdsByStatus = useCallback(async (status: 'draft' | 'active' | 'archived') => {
+    return hook.loadAll({
+      where: [
+        { field: 'userId', operator: '==', value: userId },
+        { field: 'status', operator: '==', value: status }
+      ],
+      orderBy: [{ field: 'updatedAt', direction: 'desc' }]
+    });
+  }, [hook.loadAll, userId]);
+
+  useEffect(() => {
+    if (autoLoad && userId) {
+      loadUserAds();
+    }
+  }, [autoLoad, userId, loadUserAds]);
+
+  return {
+    ...hook,
+    loadUserAds,
+    loadActiveAds,
+    loadAdsByStatus,
+  };
+};
+
+// Hook específico para envíos de formularios
+export const useFormSubmissions = (strategyId: string, autoLoad = true) => {
+  const hook = useFirestore('form-submissions', { autoLoad, dependencies: [strategyId] });
+  
+  const loadSubmissionsByStrategy = useCallback(async () => {
+    return hook.findBy('strategyId', '==', strategyId);
+  }, [hook.findBy, strategyId]);
+
+  const loadPendingSubmissions = useCallback(async () => {
+    return hook.loadAll({
+      where: [
+        { field: 'strategyId', operator: '==', value: strategyId },
+        { field: 'processed', operator: '==', value: false }
+      ],
+      orderBy: [{ field: 'submittedAt', direction: 'asc' }]
+    });
+  }, [hook.loadAll, strategyId]);
+
+  const loadProcessedSubmissions = useCallback(async () => {
+    return hook.loadAll({
+      where: [
+        { field: 'strategyId', operator: '==', value: strategyId },
+        { field: 'processed', operator: '==', value: true }
+      ],
+      orderBy: [{ field: 'submittedAt', direction: 'desc' }]
+    });
+  }, [hook.loadAll, strategyId]);
+
+  useEffect(() => {
+    if (autoLoad && strategyId) {
+      loadSubmissionsByStrategy();
+    }
+  }, [autoLoad, strategyId, loadSubmissionsByStrategy]);
+
+  return {
+    ...hook,
+    loadSubmissionsByStrategy,
+    loadPendingSubmissions,
+    loadProcessedSubmissions,
+  };
+};
+
+// Hook específico para analytics
+export const useAnalytics = (userId: string, autoLoad = true) => {
+  const hook = useFirestore('analytics', { autoLoad, dependencies: [userId] });
+  
+  const loadUserAnalytics = useCallback(async () => {
+    return hook.findBy('userId', '==', userId);
+  }, [hook.findBy, userId]);
+
+  const loadAnalyticsByType = useCallback(async (type: 'view' | 'click' | 'conversion' | 'form_submission') => {
+    return hook.loadAll({
+      where: [
+        { field: 'userId', operator: '==', value: userId },
+        { field: 'type', operator: '==', value: type }
+      ],
+      orderBy: [{ field: 'timestamp', direction: 'desc' }]
+    });
+  }, [hook.loadAll, userId]);
+
+  const loadAnalyticsByDateRange = useCallback(async (startDate: Date, endDate: Date) => {
+    return hook.loadAll({
+      where: [
+        { field: 'userId', operator: '==', value: userId },
+        { field: 'timestamp', operator: '>=', value: startDate },
+        { field: 'timestamp', operator: '<=', value: endDate }
+      ],
+      orderBy: [{ field: 'timestamp', direction: 'desc' }]
+    });
+  }, [hook.loadAll, userId]);
+
+  useEffect(() => {
+    if (autoLoad && userId) {
+      loadUserAnalytics();
+    }
+  }, [autoLoad, userId, loadUserAnalytics]);
+
+  return {
+    ...hook,
+    loadUserAnalytics,
+    loadAnalyticsByType,
+    loadAnalyticsByDateRange,
+  };
+};
+
 export default useFirestore;

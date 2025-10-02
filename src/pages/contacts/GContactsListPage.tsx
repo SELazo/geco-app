@@ -17,19 +17,21 @@ import { GHeadCenterTitle } from '../../components/GHeadCenterTitle';
 import { ContactsSectionTitle } from '../../constants/wording';
 import { GContactItem } from '../../components/GContactItem';
 import { GLogoLetter } from '../../components/GLogoLetter';
-import { Link } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 import { GDropdownMenu, IMenuItem } from '../../components/GDropdownMenu';
 import { IContact } from '../../interfaces/dtos/external/IFirestore';
 import { SessionState } from '../../redux/sessionSlice';
 import { ROUTES } from '../../constants/routes';
 
 export const GContactsListPage = () => {
+  const navigate = useNavigate();
   const [contacts, setContacts] = useState<IContact[]>([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string>('');
   
   // Obtener usuario desde Redux
   const user = useSelector((state: SessionState) => state.user);
+  const auth = useSelector((state: SessionState) => state.auth);
 
   useEffect(() => {
     const fetchContacts = async () => {
@@ -37,22 +39,45 @@ export const GContactsListPage = () => {
         setLoading(true);
         setError('');
         
+        console.log('👤 Usuario actual:', user);
+        
+        // Verificar que tenemos un usuario válido
+        if (!user || !user.id || user.id === -1) {
+          console.log('⚠️ Usuario no válido:', user);
+          console.log('🔐 Estado de autenticación:', auth);
+          setError('Usuario no encontrado. Verifica que hayas iniciado sesión.');
+          return;
+        }
+        
+        console.log('🔥 Obteniendo contactos para usuario:', user.id);
+        
         // Obtener contactos del usuario desde Firestore
         const userContacts = await ContactsFirestoreService.getUserContacts(user.id.toString());
+        
+        console.log('✅ Contactos obtenidos:', userContacts);
         setContacts(userContacts);
         
       } catch (error) {
-        console.error('Error cargando contactos:', error);
-        setError(error instanceof Error ? error.message : 'Error desconocido');
+        console.error('❌ Error cargando contactos:', error);
+        setError(error instanceof Error ? error.message : 'Error desconocido al cargar contactos');
       } finally {
         setLoading(false);
       }
     };
 
-    if (user.id) {
-      fetchContacts();
-    }
-  }, [user.id]);
+    // Agregar un pequeño delay para asegurar que Redux esté inicializado
+    const timer = setTimeout(() => {
+      if (user && user.id) {
+        fetchContacts();
+      } else {
+        console.warn('⚠️ Usuario no disponible en Redux:', user);
+        setLoading(false);
+        setError('Usuario no encontrado. Verifica que hayas iniciado sesión.');
+      }
+    }, 100);
+
+    return () => clearTimeout(timer);
+  }, [user]);
 
   const menuContacts: IMenuItem[] = [
     {
@@ -74,7 +99,10 @@ export const GContactsListPage = () => {
 
   const editContact = (id: string | undefined) => {
     if (id) {
-      console.log(contacts.find((c) => c.id === id));
+      console.log('✏️ Editando contacto con ID:', id);
+      navigate(`/contacts/edit/${id}`);
+    } else {
+      console.error('❌ ID de contacto no válido:', id);
     }
   };
 
@@ -156,10 +184,46 @@ export const GContactsListPage = () => {
 
         {/* Mostrar mensaje cuando no hay contactos */}
         {!loading && !error && contacts.length === 0 && (
-          <Box display="flex" justifyContent="center" alignItems="center" minHeight="200px">
+          <Box display="flex" flexDirection="column" justifyContent="center" alignItems="center" minHeight="200px" gap={2}>
             <Alert severity="info">
               No tienes contactos aún. ¡Agrega tu primer contacto!
             </Alert>
+            <button 
+              onClick={async () => {
+                if (user && user.id) {
+                  try {
+                    // Crear contacto de ejemplo
+                    const contactoEjemplo = {
+                      name: 'Contacto de Ejemplo',
+                      email: 'ejemplo@test.com',
+                      phone: '+1234567890',
+                      groups: [],
+                      tags: ['ejemplo'],
+                      userId: user.id.toString(),
+                      status: 'active' as const
+                    };
+                    
+                    const id = await ContactsFirestoreService.createContact(contactoEjemplo);
+                    console.log('✅ Contacto de ejemplo creado:', id);
+                    
+                    // Recargar contactos
+                    const userContacts = await ContactsFirestoreService.getUserContacts(user.id.toString());
+                    setContacts(userContacts);
+                  } catch (error) {
+                    console.error('Error creando contacto de ejemplo:', error);
+                  }
+                }
+              }}
+              style={{
+                padding: '10px 20px',
+                backgroundColor: GYellow,
+                border: 'none',
+                borderRadius: '5px',
+                cursor: 'pointer'
+              }}
+            >
+              🧪 Crear Contacto de Ejemplo (Prueba Firestore)
+            </button>
           </Box>
         )}
       </div>
