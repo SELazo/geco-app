@@ -211,56 +211,6 @@ export const GAddContactPage = () => {
         <Box sx={{ mb: 2, mx: 2 }}>
           <Alert severity="warning">
             {userWarning}
-            <div style={{ marginTop: '10px' }}>
-              <button
-                type="button"
-                onClick={() => {
-                  // Crear usuario de prueba
-                  const testUser = {
-                    id: 'test-user-' + Date.now(),
-                    name: 'Usuario Test',
-                    email: 'test@example.com',
-                    token: 'test-token-' + Date.now()
-                  };
-                  
-                  localStorage.setItem('user', JSON.stringify(testUser));
-                  localStorage.setItem('token', testUser.token);
-                  
-                  console.log('✅ Usuario de prueba creado:', testUser);
-                  setUserWarning('');
-                  window.location.reload(); // Recargar para que Redux tome los nuevos datos
-                }}
-                style={{
-                  padding: '8px 16px',
-                  backgroundColor: GYellow,
-                  border: 'none',
-                  borderRadius: '4px',
-                  cursor: 'pointer',
-                  fontSize: '14px',
-                  marginRight: '10px'
-                }}
-              >
-                🧪 Crear Usuario de Prueba
-              </button>
-              <button
-                type="button"
-                onClick={() => {
-                  console.log('🔍 Estado actual de Redux:', user);
-                  console.log('📦 LocalStorage user:', localStorage.getItem('user'));
-                  console.log('🔑 LocalStorage token:', localStorage.getItem('token'));
-                }}
-                style={{
-                  padding: '8px 16px',
-                  backgroundColor: '#e0e0e0',
-                  border: 'none',
-                  borderRadius: '4px',
-                  cursor: 'pointer',
-                  fontSize: '14px'
-                }}
-              >
-                🔍 Debug Estado
-              </button>
-            </div>
           </Alert>
         </Box>
       )}
@@ -304,38 +254,6 @@ export const GAddContactPage = () => {
         {saveError && (
           <Alert severity="error" sx={{ mt: 2 }}>
             Error al guardar contacto: {saveError}
-            {saveError.includes('Usuario no encontrado') && (
-              <div style={{ marginTop: '10px' }}>
-                <button
-                  type="button"
-                  onClick={() => {
-                    // Crear usuario de prueba
-                    const testUser = {
-                      id: 'test-user-' + Date.now(),
-                      name: 'Usuario Test',
-                      email: 'test@example.com',
-                      token: 'test-token-' + Date.now()
-                    };
-                    
-                    localStorage.setItem('user', JSON.stringify(testUser));
-                    localStorage.setItem('token', testUser.token);
-                    
-                    console.log('✅ Usuario de prueba creado:', testUser);
-                    alert('Usuario de prueba creado. Recarga la página e intenta nuevamente.');
-                  }}
-                  style={{
-                    padding: '8px 16px',
-                    backgroundColor: GYellow,
-                    border: 'none',
-                    borderRadius: '4px',
-                    cursor: 'pointer',
-                    fontSize: '14px'
-                  }}
-                >
-                  🧪 Crear Usuario de Prueba
-                </button>
-              </div>
-            )}
           </Alert>
         )}
 

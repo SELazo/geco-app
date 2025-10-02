@@ -188,42 +188,6 @@ export const GContactsListPage = () => {
             <Alert severity="info">
               No tienes contactos aún. ¡Agrega tu primer contacto!
             </Alert>
-            <button 
-              onClick={async () => {
-                if (user && user.id) {
-                  try {
-                    // Crear contacto de ejemplo
-                    const contactoEjemplo = {
-                      name: 'Contacto de Ejemplo',
-                      email: 'ejemplo@test.com',
-                      phone: '+1234567890',
-                      groups: [],
-                      tags: ['ejemplo'],
-                      userId: user.id.toString(),
-                      status: 'active' as const
-                    };
-                    
-                    const id = await ContactsFirestoreService.createContact(contactoEjemplo);
-                    console.log('✅ Contacto de ejemplo creado:', id);
-                    
-                    // Recargar contactos
-                    const userContacts = await ContactsFirestoreService.getUserContacts(user.id.toString());
-                    setContacts(userContacts);
-                  } catch (error) {
-                    console.error('Error creando contacto de ejemplo:', error);
-                  }
-                }
-              }}
-              style={{
-                padding: '10px 20px',
-                backgroundColor: GYellow,
-                border: 'none',
-                borderRadius: '5px',
-                cursor: 'pointer'
-              }}
-            >
-              🧪 Crear Contacto de Ejemplo (Prueba Firestore)
-            </button>
           </Box>
         )}
       </div>
