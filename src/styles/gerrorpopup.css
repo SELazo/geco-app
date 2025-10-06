@@ -10,6 +10,17 @@
   background-position-x: right;
   background-position-y: 40%;
   background-size: 60%;
+  font-family: 'Montserrat', sans-serif;
+}
+
+.geco-error-pop-up-overlay-no-arrow {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background-color: rgba(0, 0, 0, 0.5);
+  font-family: 'Montserrat', sans-serif;
 }
 
 .geco-error-pop-up-icon {
@@ -21,6 +32,7 @@
   display: flex;
   align-items: center;
   justify-content: center;
+  font-family: 'Montserrat', sans-serif;
 }
 .geco-error-pop-up-body {
   display: flex;
@@ -33,6 +45,20 @@
   max-width: 250px;
   min-width: 250px;
   padding: 0.5em;
+}
+
+.geco-error-pop-up-body-warning {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: space-around;
+  background: #ffffff;
+  border: 2px solid #18191f;
+  border-radius: 16px;
+  max-width: 250px;
+  min-width: 250px;
+  padding: 0.5em;
+  font-family: 'Montserrat', sans-serif;
 }
 
 .geco-error-pop-up-body p {
@@ -48,6 +74,17 @@
   left: 0;
   right: 0;
   bottom: 20px; /* Ajusta la distancia inferior según tus necesidades */
+  z-index: 9999; /* Asegúrate de que el z-index sea mayor que otros elementos en la página */
+}
+
+.geco-error-pop-up-warning {
+  display: flex;
+  align-items: flex-end;
+  justify-content: center;
+  position: fixed;
+  left: 0;
+  right: 0;
+  bottom: 250px; /* Ajusta la distancia inferior según tus necesidades */
   z-index: 9999; /* Asegúrate de que el z-index sea mayor que otros elementos en la página */
 }
 

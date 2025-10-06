@@ -9,6 +9,11 @@
   align-self: flex-start;
   margin-left: 4vw;
   margin-top: 2vh;
+  gap: 4px;
+
+  a {
+    display: contents;
+  }
 }
 
 .geco-contacts-groups-head-nav-bar-right {
@@ -22,13 +27,8 @@
   border: 2px solid #18191f;
   box-shadow: 0px 2px 0px #18191f;
   border-radius: 50%;
-  margin-right: 1vw;
   width: 48px;
-  height: 48px;
-}
-
-.geco-contacts-groups-nav-bar-section {
-  margin-right: 1vw;
+  height: 50px;
 }
 
 .geco-contacts-groups {

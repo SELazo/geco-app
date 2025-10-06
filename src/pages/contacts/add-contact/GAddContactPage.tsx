@@ -19,19 +19,17 @@ import { GBlack, GWhite, GYellow } from '../../../constants/palette';
 import { NavigationService } from '../../../services/internal/navigationService';
 import { ContactsFirestoreService } from '../../../services/external/contactsFirestoreService';
 import { Link, useNavigate } from 'react-router-dom';
-import { GLogoLetter } from '../../../components/GLogoLetter';
-import { IContactData } from '../../../interfaces/IContact';
 import { IContact } from '../../../interfaces/dtos/external/IFirestore';
 import { SessionState } from '../../../redux/sessionSlice';
-import { ROUTES } from '../../../constants/routes';
+import { GLogoLetter } from '../../../components/GLogoLetter';
 
 export const GAddContactPage = () => {
   const navigate = useNavigate();
-  
+
   // Obtener usuario desde Redux
   const user = useSelector((state: SessionState) => state.user);
   const auth = useSelector((state: SessionState) => state.auth);
-  
+
   // Estados para manejo de carga y errores
   const [saving, setSaving] = useState(false);
   const [saveError, setSaveError] = useState<string>('');
@@ -40,11 +38,13 @@ export const GAddContactPage = () => {
   // Verificar usuario al cargar el componente
   useEffect(() => {
     console.log('🔍 Verificando usuario al cargar componente:', user);
-    
+
     if (!user || !user.id || user.id === -1) {
       console.log('🔐 Estado de autenticación:', auth);
-      setUserWarning('⚠️ No hay usuario activo. Es posible que necesites iniciar sesión o crear un usuario de prueba.');
-      
+      setUserWarning(
+        '⚠️ No hay usuario activo. Es posible que necesites iniciar sesión o crear un usuario de prueba.'
+      );
+
       // Verificar localStorage como backup
       const storedUser = localStorage.getItem('user');
       if (storedUser) {
@@ -93,38 +93,43 @@ export const GAddContactPage = () => {
         'Por favor ingrese un número de celular válido (ej: +54911234567, 911234567, 1234567890).',
         function (value) {
           if (!value) return true; // Si está vacío, no validar formato (ya se valida en has-contact-info)
-          
+
           // Patrones más flexibles para números de teléfono
           const patterns = [
             /^\+[1-9]\d{1,14}$/, // Formato internacional: +54911234567
             /^[0-9]{7,15}$/, // Solo números: 1234567890
             /^\+[1-9]\d{0,3}[\s-]?[0-9]{3,4}[\s-]?[0-9]{3,4}[\s-]?[0-9]{3,4}$/, // Con espacios o guiones
           ];
-          
-          return patterns.some(pattern => pattern.test(value.replace(/[\s-]/g, '')));
+
+          return patterns.some((pattern) =>
+            pattern.test(value.replace(/[\s-]/g, ''))
+          );
         }
       ),
   });
 
-  const onSubmit = async (data: { name: string; email?: string; cellphone?: string }) => {
+  const onSubmit = async (data: {
+    name: string;
+    email?: string;
+    cellphone?: string;
+  }) => {
     try {
       setSaving(true);
       setSaveError('');
 
-      console.log('📝 Datos del formulario:', data);
-      console.log('👤 Usuario actual:', user);
-
       // Validar que tenemos un usuario válido
       if (!user || !user.id || user.id === -1) {
-        setSaveError('Usuario no encontrado. Por favor, inicia sesión nuevamente.');
-        console.error('❌ Usuario no disponible:', user);
-        console.error('🔐 Estado de autenticación:', auth);
+        setSaveError(
+          'Usuario no encontrado. Por favor, inicia sesión nuevamente.'
+        );
         return;
       }
 
       // Validar que tenemos al menos email o teléfono
       if (!data.email && !data.cellphone) {
-        setSaveError('Por favor ingrese al menos un email o número de celular.');
+        setSaveError(
+          'Por favor ingrese al menos un email o número de celular.'
+        );
         return;
       }
 
@@ -143,20 +148,18 @@ export const GAddContactPage = () => {
         status: 'active',
       };
 
-      console.log('💾 Datos a guardar:', contactData);
-
       // Guardar en Firestore
-      const contactId = await ContactsFirestoreService.createContact(contactData);
-      
-      console.log('✅ Contacto guardado con ID:', contactId);
-      
+      const contactId = await ContactsFirestoreService.createContact(
+        contactData
+      );
+
       // Limpiar formulario y navegar a la página de éxito
       reset();
       navigate('/contacts/success-add-contact');
-      
     } catch (error) {
-      console.error('❌ Error guardando contacto:', error);
-      setSaveError(error instanceof Error ? error.message : 'Error desconocido');
+      setSaveError(
+        error instanceof Error ? error.message : 'Error desconocido'
+      );
     } finally {
       setSaving(false);
     }
@@ -205,16 +208,14 @@ export const GAddContactPage = () => {
           subtitle={AddContactSectionTitle.subtitle}
         />
       </div>
-      
+
       {/* Mostrar advertencia de usuario si existe */}
       {userWarning && (
         <Box sx={{ mb: 2, mx: 2 }}>
-          <Alert severity="warning">
-            {userWarning}
-          </Alert>
+          <Alert severity="warning">{userWarning}</Alert>
         </Box>
       )}
-      
+
       <form className="geco-form" onSubmit={handleSubmit(onSubmit)}>
         <div className="input-group">
           <input
@@ -260,7 +261,7 @@ export const GAddContactPage = () => {
         {/* Botón de submit con indicador de carga */}
         <div style={{ position: 'relative', marginTop: '16px' }}>
           <GSubmitButton
-            label={saving ? "Guardando..." : "Enviar"}
+            label={saving ? 'Guardando...' : 'Enviar'}
             colorBackground={saving ? '#ccc' : GYellow}
             colorFont={GBlack}
             disabled={saving}

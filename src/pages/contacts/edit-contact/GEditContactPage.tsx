@@ -3,7 +3,8 @@ import { yupResolver } from '@hookform/resolvers/yup';
 import * as Yup from 'yup';
 import { useState, useEffect } from 'react';
 import { useSelector } from 'react-redux';
-import { Alert, CircularProgress, Box } from '@mui/material';
+import { Alert, Box } from '@mui/material';
+import { PacmanLoader } from 'react-spinners';
 import { useParams, useNavigate, Link } from 'react-router-dom';
 
 import '../../../styles/ginputBox.css';
@@ -24,16 +25,16 @@ import { SessionState } from '../../../redux/sessionSlice';
 export const GEditContactPage = () => {
   const navigate = useNavigate();
   const { id } = useParams<{ id: string }>();
-  
+
   // Obtener usuario desde Redux
   const user = useSelector((state: SessionState) => state.user);
   const auth = useSelector((state: SessionState) => state.auth);
-  
   // Estados para manejo de carga y errores
   const [loading, setLoading] = useState(true);
   const [saving, setSaving] = useState(false);
   const [saveError, setSaveError] = useState<string>('');
   const [contact, setContact] = useState<IContact | null>(null);
+  const [showDeleteConfirm, setShowDeleteConfirm] = useState(false);
   const [userWarning, setUserWarning] = useState<string>('');
 
   // Esquema de validación
@@ -69,14 +70,16 @@ export const GEditContactPage = () => {
         'Por favor ingrese un número de celular válido (ej: +54911234567, 911234567, 1234567890).',
         function (value) {
           if (!value) return true;
-          
+
           const patterns = [
             /^\+[1-9]\d{1,14}$/,
             /^[0-9]{7,15}$/,
             /^\+[1-9]\d{0,3}[\s-]?[0-9]{3,4}[\s-]?[0-9]{3,4}[\s-]?[0-9]{3,4}$/,
           ];
-          
-          return patterns.some(pattern => pattern.test(value.replace(/[\s-]/g, '')));
+
+          return patterns.some((pattern) =>
+            pattern.test(value.replace(/[\s-]/g, ''))
+          );
         }
       ),
   });
@@ -97,14 +100,12 @@ export const GEditContactPage = () => {
 
   // Verificar usuario al cargar el componente
   useEffect(() => {
-    console.log('🔍 Verificando usuario al cargar componente:', user);
-    
     if (!user || !user.id || user.id === -1) {
-      console.log('🔐 Estado de autenticación:', auth);
-      setUserWarning('⚠️ No hay usuario activo. Es posible que necesites iniciar sesión o crear un usuario de prueba.');
+      setUserWarning(
+        '⚠️ No hay usuario activo. Es posible que necesites iniciar sesión o crear un usuario de prueba.'
+      );
     } else {
       setUserWarning('');
-      console.log('✅ Usuario válido encontrado:', user);
     }
   }, [user, auth]);
 
@@ -125,10 +126,9 @@ export const GEditContactPage = () => {
 
       try {
         setLoading(true);
-        console.log('📥 Cargando contacto con ID:', id);
-        
+
         const contactData = await ContactsFirestoreService.getContact(id);
-        
+
         if (!contactData) {
           setSaveError('Contacto no encontrado');
           return;
@@ -141,17 +141,15 @@ export const GEditContactPage = () => {
         }
 
         setContact(contactData);
-        
+
         // Llenar el formulario con los datos del contacto
         setValue('name', contactData.name);
         setValue('email', contactData.email || '');
         setValue('cellphone', contactData.phone || '');
-        
-        console.log('✅ Contacto cargado:', contactData);
-        
       } catch (error) {
-        console.error('❌ Error cargando contacto:', error);
-        setSaveError(error instanceof Error ? error.message : 'Error cargando contacto');
+        setSaveError(
+          error instanceof Error ? error.message : 'Error cargando contacto'
+        );
       } finally {
         setLoading(false);
       }
@@ -160,17 +158,20 @@ export const GEditContactPage = () => {
     loadContact();
   }, [id, user, setValue]);
 
-  const onSubmit = async (data: { name: string; email?: string; cellphone?: string }) => {
+  const onSubmit = async (data: {
+    name: string;
+    email?: string;
+    cellphone?: string;
+  }) => {
     try {
       setSaving(true);
       setSaveError('');
 
-      console.log('📝 Datos del formulario:', data);
-      console.log('👤 Usuario actual:', user);
-
       // Validar que tenemos un usuario válido
       if (!user || !user.id || user.id === -1) {
-        setSaveError('Usuario no encontrado. Por favor, inicia sesión nuevamente.');
+        setSaveError(
+          'Usuario no encontrado. Por favor, inicia sesión nuevamente.'
+        );
         return;
       }
 
@@ -182,7 +183,9 @@ export const GEditContactPage = () => {
 
       // Validar que tenemos al menos email o teléfono
       if (!data.email && !data.cellphone) {
-        setSaveError('Por favor ingrese al menos un email o número de celular.');
+        setSaveError(
+          'Por favor ingrese al menos un email o número de celular.'
+        );
         return;
       }
 
@@ -197,58 +200,61 @@ export const GEditContactPage = () => {
         phone: cleanPhone,
       };
 
-      console.log('💾 Datos a actualizar:', updatedContactData);
-
       // Actualizar en Firestore
-      await ContactsFirestoreService.updateContact(contact.id!, updatedContactData);
-      
-      console.log('✅ Contacto actualizado con ID:', contact.id);
-      
+      await ContactsFirestoreService.updateContact(
+        contact.id!,
+        updatedContactData
+      );
+
       // Navegar de vuelta a la lista de contactos
       navigate('/contacts/list');
-      
     } catch (error) {
-      console.error('❌ Error actualizando contacto:', error);
-      setSaveError(error instanceof Error ? error.message : 'Error desconocido');
+      setSaveError(
+        error instanceof Error ? error.message : 'Error desconocido'
+      );
     } finally {
       setSaving(false);
     }
   };
 
-  const handleDelete = async () => {
+  const handleDeleteClick = () => {
+    setShowDeleteConfirm(true);
+  };
+
+  const handleDeleteConfirm = async () => {
     if (!contact) return;
-    
-    const confirmDelete = window.confirm(
-      `¿Estás seguro de que quieres eliminar el contacto "${contact.name}"? Esta acción no se puede deshacer.`
-    );
-    
-    if (!confirmDelete) return;
-    
+
     try {
       setSaving(true);
-      console.log('🗑️ Eliminando contacto:', contact.id);
-      
+      setShowDeleteConfirm(false);
+
       await ContactsFirestoreService.deleteContact(contact.id!);
-      
-      console.log('✅ Contacto eliminado exitosamente');
-      
+
       // Navegar de vuelta a la lista de contactos
       navigate('/contacts/list');
-      
     } catch (error) {
-      console.error('❌ Error eliminando contacto:', error);
-      setSaveError(error instanceof Error ? error.message : 'Error eliminando contacto');
+      setSaveError(
+        error instanceof Error ? error.message : 'Error eliminando contacto'
+      );
     } finally {
       setSaving(false);
     }
+  };
+
+  const handleDeleteCancel = () => {
+    setShowDeleteConfirm(false);
   };
 
   if (loading) {
     return (
       <div className="geco-add-contact-main">
-        <Box display="flex" justifyContent="center" alignItems="center" minHeight="400px">
-          <CircularProgress />
-          <span style={{ marginLeft: '16px' }}>Cargando contacto...</span>
+        <Box
+          display="flex"
+          justifyContent="center"
+          alignItems="center"
+          minHeight="400px"
+        >
+          <PacmanLoader color={GYellow} />
         </Box>
       </div>
     );
@@ -260,7 +266,7 @@ export const GEditContactPage = () => {
         <Link className="geco-add-contact-nav-bar-logo" to="/home">
           <GLogoLetter />
         </Link>
-        <Link className="geco-add-contact-nav-bar-section" to="/contacts/options">
+        <Link className="geco-add-contact-nav-bar-section" to="/contacts/info">
           <GCircularButton
             icon={GContactsIcon}
             size="1.5em"
@@ -278,23 +284,21 @@ export const GEditContactPage = () => {
           onClickAction={NavigationService.goBack}
         />
       </div>
-      
+
       <div className="geco-add-contact-header-title">
         <GHeadSectionTitle
           title="Editar Contacto"
           subtitle={contact ? `Editando: ${contact.name}` : 'Cargando...'}
         />
       </div>
-      
+
       {/* Mostrar advertencia de usuario si existe */}
       {userWarning && (
         <Box sx={{ mb: 2, mx: 2 }}>
-          <Alert severity="warning">
-            {userWarning}
-          </Alert>
+          <Alert severity="warning">{userWarning}</Alert>
         </Box>
       )}
-      
+
       <form className="geco-form" onSubmit={handleSubmit(onSubmit)}>
         <div className="input-group">
           <input
@@ -307,7 +311,7 @@ export const GEditContactPage = () => {
           />
           <span className="span-error">{errors.name?.message}</span>
         </div>
-        
+
         <div className="input-group">
           <input
             type="email"
@@ -319,7 +323,7 @@ export const GEditContactPage = () => {
           />
           <span className="span-error">{errors.email?.message}</span>
         </div>
-        
+
         <div className="input-group">
           <input
             type="text"
@@ -344,45 +348,98 @@ export const GEditContactPage = () => {
           {/* Botón de actualizar */}
           <div style={{ position: 'relative', flex: 1 }}>
             <GSubmitButton
-              label={saving ? "Actualizando..." : "Actualizar Contacto"}
+              label={saving ? 'Actualizando...' : 'Actualizar Contacto'}
               colorBackground={saving ? '#ccc' : GYellow}
               colorFont={GBlack}
               disabled={saving}
             />
-            {saving && (
-              <CircularProgress
-                size={24}
-                sx={{
-                  position: 'absolute',
-                  top: '50%',
-                  left: '50%',
-                  marginTop: '-12px',
-                  marginLeft: '-12px',
-                }}
-              />
-            )}
+
+            {/* Botón de eliminar */}
+            <button
+              type="button"
+              onClick={handleDeleteClick}
+              disabled={saving}
+              style={{
+                background: '#18191f',
+                borderRadius: '16px',
+                border: '2px solid #18191f',
+                boxShadow: '0px 2px 0px #18191f',
+                width: '327px',
+                height: '60px',
+                fontFamily: 'Montserrat',
+                fontStyle: 'normal',
+                fontWeight: '700',
+                fontSize: '21px',
+                lineHeight: '28px',
+                textAlign: 'center',
+                color: GWhite,
+                cursor: saving ? 'not-allowed' : 'pointer',
+              }}
+            >
+              {saving ? 'Procesando...' : '🗑️ Eliminar'}
+            </button>
           </div>
-          
-          {/* Botón de eliminar */}
-          <button
-            type="button"
-            onClick={handleDelete}
-            disabled={saving}
-            style={{
-              padding: '12px 24px',
-              backgroundColor: saving ? '#ccc' : GRed,
-              color: GWhite,
-              border: 'none',
-              borderRadius: '8px',
-              cursor: saving ? 'not-allowed' : 'pointer',
-              fontSize: '16px',
-              fontWeight: 'bold'
-            }}
-          >
-            {saving ? 'Procesando...' : '🗑️ Eliminar'}
-          </button>
         </div>
       </form>
+
+      {/* Popup de confirmación para eliminar */}
+      {showDeleteConfirm && (
+        <div
+          className="geco-error-pop-up-overlay-no-arrow"
+          onClick={handleDeleteCancel}
+        >
+          <div
+            className="geco-error-pop-up-warning"
+            onClick={(e) => e.stopPropagation()}
+          >
+            <div className="geco-error-pop-up-body-warning">
+              <p style={{ textAlign: 'center', margin: '16px 0' }}>
+                ¿Estás seguro de que quieres eliminar el contacto "
+                {contact?.name}"?
+                <br />
+                Esta acción no se puede deshacer.
+              </p>
+              <div
+                style={{
+                  display: 'flex',
+                  gap: '12px',
+                  justifyContent: 'center',
+                }}
+              >
+                <button
+                  onClick={handleDeleteCancel}
+                  style={{
+                    padding: '8px 16px',
+                    backgroundColor: '#ccc',
+                    color: GBlack,
+                    border: 'none',
+                    borderRadius: '4px',
+                    cursor: 'pointer',
+                    fontFamily: 'Montserrat',
+                  }}
+                >
+                  Cancelar
+                </button>
+                <button
+                  onClick={handleDeleteConfirm}
+                  disabled={saving}
+                  style={{
+                    padding: '8px 16px',
+                    backgroundColor: GBlack,
+                    color: GWhite,
+                    border: 'none',
+                    borderRadius: '4px',
+                    cursor: saving ? 'not-allowed' : 'pointer',
+                    fontFamily: 'Montserrat',
+                  }}
+                >
+                  {saving ? 'Eliminando...' : 'Eliminar'}
+                </button>
+              </div>
+            </div>
+          </div>
+        </div>
+      )}
     </div>
   );
 };

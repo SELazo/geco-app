@@ -1,0 +1,348 @@
+/* Estilos principales para la sección de Respuestas */
+.geco-responses-main {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  font-family: 'Montserrat', sans-serif;
+}
+
+/* Barra de navegación */
+.geco-responses-nav-bar {
+  display: flex;
+  align-self: flex-start;
+  margin-left: 4vw;
+  margin-top: 2vh;
+  gap: 4px;
+
+  a {
+    display: contents;
+  }
+}
+
+.geco-responses-nav-bar-logo img {
+  border: 2px solid #18191f;
+  box-shadow: 0px 2px 0px #18191f;
+  border-radius: 50%;
+  width: 48px;
+  height: 50px;
+  display: block;
+}
+
+.geco-responses-nav-bar-section {
+  margin-right: 1vw;
+}
+
+/* Header */
+.geco-responses-header {
+  width: 100%;
+  max-width: 800px;
+  margin-bottom: 2vh;
+  text-align: center;
+}
+
+.geco-responses-title {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 8px;
+}
+
+.geco-responses-main-title {
+  font-family: 'Montserrat', sans-serif;
+  font-weight: 700;
+  font-size: 24px;
+  color: #18191f;
+  margin: 16px 0 0 0;
+  text-align: center;
+  line-height: 1.2;
+}
+
+.geco-responses-subtitle {
+  font-family: 'Montserrat', sans-serif;
+  font-weight: 400;
+  font-size: 14px;
+  color: #666;
+  margin: 0;
+  text-align: center;
+}
+
+/* Contenido principal */
+.geco-responses-content {
+  width: 100%;
+  max-width: 800px;
+  padding: 0 20px;
+}
+
+/* Lista de estrategias */
+.geco-responses-list-container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  width: 100%;
+}
+
+.geco-responses-list {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+  width: 100%;
+  max-width: 600px;
+}
+
+/* Tarjeta de estrategia */
+.geco-response-strategy-card {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  background: #ffffff;
+  border: 2px solid #18191f;
+  border-radius: 16px;
+  padding: 20px;
+  box-shadow: 0px 2px 0px #18191f;
+  transition: transform 0.2s ease;
+}
+
+.geco-response-strategy-card:hover {
+  transform: translateY(-2px);
+}
+
+.geco-response-strategy-info {
+  flex: 1;
+  margin-right: 16px;
+}
+
+.geco-response-strategy-name {
+  font-size: 18px;
+  font-weight: 700;
+  color: #18191f;
+  margin: 0 0 8px 0;
+}
+
+.geco-response-strategy-description {
+  font-size: 14px;
+  color: #666;
+  margin: 0 0 12px 0;
+  line-height: 1.4;
+}
+
+.geco-response-strategy-stats {
+  display: flex;
+  gap: 16px;
+  font-size: 12px;
+  color: #888;
+}
+
+.geco-response-count,
+.geco-response-date {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+}
+
+.geco-response-strategy-actions {
+  display: flex;
+  align-items: center;
+}
+
+.geco-response-view-btn {
+  transition: all 0.2s ease;
+}
+
+.geco-response-view-btn:hover {
+  transform: translateY(-1px);
+  box-shadow: 0px 3px 0px #18191f;
+}
+
+/* Vista de respuestas individuales */
+.geco-responses-view-container {
+  display: flex;
+  flex-direction: column;
+  gap: 24px;
+}
+
+/* Controles de filtro y exportación */
+.geco-responses-controls {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  background: #f8f9fa;
+  border: 2px solid #18191f;
+  border-radius: 16px;
+  padding: 16px;
+  box-shadow: 0px 2px 0px #18191f;
+  gap: 16px;
+}
+
+.geco-responses-filters {
+  display: flex;
+  gap: 12px;
+  align-items: center;
+}
+
+.geco-responses-summary {
+  background: #f8f9fa;
+  border: 2px solid #18191f;
+  border-radius: 16px;
+  padding: 20px;
+  box-shadow: 0px 2px 0px #18191f;
+}
+
+.geco-responses-summary h3 {
+  margin: 0 0 12px 0;
+  color: #18191f;
+  font-size: 18px;
+  font-weight: 700;
+}
+
+.geco-responses-summary p {
+  margin: 4px 0;
+  color: #555;
+  font-size: 14px;
+}
+
+/* Tarjeta de respuesta individual */
+.geco-response-card {
+  background: #ffffff;
+  border: 2px solid #18191f;
+  border-radius: 16px;
+  padding: 20px;
+  box-shadow: 0px 2px 0px #18191f;
+  margin-bottom: 16px;
+}
+
+.geco-response-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  margin-bottom: 16px;
+  border-bottom: 1px solid #eee;
+}
+
+.geco-response-meta {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-end;
+  gap: 8px;
+}
+
+.geco-response-status {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-end;
+  gap: 8px;
+}
+
+.geco-response-contact-info h4 {
+  margin: 0 0 8px 0;
+  color: #18191f;
+  font-size: 16px;
+  font-weight: 700;
+}
+
+.geco-response-contact-info p {
+  margin: 2px 0;
+  color: #666;
+  font-size: 12px;
+}
+
+.geco-response-date {
+  font-size: 12px;
+  color: #888;
+  text-align: right;
+}
+
+.geco-response-answers h5 {
+  margin: 0 0 8px 0;
+  color: #18191f;
+  font-size: 14px;
+  font-weight: 700;
+}
+
+.geco-response-qa {
+  padding: 12px;
+  background: #f8f9fa;
+  border-radius: 8px;
+}
+
+.geco-response-question {
+  margin-bottom: 6px;
+  font-size: 13px;
+  color: #18191f;
+}
+
+.geco-response-answer {
+  font-size: 13px;
+  color: #555;
+  padding-left: 16px;
+}
+
+/* Responsive */
+@media only screen and (max-width: 768px) {
+  .geco-responses-content {
+    padding: 0 16px;
+  }
+
+  .geco-response-strategy-card {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 16px;
+  }
+
+  .geco-response-strategy-info {
+    margin-right: 0;
+  }
+
+  .geco-response-strategy-actions {
+    width: 100%;
+    justify-content: center;
+  }
+
+  .geco-response-header {
+    flex-direction: column;
+    gap: 12px;
+  }
+
+  .geco-response-meta {
+    align-items: flex-start;
+    width: 100%;
+  }
+
+  .geco-response-status {
+    align-items: flex-start;
+    width: 100%;
+  }
+
+  .geco-response-date {
+    text-align: left;
+  }
+
+  .geco-responses-controls {
+    flex-direction: column;
+    gap: 12px;
+    align-items: stretch;
+  }
+
+  .geco-responses-filters {
+    justify-content: center;
+  }
+}
+
+@media only screen and (max-width: 480px) {
+  .geco-responses-header {
+    max-width: 100%;
+    padding: 0 16px;
+  }
+
+  .geco-responses-main-title {
+    font-size: 20px;
+  }
+
+  .geco-responses-subtitle {
+    font-size: 16px;
+  }
+
+  .geco-response-strategy-stats {
+    flex-direction: column;
+    gap: 8px;
+  }
+}
