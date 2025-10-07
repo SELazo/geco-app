@@ -3,9 +3,11 @@ import { Box } from '@mui/material';
 import { PacmanLoader } from 'react-spinners';
 import { GRouter } from './GRouter';
 import { SessionService } from '../services/internal/sessionService';
-import { Auth, User, loginSuccess } from '../redux/sessionSlice';
-import { useDispatch } from 'react-redux';
+import { Auth, User, loginSuccess, logout } from '../redux/sessionSlice';
+import { useDispatch, useSelector } from 'react-redux';
 import { GYellow } from '../constants/palette';
+import useSessionManager from '../hooks/useSessionManager';
+import { RootState } from '../redux/gecoStore';
 
 const getAuthenticationStatus = async (): Promise<boolean> => {
   const storedToken = SessionService.getToken();
@@ -17,6 +19,10 @@ export const GAuthenticationProvider = () => {
   const [isAuthenticated, setIsAuthenticated] = useState(false);
   const [isLoading, setIsLoading] = useState(true);
   const dispatch = useDispatch();
+  
+  // Obtener estado de autenticación desde Redux
+  const authState = useSelector((state: RootState) => state.auth);
+  const token = authState?.token;
 
   useEffect(() => {
     const fetchAuthenticationStatus = async () => {
@@ -50,8 +56,16 @@ export const GAuthenticationProvider = () => {
   };
 
   const handleLogout = () => {
+    dispatch(logout());
     setIsAuthenticated(false);
   };
+
+  // Hook para manejo de inactividad y control de sesiones
+  useSessionManager({
+    token: token || null,
+    isAuthenticated,
+    onLogout: handleLogout
+  });
 
   if (isLoading) {
     return (

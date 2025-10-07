@@ -22,7 +22,7 @@ const firebaseConfig = {
 const app = initializeApp(firebaseConfig);
 
 // Initialize Cloud Firestore and get a reference to the service
-// Usar la base de datos específica 'gecodb' en lugar de la default
+// Usar la base de datos específica 'gecodb' donde están las tablas
 export const db = getFirestore(app, 'gecodb');
 
 // Initialize Firebase Authentication and get a reference to the service

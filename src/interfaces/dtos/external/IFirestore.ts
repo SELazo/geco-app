@@ -78,3 +78,21 @@ export interface IAnalytics extends IFirestoreDocument {
   metadata?: Record<string, any>;
   userId: string;
 }
+
+// Interfaces para autenticación
+export interface IUser extends IFirestoreDocument {
+  name: string;
+  email: string;
+  password: string; // Hash de la contraseña
+  isDeleted: boolean;
+  deletedAt?: Date;
+}
+
+export interface ISession extends IFirestoreDocument {
+  userId: string;
+  startDate: Date;
+  endDate?: Date;
+  isActive: boolean;
+  lastActivity: Date;
+  token: string;
+}
