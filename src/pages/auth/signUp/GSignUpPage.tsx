@@ -20,10 +20,10 @@ import { GIconButtonBack } from '../../../constants/buttons';
 import { GBlack, GWhite, GYellow } from '../../../constants/palette';
 import { NavigationService } from '../../../services/internal/navigationService';
 import { useNavigate } from 'react-router-dom';
-import { AuthService } from '../../../services/external/authService';
+import AuthServiceFirestore from '../../../services/external/authServiceFirestore';
 import { ROUTES } from '../../../constants/routes';
 
-const { signUp } = AuthService;
+const { signUp } = AuthServiceFirestore;
 
 type SignUpFormData = {
   name: string;
@@ -68,7 +68,7 @@ export const GSignUpPage = () => {
         reset();
         navigate(ROUTES.SIGN_UP.SIGN_UP_SUCCESSFUL);
       })
-      .catch((e) => setError('email', manualError));
+      .catch((e: any) => setError('email', manualError));
   };
 
   return (

@@ -2,7 +2,7 @@ import { EMPTY_STRING, SESSION_KEY, TOKEN_KEY } from '../../constants/auth';
 import { IValidateSessionResponse } from '../../interfaces/dtos/external/IAuth';
 import { ApiResponse } from '../../interfaces/dtos/external/IResponse';
 import { ISessionService } from '../../interfaces/dtos/internal/ISessionService';
-import { AuthService } from '../external/authService';
+import AuthServiceFirestore from '../external/authServiceFirestore';
 
 export const SessionService: ISessionService = {
   getToken: (): string => {
@@ -41,13 +41,13 @@ export const SessionService: ISessionService = {
   validateSession: async (token: string): Promise<boolean> => {
     if (!token) return false;
 
-    return await AuthService.validateSession()
+    return await AuthServiceFirestore.validateSession()
       .then(async (response: ApiResponse<IValidateSessionResponse>) => {
           const session = response.data as IValidateSessionResponse;
           SessionService.setSession(session);
           return true;
       })
-      .catch(e => {
+      .catch((e: any) => {
         SessionService.removeToken();
         return false;
       })

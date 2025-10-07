@@ -77,4 +77,9 @@ export const ROUTES = {
   SIGN_UP: {
     SIGN_UP_SUCCESSFUL: '/sign-up/sign-up-successful',
   },
+  RESPONSES: {
+    ROOT: '/responses',
+    LIST: '/responses/list',
+    VIEW: '/responses/view',
+  },
 };

@@ -33,21 +33,28 @@ import { NavigationService } from '../../../services/internal/navigationService'
 import { Link, useLocation, useNavigate } from 'react-router-dom';
 import { GLogoLetter } from '../../../components/GLogoLetter';
 import { useEffect, useState } from 'react';
-import { ContactsService } from '../../../services/external/contactsService';
+import { ContactsFirestoreService } from '../../../services/external/contactsFirestoreService';
 import { IContactResponse } from '../../../interfaces/dtos/external/IContacts';
-import { GroupsService } from '../../../services/external/groupsService';
+import { IContact, IGroup } from '../../../interfaces/dtos/external/IFirestore';
+import { SessionState } from '../../../redux/sessionSlice';
 import { ROUTES } from '../../../constants/routes';
-
-const { getContacts } = ContactsService;
-const { newGroup } = GroupsService;
+import { Alert, CircularProgress } from '@mui/material';
 
 export const GAddNewGroupFormStep2Page = () => {
-  const [selectedNumbers, setSelectedNumbers] = useState<number[]>([]);
-  const [contactsList, setContactsList] = useState<IContactResponse[]>([]);
+  const [selectedNumbers, setSelectedNumbers] = useState<string[]>([]);
+  const [contactsList, setContactsList] = useState<IContact[]>([]);
   const [error, setError] = useState({ show: false, message: '' });
+  const [saving, setSaving] = useState(false);
+  const [saveError, setSaveError] = useState<string>('');
   const location = useLocation();
   const navigate = useNavigate();
   const dispatch = useDispatch();
+  
+  // Obtener datos del usuario y grupo desde Redux
+  const { user, formNewGroup } = useSelector((state: SessionState) => ({
+    user: state.user,
+    formNewGroup: state.formNewGroup,
+  }));
   const groupInfo: INewGroupForm = useSelector(
     (state: any) => state.auth.formNewGroup
   );
@@ -65,15 +72,22 @@ export const GAddNewGroupFormStep2Page = () => {
   useEffect(() => {
     const fetchContacts = async () => {
       try {
-        const contactsData = await getContacts();
-        setContactsList(contactsData.data ?? []);
+        // Obtener contactos del usuario desde Firestore
+        const contactsData = await ContactsFirestoreService.getUserContacts(user.id.toString());
+        setContactsList(contactsData);
       } catch (error) {
-        console.log(error); // TODO: Mostrar error en pantalla
+        console.error('Error cargando contactos:', error);
+        setError({
+          show: true,
+          message: 'Error al cargar contactos'
+        });
       }
     };
 
-    fetchContacts();
-  }, []);
+    if (user.id) {
+      fetchContacts();
+    }
+  }, [user.id]);
 
   const validationSchema = Yup.object().shape({});
 
@@ -83,32 +97,57 @@ export const GAddNewGroupFormStep2Page = () => {
         show: true,
         message: 'Selecciona al menos un contacto',
       });
-    } else {
+      return;
+    }
+
+    try {
+      setSaving(true);
+      setSaveError('');
+      setError({ show: false, message: '' });
+
+      // Crear objeto de grupo para Firestore
+      const groupData: Omit<IGroup, 'id' | 'createdAt' | 'updatedAt'> = {
+        name: formNewGroup.groupInfo?.name || 'Nuevo Grupo',
+        description: formNewGroup.groupInfo?.description || '',
+        contactIds: selectedNumbers.map(String), // Convertir a strings
+        userId: user.id.toString(),
+        color: '#007bff', // Color por defecto
+        tags: [],
+      };
+
+      // Guardar grupo en Firestore
+      const groupId = await ContactsFirestoreService.createGroup(groupData);
+      
+      console.log('✅ Grupo creado con ID:', groupId);
+
+      // Agregar contactos al grupo
+      for (const contactId of selectedNumbers) {
+        await ContactsFirestoreService.addContactToGroup(contactId, groupId);
+      }
+
+      // Limpiar Redux y navegar
       dispatch(clearNewGroupForm());
-      await newGroup(
-        groupInfo.groupInfo.name,
-        groupInfo.groupInfo.description,
-        selectedNumbers
-      )
-        .then(() => {
-          reset();
-          navigate(`${ROUTES.GROUPS.ROOT}${ROUTES.GROUPS.ADD_GROUP_SUCCESS}`);
-        })
-        .catch((e) => console.log(e)); //TODO: Mostrar error en pantalla
       reset();
+      navigate(`${ROUTES.GROUPS.ROOT}${ROUTES.GROUPS.ADD_GROUP_SUCCESS}`);
+      
+    } catch (error) {
+      console.error('❌ Error creando grupo:', error);
+      setSaveError(error instanceof Error ? error.message : 'Error desconocido');
+    } finally {
+      setSaving(false);
     }
   };
 
   const handleContactSelection = (
     e: React.ChangeEvent<HTMLInputElement>,
-    id: number
+    id: string
   ) => {
     const isChecked = e.target.checked;
     setSelectedNumbers((prevSelectedNumbers) => {
       if (isChecked) {
         return [...prevSelectedNumbers, id];
       } else {
-        return prevSelectedNumbers.filter((number) => number !== id);
+        return prevSelectedNumbers.filter((contactId) => contactId !== id);
       }
     });
   };
@@ -168,8 +207,8 @@ export const GAddNewGroupFormStep2Page = () => {
                     className="geco-checkbox"
                     type="checkbox"
                     id={`contact-${contact.id}`}
-                    checked={selectedNumbers.includes(contact.id)}
-                    onChange={(e) => handleContactSelection(e, contact.id)}
+                    checked={contact.id ? selectedNumbers.includes(contact.id) : false}
+                    onChange={(e) => contact.id && handleContactSelection(e, contact.id)}
                   />
                 </div>
               </div>
@@ -184,13 +223,35 @@ export const GAddNewGroupFormStep2Page = () => {
           </Link>
         )}
 
-        <GSubmitButton
-          label="Siguiente"
-          colorBackground={GYellow}
-          colorFont={GBlack}
-          icon={GChevronRightBlackIcon}
-          disabled={contactsList.length === 0}
-        />
+        {/* Mostrar error si existe */}
+        {saveError && (
+          <Alert severity="error" sx={{ mt: 2 }}>
+            Error al crear grupo: {saveError}
+          </Alert>
+        )}
+
+        {/* Botón de submit con indicador de carga */}
+        <div style={{ position: 'relative', marginTop: '16px' }}>
+          <GSubmitButton
+            label={saving ? "Creando grupo..." : "Siguiente"}
+            colorBackground={saving ? '#ccc' : GYellow}
+            colorFont={GBlack}
+            icon={GChevronRightBlackIcon}
+            disabled={contactsList.length === 0 || saving}
+          />
+          {saving && (
+            <CircularProgress
+              size={24}
+              sx={{
+                position: 'absolute',
+                top: '50%',
+                left: '50%',
+                marginTop: '-12px',
+                marginLeft: '-12px',
+              }}
+            />
+          )}
+        </div>
       </form>
     </div>
   );

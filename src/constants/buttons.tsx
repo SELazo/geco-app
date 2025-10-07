@@ -1,5 +1,5 @@
 import { IButtonIcon } from '../interfaces/components/IButtonIcon';
-import { GBlack, GGreen, GPink, GRed, GWhite, GYellow } from './palette';
+import { GBlack, GBlue, GGreen, GPink, GRed, GWhite, GYellow } from './palette';
 
 /**
  * Circular buttons
@@ -91,6 +91,11 @@ export const GViewIcon: IButtonIcon = {
 
 export const GCommentIcon: IButtonIcon = {
   color: GBlack,
+  'icon-type': 'comment',
+};
+
+export const GResponsesIcon: IButtonIcon = {
+  color: GBlue,
   'icon-type': 'comment',
 };
 

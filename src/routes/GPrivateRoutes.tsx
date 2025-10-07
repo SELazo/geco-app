@@ -27,6 +27,7 @@ import { GAddNewGroupFormStep2Page } from '../pages/contacts/add-group/GAddNewGr
 import { GNewGroupSuccessPage } from '../pages/contacts/add-group/GNewGroupSuccessPage';
 import { GGroupPage } from '../pages/contacts/GGroupPage';
 import { GEditUserInfoSuccessPage } from '../pages/user/GEditUserInfoSuccessPage';
+import { GEditContactPage } from '../pages/contacts/edit-contact/GEditContactPage';
 import { GAdsPage } from '../pages/ads/GAdsPage';
 import { GAdSizePage } from '../pages/ads/createAd/GAdSizePage';
 import { GAdContentPage } from '../pages/ads/createAd/GAdContentPage';
@@ -62,6 +63,8 @@ import { GAdViewPage } from '../pages/ads/listAds/GAdViewPage';
 import { GAdEditSuccessPage } from '../pages/ads/editAds/GAdEditSuccessPage';
 import { GAdEditIdentificationPage } from '../pages/ads/editAds/GAdEditIdentificationPage';
 import { GPublicStrategyPage } from '../pages/marketing/GPublicStrategyPage';
+import { GResponsesListPage } from '../pages/responses/GResponsesListPage';
+import { GResponsesViewPage } from '../pages/responses/GResponsesViewPage';
 
 export const GPrivateRoutes = () => {
   return (
@@ -109,6 +112,7 @@ export const GPrivateRoutes = () => {
         />
         <Route path="groups/:id" element={<GGroupPage />} />
         <Route path="list" element={<GContactsListPage />} />
+        <Route path="edit/:id" element={<GEditContactPage />} />
         <Route path="*" element={<Navigate to="/contacts/options" />} />
       </Route>
       <Route path="/statistics" element={<GStatisticsRenderMainPage />}>
@@ -195,6 +199,11 @@ export const GPrivateRoutes = () => {
         element={<GStrategyEditSuccessPage />}
       />
       <Route path="/strategy/list" element={<GStrategiesListPage />} />
+      <Route path="/responses/list" element={<GResponsesListPage />} />
+      <Route
+        path="/responses/view/:strategyId"
+        element={<GResponsesViewPage />}
+      />
       <Route path="/statistics" element={<GHomePage />} />
       <Route path="/public/strategy/:id" element={<GPublicStrategyPage />} />
       <Route path="/*" element={<Navigate to="/home" />} />

@@ -9,6 +9,7 @@ import { CssBaseline } from '@mui/material';
 
 import './index.css';
 
+
 Modal.setAppElement('#root');
 
 const theme = createTheme({

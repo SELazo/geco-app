@@ -43,6 +43,8 @@ export const ContactsHeadCenterTitle: string = 'Agenda';
 
 export const StatisticsHeadCenterTitle: string = 'Estadísticas';
 
+export const ResponsesHeadCenterTitle: string = 'Respuestas';
+
 export const EditUserInfoTitle: string = 'Editar información';
 
 export const PricingTitle: string = 'Cambiar suscripción';
@@ -54,6 +56,8 @@ export const PricingSectionTitle: string = 'Modalidades';
 export const ContactsSectionTitle: string = 'Agenda';
 
 export const StatisticsSectionTitle: string = 'Estadísticas';
+
+export const ResponsesSectionTitle: string = 'Respuestas';
 
 export const GroupGrowthSectionTitle: string =
   'Crecimiento de los grupos en tu red';
@@ -258,6 +262,16 @@ export const EditStrategyPeriodicityTitle: IHeadSectionTitle = {
   title: 'Editar estrategia de comunicación',
   subtitle:
     '¿Cómo preferís que se realice la difución de tu estrategia de comunicación? ⏰',
+};
+
+export const ResponsesListTitle: IHeadSectionTitle = {
+  title: 'Respuestas de formularios',
+  subtitle: 'Consulta las respuestas que han enviado tus contactos a través de los formularios de tus estrategias de comunicación 📋',
+};
+
+export const ResponsesViewTitle: IHeadSectionTitle = {
+  title: 'Respuestas de la estrategia',
+  subtitle: 'Aquí puedes ver todas las respuestas recibidas para esta estrategia 📊',
 };
 
 /**

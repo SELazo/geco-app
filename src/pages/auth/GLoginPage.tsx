@@ -18,7 +18,7 @@ import {
 import { GLogoLetter } from '../../components/GLogoLetter';
 import { GBlack, GWhite } from '../../constants/palette';
 
-import { AuthService } from '../../services/external/authService';
+import AuthServiceFirestore from '../../services/external/authServiceFirestore';
 import { SessionService } from '../../services/internal/sessionService';
 import { GChevronRightIcon } from '../../constants/buttons';
 import { useNavigate } from 'react-router-dom';
@@ -28,7 +28,7 @@ import { ROUTES } from '../../constants/routes';
 import { useDispatch } from 'react-redux';
 import { Auth, User, loginSuccess } from '../../redux/sessionSlice';
 
-const { login, validateSession } = AuthService;
+const { login, validateSession } = AuthServiceFirestore;
 const { setToken } = SessionService;
 
 type LoginForm = {
@@ -88,7 +88,7 @@ export const GLoginPage = ({ handleLogin }: { handleLogin: () => void }) => {
         handleLogin();
         navigate(ROUTES.HOME);
       })
-      .catch((e) => {
+      .catch((e: any) => {
         setError('password', manualError);
       });
   };

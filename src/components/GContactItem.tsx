@@ -30,7 +30,7 @@ export const GContactItem: FC<IContactItemnProps> = (
           <h1 className="geco-contact-item-name">{props.contact.name}</h1>
           <div className="geco-contact-item-info">
             <p>{props.contact.phone}</p>
-            {props.contact.email && <p>{props.contact.email}</p>}
+            {props.contact.email && <p>{props.contact.email.length > 25 ? props.contact.email.substring(0, 25) + '...' : props.contact.email}</p>}
           </div>
         </div>
         <button
