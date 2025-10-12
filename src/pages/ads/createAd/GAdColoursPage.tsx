@@ -25,7 +25,7 @@ const { getAdColours } = AdsService;
 
 export const GAdColoursPage = () => {
   const [colours, setColours] = useState<IAdColours[]>([]);
-  const formNewAd = useSelector((state: RootState) => state.auth.formNewAd);
+  const formNewAd = useSelector((state: RootState) => state.formNewAd);
   const [selectedHex, setSelectedHex] = useState<string>(GWhite);
   const [inputHex, setInputHex] = useState<string>(GWhite);
   const [hexValid, setHexValid] = useState<boolean>(true);

@@ -40,7 +40,7 @@ import { IStrategyProps } from '../../../components/GStrategyCard';
 const { getPeriodicities, getSchedules } = StrategyService;
 
 export const GStrategyEditPeriodicityPage = () => {
-  const userStatus = useSelector((state: RootState) => state.auth.user.id);
+  const userStatus = useSelector((state: RootState) => state.user.id);
   const [periodicities, setPeriodicities] = useState<IPeriodicity[]>([]);
   const [schedules, setSchedules] = useState<ISchedule[]>([]);
   const [selectedPeriodicity, setSelectedPeriodicity] = useState<
