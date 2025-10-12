@@ -13,7 +13,13 @@ import {
   Stack,
   Snackbar,
   Alert,
+  IconButton,
+  Card,
+  CardMedia,
+  CardContent,
 } from '@mui/material';
+import ArrowBackIosIcon from '@mui/icons-material/ArrowBackIos';
+import ArrowForwardIosIcon from '@mui/icons-material/ArrowForwardIos';
 import '../../styles/gstrategy.css';
 import '../../styles/gpublic-strategy.css';
 
@@ -92,6 +98,7 @@ export const GPublicStrategyPage: React.FC = () => {
   const [images, setImages] = useState<Record<number, string>>({});
   const [snackOpen, setSnackOpen] = useState<boolean>(false);
   const [snackMsg, setSnackMsg] = useState<string>('Enviado (mock)');
+  const [currentAdIndex, setCurrentAdIndex] = useState<number>(0);
   const storedCC = React.useMemo(() => {
     try {
       return localStorage.getItem('public_form_cc') || '+54';
@@ -197,22 +204,40 @@ export const GPublicStrategyPage: React.FC = () => {
       .filter((a: any) => a && typeof a.id === 'number');
   }, [adsInput]);
 
+  // Funciones para el carrusel
+  const nextAd = () => {
+    setCurrentAdIndex((prev) => (prev + 1) % ads.length);
+  };
+
+  const prevAd = () => {
+    setCurrentAdIndex((prev) => (prev - 1 + ads.length) % ads.length);
+  };
+
+  const goToAd = (index: number) => {
+    setCurrentAdIndex(index);
+  };
+
   useEffect(() => {
     let mounted = true;
     const loadImages = async () => {
       const result: Record<number, string> = {};
       for (const a of ads) {
         try {
+          // Intentar cargar desde el servicio primero
           const url = await AdsService.getAdImg(a.id);
           if (mounted) result[a.id] = url as string;
         } catch (e) {
-          // ignore
+          // Si falla, usar la imagen del mock si existe
+          if (a.image && mounted) {
+            result[a.id] = a.image;
+          }
         }
       }
       // Fill placeholders for missing images
       for (const a of ads) {
         if (!result[a.id]) {
-          result[a.id] = placeholderImg(a.id);
+          // Usar imagen del mock si existe, sino placeholder
+          result[a.id] = a.image || placeholderImg(a.id);
         }
       }
       if (mounted) setImages(result);
@@ -258,6 +283,7 @@ export const GPublicStrategyPage: React.FC = () => {
               fontFamily: 'Montserrat, sans-serif',
               fontWeight: 800,
               lineHeight: 1.1,
+              fontSize: { xs: '1.75rem', sm: '2.5rem', md: '3rem' },
             }}
           >
             {title}
@@ -269,6 +295,7 @@ export const GPublicStrategyPage: React.FC = () => {
                 fontFamily: 'Montserrat, sans-serif',
                 fontWeight: 600,
                 opacity: 0.85,
+                fontSize: { xs: '1rem', sm: '1.125rem', md: '1.25rem' },
               }}
             >
               {subtitle}
@@ -281,79 +308,189 @@ export const GPublicStrategyPage: React.FC = () => {
           <Grid item xs={12} md={6}>
             <Paper
               variant="outlined"
-              sx={{ p: 2, borderRadius: 3, height: { xs: 360, md: 800 } }}
+              sx={{ p: 2, borderRadius: 3, height: { xs: 400, md: 800 } }}
             >
-              <Box sx={{ height: '100%', overflowY: 'auto' }}>
-                {ads.length === 0 ? (
+              {ads.length === 0 ? (
+                <Box
+                  sx={{
+                    height: '100%',
+                    display: 'flex',
+                    alignItems: 'center',
+                    justifyContent: 'center',
+                  }}
+                >
                   <Typography
                     sx={{
                       textAlign: 'center',
                       fontWeight: 700,
                       color: '#9FA4B4',
-                      my: 4,
                     }}
                   >
                     No hay publicidades
                   </Typography>
-                ) : (
-                  <Stack spacing={1.5}>
-                    {ads.map((a) => (
-                      <Box
-                        key={`ad-${a.id}`}
+                </Box>
+              ) : (
+                <Box
+                  sx={{
+                    height: '100%',
+                    display: 'flex',
+                    flexDirection: 'column',
+                    position: 'relative',
+                  }}
+                >
+                  {/* Carrusel principal */}
+                  <Box
+                    sx={{
+                      flex: 1,
+                      display: 'flex',
+                      alignItems: 'center',
+                      justifyContent: 'center',
+                      position: 'relative',
+                      mb: 2,
+                    }}
+                  >
+                    {/* Botón anterior */}
+                    <IconButton
+                      onClick={prevAd}
+                      disabled={ads.length <= 1}
+                      sx={{
+                        position: 'absolute',
+                        left: 8,
+                        zIndex: 2,
+                        bgcolor: 'rgba(255,255,255,0.8)',
+                        '&:hover': {
+                          bgcolor: 'rgba(255,255,255,0.9)',
+                        },
+                      }}
+                    >
+                      <ArrowBackIosIcon />
+                    </IconButton>
+
+                    {/* Contenido de la publicidad actual */}
+                    <Card
+                      sx={{
+                        width: '100%',
+                        maxWidth: 400,
+                        height: '90%',
+                        display: 'flex',
+                        flexDirection: 'column',
+                      }}
+                    >
+                      {/* Imagen */}
+                      <CardMedia
                         sx={{
-                          border: '1px dashed #cfd3dc',
-                          borderRadius: 2,
-                          bgcolor: '#f9fafc',
-                          p: 1,
+                          height: '60%',
+                          backgroundSize: 'cover',
+                          backgroundPosition: 'center',
+                          background: images[ads[currentAdIndex]?.id]
+                            ? `url(${images[ads[currentAdIndex]?.id]})`
+                            : 'repeating-linear-gradient(-45deg,#e5e7eb,#e5e7eb 10px,#f3f4f6 10px,#f3f4f6 20px)',
+                        }}
+                      />
+                      
+                      {/* Contenido */}
+                      <CardContent
+                        sx={{
+                          flex: 1,
+                          display: 'flex',
+                          flexDirection: 'column',
+                          justifyContent: 'center',
+                          textAlign: 'center',
                         }}
                       >
-                        {images[a.id] ? (
-                          <Box
-                            component="img"
-                            src={images[a.id]}
-                            alt={`ad-${a.id}`}
-                            sx={{ width: '100%', borderRadius: 1 }}
-                          />
-                        ) : (
-                          <Box
+                        {ads[currentAdIndex]?.title && (
+                          <Typography
+                            variant="h6"
                             sx={{
-                              width: '100%',
-                              height: 180,
-                              borderRadius: 1,
-                              background:
-                                'repeating-linear-gradient(-45deg,#e5e7eb,#e5e7eb 10px,#f3f4f6 10px,#f3f4f6 20px)',
+                              fontFamily: 'Montserrat',
+                              fontWeight: 700,
+                              color: '#18191f',
+                              mb: 1,
                             }}
-                          />
+                          >
+                            {ads[currentAdIndex].title}
+                          </Typography>
                         )}
-                        {a.title ? (
+                        {ads[currentAdIndex]?.description && (
                           <Typography
+                            variant="body2"
                             sx={{
-                              mt: 0.5,
                               fontFamily: 'Montserrat',
-                              fontWeight: 600,
-                              color: '#18191f',
+                              fontWeight: 500,
+                              color: '#666',
+                              lineHeight: 1.4,
                             }}
                           >
-                            {a.title}
+                            {ads[currentAdIndex].description}
                           </Typography>
-                        ) : null}
-                        {a.description ? (
-                          <Typography
-                            sx={{
-                              mt: 0.5,
-                              fontFamily: 'Montserrat',
-                              fontWeight: 600,
-                              color: '#18191f',
-                            }}
-                          >
-                            {a.description}
-                          </Typography>
-                        ) : null}
-                      </Box>
-                    ))}
-                  </Stack>
-                )}
-              </Box>
+                        )}
+                      </CardContent>
+                    </Card>
+
+                    {/* Botón siguiente */}
+                    <IconButton
+                      onClick={nextAd}
+                      disabled={ads.length <= 1}
+                      sx={{
+                        position: 'absolute',
+                        right: 8,
+                        zIndex: 2,
+                        bgcolor: 'rgba(255,255,255,0.8)',
+                        '&:hover': {
+                          bgcolor: 'rgba(255,255,255,0.9)',
+                        },
+                      }}
+                    >
+                      <ArrowForwardIosIcon />
+                    </IconButton>
+                  </Box>
+
+                  {/* Indicadores (dots) */}
+                  {ads.length > 1 && (
+                    <Box
+                      sx={{
+                        display: 'flex',
+                        justifyContent: 'center',
+                        gap: 1,
+                        mt: 2,
+                      }}
+                    >
+                      {ads.map((_, index) => (
+                        <Box
+                          key={index}
+                          onClick={() => goToAd(index)}
+                          sx={{
+                            width: 12,
+                            height: 12,
+                            borderRadius: '50%',
+                            bgcolor: index === currentAdIndex ? '#1947E5' : '#ccc',
+                            cursor: 'pointer',
+                            transition: 'background-color 0.3s',
+                            '&:hover': {
+                              bgcolor: index === currentAdIndex ? '#1947E5' : '#999',
+                            },
+                          }}
+                        />
+                      ))}
+                    </Box>
+                  )}
+
+                  {/* Contador */}
+                  {ads.length > 1 && (
+                    <Typography
+                      variant="caption"
+                      sx={{
+                        textAlign: 'center',
+                        color: '#666',
+                        mt: 1,
+                        fontFamily: 'Montserrat',
+                      }}
+                    >
+                      {currentAdIndex + 1} de {ads.length}
+                    </Typography>
+                  )}
+                </Box>
+              )}
             </Paper>
           </Grid>
           <Grid item xs={12} md={6}>
@@ -453,8 +590,58 @@ export const GPublicStrategyPage: React.FC = () => {
 };
 
 function mockPublicStrategy(id: number) {
-  // Mock minimal strategy data
-  const mockAds = [101, 102, 103, 104];
+  // Mock ads con información completa según la interfaz IAd
+  const mockAds = [
+    {
+      id: 101,
+      title: '🍕 Pizza Especial 2x1',
+      description: 'Llevá dos pizzas grandes por el precio de una. Válido solo los martes y miércoles. ¡No te lo pierdas!',
+      size: 'large',
+      image: 'https://via.placeholder.com/400x240/FF6B6B/FFFFFF?text=Pizza+2x1',
+      ad_template: {
+        color_text: '#FFFFFF',
+        type: 'promotional',
+        disposition_pattern: 'center'
+      }
+    },
+    {
+      id: 102,
+      title: '☕ Café Premium',
+      description: 'Descubrí nuestro nuevo blend de café premium. Granos seleccionados de origen único para una experiencia única.',
+      size: 'medium',
+      image: 'https://via.placeholder.com/400x240/8B4513/FFFFFF?text=Cafe+Premium',
+      ad_template: {
+        color_text: '#8B4513',
+        type: 'product',
+        disposition_pattern: 'left'
+      }
+    },
+    {
+      id: 103,
+      title: '👗 Moda Primavera',
+      description: 'Nueva colección primavera-verano 2024. Vestidos, blusas y accesorios con hasta 40% de descuento.',
+      size: 'large',
+      image: 'https://via.placeholder.com/400x240/FF69B4/FFFFFF?text=Moda+2024',
+      ad_template: {
+        color_text: '#FF69B4',
+        type: 'fashion',
+        disposition_pattern: 'right'
+      }
+    },
+    {
+      id: 104,
+      title: '🏋️ Gimnasio Fit',
+      description: 'Inscribite ahora y obtené 3 meses gratis. Clases grupales, musculación y pilates incluidos.',
+      size: 'medium',
+      image: 'https://via.placeholder.com/400x240/32CD32/FFFFFF?text=Gym+Fit',
+      ad_template: {
+        color_text: '#32CD32',
+        type: 'service',
+        disposition_pattern: 'center'
+      }
+    }
+  ];
+
   // Example mocks for form types; rotate by id
   const types = [
     'Pedido rápido',
@@ -469,13 +656,24 @@ function mockPublicStrategy(id: number) {
       : form_type === 'Catálogo'
       ? { categories: ['Remeras', 'Buzos', 'Accesorios'], allow_quantity: true }
       : undefined;
+  
   return {
     id,
-    name: `Estrategia #${id}`,
+    name: `Estrategia #${id} - ${getStrategyName(id)}`,
     ads: mockAds,
     form_type,
     form_config,
   };
+}
+
+function getStrategyName(id: number): string {
+  const names = [
+    'Promociones de Restaurante',
+    'Lanzamiento de Productos',
+    'Campaña de Moda',
+    'Membresías Deportivas'
+  ];
+  return names[id % names.length];
 }
 
 function placeholderImg(id: number): string {
