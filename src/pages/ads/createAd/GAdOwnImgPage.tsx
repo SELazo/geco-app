@@ -35,7 +35,7 @@ export const GAdOwnImgPage = () => {
   const [selectedFile, setSelectedFile] = useState(null);
   const [fileError, setFileError] = useState('');
   const [requestError, setRequestError] = useState(false);
-  const formNewAd = useSelector((state: RootState) => state.auth.formNewAd);
+  const formNewAd = useSelector((state: RootState) => state.formNewAd);
 
   const navigate = useNavigate();
 

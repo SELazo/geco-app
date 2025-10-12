@@ -62,7 +62,6 @@ import { GStrategyEditFormConfigPage } from '../pages/strategies/editStrategy/GS
 import { GAdViewPage } from '../pages/ads/listAds/GAdViewPage';
 import { GAdEditSuccessPage } from '../pages/ads/editAds/GAdEditSuccessPage';
 import { GAdEditIdentificationPage } from '../pages/ads/editAds/GAdEditIdentificationPage';
-import { GPublicStrategyPage } from '../pages/marketing/GPublicStrategyPage';
 import { GResponsesListPage } from '../pages/responses/GResponsesListPage';
 import { GResponsesViewPage } from '../pages/responses/GResponsesViewPage';
 
@@ -205,7 +204,6 @@ export const GPrivateRoutes = () => {
         element={<GResponsesViewPage />}
       />
       <Route path="/statistics" element={<GHomePage />} />
-      <Route path="/public/strategy/:id" element={<GPublicStrategyPage />} />
       <Route path="/*" element={<Navigate to="/home" />} />
     </Routes>
   );

@@ -40,7 +40,7 @@ import { setNewStrategyConfig } from '../../../redux/sessionSlice';
 const { getPeriodicities, getSchedules } = StrategyService;
 
 export const GStrategyPeriodicityPage = () => {
-  const userStatus = useSelector((state: RootState) => state.auth.user.id);
+  const userStatus = useSelector((state: RootState) => state.user.id);
   const [periodicities, setPeriodicities] = useState<IPeriodicity[]>([]);
   const [schedules, setSchedules] = useState<ISchedule[]>([]);
   const [selectedPeriodicity, setSelectedPeriodicity] = useState<

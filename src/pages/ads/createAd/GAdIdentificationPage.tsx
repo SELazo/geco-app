@@ -36,7 +36,7 @@ type AdData = {
 
 export const GAdIdentificationPage = () => {
   const [loading, setLoading] = useState(false);
-  const formNewAd = useSelector((state: RootState) => state.auth.formNewAd);
+  const formNewAd = useSelector((state: RootState) => state.formNewAd);
   const validationSchema = Yup.object().shape({
     titleHelper: Yup.string()
       .required(
