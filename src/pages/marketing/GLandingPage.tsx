@@ -18,6 +18,7 @@ import {
 import { Link as RouterLink } from 'react-router-dom';
 import { GLogoWord } from '../../components/GLogoWord';
 import GecoAnimal from '../../assets/images/geco_animal.svg';
+import DemoAppGif from '../../assets/images/demo-app.gif';
 import { GIcon } from '../../components/GIcon';
 import { GContactsIcon, GStrategyIcon, GAdIcon } from '../../constants/buttons';
 import { GYellow } from '../../constants/palette';
@@ -406,9 +407,39 @@ export const GLandingPage: React.FC = () => {
                   display: 'flex',
                   alignItems: 'center',
                   justifyContent: 'center',
+                  overflow: 'hidden',
                 }}
               >
-                <Typography variant="overline" sx={{ opacity: 0.7 }}>
+                {/* GIF de demostración de la app */}
+                <img
+                  src={DemoAppGif}
+                  alt="Demostración de GECo App"
+                  style={{
+                    height: '100%',
+                    objectFit: 'cover',
+                    borderRadius: '8px',
+                  }}
+                  onError={(e) => {
+                    // Fallback si no se encuentra el GIF
+                    e.currentTarget.style.display = 'none';
+                    const nextElement = e.currentTarget
+                      .nextElementSibling as HTMLElement;
+                    if (nextElement) {
+                      nextElement.style.display = 'flex';
+                    }
+                  }}
+                />
+                <Typography
+                  variant="overline"
+                  sx={{
+                    opacity: 0.7,
+                    display: 'none',
+                    alignItems: 'center',
+                    justifyContent: 'center',
+                    width: '100%',
+                    height: '100%',
+                  }}
+                >
                   Vista previa de la aplicación
                 </Typography>
               </Box>
