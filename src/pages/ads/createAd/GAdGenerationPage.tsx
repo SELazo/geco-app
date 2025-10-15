@@ -25,7 +25,7 @@ export const GAdGenerationPage = () => {
   const [adjustedAd, setAdjustedAd] = useState<string | null>(null);
   const [selectedKey, setSelectedKey] = useState<'brand' | 'adjusted' | null>(null);
   const [loading, setLoading] = useState(false);
-  const formNewAd = useSelector((state: RootState) => state.auth.formNewAd);
+  const formNewAd = useSelector((state: RootState) => state.formNewAd);
 
   const location = useLocation();
   const navigate = useNavigate();
