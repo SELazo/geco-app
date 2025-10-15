@@ -64,6 +64,8 @@ import { GAdEditSuccessPage } from '../pages/ads/editAds/GAdEditSuccessPage';
 import { GAdEditIdentificationPage } from '../pages/ads/editAds/GAdEditIdentificationPage';
 import { GResponsesListPage } from '../pages/responses/GResponsesListPage';
 import { GResponsesViewPage } from '../pages/responses/GResponsesViewPage';
+import { GEditGroupSelectPage } from '../pages/contacts/edit-group/GEditGroupSelectPage';
+import { GEditGroupFormPage } from '../pages/contacts/edit-group/GEditGroupFormPage';
 
 export const GPrivateRoutes = () => {
   return (
@@ -109,6 +111,8 @@ export const GPrivateRoutes = () => {
           path="groups/sucess-add-group"
           element={<GNewGroupSuccessPage />}
         />
+        <Route path="groups/edit-group" element={<GEditGroupSelectPage />} />
+        <Route path="groups/edit-group/:id" element={<GEditGroupFormPage />} />
         <Route path="groups/:id" element={<GGroupPage />} />
         <Route path="list" element={<GContactsListPage />} />
         <Route path="edit/:id" element={<GEditContactPage />} />

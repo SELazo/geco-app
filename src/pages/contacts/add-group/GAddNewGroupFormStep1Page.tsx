@@ -37,7 +37,7 @@ export const GAddNewGroupFormStep1Page = () => {
   const navigate = useNavigate();
   const dispatch = useDispatch();
   let hasGroupInfo: INewGroupForm = useSelector(
-    (state: any) => state.auth.formNewGroup
+    (state: any) => state.formNewGroup
   );
 
   useEffect(() => {

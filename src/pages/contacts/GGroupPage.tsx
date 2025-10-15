@@ -10,7 +10,7 @@ import {
 } from '../../constants/buttons';
 import { GBlack, GWhite, GYellow } from '../../constants/palette';
 import { NavigationService } from '../../services/internal/navigationService';
-import { GroupsService } from '../../services/external/groupsService';
+import { GroupsServiceFirestore } from '../../services/external/groupsServiceFirestore';
 import { GHeadCenterTitle } from '../../components/GHeadCenterTitle';
 import { GContactItem } from '../../components/GContactItem';
 import { GLogoLetter } from '../../components/GLogoLetter';
@@ -18,10 +18,12 @@ import { Link, useNavigate, useParams } from 'react-router-dom';
 import { ROUTES } from '../../constants/routes';
 import { IGroupResponse } from '../../interfaces/dtos/external/IGroups';
 
-const { getGroup } = GroupsService;
+const { getGroup } = GroupsServiceFirestore;
 
 export const GGroupPage = () => {
   const [group, setGroup] = useState<IGroupResponse | null>(null);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState<string | null>(null);
   const navigate = useNavigate();
   const { id } = useParams();
 
@@ -32,19 +34,25 @@ export const GGroupPage = () => {
   const numericId = parseInt(id); // Convertir el parámetro 'id' a un número
 
   useEffect(() => {
-    const fetchContacts = async () => {
+    const fetchGroup = async () => {
       try {
+        setLoading(true);
+        setError(null);
         const response = await getGroup(numericId);
         const groupData = response as IGroupResponse;
         setGroup(groupData ?? null);
       } catch (error) {
-        console.error(error); // TODO: Mostrar error en pantalla
-        navigate(ROUTES.GROUPS.ROOT);
+        console.error('Error fetching group:', error);
+        const errorMessage = error instanceof Error ? error.message : 'Error desconocido al cargar el grupo';
+        setError(errorMessage);
+        // No navegar automáticamente, mostrar el error al usuario
+      } finally {
+        setLoading(false);
       }
     };
 
-    fetchContacts();
-  }, []);
+    fetchGroup();
+  }, [numericId]);
 
   const editContact = (id: number) => {
     console.log(group?.contacts.find((c) => c.id === id));
@@ -80,13 +88,32 @@ export const GGroupPage = () => {
         </div>
       </div>
       <div className="geco-contacts-list-title">
-        <GHeadCenterTitle title={group?.group.name!} color={GBlack} />
+        <GHeadCenterTitle title={group?.group.name || 'Cargando...'} color={GBlack} />
       </div>
-      {group?.contacts.length! > 0 && (
+
+      {loading && (
+        <div className="geco-contacts-empty">
+          <p>Cargando grupo...</p>
+        </div>
+      )}
+
+      {error && (
+        <div className="geco-contacts-empty">
+          <p style={{ color: 'red' }}>Error: {error}</p>
+          <button 
+            onClick={() => navigate(ROUTES.GROUPS.ROOT)}
+            style={{ marginTop: '10px', padding: '8px 16px', cursor: 'pointer' }}
+          >
+            Volver a grupos
+          </button>
+        </div>
+      )}
+
+      {!loading && !error && group && group.contacts.length > 0 && (
         <div className="geco-contacts-list-container">
           <div className="geco-contacts-list-ul">
             <div className="geco-contacts-list-item">
-              {group?.contacts.map((item) => (
+              {group.contacts.map((item) => (
                 <GContactItem
                   key={item.id}
                   contact={item}
@@ -100,7 +127,7 @@ export const GGroupPage = () => {
         </div>
       )}
 
-      {group?.contacts.length === 0 && (
+      {!loading && !error && group && group.contacts.length === 0 && (
         <div className="geco-contacts-empty">
           <p>No tiene contactos aún.</p>
         </div>
