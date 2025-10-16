@@ -39,8 +39,6 @@ export const GContactsListPage = () => {
         setLoading(true);
         setError('');
         
-        console.log('👤 Usuario actual:', user);
-        
         // Verificar que tenemos un usuario válido
         if (!user || !user.id || user.id === -1) {
           console.log('⚠️ Usuario no válido:', user);
