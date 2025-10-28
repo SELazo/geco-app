@@ -63,9 +63,12 @@ import { GStrategyEditFormConfigPage } from '../pages/strategies/editStrategy/GS
 import { GAdViewPage } from '../pages/ads/listAds/GAdViewPage';
 import { GAdEditSuccessPage } from '../pages/ads/editAds/GAdEditSuccessPage';
 import { GAdEditIdentificationPage } from '../pages/ads/editAds/GAdEditIdentificationPage';
-import { GPublicStrategyPage } from '../pages/marketing/GPublicStrategyPage';
 import { GResponsesListPage } from '../pages/responses/GResponsesListPage';
 import { GResponsesViewPage } from '../pages/responses/GResponsesViewPage';
+import { GEditGroupSelectPage } from '../pages/contacts/edit-group/GEditGroupSelectPage';
+import { GEditGroupFormStep1Page } from '../pages/contacts/edit-group/GEditGroupFormStep1Page';
+import { GEditGroupFormStep2Page } from '../pages/contacts/edit-group/GEditGroupFormStep2Page';
+import { GEditGroupFormStep3Page } from '../pages/contacts/edit-group/GEditGroupFormStep3Page';
 
 export const GPrivateRoutes = () => {
   return (
@@ -111,6 +114,10 @@ export const GPrivateRoutes = () => {
           path="groups/sucess-add-group"
           element={<GNewGroupSuccessPage />}
         />
+        <Route path="groups/edit-group" element={<GEditGroupSelectPage />} />
+        <Route path="groups/edit-group/:id" element={<GEditGroupFormStep1Page />} />
+        <Route path="groups/edit-group/:id/members" element={<GEditGroupFormStep2Page />} />
+        <Route path="groups/edit-group/:id/add-members" element={<GEditGroupFormStep3Page />} />
         <Route path="groups/:id" element={<GGroupPage />} />
         <Route path="list" element={<GContactsListPage />} />
         <Route path="edit/:id" element={<GEditContactPage />} />
@@ -207,7 +214,6 @@ export const GPrivateRoutes = () => {
         element={<GResponsesViewPage />}
       />
       <Route path="/statistics" element={<GHomePage />} />
-      <Route path="/public/strategy/:id" element={<GPublicStrategyPage />} />
       <Route path="/*" element={<Navigate to="/home" />} />
     </Routes>
   );

@@ -180,6 +180,7 @@ export const AuthServiceFirestore: IAuthService = {
       const errorResponse: ApiResponse<IBasicSuccessResponse> = {
         success: false,
         error: {
+          type: 'error',
           message: error instanceof Error ? error.message : 'Error desconocido',
           code: 400
         },
@@ -212,6 +213,7 @@ export const AuthServiceFirestore: IAuthService = {
       const errorResponse: ApiResponse<IBasicSuccessResponse> = {
         success: false,
         error: {
+          type: 'error',
           message: error instanceof Error ? error.message : 'Error desconocido',
           code: 400
         },
@@ -244,6 +246,7 @@ export const AuthServiceFirestore: IAuthService = {
       const errorResponse: ApiResponse<IBasicSuccessResponse> = {
         success: false,
         error: {
+          type: 'error',
           message: error instanceof Error ? error.message : 'Error desconocido',
           code: 400
         },

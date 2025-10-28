@@ -55,9 +55,6 @@ export const GAddNewGroupFormStep2Page = () => {
     user: state.user,
     formNewGroup: state.formNewGroup,
   }));
-  const groupInfo: INewGroupForm = useSelector(
-    (state: any) => state.auth.formNewGroup
-  );
 
   useEffect(() => {
     const previousPath = location.state?.from;

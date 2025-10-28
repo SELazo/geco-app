@@ -42,7 +42,7 @@ export const GStrategyResumePage = () => {
   const navigate = useNavigate();
 
   const strategyForm: INewStrategyForm = useSelector(
-    (state: RootState) => state.auth.formNewStrategy
+    (state: RootState) => state.formNewStrategy
   );
 
   const dispatch = useDispatch();
