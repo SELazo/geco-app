@@ -36,7 +36,7 @@ import { useEffect, useState } from 'react';
 import { ContactsFirestoreService } from '../../../services/external/contactsFirestoreService';
 import { IContactResponse } from '../../../interfaces/dtos/external/IContacts';
 import { IContact, IGroup } from '../../../interfaces/dtos/external/IFirestore';
-import { SessionState } from '../../../redux/sessionSlice';
+import { RootState } from '../../../redux/gecoStore';
 import { ROUTES } from '../../../constants/routes';
 import { Alert, CircularProgress } from '@mui/material';
 
@@ -51,7 +51,7 @@ export const GAddNewGroupFormStep2Page = () => {
   const dispatch = useDispatch();
   
   // Obtener datos del usuario y grupo desde Redux
-  const { user, formNewGroup } = useSelector((state: SessionState) => ({
+  const { user, formNewGroup } = useSelector((state: RootState) => ({
     user: state.user,
     formNewGroup: state.formNewGroup,
   }));

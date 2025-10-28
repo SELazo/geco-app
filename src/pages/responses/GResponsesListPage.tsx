@@ -13,7 +13,7 @@ import { GResponsesIcon, GIconButtonBack } from '../../constants/buttons';
 import { GBlack, GWhite, GYellow } from '../../constants/palette';
 import { GLogoLetter } from '../../components/GLogoLetter';
 import { ResponsesListTitle } from '../../constants/wording';
-import { SessionState } from '../../redux/sessionSlice';
+import { RootState } from '../../redux/gecoStore';
 import { ROUTES } from '../../constants/routes';
 
 // Interfaces temporales - estas deberían estar en un archivo de interfaces
@@ -33,7 +33,7 @@ export const GResponsesListPage = () => {
   const [error, setError] = useState<string>('');
 
   // Obtener usuario desde Redux
-  const user = useSelector((state: SessionState) => state.user);
+  const user = useSelector((state: RootState) => state.user);
 
   useEffect(() => {
     const fetchStrategiesWithForms = async () => {

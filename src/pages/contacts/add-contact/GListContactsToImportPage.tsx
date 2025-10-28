@@ -23,7 +23,7 @@ import { IContactResponse } from '../../../interfaces/dtos/external/IContacts';
 import { ContactsService } from '../../../services/external/contactsService';
 import { ContactsFirestoreService } from '../../../services/external/contactsFirestoreService';
 import { IContact } from '../../../interfaces/dtos/external/IFirestore';
-import { SessionState } from '../../../redux/sessionSlice';
+import { RootState } from '../../../redux/gecoStore';
 
 const { newContact } = ContactsService;
 
@@ -32,7 +32,7 @@ export const GListContactsToImportPage = () => {
   const navigate = useNavigate();
   
   // Obtener usuario desde Redux
-  const user = useSelector((state: SessionState) => state.user);
+  const user = useSelector((state: RootState) => state.user);
   
   // Estados para manejo de la importación
   const [contacts, setContacts] = useState<IContactResponse[]>(

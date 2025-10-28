@@ -25,20 +25,51 @@ export class ContactsFirestoreService {
    * Obtener todos los contactos de un usuario
    */
   static async getUserContacts(userId: string): Promise<IContact[]> {
-    return FirestoreService.findBy(this.CONTACTS_COLLECTION, 'userId', '==', userId);
+    try {
+      console.log('🔍 Buscando contactos para usuario:', userId);
+      
+      if (!userId) {
+        console.error('❌ Error: userId no proporcionado');
+        throw new Error('Se requiere un ID de usuario válido');
+      }
+
+      const contacts = await FirestoreService.findBy(this.CONTACTS_COLLECTION, 'userId', '==', userId);
+      console.log(`✅ Se encontraron ${contacts.length} contactos para el usuario ${userId}`);
+      
+      return contacts;
+    } catch (error) {
+      console.error('❌ Error en getUserContacts:', error);
+      // Devolver un array vacío en lugar de lanzar el error
+      return [];
+    }
   }
 
   /**
    * Obtener contactos activos de un usuario
    */
   static async getActiveContacts(userId: string): Promise<IContact[]> {
-    return FirestoreService.readAll(this.CONTACTS_COLLECTION, {
-      where: [
-        { field: 'userId', operator: '==', value: userId },
-        { field: 'status', operator: '==', value: 'active' }
-      ],
-      orderBy: [{ field: 'name', direction: 'asc' }]
-    });
+    try {
+      console.log('🔍 Buscando contactos activos para usuario:', userId);
+      
+      if (!userId) {
+        console.error('❌ Error: userId no proporcionado');
+        return [];
+      }
+
+      const contacts = await FirestoreService.readAll(this.CONTACTS_COLLECTION, {
+        where: [
+          { field: 'userId', operator: '==', value: userId },
+          { field: 'status', operator: '==', value: 'active' }
+        ],
+        orderBy: [{ field: 'name', direction: 'asc' }]
+      });
+      
+      console.log(`✅ Se encontraron ${contacts.length} contactos activos para el usuario ${userId}`);
+      return contacts;
+    } catch (error) {
+      console.error('❌ Error en getActiveContacts:', error);
+      return [];
+    }
   }
 
   /**

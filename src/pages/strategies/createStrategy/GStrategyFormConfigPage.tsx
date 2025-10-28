@@ -29,8 +29,8 @@ import { NavigationService } from '../../../services/internal/navigationService'
 import {
   setNewStrategyForm,
   setNewStrategyFormConfig,
-  SessionState,
 } from '../../../redux/sessionSlice';
+import { RootState } from '../../../redux/gecoStore';
 import { StrategiesFirestoreService } from '../../../services/external/strategiesFirestoreService';
 import { IStrategy } from '../../../interfaces/dtos/external/IFirestore';
 
@@ -46,7 +46,7 @@ export const GStrategyFormConfigPage = () => {
   const navigate = useNavigate();
 
   // Obtener datos del usuario y estrategia desde Redux
-  const { user, formNewStrategy } = useSelector((state: SessionState) => ({
+  const { user, formNewStrategy } = useSelector((state: RootState) => ({
     user: state.user,
     formNewStrategy: state.formNewStrategy,
   }));

@@ -20,7 +20,7 @@ import { GLogoLetter } from '../../components/GLogoLetter';
 import { Link, useNavigate } from 'react-router-dom';
 import { GDropdownMenu, IMenuItem } from '../../components/GDropdownMenu';
 import { IContact } from '../../interfaces/dtos/external/IFirestore';
-import { SessionState } from '../../redux/sessionSlice';
+import { RootState } from '../../redux/gecoStore';
 import { ROUTES } from '../../constants/routes';
 
 export const GContactsListPage = () => {
@@ -30,8 +30,8 @@ export const GContactsListPage = () => {
   const [error, setError] = useState<string>('');
   
   // Obtener usuario desde Redux
-  const user = useSelector((state: SessionState) => state.user);
-  const auth = useSelector((state: SessionState) => state.auth);
+  const user = useSelector((state: RootState) => state.user);
+  const auth = useSelector((state: RootState) => state.auth);
 
   useEffect(() => {
     const fetchContacts = async () => {

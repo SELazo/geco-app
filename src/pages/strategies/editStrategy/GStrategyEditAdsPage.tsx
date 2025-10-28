@@ -147,8 +147,8 @@ export const GStrategyEditAdsPage = () => {
                     className="geco-checkbox"
                     type="checkbox"
                     id={`strategy-${ad.id}`}
-                    checked={selectedNumbers.includes(ad.id)}
-                    onChange={(e) => handleAdsSelection(e, ad.id)}
+                    checked={selectedNumbers.includes(typeof ad.id === 'string' ? parseInt(ad.id) : ad.id)}
+                    onChange={(e) => handleAdsSelection(e, typeof ad.id === 'string' ? parseInt(ad.id) : ad.id)}
                   />
                 </div>
               </div>

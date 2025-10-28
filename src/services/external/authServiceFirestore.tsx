@@ -95,7 +95,7 @@ export const AuthServiceFirestore: IAuthService = {
       const validateResponse: IValidateSessionResponse = {
         success: true,
         user: {
-          id: parseInt(sessionData.user.id || '0', 10), // Convertir string a number para compatibilidad
+          id: (sessionData.user.id || '') as string | number, // Mantener como string para IDs de Firestore
           name: sessionData.user.name,
           email: sessionData.user.email,
         }

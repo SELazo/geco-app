@@ -14,7 +14,7 @@ import { GResponsesIcon, GIconButtonBack } from '../../constants/buttons';
 import { GBlack, GWhite, GYellow, GBlue } from '../../constants/palette';
 import { GLogoLetter } from '../../components/GLogoLetter';
 import { ResponsesViewTitle } from '../../constants/wording';
-import { SessionState } from '../../redux/sessionSlice';
+import { RootState } from '../../redux/gecoStore';
 import { ROUTES } from '../../constants/routes';
 
 // Interfaces temporales - estas deberían estar en un archivo de interfaces
@@ -48,7 +48,7 @@ export const GResponsesViewPage = () => {
   const [statusFilter, setStatusFilter] = useState<ResponseStatus | 'all'>('all');
 
   // Obtener usuario desde Redux
-  const user = useSelector((state: SessionState) => state.user);
+  const user = useSelector((state: RootState) => state.user);
 
   // Función para filtrar respuestas por estado
   useEffect(() => {

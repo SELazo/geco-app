@@ -21,11 +21,25 @@ export const GroupsServiceFirestore: IGroupService = {
       // Obtener el usuario actual del localStorage
       const userStr = localStorage.getItem('user');
       if (!userStr) {
-        throw new Error('Usuario no autenticado');
+        console.error('❌ Usuario no autenticado');
+        return {
+          type: 'error',
+          code: 401,
+          message: 'Usuario no autenticado. Por favor inicia sesión.'
+        };
       }
       
       const user = JSON.parse(userStr);
-      const userId = user.id;
+      const userId = user?.id;
+      
+      if (!userId) {
+        console.error('❌ ID de usuario inválido');
+        return {
+          type: 'error',
+          code: 400,
+          message: 'ID de usuario inválido'
+        };
+      }
 
       // Crear el grupo en Firestore
       const groupData: Omit<IGroup, 'id' | 'createdAt' | 'updatedAt'> = {
@@ -152,11 +166,17 @@ export const GroupsServiceFirestore: IGroupService = {
       // Encontrar el ID real de Firestore basado en el ID numérico
       const userStr = localStorage.getItem('user');
       if (!userStr) {
-        throw new Error('Usuario no autenticado');
+        console.error('❌ Usuario no autenticado');
+        throw new Error('Usuario no autenticado. Por favor inicia sesión.');
       }
       
       const user = JSON.parse(userStr);
-      const userIdStr = user.id.toString();
+      const userIdStr = user?.id?.toString();
+      
+      if (!userIdStr) {
+        console.error('❌ ID de usuario inválido');
+        throw new Error('ID de usuario inválido');
+      }
       const allGroups = await ContactsFirestoreService.getUserGroups(userIdStr);
       
       // Buscar el grupo que coincida con el ID numérico
@@ -216,25 +236,53 @@ export const GroupsServiceFirestore: IGroupService = {
 
   getGroups: async (name?: string): Promise<IGroupOld[]> => {
     try {
+      console.log('🔍 Iniciando getGroups');
+      
       // Obtener el usuario actual
       const userStr = localStorage.getItem('user');
       if (!userStr) {
-        throw new Error('Usuario no autenticado');
+        console.error('❌ Usuario no autenticado - No se encontró usuario en localStorage');
+        return [];
       }
       
-      const user = JSON.parse(userStr);
-      const userId = user.id;
+      let user;
+      try {
+        user = JSON.parse(userStr);
+        console.log('👤 Usuario parseado:', user);
+      } catch (parseError) {
+        console.error('❌ Error al parsear usuario de localStorage:', parseError);
+        return [];
+      }
+      
+      const userId = user?.id;
+      
+      if (!userId) {
+        console.error('❌ ID de usuario no encontrado en el objeto de usuario');
+        return [];
+      }
 
-      // Obtener grupos del usuario
+      // Convertir a string de manera segura
       const userIdStr = userId.toString();
-      const firestoreGroups = await ContactsFirestoreService.getUserGroups(userIdStr);
+      console.log('🔄 Obteniendo grupos para usuario:', userIdStr);
+      
+      // Obtener grupos del usuario
+      let firestoreGroups;
+      try {
+        firestoreGroups = await ContactsFirestoreService.getUserGroups(userIdStr);
+        console.log(`✅ Se encontraron ${firestoreGroups.length} grupos para el usuario`);
+      } catch (groupsError) {
+        console.error('❌ Error al obtener grupos de Firestore:', groupsError);
+        return [];
+      }
 
       // Filtrar por nombre si se proporciona
-      let filteredGroups = firestoreGroups;
-      if (name) {
-        filteredGroups = firestoreGroups.filter(group => 
-          group.name.toLowerCase().includes(name.toLowerCase())
+      let filteredGroups = firestoreGroups || [];
+      if (name && name.trim() !== '') {
+        console.log(`🔍 Filtrando grupos por nombre: "${name}"`);
+        filteredGroups = filteredGroups.filter(group => 
+          group.name && group.name.toLowerCase().includes(name.toLowerCase())
         );
+        console.log(`🔍 ${filteredGroups.length} grupos después del filtrado`);
       }
 
       // Convertir al formato esperado
@@ -248,15 +296,18 @@ export const GroupsServiceFirestore: IGroupService = {
         
         return {
           id: numericId,
-          name: group.name,
+          name: group.name || 'Grupo sin nombre',
           description: group.description || '',
-          account_id: parseInt(group.userId)
+          account_id: parseInt(group.userId || '0')
         };
       });
+      
+      console.log(`🏁 Conversión completada: ${convertedGroups.length} grupos listos`);
       return convertedGroups;
     } catch (error) {
-      console.error('Error getting groups:', error);
-      throw error;
+      console.error('❌ Error crítico en getGroups:', error);
+      // En lugar de lanzar el error, devolvemos un array vacío
+      return [];
     }
   },
 };

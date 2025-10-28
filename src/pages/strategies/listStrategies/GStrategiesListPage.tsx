@@ -17,7 +17,7 @@ import { ROUTES } from '../../../constants/routes';
 import { IStrategyResponse } from '../../../interfaces/dtos/external/IStrategies';
 import { StrategiesFirestoreService } from '../../../services/external/strategiesFirestoreService';
 import { IStrategy } from '../../../interfaces/dtos/external/IFirestore';
-import { SessionState } from '../../../redux/sessionSlice';
+import { RootState } from '../../../redux/gecoStore';
 import { GStrategyCard } from '../../../components/GStrategyCard';
 
 export const GStrategiesListPage = () => {
@@ -26,7 +26,7 @@ export const GStrategiesListPage = () => {
   const [error, setError] = useState<string>('');
   
   // Obtener usuario desde Redux
-  const user = useSelector((state: SessionState) => state.user);
+  const user = useSelector((state: RootState) => state.user);
 
   useEffect(() => {
     const fetchStrategies = async () => {

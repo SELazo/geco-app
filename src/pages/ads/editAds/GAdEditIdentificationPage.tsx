@@ -62,8 +62,9 @@ export const GAdEditIdentificationPage = () => {
   }, []);
 
   const onSubmit = async (data: AdData) => {
+    const adId = typeof ad.id === 'string' ? parseInt(ad.id) : ad.id;
     const response = await AdsService.editAd(
-      ad.id,
+      adId,
       data.titleHelper,
       data.descriptionHelper
     )

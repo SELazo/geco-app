@@ -20,15 +20,15 @@ import { NavigationService } from '../../../services/internal/navigationService'
 import { ContactsFirestoreService } from '../../../services/external/contactsFirestoreService';
 import { GLogoLetter } from '../../../components/GLogoLetter';
 import { IContact } from '../../../interfaces/dtos/external/IFirestore';
-import { SessionState } from '../../../redux/sessionSlice';
+import { RootState } from '../../../redux/gecoStore';
 
 export const GEditContactPage = () => {
   const navigate = useNavigate();
   const { id } = useParams<{ id: string }>();
 
   // Obtener usuario desde Redux
-  const user = useSelector((state: SessionState) => state.user);
-  const auth = useSelector((state: SessionState) => state.auth);
+  const user = useSelector((state: RootState) => state.user);
+  const auth = useSelector((state: RootState) => state.auth);
   // Estados para manejo de carga y errores
   const [loading, setLoading] = useState(true);
   const [saving, setSaving] = useState(false);

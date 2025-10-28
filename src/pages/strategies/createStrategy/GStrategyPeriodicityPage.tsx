@@ -56,7 +56,8 @@ export const GStrategyPeriodicityPage = () => {
   useEffect(() => {
     const fetchData = async () => {
       try {
-        const periodicitiesData = getPeriodicities(userStatus);
+        const userStatusNum = typeof userStatus === 'string' ? parseInt(userStatus) : userStatus;
+        const periodicitiesData = getPeriodicities(userStatusNum);
         const schedulesData = getSchedules();
         if (
           periodicitiesData &&

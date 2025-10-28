@@ -20,15 +20,15 @@ import { NavigationService } from '../../../services/internal/navigationService'
 import { ContactsFirestoreService } from '../../../services/external/contactsFirestoreService';
 import { Link, useNavigate } from 'react-router-dom';
 import { IContact } from '../../../interfaces/dtos/external/IFirestore';
-import { SessionState } from '../../../redux/sessionSlice';
+import { RootState } from '../../../redux/gecoStore';
 import { GLogoLetter } from '../../../components/GLogoLetter';
 
 export const GAddContactPage = () => {
   const navigate = useNavigate();
 
   // Obtener usuario desde Redux
-  const user = useSelector((state: SessionState) => state.user);
-  const auth = useSelector((state: SessionState) => state.auth);
+  const user = useSelector((state: RootState) => state.user);
+  const auth = useSelector((state: RootState) => state.auth);
 
   // Estados para manejo de carga y errores
   const [saving, setSaving] = useState(false);
