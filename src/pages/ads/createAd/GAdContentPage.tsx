@@ -32,7 +32,7 @@ type AdData = {
 };
 
 export const GAdContentPage = () => {
-  const formNewAd = useSelector((state: RootState) => state.auth.formNewAd);
+  const formNewAd = useSelector((state: RootState) => state.formNewAd);
 
   const validationSchema = Yup.object().shape({
     titleAd: Yup.string(),
@@ -46,8 +46,10 @@ export const GAdContentPage = () => {
   const dispatch = useDispatch();
 
   useEffect(() => {
-    if (!formNewAd.template && !formNewAd.pallette) {
+    if (!formNewAd || !formNewAd.template || !formNewAd.pallette) {
+      console.error('formNewAd no está completo:', formNewAd);
       navigate(`${ROUTES.AD.ROOT}`);
+      return;
     }
   }, [formNewAd]);
 

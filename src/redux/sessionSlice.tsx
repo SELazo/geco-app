@@ -2,7 +2,7 @@ import { createSlice, PayloadAction } from '@reduxjs/toolkit';
 import { IAdPattern } from '../interfaces/dtos/external/IAds';
 
 export interface User {
-  id: number;
+  id: number | string; // Soportar IDs de Firestore (strings) y números
   name: string;
   email: string;
 }
@@ -90,6 +90,10 @@ export const sessionSlice = createSlice({
     logout: (state) => {
       state.auth.isAuthenticated = false;
       state.auth.token = null;
+    },
+    extendSession: (state) => {
+      // Esta acción solo se usa para triggear el middleware que actualizará localStorage
+      // No necesita modificar el estado
     },
     setNewFormGroupInfo: (state, action: PayloadAction<INewGoupInfo>) => {
       state.formNewGroup.groupInfo = action.payload;
@@ -213,6 +217,7 @@ export const {
   resetTerms,
   loginSuccess,
   logout,
+  extendSession,
   setNewFormGroupInfo,
   setNewGroupContacts,
   clearNewGroupForm,

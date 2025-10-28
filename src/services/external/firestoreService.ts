@@ -42,13 +42,23 @@ export class FirestoreService {
    */
   static async create(collectionName: string, data: any): Promise<string> {
     try {
-      const docRef = await addDoc(collection(db, collectionName), {
+      console.log(`📝 FirestoreService.create - Colección: ${collectionName}`);
+      console.log('📝 FirestoreService.create - Datos:', data);
+      
+      const docData = {
         ...data,
         createdAt: new Date(),
         updatedAt: new Date(),
-      });
+      };
+      
+      console.log('📝 FirestoreService.create - Datos finales con timestamps:', docData);
+      
+      const docRef = await addDoc(collection(db, collectionName), docData);
+      
+      console.log(`✅ FirestoreService.create - Documento creado con ID: ${docRef.id}`);
       return docRef.id;
     } catch (error) {
+      console.error('❌ FirestoreService.create - Error:', error);
       throw error;
     }
   }
@@ -152,7 +162,7 @@ export class FirestoreService {
         ...data,
         updatedAt: new Date(),
       });
-      console.log('Document updated successfully');
+      // console.log('Document updated successfully'); // Reducir logs
     } catch (error) {
       console.error('Error updating document: ', error);
       throw error;

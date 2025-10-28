@@ -32,6 +32,7 @@ import { GAdsPage } from '../pages/ads/GAdsPage';
 import { GAdSizePage } from '../pages/ads/createAd/GAdSizePage';
 import { GAdContentPage } from '../pages/ads/createAd/GAdContentPage';
 import { GAdImgTypePage } from '../pages/ads/createAd/GAdImgTypePage';
+import { GAdAIImagePage } from '../pages/ads/createAd/GAdAIImagePage';
 import { GAdOwnImgPage } from '../pages/ads/createAd/GAdOwnImgPage';
 import { GAdPatternPage } from '../pages/ads/createAd/GAdPatternPage';
 import { GAdColoursPage } from '../pages/ads/createAd/GAdColoursPage';
@@ -130,6 +131,7 @@ export const GPrivateRoutes = () => {
       <Route path="/ad/create/size" element={<GAdSizePage />} />
       <Route path="/ad/create/content" element={<GAdContentPage />} />
       <Route path="/ad/create/image" element={<GAdImgTypePage />} />
+      <Route path="/ad/create/image/ai" element={<GAdAIImagePage />} />
       <Route path="/ad/create/image/own" element={<GAdOwnImgPage />} />
       <Route path="/ad/create/pattern" element={<GAdPatternPage />} />
       <Route path="/ad/create/pallette" element={<GAdColoursPage />} />

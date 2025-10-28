@@ -117,13 +117,16 @@ export const GAddContactPage = () => {
       setSaving(true);
       setSaveError('');
 
-      // Validar que tenemos un usuario válido
-      if (!user || !user.id || user.id === -1) {
+      // Validar que tenemos un usuario válido (aceptar tanto string como number)
+      if (!user || !user.id || user.id === -1 || user.id === '0' || user.id === 0) {
+        console.error('❌ Usuario inválido:', user);
         setSaveError(
           'Usuario no encontrado. Por favor, inicia sesión nuevamente.'
         );
         return;
       }
+      
+      console.log('✅ Usuario válido para crear contacto:', user);
 
       // Validar que tenemos al menos email o teléfono
       if (!data.email && !data.cellphone) {

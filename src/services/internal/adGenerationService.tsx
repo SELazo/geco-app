@@ -1,6 +1,7 @@
 import html2canvas from 'html2canvas';
 import { INewAd } from '../../interfaces/dtos/external/IAds';
 import Image from 'image-js';
+import logoGeco from '../../assets/images/logo_geco.svg';
 
 export const AdGenerationService = {
   // Configuración global simple para contraste
@@ -162,7 +163,7 @@ export const AdGenerationService = {
         pointerEvents: 'none',
       } as React.CSSProperties);
       const watermarkImg = document.createElement('img');
-      watermarkImg.src = '/src/assets/images/logo_geco.svg';
+      watermarkImg.src = logoGeco;
       Object.assign(watermarkImg.style, {
         width: `${sizePx}px`,
         height: 'auto',
@@ -176,7 +177,13 @@ export const AdGenerationService = {
 
     document.body.appendChild(hiddenContainer);
     const scale = options?.scale ?? 2;
-    const canvas = await html2canvas(adDiv, { scale, useCORS: true });
+    const canvas = await html2canvas(adDiv, { 
+      scale, 
+      useCORS: true,
+      allowTaint: true,
+      logging: false, // Reducir logs
+      backgroundColor: null
+    });
     let dataURL = canvas.toDataURL('image/jpg');
 
     document.body.removeChild(hiddenContainer);
@@ -274,19 +281,62 @@ export const AdGenerationService = {
   async estimateBackgroundBrightness(img: File | string): Promise<number> {
     try {
       let buffer: ArrayBuffer | null = null;
+      
       if (img instanceof File) {
         buffer = await img.arrayBuffer();
       } else if (typeof img === 'string') {
-        const res = await fetch(img);
-        const blob = await res.blob();
-        buffer = await blob.arrayBuffer();
+        // Si es base64, convertirlo directamente
+        if (img.startsWith('data:image')) {
+          try {
+            const base64Data = img.split(',')[1];
+            if (!base64Data) {
+              console.warn('Base64 inválido, usando brillo por defecto');
+              return 0.5;
+            }
+            const binaryString = atob(base64Data);
+            const bytes = new Uint8Array(binaryString.length);
+            for (let i = 0; i < binaryString.length; i++) {
+              bytes[i] = binaryString.charCodeAt(i);
+            }
+            buffer = bytes.buffer;
+          } catch (e) {
+            console.error('Error decodificando base64:', e);
+            return 0.5;
+          }
+        } else {
+          // Si es una URL, hacer fetch
+          try {
+            const res = await fetch(img);
+            if (!res.ok) {
+              console.warn('Error fetching image, usando brillo por defecto');
+              return 0.5;
+            }
+            const blob = await res.blob();
+            buffer = await blob.arrayBuffer();
+          } catch (e) {
+            console.error('Error cargando imagen desde URL:', e);
+            return 0.5;
+          }
+        }
       }
-      if (!buffer) return 0.5;
+      
+      if (!buffer || buffer.byteLength === 0) {
+        console.warn('Buffer vacío, usando brillo por defecto');
+        return 0.5;
+      }
+      
       const image = await Image.load(buffer);
+      
       // Downscale for performance
       const small = image.resize({ width: 32 });
       let total = 0;
       const data: Uint8Array = (small as any).data as Uint8Array;
+      
+      if (!data || data.length === 0) {
+        console.warn('Datos de imagen vacíos, usando brillo por defecto');
+        return 0.5;
+      }
+      
       for (let i = 0; i < data.length; i += 4) {
         const r: number = data[i];
         const g: number = data[i + 1];
@@ -297,14 +347,14 @@ export const AdGenerationService = {
       }
       const brightness = total / (data.length / 4);
       return brightness; // 0..1
-    } catch (e) {
-      console.warn('No se pudo estimar brillo de fondo', e);
+    } catch (error) {
+      console.error('Error estimando brillo de imagen:', error);
+      // Retornar valor por defecto en lugar de fallar
       return 0.5;
     }
   },
-  autoResizeText(el: HTMLElement, baseFontSizePx: number, minFontSizePx: number) {
-    // Limita la altura segun baseFontSize para evitar desborde
-    const maxHeight = baseFontSizePx * 2.2; // heurística
+  autoResizeText(el: HTMLElement, baseFontSizePx: number, minFontSizePx: number): void {
+    const maxHeight = el.clientHeight || 10000;
     el.style.maxHeight = `${maxHeight}px`;
     el.style.overflow = 'hidden';
     let size = baseFontSizePx;

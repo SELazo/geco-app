@@ -35,13 +35,15 @@ export const GAdOwnImgPage = () => {
   const [selectedFile, setSelectedFile] = useState(null);
   const [fileError, setFileError] = useState('');
   const [requestError, setRequestError] = useState(false);
-  const formNewAd = useSelector((state: RootState) => state.auth.formNewAd);
+  const formNewAd = useSelector((state: RootState) => state.formNewAd);
 
   const navigate = useNavigate();
 
   useEffect(() => {
-    if (!formNewAd.template && !formNewAd.pallette) {
+    if (!formNewAd || (!formNewAd.template && !formNewAd.pallette)) {
+      console.error('formNewAd no está completo:', formNewAd);
       navigate(`${ROUTES.AD.ROOT}`);
+      return;
     }
   }, []);
 

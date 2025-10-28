@@ -62,7 +62,7 @@ export interface IPostAdResponse {
 }
 
 export interface IGetAdResponse {
-  id: number;
+  id: number | string; // Puede ser number (backend) o string (Firestore)
   description: string;
   title: string;
   size: string;
@@ -75,6 +75,9 @@ export interface IGetAdResponse {
     type: string;
     disposition_pattern: string;
   };
+  imageUrl?: string; // Imagen base64 desde Firestore
+  firestoreId?: string; // ID original de Firestore
+  firestoreData?: any; // Datos completos de Firestore
 }
 
 export interface IAdsService {

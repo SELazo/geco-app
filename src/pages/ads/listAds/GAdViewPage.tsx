@@ -40,23 +40,55 @@ export const GAdViewPage = () => {
   const ad: IGetAdResponse = location && location.state;
 
   useEffect(() => {
-    setLoading(true);
+    console.log('📸 Cargando vista previa de publicidad...');
+    console.log('📸 Datos completos de publicidad:', ad);
+    
     if (!ad || !ad.id || !ad.description || !ad.title) {
+      console.error('❌ Datos de publicidad incompletos');
       navigate(`${ROUTES.AD.ROOT}`);
+      return;
     }
 
-    const fetchAd = async () => {
-      try {
-        const adImg = await getAdImg(ad.id);
-        if (adImg) {
-          setAdFile(adImg);
-        }
-      } catch (error) {
-        setErrorImg('No se pudo cargar la imagen 😥');
-      }
-    };
-
-    fetchAd();
+    // 🔍 BUSCAR IMAGEN EN MÚLTIPLES UBICACIONES
+    let foundImage = false;
+    
+    // Opción 1: imageUrl en el objeto principal
+    if (ad.imageUrl) {
+      console.log('✅ Imagen encontrada en ad.imageUrl (longitud):', ad.imageUrl.length);
+      setAdFile(ad.imageUrl);
+      foundImage = true;
+    } 
+    // Opción 2: ad_image en firestoreData
+    else if ((ad as any).firestoreData?.ad_image) {
+      console.log('✅ Imagen encontrada en firestoreData.ad_image (longitud):', (ad as any).firestoreData.ad_image.length);
+      setAdFile((ad as any).firestoreData.ad_image);
+      foundImage = true;
+    }
+    // Opción 3: content.imageUrl en firestoreData
+    else if ((ad as any).firestoreData?.content?.imageUrl) {
+      console.log('✅ Imagen encontrada en firestoreData.content.imageUrl (longitud):', (ad as any).firestoreData.content.imageUrl.length);
+      setAdFile((ad as any).firestoreData.content.imageUrl);
+      foundImage = true;
+    }
+    // Opción 4: imageUrl directo en firestoreData
+    else if ((ad as any).firestoreData?.imageUrl) {
+      console.log('✅ Imagen encontrada en firestoreData.imageUrl (longitud):', (ad as any).firestoreData.imageUrl.length);
+      setAdFile((ad as any).firestoreData.imageUrl);
+      foundImage = true;
+    }
+    
+    if (!foundImage) {
+      console.error('❌ No se encontró imagen en ninguna ubicación');
+      console.error('❌ Estructura del objeto:', {
+        hasImageUrl: !!ad.imageUrl,
+        hasFirestoreData: !!(ad as any).firestoreData,
+        firestoreDataKeys: (ad as any).firestoreData ? Object.keys((ad as any).firestoreData) : [],
+        hasAdImage: !!(ad as any).firestoreData?.ad_image,
+        hasContentImageUrl: !!(ad as any).firestoreData?.content?.imageUrl,
+      });
+      setErrorImg('No se pudo cargar la imagen 😥 - La publicidad puede tener un formato antiguo');
+    }
+    
     setLoading(false);
   }, []);
 

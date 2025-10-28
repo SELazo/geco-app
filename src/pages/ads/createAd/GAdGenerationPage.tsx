@@ -25,7 +25,8 @@ export const GAdGenerationPage = () => {
   const [adjustedAd, setAdjustedAd] = useState<string | null>(null);
   const [selectedKey, setSelectedKey] = useState<'brand' | 'adjusted' | null>(null);
   const [loading, setLoading] = useState(false);
-  const formNewAd = useSelector((state: RootState) => state.auth.formNewAd);
+  const [error, setError] = useState<string | null>(null);
+  const formNewAd = useSelector((state: RootState) => state.formNewAd);
 
   const location = useLocation();
   const navigate = useNavigate();
@@ -33,8 +34,10 @@ export const GAdGenerationPage = () => {
   const img = location && location.state;
 
   useEffect(() => {
-    if (!formNewAd.template && !formNewAd.pallette) {
+    if (!formNewAd || (!formNewAd.template && !formNewAd.pallette)) {
+      console.error('formNewAd no está completo:', formNewAd);
       navigate(`${ROUTES.AD.ROOT}`);
+      return;
     }
     const generateAd = async () => {
       try {
@@ -63,7 +66,9 @@ export const GAdGenerationPage = () => {
           setSelectedKey('brand');
         }
       } catch (error) {
-        navigate(`${ROUTES.AD.ROOT}${ROUTES.AD.CREATE.ROOT}`);
+        console.error('Error generando publicidad:', error);
+        setError('Error al generar la imagen. Por favor, intenta con otra imagen.');
+        setLoading(false);
       } finally {
         setLoading(false);
       }
@@ -110,7 +115,35 @@ export const GAdGenerationPage = () => {
           subtitle={CreateAdGeneratedTitle.subtitle}
         />
         <form className="geco-form" onSubmit={handleSubmit}>
-          {loading && !generatedAd ? (
+          {error ? (
+            <div
+              style={{
+                padding: '20px',
+                margin: '20px 0',
+                backgroundColor: '#fee',
+                border: '2px solid #c33',
+                borderRadius: '12px',
+                color: '#c33',
+                textAlign: 'center',
+              }}
+            >
+              <p style={{ margin: '0 0 10px 0', fontWeight: 'bold' }}>⚠️ {error}</p>
+              <button
+                type="button"
+                onClick={() => navigate(`${ROUTES.AD.ROOT}${ROUTES.AD.CREATE.ROOT}`)}
+                style={{
+                  padding: '10px 20px',
+                  backgroundColor: '#FFD21E',
+                  border: '2px solid #18191f',
+                  borderRadius: '8px',
+                  cursor: 'pointer',
+                  fontWeight: 'bold',
+                }}
+              >
+                Volver a intentar
+              </button>
+            </div>
+          ) : loading && !generatedAd ? (
             <div
               style={{
                 textAlign: 'start',
