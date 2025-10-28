@@ -55,7 +55,11 @@ export const GGroupPage = () => {
   }, [numericId]);
 
   const editContact = (id: number) => {
-    console.log(group?.contacts.find((c) => c.id === id));
+    if (!id || !group) {
+      console.warn('ID de contacto o grupo no válido:', { id, group });
+      return;
+    }
+    console.log(group.contacts.find((c) => c.id === id));
   };
 
   return (
@@ -113,9 +117,9 @@ export const GGroupPage = () => {
         <div className="geco-contacts-list-container">
           <div className="geco-contacts-list-ul">
             <div className="geco-contacts-list-item">
-              {group.contacts.map((item) => (
+              {group.contacts.map((item, index) => (
                 <GContactItem
-                  key={item.id}
+                  key={item.id || `contact-${index}`}
                   contact={item}
                   icon={GEditIcon}
                   iconBackgroundColor={GYellow}

@@ -87,8 +87,8 @@ export const GEditGroupSelectPage = () => {
 
         {!loading && !error && groups.length > 0 && (
           <div className="geco-contacts-list-content">
-            {groups.map((group) => (
-              <div key={group.id} onClick={() => handleGroupSelect(group.id)}>
+            {groups.map((group, index) => (
+              <div key={group.id || `group-${index}`} onClick={() => handleGroupSelect(group.id)}>
                 <GGroupItem
                   group={group}
                   color="#007bff"

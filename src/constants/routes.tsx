@@ -16,7 +16,9 @@ export const ROUTES = {
     ADD_GROUP_SUCCESS: '/sucess-add-group',
     GROUP_SEE_MORE: '/:id',
     EDIT_GROUP_SELECT: '/edit-group',
-    EDIT_GROUP_FORM: '/edit-group/:id',
+    EDIT_GROUP_STEP1: '/edit-group/:id',
+    EDIT_GROUP_STEP2: '/edit-group/:id/members',
+    EDIT_GROUP_STEP3: '/edit-group/:id/add-members',
   },
   USER: {
     EDIT_SUCCESS: '/user/edit-success',
