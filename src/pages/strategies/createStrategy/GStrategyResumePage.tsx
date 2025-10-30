@@ -18,7 +18,7 @@ import { GBlack, GWhite, GYellow } from '../../../constants/palette';
 import { NavigationService } from '../../../services/internal/navigationService';
 import { Link, useNavigate } from 'react-router-dom';
 import { GLogoLetter } from '../../../components/GLogoLetter';
-import { useEffect, useState } from 'react';
+import { useEffect, useState, useRef } from 'react';
 import { ROUTES } from '../../../constants/routes';
 import { GroupsService } from '../../../services/external/groupsService';
 import { IGroup } from '../../../interfaces/dtos/external/IGroups';
@@ -29,6 +29,11 @@ import { PacmanLoader } from 'react-spinners';
 import dayjs from 'dayjs';
 import { StrategyService } from '../../../services/internal/strategyService';
 import { StrategiesService } from '../../../services/external/strategiesService';
+import { StrategiesFirestoreService } from '../../../services/external/strategiesFirestoreService';
+import { FirestoreService } from '../../../services/external/firestoreService';
+import { SessionService } from '../../../services/internal/sessionService';
+import { AdsFirestoreService } from '../../../services/external/adsFirestoreService';
+import { IAd } from '../../../interfaces/dtos/external/IFirestore';
 
 const { getGroups } = GroupsService;
 const { getAds } = AdsService;
@@ -39,6 +44,7 @@ export const GStrategyResumePage = () => {
   const [loading, setLoading] = useState<boolean>(false);
   const [groupsList, setGroupsList] = useState<IGroup[]>([]);
   const [adsList, setAdsList] = useState<IGetAdResponse[]>([]);
+  const isSubmitting = useRef(false); // ✅ Flag para prevenir doble-click
   const navigate = useNavigate();
 
   const strategyForm: INewStrategyForm = useSelector(
@@ -48,24 +54,60 @@ export const GStrategyResumePage = () => {
   const dispatch = useDispatch();
 
   useEffect(() => {
-    const fetchGroups = async () => {
+    const fetchData = async () => {
       setLoading(true);
       if (strategyForm) {
         try {
+          console.log('🔍 Cargando datos para resumen...');
+          console.log('📋 IDs de publicidades:', strategyForm.ads);
+          console.log('📋 IDs de grupos:', strategyForm.groups);
+          
           const groups: IGroup[] = [];
           const groupsData = await getGroups();
           const ads: IGetAdResponse[] = [];
-          const adsData = await getAds();
 
-          if (strategyForm.ads && strategyForm.ads.length > 0 && adsData.data) {
-            adsData.data.map((ad) => {
-              const findAd = strategyForm.ads.find((adId) => adId === ad.id);
-
-              if (findAd) {
-                ads.push(ad);
+          // Cargar publicidades desde Firestore usando los firestoreIds
+          if (strategyForm.ads && strategyForm.ads.length > 0) {
+            const adsPromises = strategyForm.ads.map(adId => 
+              AdsFirestoreService.getAd(String(adId))
+            );
+            const firestoreAds = await Promise.all(adsPromises);
+            
+            // Mapear a formato esperado
+            firestoreAds.forEach((ad: any) => {
+              if (ad) {
+                let dateString = new Date().toISOString();
+                if (ad.createdAt) {
+                  if (typeof ad.createdAt === 'object' && 'seconds' in ad.createdAt) {
+                    dateString = new Date((ad.createdAt as any).seconds * 1000).toISOString();
+                  } else if (ad.createdAt instanceof Date) {
+                    dateString = ad.createdAt.toISOString();
+                  }
+                }
+                
+                ads.push({
+                  id: ad.id || '',
+                  firestoreId: ad.id || '',
+                  title: ad.ad_title || ad.title || '', // ✅ Leer ad_title
+                  description: ad.ad_description || ad.description || '', // ✅ Leer ad_description
+                  size: ad.ad_size || ad.size || '1080x1080',
+                  create_date: dateString,
+                  deleted_date: null,
+                  account_id: parseInt(ad.userId || ad.accounts_account_id || '0'),
+                  ad_template: {
+                    id: 1,
+                    type: ad.ad_template?.disposition_pattern || ad.template || '',
+                    disposition_pattern: ad.ad_template?.disposition_pattern || ad.template || '',
+                    color_text: ad.ad_template?.color_text || ad.palette || '#000000',
+                  }
+                });
               }
             });
+            
+            console.log(`✅ ${ads.length} publicidades cargadas para resumen`);
           }
+          
+          // Cargar grupos
           if (strategyForm.groups && strategyForm.groups.length > 0) {
             groupsData.map((group) => {
               const findGroup = strategyForm.groups.find(
@@ -76,99 +118,185 @@ export const GStrategyResumePage = () => {
                 groups.push(group);
               }
             });
+            
+            console.log(`✅ ${groups.length} grupos cargados para resumen`);
           }
 
           setGroupsList(groups);
           setAdsList(ads);
           setLoading(false);
         } catch (error) {
-          console.log(error); // TODO: Mostrar error en pantalla
+          console.error('❌ Error cargando datos para resumen:', error);
+          setLoading(false);
         }
       }
     };
 
-    fetchGroups();
+    fetchData();
   }, [strategyForm]);
 
   const handleSubmit = async (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();
-    setLoading(true);
-    const startDate = new Date(strategyForm.startDate);
-    const endDate = new Date(strategyForm.endDate);
-    console.log('Creando estrategia (antes de payload):', {
-      name: strategyForm.title,
-      start_date: startDate.toISOString(),
-      end_date: endDate.toISOString(),
-      periodicity: strategyForm.periodicity,
-      schedule: strategyForm.schedule,
-      ads: strategyForm.ads,
-      groups: strategyForm.groups,
-      formTypeUI: strategyForm.formType,
-      formConfigUI: strategyForm.formConfig,
-    });
-
-    const mapFormType = (t?: string): string | undefined => {
-      switch (t) {
-        case 'Pedido rápido':
-          return 'quick_order';
-        case 'Contacto simple':
-          return 'simple_contact';
-        case 'Reservas / turnos':
-          return 'booking';
-        case 'Catálogo':
-          return 'catalog';
-        default:
-          return undefined;
+    
+    // 🔒 SOLUCIÓN DEFINITIVA: Usar sessionStorage como barrera global
+    const submissionKey = `strategy_submit_${Date.now()}`;
+    const lastSubmission = sessionStorage.getItem('last_strategy_submission');
+    
+    if (lastSubmission) {
+      const timeSinceLastSubmit = Date.now() - parseInt(lastSubmission);
+      if (timeSinceLastSubmit < 3000) { // Menos de 3 segundos
+        console.log('⏳ Bloqueo de seguridad: Ya se creó una estrategia hace', timeSinceLastSubmit, 'ms');
+        return;
       }
-    };
-    const form_type = strategyForm?.enableForm
-      ? mapFormType(strategyForm?.formType)
-      : undefined;
-    const form_config = strategyForm.formConfig;
-    console.log('Payload a enviar (newStrategy):', {
-      name: strategyForm.title,
-      start_date: startDate,
-      end_date: endDate,
-      periodicity: strategyForm.periodicity,
-      schedule: strategyForm.schedule,
-      ads: strategyForm.ads,
-      groups: strategyForm.groups,
-      form_type,
-      form_config,
-    });
+    }
+    
+    // Marcar inmediatamente en sessionStorage
+    sessionStorage.setItem('last_strategy_submission', String(Date.now()));
+    
+    // Prevenir múltiples clicks con useRef
+    if (isSubmitting.current) {
+      console.log('⏳ Ya hay una creación en proceso, ignorando...');
+      return;
+    }
+    
+    isSubmitting.current = true;
+    
+    // Desactivar el botón INMEDIATAMENTE
+    const submitButton = event.currentTarget.querySelector('button[type="submit"]') as HTMLButtonElement;
+    if (submitButton) {
+      submitButton.disabled = true;
+      submitButton.style.pointerEvents = 'none';
+      submitButton.style.opacity = '0.6';
+    }
+    
+    setLoading(true);
+    
     try {
-      const response = await newStrategy(
-        strategyForm.title,
+      console.log('📝 Iniciando creación de estrategia...');
+      
+      // Obtener usuario de localStorage
+      const storedUser = localStorage.getItem('user');
+      if (!storedUser) {
+        console.error('❌ No hay usuario disponible');
+        navigate('/login');
+        return;
+      }
+      
+      const user = JSON.parse(storedUser);
+      if (!user || (!user.id && !user.email)) {
+        console.error('❌ Usuario inválido');
+        navigate('/login');
+        return;
+      }
+      
+      const userId = user.id || user.email;
+      console.log('👤 Usuario ID:', userId);
+      
+      const startDate = new Date(strategyForm.startDate);
+      const endDate = new Date(strategyForm.endDate);
+      
+      console.log('📋 Datos de la estrategia:', {
+        title: strategyForm.title,
         startDate,
         endDate,
-        strategyForm.periodicity,
-        strategyForm.schedule,
-        strategyForm.ads,
-        strategyForm.groups,
-        form_type,
-        form_config
-      );
+        periodicity: strategyForm.periodicity,
+        schedule: strategyForm.schedule,
+        ads: strategyForm.ads,
+        groups: strategyForm.groups,
+        formType: strategyForm.formType,
+      });
 
-      console.log('Respuesta del backend:', response);
-
-      if (response && response.success) {
-        dispatch(clearNewStrategyForm());
-        navigate(
-          `${ROUTES.STRATEGY.ROOT}${ROUTES.STRATEGY.CREATE.ROOT}${ROUTES.STRATEGY.CREATE.SUCCESS}`
-        );
-      } else {
-        console.error('Error al crear estrategia:', response);
-        navigate(
-          `${ROUTES.STRATEGY.ROOT}${ROUTES.STRATEGY.CREATE.ROOT}${ROUTES.STRATEGY.ERROR}`
-        );
+      // 1. Crear estrategia en Firestore (DIRECTO - igual que publicidades)
+      // Construir objeto base SIN formType ni formConfig
+      const baseStrategyData: any = {
+        title: strategyForm.title || 'Sin título',
+        description: '',
+        ads: (strategyForm.ads || []).map((id: any) => String(id)),
+        groups: (strategyForm.groups || []).map((id: any) => String(id)),
+        startDate,
+        endDate,
+        periodicity: strategyForm.periodicity || 'Única vez',
+        schedule: strategyForm.schedule || '09:00',
+        enableForm: Boolean(strategyForm.enableForm),
+        status: 'active',
+        userId: String(userId)
+      };
+      
+      // SOLO si enableForm es true Y formType tiene valor, agregar campos de formulario
+      if (strategyForm.enableForm && strategyForm.formType) {
+        baseStrategyData.formType = strategyForm.formType;
+        
+        // SOLO si formConfig existe y tiene contenido, agregarlo
+        if (strategyForm.formConfig && Object.keys(strategyForm.formConfig).length > 0) {
+          baseStrategyData.formConfig = strategyForm.formConfig;
+        } else {
+          // Si no hay formConfig, poner un objeto vacío
+          baseStrategyData.formConfig = {};
+        }
       }
+      
+      console.log('🔍 enableForm:', strategyForm.enableForm);
+      console.log('🔍 formType:', strategyForm.formType);
+      console.log('🔍 formConfig:', strategyForm.formConfig);
+      
+      // Limpieza final con JSON para asegurar no hay undefined
+      const finalData = JSON.parse(JSON.stringify(baseStrategyData));
+      
+      console.log('💾 Guardando estrategia en Firestore...');
+      console.log('💾 Datos limpios:', finalData);
+      console.log('💾 Datos en JSON:', JSON.stringify(finalData, null, 2));
+      
+      const strategyId = await StrategiesFirestoreService.createStrategy(finalData);
+      console.log('✅ Estrategia creada con ID:', strategyId);
+      
+      // 2. Crear relaciones en ads_by_strategy
+      if (strategyForm.ads && strategyForm.ads.length > 0) {
+        console.log('🔗 Creando relaciones con publicidades...');
+        console.log('📋 IDs de publicidades a relacionar:', strategyForm.ads);
+        const adsPromises = strategyForm.ads
+          .filter((adId: any) => adId) // Filtrar valores falsy
+          .map((adId: any) =>
+            FirestoreService.create('ads_by_strategy', {
+              strategies_strategy_id: strategyId || '', // Guardar como string
+              ads_ad_id: String(adId), // Asegurar que sea string
+              add_date: new Date(),
+              deleted_date: null
+            })
+          );
+        await Promise.all(adsPromises);
+        console.log(`✅ ${adsPromises.length} relaciones con publicidades creadas`);
+      }
+      
+      // 3. Crear relaciones en groups_by_strategy
+      if (strategyForm.groups && strategyForm.groups.length > 0) {
+        console.log('🔗 Creando relaciones con grupos...');
+        const groupsPromises = strategyForm.groups
+          .filter((groupId: any) => groupId) // Filtrar valores falsy
+          .map((groupId: any) =>
+            FirestoreService.create('groups_by_strategy', {
+              strategies_strategy_id: strategyId || '', // Guardar como string
+              groups_group_id: String(groupId), // Asegurar que sea string
+              add_date: new Date(),
+              deleted_date: null
+            })
+          );
+        await Promise.all(groupsPromises);
+        console.log(`✅ ${groupsPromises.length} relaciones con grupos creadas`);
+      }
+      
+      console.log('✅ Estrategia creada exitosamente');
+      
+      // Limpiar formulario y navegar a éxito
+      dispatch(clearNewStrategyForm());
+      navigate(`/strategy/create/success`);
+      
     } catch (error) {
-      console.error('Error en la creación de estrategia:', error);
-      navigate(
-        `${ROUTES.STRATEGY.ROOT}${ROUTES.STRATEGY.CREATE.ROOT}${ROUTES.STRATEGY.ERROR}`
-      );
+      console.error('❌ Error creando estrategia:', error);
+      navigate(`/strategy/create/error`);
+    } finally {
+      setLoading(false);
+      isSubmitting.current = false; // ✅ Resetear flag al finalizar
     }
-    setLoading(false);
   };
 
   return (
@@ -357,9 +485,10 @@ export const GStrategyResumePage = () => {
             </div>
           </div>
           <GSubmitButton
-            label="Crear estrategia! ✨"
+            label={loading ? "Creando..." : "Crear estrategia! ✨"}
             colorBackground={GYellow}
             colorFont={GBlack}
+            disabled={loading}
           />
         </form>
       )}

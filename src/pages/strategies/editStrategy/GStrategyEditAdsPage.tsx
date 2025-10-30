@@ -35,7 +35,7 @@ const { getAds } = AdsService;
 const { getDateString } = DateService;
 
 export const GStrategyEditAdsPage = () => {
-  const [selectedNumbers, setSelectedNumbers] = useState<number[]>([]);
+  const [selectedNumbers, setSelectedNumbers] = useState<(number | string)[]>([]);
   const [adsList, setAdsList] = useState<IGetAdResponse[]>([]);
   const [error, setError] = useState({ show: false, message: '' });
   const navigate = useNavigate();

@@ -34,6 +34,8 @@ import { useEffect, useState } from 'react';
 import { ROUTES } from '../../../constants/routes';
 import { AdsService } from '../../../services/external/adsService';
 import { IGetAdResponse } from '../../../interfaces/dtos/external/IAds';
+import { AdsFirestoreService } from '../../../services/external/adsFirestoreService';
+import { IAd } from '../../../interfaces/dtos/external/IFirestore';
 import { DateService } from '../../../services/internal/dateService';
 
 const { getAds } = AdsService;
@@ -41,6 +43,7 @@ const { getDateString } = DateService;
 
 export const GStrategyAdsPage = () => {
   const [selectedNumbers, setSelectedNumbers] = useState<number[]>([]);
+  const [selectedFirestoreIds, setSelectedFirestoreIds] = useState<string[]>([]);
   const [adsList, setAdsList] = useState<IGetAdResponse[]>([]);
   const [error, setError] = useState({ show: false, message: '' });
   const navigate = useNavigate();
@@ -53,17 +56,66 @@ export const GStrategyAdsPage = () => {
   useEffect(() => {
     const fetchAds = async () => {
       try {
-        const adsData = await getAds();
-        // Asegurar que adsData.data sea un array
-        if (adsData && adsData.data && Array.isArray(adsData.data)) {
-          setAdsList(adsData.data);
-        } else {
-          console.warn('API response is not an array:', adsData);
+        console.log('🔍 Cargando publicidades desde Firestore...');
+        
+        // Obtener usuario
+        const storedUser = localStorage.getItem('user');
+        if (!storedUser) {
+          console.error('❌ No hay usuario');
           setAdsList([]);
+          return;
         }
+        
+        const user = JSON.parse(storedUser);
+        const userId = user.id || user.email;
+        
+        console.log('👤 Buscando publicidades para userId:', userId);
+        console.log('👤 Usuario completo:', user);
+        
+        // Cargar publicidades desde Firestore (igual que GAdsListPage)
+        const firestoreAds = await AdsFirestoreService.getUserAds(String(userId));
+        console.log(`✅ ${firestoreAds.length} publicidades cargadas desde Firestore`);
+        console.log('📦 Datos de Firestore:', firestoreAds);
+        
+        // Mapear a formato esperado por el componente
+        const mappedAds: IGetAdResponse[] = firestoreAds.map((ad: any, index: number) => {
+          // Manejar Timestamp de Firestore
+          let dateString = new Date().toISOString();
+          if (ad.createdAt) {
+            if (typeof ad.createdAt === 'object' && 'seconds' in ad.createdAt) {
+              dateString = new Date((ad.createdAt as any).seconds * 1000).toISOString();
+            } else if (ad.createdAt instanceof Date) {
+              dateString = ad.createdAt.toISOString();
+            }
+          }
+          
+          // IMPORTANTE: Los campos reales en Firestore son ad_title, ad_description, etc.
+          return {
+            id: index + 1, // ID numérico basado en índice
+            firestoreId: ad.id, // ID de Firestore (string) para referencias
+            title: ad.ad_title || ad.title || '', // ✅ Leer ad_title
+            description: ad.ad_description || ad.description || '', // ✅ Leer ad_description
+            size: ad.ad_size || ad.size || '1080x1080',
+            create_date: dateString,
+            deleted_date: null,
+            account_id: parseInt(ad.userId || ad.accounts_account_id || '0'),
+            ad_template: {
+              id: 1,
+              type: ad.ad_template?.disposition_pattern || ad.template || '',
+              disposition_pattern: ad.ad_template?.disposition_pattern || ad.template || '',
+              color_text: ad.ad_template?.color_text || ad.palette || '#000000',
+            }
+          };
+        });
+        
+        console.log('📊 Publicidades mapeadas:', mappedAds.length);
+        console.log('📊 Primera publicidad:', mappedAds[0]);
+        console.log('📊 Todas las publicidades:', mappedAds);
+        setAdsList(mappedAds);
+        
       } catch (error) {
-        console.log('Error fetching ads:', error);
-        setAdsList([]); // Asegurar que siempre sea un array
+        console.error('❌ Error cargando publicidades:', error);
+        setAdsList([]);
       }
     };
 
@@ -73,14 +125,16 @@ export const GStrategyAdsPage = () => {
   const validationSchema = Yup.object().shape({});
 
   const onSubmit = async () => {
-    if (selectedNumbers.length === 0) {
+    if (selectedFirestoreIds.length === 0) {
       setError({
         show: true,
         message:
           'Selecciona al menos un publicidad para que sea parte de tu estrategia de comunicación.',
       });
     } else {
-      dispatch(setNewStrategyAds(selectedNumbers));
+      // Guardar los firestoreIds en lugar de los IDs numéricos
+      console.log('💾 Guardando IDs de publicidades:', selectedFirestoreIds);
+      dispatch(setNewStrategyAds(selectedFirestoreIds as any));
       navigate(
         `${ROUTES.STRATEGY.ROOT}${ROUTES.STRATEGY.CREATE.ROOT}${ROUTES.STRATEGY.CREATE.GROUPS}`
       );
@@ -90,14 +144,26 @@ export const GStrategyAdsPage = () => {
 
   const handleAdsSelection = (
     e: React.ChangeEvent<HTMLInputElement>,
-    id: number
+    id: number,
+    firestoreId: string
   ) => {
     const isChecked = e.target.checked;
+    
+    // Actualizar IDs numéricos (para UI)
     setSelectedNumbers((prevSelectedNumbers) => {
       if (isChecked) {
         return [...prevSelectedNumbers, id];
       } else {
         return prevSelectedNumbers.filter((number) => number !== id);
+      }
+    });
+    
+    // Actualizar firestoreIds (para guardar en estrategia)
+    setSelectedFirestoreIds((prevIds) => {
+      if (isChecked) {
+        return [...prevIds, firestoreId];
+      } else {
+        return prevIds.filter((fid) => fid !== firestoreId);
       }
     });
   };
@@ -154,7 +220,11 @@ export const GStrategyAdsPage = () => {
                     type="checkbox"
                     id={`strategy-${ad.id}`}
                     checked={selectedNumbers.includes(typeof ad.id === 'string' ? parseInt(ad.id) : ad.id)}
-                    onChange={(e) => handleAdsSelection(e, typeof ad.id === 'string' ? parseInt(ad.id) : ad.id)}
+                    onChange={(e) => handleAdsSelection(
+                      e, 
+                      typeof ad.id === 'string' ? parseInt(ad.id) : ad.id,
+                      ad.firestoreId || String(ad.id)
+                    )}
                   />
                 </div>
               </div>

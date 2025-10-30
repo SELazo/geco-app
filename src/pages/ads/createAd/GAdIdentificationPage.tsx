@@ -178,25 +178,27 @@ export const GAdIdentificationPage = () => {
       
       const adInfo = { ...formNewAd };
       
-      // Crear objeto de publicidad para Firestore (ESTRUCTURA 100% PLANA - IGUAL A TU BD)
+      // Crear objeto de publicidad para Firestore usando interfaz IAd
       const adData: any = {
-        ad_title: data.titleHelper.trim(),
-        ad_description: data.descriptionHelper?.trim() || '',
-        ad_image: finalImage, // Imagen base64 (comprimida si era necesario)
-        ad_size: adInfo.size || '1080x1080',
-        'ad_templates.ad_temp_id': adInfo.template?.id || 0, // ✅ Campo plano con notación de punto
-        ad_account_id: 0,
-        ad_id: 0,
-        ad_create_date: new Date(),
-        ad_deleted_date: null,
-        userId: String(userId), // Agregar userId para consultas
+        title: data.titleHelper.trim(), // ✅ Sin prefijo para IAd
+        description: data.descriptionHelper?.trim() || '', // ✅ Sin prefijo para IAd
+        content: {
+          titleAd: data.titleHelper.trim(),
+          textAd: data.descriptionHelper?.trim() || '',
+          imageUrl: finalImage
+        },
+        template: adInfo.template ? String(adInfo.template.id) : '',
+        palette: adInfo.pallette || '',
+        size: adInfo.size || '1080x1080',
+        userId: String(userId),
+        status: 'active' as const,
       };
       
       console.log('💾 Guardando en Firestore...');
       console.log('💾 Datos:', {
-        ad_title: adData.ad_title,
+        title: adData.title,
         userId: adData.userId,
-        imageLength: adData.ad_image?.length || 0
+        imageLength: adData.content?.imageUrl?.length || 0
       });
       
       // Guardar en Firestore (IGUAL QUE CONTACTOS)

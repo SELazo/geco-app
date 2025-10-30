@@ -34,22 +34,60 @@ export const GStrategiesListPage = () => {
         setLoading(true);
         setError('');
         
+        // Obtener usuario de Redux o localStorage (igual que publicidades)
+        let currentUser = user;
+        
+        if (!currentUser || (!currentUser.id && !currentUser.email)) {
+          console.log('⏳ Usuario no disponible en Redux, cargando desde localStorage...');
+          const storedUser = localStorage.getItem('user');
+          
+          if (!storedUser) {
+            console.error('❌ No hay usuario en localStorage');
+            setError('No hay sesión activa');
+            setLoading(false);
+            return;
+          }
+          
+          currentUser = JSON.parse(storedUser);
+          console.log('✅ Usuario cargado desde localStorage:', currentUser);
+        }
+        
+        const userId = currentUser.id || currentUser.email;
+        if (!userId) {
+          console.error('❌ Usuario inválido');
+          setError('Usuario inválido');
+          setLoading(false);
+          return;
+        }
+        
+        console.log('🔍 Cargando estrategias para usuario:', userId);
+        
         // Obtener estrategias del usuario desde Firestore
-        const userStrategies = await StrategiesFirestoreService.getUserStrategies(user.id.toString());
-        setStrategies(userStrategies);
+        const userStrategies = await StrategiesFirestoreService.getUserStrategies(String(userId));
+        console.log(`✅ ${userStrategies.length} estrategias cargadas`);
+        console.log('📊 Estrategias:', userStrategies);
+        
+        // Eliminar duplicados por ID (por si acaso)
+        const uniqueStrategies = Array.from(
+          new Map(userStrategies.map(s => [s.id, s])).values()
+        );
+        
+        if (uniqueStrategies.length !== userStrategies.length) {
+          console.warn(`⚠️ Se encontraron duplicados: ${userStrategies.length} → ${uniqueStrategies.length}`);
+        }
+        
+        setStrategies(uniqueStrategies);
         
       } catch (error) {
-        console.error('Error cargando estrategias:', error);
+        console.error('❌ Error cargando estrategias:', error);
         setError(error instanceof Error ? error.message : 'Error desconocido');
       } finally {
         setLoading(false);
       }
     };
 
-    if (user.id) {
-      fetchStrategies();
-    }
-  }, [user.id]);
+    fetchStrategies();
+  }, []); // ✅ Sin dependencias - solo se ejecuta una vez
 
   return (
     <>
@@ -104,13 +142,14 @@ export const GStrategiesListPage = () => {
                   <div key={`strategyCard${item.id}`}>
                     <GStrategyCard
                       id={item.id ? parseInt(item.id.slice(-6), 16) : Math.random()} // Convertir string a number
+                      firestoreId={item.id} // ✅ Pasar ID de Firestore para operaciones
                       name={item.title} // Usar title en lugar de name
                       start_date={item.startDate instanceof Date ? item.startDate.toISOString().split('T')[0] : item.startDate as any}
                       end_date={item.endDate instanceof Date ? item.endDate.toISOString().split('T')[0] : item.endDate as any}
                       periodicity={item.periodicity}
                       schedule={item.schedule}
-                      ads={item.ads.map(ad => parseInt(ad) || 0)} // Convertir strings a numbers
-                      groups={item.groups.map(group => parseInt(group) || 0)} // Convertir strings a numbers
+                      ads={item.ads} // ✅ Pasar IDs de Firestore como strings
+                      groups={item.groups} // ✅ Pasar IDs como strings
                     />
                   </div>
                 ))}

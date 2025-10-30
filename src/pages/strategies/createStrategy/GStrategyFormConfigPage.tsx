@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useRef } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import { useDispatch, useSelector } from 'react-redux';
 import {
@@ -54,6 +54,7 @@ export const GStrategyFormConfigPage = () => {
   // Estados para manejo de carga y errores
   const [saving, setSaving] = useState(false);
   const [saveError, setSaveError] = useState<string>('');
+  const isSubmitting = useRef(false); // ✅ Flag para prevenir doble-click
 
   const [enableForm, setEnableForm] = useState(false);
   const [formType, setFormType] = useState<
@@ -103,8 +104,8 @@ export const GStrategyFormConfigPage = () => {
       setSaving(true);
       setSaveError('');
 
-      // Construir objeto de estrategia completo
-      const strategyData: Omit<IStrategy, 'id' | 'createdAt' | 'updatedAt'> = {
+      // Construir objeto base sin campos undefined
+      const baseStrategyData: any = {
         title: formNewStrategy.title || 'Nueva Estrategia',
         description: `Estrategia creada el ${new Date().toLocaleDateString()}`,
         ads: formNewStrategy.ads?.map(String) || [],
@@ -118,11 +119,20 @@ export const GStrategyFormConfigPage = () => {
         periodicity: formNewStrategy.periodicity || 'daily',
         schedule: formNewStrategy.schedule || '09:00',
         enableForm,
-        formType: enableForm ? formType : undefined,
-        formConfig,
         status: 'draft',
         userId: user.id.toString(),
       };
+
+      // SOLO agregar formType y formConfig si enableForm es true
+      if (enableForm && formType) {
+        baseStrategyData.formType = formType;
+        baseStrategyData.formConfig = formConfig || {};
+      }
+
+      // Limpieza final: eliminar cualquier undefined
+      const strategyData = JSON.parse(JSON.stringify(baseStrategyData));
+
+      console.log('💾 Guardando estrategia:', strategyData);
 
       // Guardar en Firestore
       const strategyId = await StrategiesFirestoreService.createStrategy(
@@ -144,6 +154,36 @@ export const GStrategyFormConfigPage = () => {
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
+    
+    // 🔒 SOLUCIÓN DEFINITIVA: Usar sessionStorage como barrera global
+    const lastSubmission = sessionStorage.getItem('last_formconfig_submission');
+    
+    if (lastSubmission) {
+      const timeSinceLastSubmit = Date.now() - parseInt(lastSubmission);
+      if (timeSinceLastSubmit < 3000) { // Menos de 3 segundos
+        console.log('⏳ Bloqueo de seguridad FormConfig: Ya se guardó hace', timeSinceLastSubmit, 'ms');
+        return;
+      }
+    }
+    
+    // Marcar inmediatamente en sessionStorage
+    sessionStorage.setItem('last_formconfig_submission', String(Date.now()));
+    
+    // Prevenir múltiples clicks con useRef
+    if (isSubmitting.current) {
+      console.log('⏳ Ya hay un guardado en proceso, ignorando...');
+      return;
+    }
+    
+    isSubmitting.current = true;
+    
+    // Desactivar el botón INMEDIATAMENTE
+    const submitButton = (e.currentTarget as HTMLFormElement).querySelector('button[type="submit"]') as HTMLButtonElement;
+    if (submitButton) {
+      submitButton.disabled = true;
+      submitButton.style.pointerEvents = 'none';
+      submitButton.style.opacity = '0.6';
+    }
 
     // Actualizar Redux primero
     dispatch(
@@ -203,18 +243,16 @@ export const GStrategyFormConfigPage = () => {
     // Guardar configuración en Redux
     dispatch(setNewStrategyFormConfig(formConfig));
 
-    try {
-      // Guardar estrategia completa en Firestore
-      await saveStrategyToFirestore(formConfig);
-
-      // Navegar a la página de resumen
-      navigate(
-        `${ROUTES.STRATEGY.ROOT}${ROUTES.STRATEGY.CREATE.ROOT}${ROUTES.STRATEGY.CREATE.RESUME}`
-      );
-    } catch (error) {
-      // El error ya se maneja en saveStrategyToFirestore
-      console.error('Error en handleSubmit:', error);
-    }
+    // ✅ NO guardar en Firestore aquí - solo actualizar Redux
+    // La creación final se hace en GStrategyResumePage
+    console.log('✅ Configuración guardada en Redux, navegando a resumen...');
+    
+    // Navegar a la página de resumen
+    navigate(
+      `${ROUTES.STRATEGY.ROOT}${ROUTES.STRATEGY.CREATE.ROOT}${ROUTES.STRATEGY.CREATE.RESUME}`
+    );
+    
+    isSubmitting.current = false; // ✅ Resetear flag
   };
 
   return (
