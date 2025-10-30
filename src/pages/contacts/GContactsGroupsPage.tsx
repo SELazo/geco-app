@@ -111,11 +111,13 @@ export const GContactsGroupPage = () => {
     };
   })();
 
-  const seeMoreGroup = (id: number) => {
+  const seeMoreGroup = (id: number | string) => {
+    const idStr = typeof id === 'number' ? id.toString() : id;
+    console.log('🔗 Navegando a grupo con ID:', idStr);
     navigate(
       `${ROUTES.GROUPS.ROOT}${ROUTES.GROUPS.GROUP_SEE_MORE.replace(
         ':id',
-        id.toString()
+        idStr
       )}`
     );
   };
@@ -184,6 +186,8 @@ export const GContactsGroupPage = () => {
               <div className="geco-contacts-groups-item">
                 {groupsList.map((item) => {
                   const rotatingColor = getRotatingColor(); // Invocar la función y almacenar el resultado en una variable
+                  // Usar firestoreId si está disponible, sino usar id numérico
+                  const groupId = (item as any).firestoreId || item.id;
                   return (
                     <GGroupItem
                       key={item.id}
@@ -191,7 +195,7 @@ export const GContactsGroupPage = () => {
                       color={rotatingColor} // Usar el resultado almacenado como el valor de la prop "color"
                       icon={GChevronRightBlackIcon}
                       iconBackgroundColor={GBlack}
-                      onClickAction={() => seeMoreGroup(item.id)}
+                      onClickAction={() => seeMoreGroup(groupId)}
                     />
                   );
                 })}

@@ -161,9 +161,11 @@ export const GroupsServiceFirestore: IGroupService = {
     }
   },
 
-  getGroup: async (groupId: number): Promise<IGroupResponse> => {
+  getGroup: async (groupId: number | string): Promise<IGroupResponse> => {
     try {
-      // Encontrar el ID real de Firestore basado en el ID numérico
+      console.log('🔍 getGroup llamado con ID:', groupId, 'Tipo:', typeof groupId);
+      
+      // Obtener usuario
       const userStr = localStorage.getItem('user');
       if (!userStr) {
         console.error('❌ Usuario no autenticado');
@@ -177,25 +179,45 @@ export const GroupsServiceFirestore: IGroupService = {
         console.error('❌ ID de usuario inválido');
         throw new Error('ID de usuario inválido');
       }
-      const allGroups = await ContactsFirestoreService.getUserGroups(userIdStr);
       
-      // Buscar el grupo que coincida con el ID numérico
-      let targetFirestoreId: string | null = null;
-      for (const group of allGroups) {
-        const firestoreId = group.id || '0';
-        const numericId = firestoreId === '0' ? 0 : Math.abs(firestoreId.split('').reduce((a, b) => {
+      let targetFirestoreId: string;
+      let numericGroupId: number;
+      
+      // Si el ID es un string, es un ID de Firestore directo
+      if (typeof groupId === 'string') {
+        targetFirestoreId = groupId;
+        // Generar ID numérico a partir del string para mantener compatibilidad
+        numericGroupId = Math.abs(groupId.split('').reduce((a, b) => {
           a = ((a << 5) - a) + b.charCodeAt(0);
           return a & a;
         }, 0));
+        console.log('✅ ID de Firestore directo:', targetFirestoreId);
+      } else {
+        // Si es un número, buscar el ID de Firestore correspondiente
+        const allGroups = await ContactsFirestoreService.getUserGroups(userIdStr);
         
-        if (numericId === groupId) {
-          targetFirestoreId = firestoreId;
-          break;
+        let foundFirestoreId: string | null = null;
+        for (const group of allGroups) {
+          const firestoreId = group.id || '0';
+          const calculatedNumericId = firestoreId === '0' ? 0 : Math.abs(firestoreId.split('').reduce((a, b) => {
+            a = ((a << 5) - a) + b.charCodeAt(0);
+            return a & a;
+          }, 0));
+          
+          if (calculatedNumericId === groupId) {
+            foundFirestoreId = firestoreId;
+            break;
+          }
         }
-      }
-      
-      if (!targetFirestoreId) {
-        throw new Error('Grupo no encontrado');
+        
+        if (!foundFirestoreId) {
+          console.error('❌ Grupo no encontrado con ID numérico:', groupId);
+          throw new Error('Grupo no encontrado');
+        }
+        
+        targetFirestoreId = foundFirestoreId;
+        numericGroupId = groupId;
+        console.log('✅ ID de Firestore encontrado:', targetFirestoreId, 'para ID numérico:', groupId);
       }
       
       // Obtener el grupo de Firestore
@@ -209,27 +231,28 @@ export const GroupsServiceFirestore: IGroupService = {
 
       // Convertir formato de Firestore al formato esperado
       const group: IGroupOld = {
-        id: groupId,
+        id: numericGroupId,
         name: firestoreGroup.name,
         description: firestoreGroup.description || '',
         account_id: parseInt(firestoreGroup.userId)
       };
 
-      // Convertir contactos de Firestore al formato esperado
+      // Convertir contactos de Firestore al formato esperado (usar IDs de Firestore)
       const contactsResponse = contacts.map(contact => ({
-        id: parseInt(contact.id || '0'),
+        id: contact.id || '0', // ✅ Mantener como string (ID de Firestore)
         name: contact.name,
         email: contact.email || '',
-        phone: parseInt(contact.phone || '0'),
+        phone: contact.phone || '',
         account_id: parseInt(contact.userId)
       }));
 
+      console.log('✅ Grupo obtenido:', group.name, 'con', contactsResponse.length, 'contactos');
       return {
         group,
-        contacts: contactsResponse
+        contacts: contactsResponse as any // Cast para evitar error de tipos
       };
     } catch (error) {
-      console.error('Error getting group:', error);
+      console.error('❌ Error getting group:', error);
       throw error;
     }
   },
@@ -298,8 +321,9 @@ export const GroupsServiceFirestore: IGroupService = {
           id: numericId,
           name: group.name || 'Grupo sin nombre',
           description: group.description || '',
-          account_id: parseInt(group.userId || '0')
-        };
+          account_id: parseInt(group.userId || '0'),
+          firestoreId: firestoreId // ✅ Guardar ID de Firestore original para referencia
+        } as any;
       });
       
       console.log(`🏁 Conversión completada: ${convertedGroups.length} grupos listos`);

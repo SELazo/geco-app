@@ -31,18 +31,19 @@ export const GGroupPage = () => {
     navigate(ROUTES.GROUPS.ROOT);
     return null;
   }
-  const numericId = parseInt(id); // Convertir el parámetro 'id' a un número
 
   useEffect(() => {
     const fetchGroup = async () => {
       try {
         setLoading(true);
         setError(null);
-        const response = await getGroup(numericId);
+        console.log('🔍 Cargando grupo con ID:', id);
+        const response = await getGroup(id as any); // ✅ Usar string directamente (as any para TypeScript)
         const groupData = response as IGroupResponse;
+        console.log('✅ Grupo cargado:', groupData);
         setGroup(groupData ?? null);
       } catch (error) {
-        console.error('Error fetching group:', error);
+        console.error('❌ Error fetching group:', error);
         const errorMessage = error instanceof Error ? error.message : 'Error desconocido al cargar el grupo';
         setError(errorMessage);
         // No navegar automáticamente, mostrar el error al usuario
@@ -52,14 +53,19 @@ export const GGroupPage = () => {
     };
 
     fetchGroup();
-  }, [numericId]);
+  }, [id]);
 
-  const editContact = (id: number) => {
-    if (!id || !group) {
-      console.warn('ID de contacto o grupo no válido:', { id, group });
+  const editContact = (contactId: number | string) => {
+    if (!contactId || !group) {
+      console.error('❌ ID de CONTACTO o GRUPO no válido:', { contactId, group });
       return;
     }
-    console.log(group.contacts.find((c) => c.id === id));
+    console.log('✅ Navegando a editar contacto:', contactId, 'desde grupo:', id);
+    const contactIdStr = typeof contactId === 'number' ? contactId.toString() : contactId;
+    // Pasar el groupId (de la URL) en el state para regresar aquí después de editar
+    navigate(`/contacts/edit/${contactIdStr}`, {
+      state: { fromGroupId: id } // ID de Firestore del grupo desde la URL
+    });
   };
 
   return (
