@@ -28,13 +28,10 @@ export const GAdGenerationPage = () => {
   const [error, setError] = useState<string | null>(null);
   const formNewAd = useSelector((state: RootState) => state.formNewAd);
 
-  const location = useLocation();
   const navigate = useNavigate();
 
-  const img = location && location.state;
-
   useEffect(() => {
-    if (!formNewAd || (!formNewAd.template && !formNewAd.pallette)) {
+    if (!formNewAd || !formNewAd.template || !formNewAd.pallette || !formNewAd.img) {
       console.error('formNewAd no está completo:', formNewAd);
       navigate(`${ROUTES.AD.ROOT}`);
       return;
@@ -47,7 +44,7 @@ export const GAdGenerationPage = () => {
           textAd: formNewAd.textAd ?? undefined,
           pallette: formNewAd.pallette,
           template: formNewAd.template,
-          img: img,
+          img: formNewAd.img,
         };
 
         // Primero evaluar contraste con el color elegido
@@ -74,7 +71,7 @@ export const GAdGenerationPage = () => {
       }
     };
     generateAd();
-  }, [formNewAd, img]);
+  }, [formNewAd]);
 
   const handleSubmit = async (event: any) => {
     event.preventDefault();

@@ -49,7 +49,7 @@ export const GAddNewGroupFormStep2Page = () => {
   const location = useLocation();
   const navigate = useNavigate();
   const dispatch = useDispatch();
-  
+
   // Obtener datos del usuario y grupo desde Redux
   const { user, formNewGroup } = useSelector((state: RootState) => ({
     user: state.user,
@@ -70,13 +70,15 @@ export const GAddNewGroupFormStep2Page = () => {
     const fetchContacts = async () => {
       try {
         // Obtener contactos del usuario desde Firestore
-        const contactsData = await ContactsFirestoreService.getUserContacts(user.id.toString());
+        const contactsData = await ContactsFirestoreService.getUserContacts(
+          user.id.toString()
+        );
         setContactsList(contactsData);
       } catch (error) {
         console.error('Error cargando contactos:', error);
         setError({
           show: true,
-          message: 'Error al cargar contactos'
+          message: 'Error al cargar contactos',
         });
       }
     };
@@ -114,7 +116,7 @@ export const GAddNewGroupFormStep2Page = () => {
 
       // Guardar grupo en Firestore
       const groupId = await ContactsFirestoreService.createGroup(groupData);
-      
+
       console.log('✅ Grupo creado con ID:', groupId);
 
       // Agregar contactos al grupo
@@ -126,10 +128,11 @@ export const GAddNewGroupFormStep2Page = () => {
       dispatch(clearNewGroupForm());
       reset();
       navigate(`${ROUTES.GROUPS.ROOT}${ROUTES.GROUPS.ADD_GROUP_SUCCESS}`);
-      
     } catch (error) {
       console.error('❌ Error creando grupo:', error);
-      setSaveError(error instanceof Error ? error.message : 'Error desconocido');
+      setSaveError(
+        error instanceof Error ? error.message : 'Error desconocido'
+      );
     } finally {
       setSaving(false);
     }
@@ -160,13 +163,15 @@ export const GAddNewGroupFormStep2Page = () => {
           <GLogoLetter />
         </Link>
         <Link className="geco-add-group-nav-bar-section" to="/contacts/info">
-          <GCircularButton
-            icon={GContactsIcon}
-            size="1.5em"
-            width="50px"
-            height="50px"
-            colorBackground={GWhite}
-          />
+          <div style={{ marginRight: '1vw' }}>
+            <GCircularButton
+              icon={GContactsIcon}
+              size="1.5em"
+              width="50px"
+              height="50px"
+              colorBackground={GWhite}
+            />
+          </div>
         </Link>
         <GCircularButton
           icon={GIconButtonBack}
@@ -204,8 +209,12 @@ export const GAddNewGroupFormStep2Page = () => {
                     className="geco-checkbox"
                     type="checkbox"
                     id={`contact-${contact.id}`}
-                    checked={contact.id ? selectedNumbers.includes(contact.id) : false}
-                    onChange={(e) => contact.id && handleContactSelection(e, contact.id)}
+                    checked={
+                      contact.id ? selectedNumbers.includes(contact.id) : false
+                    }
+                    onChange={(e) =>
+                      contact.id && handleContactSelection(e, contact.id)
+                    }
                   />
                 </div>
               </div>
@@ -230,7 +239,7 @@ export const GAddNewGroupFormStep2Page = () => {
         {/* Botón de submit con indicador de carga */}
         <div style={{ position: 'relative', marginTop: '16px' }}>
           <GSubmitButton
-            label={saving ? "Creando grupo..." : "Siguiente"}
+            label={saving ? 'Creando grupo...' : 'Siguiente'}
             colorBackground={saving ? '#ccc' : GYellow}
             colorFont={GBlack}
             icon={GChevronRightBlackIcon}

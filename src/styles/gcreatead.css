@@ -105,3 +105,110 @@
 
   cursor: pointer;
 }
+
+/* Content Builder - Responsive Layout */
+.content-builder-container {
+  display: flex;
+  flex-direction: column;
+  gap: 24px;
+  max-width: 100%;
+  padding: 0 16px;
+}
+
+.content-builder-settings {
+  order: 2; /* En mobile aparece después del preview */
+}
+
+.content-builder-preview {
+  order: 1; /* En mobile aparece primero */
+}
+
+/* Secciones de configuración - Sin bordes en mobile */
+.config-section {
+  padding: 16px;
+  background: #fff;
+  border: none;
+  border-radius: 0;
+  box-shadow: none;
+  margin-bottom: 16px;
+}
+
+/* Mobile: ocultar secciones según tab activo */
+.mobile-hidden {
+  display: none;
+}
+
+/* Tabs en mobile, ocultar en desktop */
+.mobile-tabs {
+  display: flex;
+}
+
+/* Desktop only elements */
+.desktop-only {
+  display: none;
+}
+
+/* Desktop sticky */
+.desktop-sticky {
+  position: static;
+}
+
+/* Preview container adaptativo */
+.preview-container {
+  width: 100%;
+  margin: 0 auto;
+}
+
+@media (max-width: 767px) {
+  .preview-container {
+    max-width: 100%;
+  }
+}
+
+@media (min-width: 768px) {
+  .content-builder-container {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 24px;
+    max-width: 900px;
+    margin: 0 auto;
+    padding: 0 24px;
+  }
+
+  .content-builder-settings {
+    order: 1;
+  }
+
+  .content-builder-preview {
+    order: 2;
+  }
+
+  .config-section {
+    border: 2px solid #18191f;
+    border-radius: 12px;
+    box-shadow: 0 2px 0 #18191f;
+    padding: 16px;
+  }
+
+  /* Desktop: mostrar todas las secciones */
+  .mobile-hidden {
+    display: block;
+  }
+
+  /* Desktop: ocultar tabs */
+  .mobile-tabs {
+    display: none;
+  }
+
+  /* Desktop: mostrar elementos */
+  .desktop-only {
+    display: block;
+  }
+
+  /* Desktop: sticky preview */
+  .desktop-sticky {
+    position: sticky;
+    top: 20px;
+    align-self: start;
+  }
+}

@@ -28,15 +28,18 @@ export const ROUTES = {
     CREATE: {
       ROOT: '/create',
       SIZE: '/size',
+      IMAGE: '/image',
+      CONTENT_BUILDER: '/content-builder',
+      AD_GENERATION: '/ad_generation',
+      INFORMATION: '/information',
+      SUCCESS: '/success',
+      // Rutas legacy (mantener por compatibilidad)
       CONTENT: '/content',
-      IMAGE_TYPE: '/image',
+      IMAGE_TYPE: '/image-type',
       IMAGE_AI: '/image/ai',
       IMAGE_OWN: '/image/own',
       PATTERN: '/pattern',
       PALLETTE: '/pallette',
-      AD_GENERATION: '/ad_generation',
-      INFORMATION: '/information',
-      SUCCESS: '/success',
     },
     LIST: {
       ROOT: '/list',

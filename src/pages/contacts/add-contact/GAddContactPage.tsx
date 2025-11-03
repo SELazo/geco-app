@@ -118,14 +118,20 @@ export const GAddContactPage = () => {
       setSaveError('');
 
       // Validar que tenemos un usuario válido (aceptar tanto string como number)
-      if (!user || !user.id || user.id === -1 || user.id === '0' || user.id === 0) {
+      if (
+        !user ||
+        !user.id ||
+        user.id === -1 ||
+        user.id === '0' ||
+        user.id === 0
+      ) {
         console.error('❌ Usuario inválido:', user);
         setSaveError(
           'Usuario no encontrado. Por favor, inicia sesión nuevamente.'
         );
         return;
       }
-      
+
       console.log('✅ Usuario válido para crear contacto:', user);
 
       // Validar que tenemos al menos email o teléfono
@@ -188,13 +194,15 @@ export const GAddContactPage = () => {
           <GLogoLetter />
         </Link>
         <Link className="geco-add-contact-nav-bar-section" to="/contacts/info">
-          <GCircularButton
-            icon={GContactsIcon}
-            size="1.5em"
-            width="50px"
-            height="50px"
-            colorBackground={GWhite}
-          />
+          <div style={{ marginRight: '1vw' }}>
+            <GCircularButton
+              icon={GContactsIcon}
+              size="1.5em"
+              width="50px"
+              height="50px"
+              colorBackground={GWhite}
+            />
+          </div>
         </Link>
         <GCircularButton
           icon={GIconButtonBack}

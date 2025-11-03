@@ -9,7 +9,9 @@ export const AdGenerationService = {
     forceBrandColor: false,
     threshold: 4.5, // WCAG AA por defecto
   },
-  setContrastOptions(opts: Partial<{ forceBrandColor: boolean; threshold: number }>) {
+  setContrastOptions(
+    opts: Partial<{ forceBrandColor: boolean; threshold: number }>
+  ) {
     this._contrastConfig = { ...this._contrastConfig, ...opts };
   },
   getContrastOptions() {
@@ -34,19 +36,9 @@ export const AdGenerationService = {
       width: props.template.width,
       height: props.template.height,
       padding: props.template.padding,
-      display: 'flex',
-      flexDirection: 'column',
       backgroundSize: 'cover',
       backgroundPosition: 'center',
       backgroundRepeat: 'no-repeat',
-      justifyContent: this.getJustifyContent(
-        props.template.titleDisposition,
-        props.template.textDispostion
-      ),
-      alignItems: this.getAlignItems(
-        props.template.titleDisposition,
-        props.template.textDispostion
-      ),
       borderRadius: '12px',
       overflow: 'hidden',
     };
@@ -62,7 +54,8 @@ export const AdGenerationService = {
 
     // Determinar opacidad del overlay según brillo estimado del fondo
     const brightness = await this.estimateBackgroundBrightness(props.img);
-    const overlayAlpha = brightness > 0.6 ? 0.28 : brightness > 0.4 ? 0.22 : 0.16;
+    const overlayAlpha =
+      brightness > 0.6 ? 0.28 : brightness > 0.4 ? 0.22 : 0.16;
 
     // Overlay sutil para mejorar contraste del texto
     const overlay = document.createElement('div');
@@ -87,27 +80,46 @@ export const AdGenerationService = {
     const contrastWithBrand = this.contrastRatio(brandLum, bgLum);
     const meetsContrast = contrastWithBrand >= (threshold ?? 4.5);
     const fallbackColor = bgLum > 0.5 ? '#18191F' : '#FFFFFF'; // negro sobre fondo claro, blanco sobre fondo oscuro
-    const titleFinalColor = forceBrandColor ? brandHex : (meetsContrast ? brandHex : fallbackColor);
-    const bodyFinalColor = forceBrandColor ? brandHex : (meetsContrast ? brandHex : fallbackColor);
+    
+    // Si hay colores personalizados, usarlos; sino aplicar la lógica de contraste
+    const titleFinalColor = props.titleColor 
+      ? props.titleColor 
+      : forceBrandColor
+      ? brandHex
+      : meetsContrast
+      ? brandHex
+      : fallbackColor;
+    const bodyFinalColor = props.textColor
+      ? props.textColor
+      : forceBrandColor
+      ? brandHex
+      : meetsContrast
+      ? brandHex
+      : fallbackColor;
 
     if (props.titleAd) {
       const titleColor = titleFinalColor;
+      const titlePositioning = this.getElementPositioning(
+        props.template.titleDisposition
+      );
       const titleStyle: React.CSSProperties = {
+        position: 'absolute',
+        ...titlePositioning,
         color: titleColor,
         fontFamily: 'Montserrat, Arial, sans-serif',
         fontStyle: 'normal',
         fontWeight: options?.titleWeight ?? 900,
         padding: '16px 20px',
-        margin: '12px 0',
+        margin: 0,
         backgroundColor: 'rgba(0,0,0,0.18)',
         borderRadius: '10px',
         fontSize: props.template.titleSize,
         lineHeight: '1.1',
         letterSpacing: '-0.5px',
+        width: props.template.titleWidth,
         maxWidth: props.template.titleWidth,
-        textAlign: options?.textAlign ?? 'center',
+        textAlign: this.getTextAlign(props.template.titleDisposition),
         overflowWrap: 'break-word',
-        // Halo suave con el color de marca para conservar identidad aunque cambiemos el color final
         textShadow: `0 2px 10px ${this.hexToRgba(brandHex, 0.35)}`,
       };
       const titleH1 = document.createElement('h1');
@@ -120,26 +132,27 @@ export const AdGenerationService = {
 
     if (props.textAd) {
       const bodyColor = bodyFinalColor;
+      const textPositioning = this.getElementPositioning(
+        props.template.textDispostion
+      );
       const textStyle: React.CSSProperties = {
+        position: 'absolute',
+        ...textPositioning,
         color: bodyColor,
         fontFamily: 'Montserrat, Arial, sans-serif',
         fontStyle: 'normal',
         fontWeight: options?.textWeight ?? 600,
         padding: '14px 18px',
-        margin: '0',
+        margin: 0,
         backgroundColor: 'rgba(0,0,0,0.18)',
         borderRadius: '10px',
         fontSize: props.template.textSize,
         lineHeight: '1.25',
+        width: props.template.textWidth,
         maxWidth: props.template.textWidth,
-        textAlign: options?.textAlign ?? 'center',
-        justifyContent: 'center',
+        textAlign: this.getTextAlign(props.template.textDispostion),
         overflowWrap: 'break-word',
         textShadow: `0 2px 8px ${this.hexToRgba(brandHex, 0.3)}`,
-        alignSelf: this.getAlignSelfText(
-          props.template.titleDisposition,
-          props.template.textDispostion
-        ),
       };
       const textP = document.createElement('p');
       textP.textContent = props.textAd;
@@ -177,12 +190,12 @@ export const AdGenerationService = {
 
     document.body.appendChild(hiddenContainer);
     const scale = options?.scale ?? 2;
-    const canvas = await html2canvas(adDiv, { 
-      scale, 
+    const canvas = await html2canvas(adDiv, {
+      scale,
       useCORS: true,
       allowTaint: true,
       logging: false, // Reducir logs
-      backgroundColor: null
+      backgroundColor: null,
     });
     let dataURL = canvas.toDataURL('image/jpg');
 
@@ -200,7 +213,16 @@ export const AdGenerationService = {
 
     return resizedImage.toDataURL();
   },
-  async assessContrast(props: INewAd, threshold?: number): Promise<{ meets: boolean; bgLum: number; brandLum: number; contrast: number; fallback: string; }> {
+  async assessContrast(
+    props: INewAd,
+    threshold?: number
+  ): Promise<{
+    meets: boolean;
+    bgLum: number;
+    brandLum: number;
+    contrast: number;
+    fallback: string;
+  }> {
     const brightness = await this.estimateBackgroundBrightness(props.img);
     const brandHex = this.resolveBrandHex(props.pallette);
     const brandLum = this.relativeLuminanceFromHex(brandHex);
@@ -217,15 +239,27 @@ export const AdGenerationService = {
     }
     return '#FFFFFF';
   },
-  async generationAdjustedPair(props: INewAd): Promise<{ brand: string; adjusted: string }> {
-    const brand = await this.generation(props, { scale: 2, forceBrandColor: true });
-    const adjusted = await this.generation(props, { scale: 2, forceBrandColor: false });
+  async generationAdjustedPair(
+    props: INewAd
+  ): Promise<{ brand: string; adjusted: string }> {
+    const brand = await this.generation(props, {
+      scale: 2,
+      forceBrandColor: true,
+    });
+    const adjusted = await this.generation(props, {
+      scale: 2,
+      forceBrandColor: false,
+    });
     return { brand, adjusted };
   },
   // Utils de color y contraste
   relativeLuminanceFromHex(hex: string): number {
     const { r, g, b } = this.hexToRgb(hex);
-    const srgb = [r, g, b].map((v) => v / 255).map((c) => (c <= 0.03928 ? c / 12.92 : Math.pow((c + 0.055) / 1.055, 2.4)));
+    const srgb = [r, g, b]
+      .map((v) => v / 255)
+      .map((c) =>
+        c <= 0.03928 ? c / 12.92 : Math.pow((c + 0.055) / 1.055, 2.4)
+      );
     // https://www.w3.org/TR/WCAG20/#relativeluminancedef
     return 0.2126 * srgb[0] + 0.7152 * srgb[1] + 0.0722 * srgb[2];
   },
@@ -236,7 +270,13 @@ export const AdGenerationService = {
   },
   hexToRgb(hex: string): { r: number; g: number; b: number } {
     const clean = hex.replace('#', '');
-    const full = clean.length === 3 ? clean.split('').map((c) => c + c).join('') : clean;
+    const full =
+      clean.length === 3
+        ? clean
+            .split('')
+            .map((c) => c + c)
+            .join('')
+        : clean;
     const num = parseInt(full, 16);
     return { r: (num >> 16) & 255, g: (num >> 8) & 255, b: num & 255 };
   },
@@ -256,16 +296,34 @@ export const AdGenerationService = {
       textAlign?: 'left' | 'center';
     }> = [
       // Variante 1: clásica, blanco sobre overlay suave, centrado
-      { titleWeight: 900, textWeight: 600, usePaletteText: false, textAlign: 'center' },
+      {
+        titleWeight: 900,
+        textWeight: 600,
+        usePaletteText: false,
+        textAlign: 'center',
+      },
       // Variante 2: colores de marca (paleta) como color de texto y overlay más fuerte, centrado
-      { titleWeight: 800, textWeight: 500, usePaletteText: true, textAlign: 'center' },
+      {
+        titleWeight: 800,
+        textWeight: 500,
+        usePaletteText: true,
+        textAlign: 'center',
+      },
       // Variante 3: alineación izquierda, más contraste
-      { titleWeight: 900, textWeight: 700, usePaletteText: false, textAlign: 'left' },
+      {
+        titleWeight: 900,
+        textWeight: 700,
+        usePaletteText: false,
+        textAlign: 'left',
+      },
     ];
 
     const results: string[] = [];
     for (const v of variants) {
-      const img = await this.generation({ ...props }, { scale: options?.scale ?? 2, ...v });
+      const img = await this.generation(
+        { ...props },
+        { scale: options?.scale ?? 2, ...v }
+      );
       results.push(img);
     }
     return results;
@@ -281,7 +339,7 @@ export const AdGenerationService = {
   async estimateBackgroundBrightness(img: File | string): Promise<number> {
     try {
       let buffer: ArrayBuffer | null = null;
-      
+
       if (img instanceof File) {
         buffer = await img.arrayBuffer();
       } else if (typeof img === 'string') {
@@ -319,24 +377,24 @@ export const AdGenerationService = {
           }
         }
       }
-      
+
       if (!buffer || buffer.byteLength === 0) {
         console.warn('Buffer vacío, usando brillo por defecto');
         return 0.5;
       }
-      
+
       const image = await Image.load(buffer);
-      
+
       // Downscale for performance
       const small = image.resize({ width: 32 });
       let total = 0;
       const data: Uint8Array = (small as any).data as Uint8Array;
-      
+
       if (!data || data.length === 0) {
         console.warn('Datos de imagen vacíos, usando brillo por defecto');
         return 0.5;
       }
-      
+
       for (let i = 0; i < data.length; i += 4) {
         const r: number = data[i];
         const g: number = data[i + 1];
@@ -353,7 +411,11 @@ export const AdGenerationService = {
       return 0.5;
     }
   },
-  autoResizeText(el: HTMLElement, baseFontSizePx: number, minFontSizePx: number): void {
+  autoResizeText(
+    el: HTMLElement,
+    baseFontSizePx: number,
+    minFontSizePx: number
+  ): void {
     const maxHeight = el.clientHeight || 10000;
     el.style.maxHeight = `${maxHeight}px`;
     el.style.overflow = 'hidden';
@@ -422,5 +484,45 @@ export const AdGenerationService = {
     }
 
     return 'auto';
+  },
+  getElementPositioning(disposition: string): React.CSSProperties {
+    const padding = '30px';
+    const positions: Record<string, React.CSSProperties> = {
+      'top-left': { top: padding, left: padding },
+      'top-center': {
+        top: padding,
+        left: '50%',
+        transform: 'translateX(-50%)',
+      },
+      'top-right': { top: padding, right: padding },
+      'middle-left': {
+        top: '50%',
+        left: padding,
+        transform: 'translateY(-50%)',
+      },
+      'middle-center': {
+        top: '50%',
+        left: '50%',
+        transform: 'translate(-50%, -50%)',
+      },
+      'middle-right': {
+        top: '50%',
+        right: padding,
+        transform: 'translateY(-50%)',
+      },
+      'bottom-left': { bottom: padding, left: padding },
+      'bottom-center': {
+        bottom: padding,
+        left: '50%',
+        transform: 'translateX(-50%)',
+      },
+      'bottom-right': { bottom: padding, right: padding },
+    };
+    return positions[disposition] || positions['middle-center'];
+  },
+  getTextAlign(disposition: string): 'left' | 'center' | 'right' {
+    if (disposition.includes('left')) return 'left';
+    if (disposition.includes('right')) return 'right';
+    return 'center';
   },
 };

@@ -30,6 +30,9 @@ import { GEditUserInfoSuccessPage } from '../pages/user/GEditUserInfoSuccessPage
 import { GEditContactPage } from '../pages/contacts/edit-contact/GEditContactPage';
 import { GAdsPage } from '../pages/ads/GAdsPage';
 import { GAdSizePage } from '../pages/ads/createAd/GAdSizePage';
+import { GAdImagePage } from '../pages/ads/createAd/GAdImagePage';
+import { GAdContentBuilderPage } from '../pages/ads/createAd/GAdContentBuilderPage';
+// Legacy imports (mantener por compatibilidad)
 import { GAdContentPage } from '../pages/ads/createAd/GAdContentPage';
 import { GAdImgTypePage } from '../pages/ads/createAd/GAdImgTypePage';
 import { GAdAIImagePage } from '../pages/ads/createAd/GAdAIImagePage';
@@ -135,14 +138,18 @@ export const GPrivateRoutes = () => {
       </Route>
       <Route path="/pricing" element={<GHomePage />} />
       <Route path="/ad" element={<GAdsPage />} />
+      {/* Nuevo flujo optimizado */}
       <Route path="/ad/create/size" element={<GAdSizePage />} />
+      <Route path="/ad/create/image" element={<GAdImagePage />} />
+      <Route path="/ad/create/content-builder" element={<GAdContentBuilderPage />} />
+      <Route path="/ad/create/ad_generation" element={<GAdGenerationPage />} />
+      {/* Rutas legacy (mantener por compatibilidad) */}
       <Route path="/ad/create/content" element={<GAdContentPage />} />
-      <Route path="/ad/create/image" element={<GAdImgTypePage />} />
+      <Route path="/ad/create/image-type" element={<GAdImgTypePage />} />
       <Route path="/ad/create/image/ai" element={<GAdAIImagePage />} />
       <Route path="/ad/create/image/own" element={<GAdOwnImgPage />} />
       <Route path="/ad/create/pattern" element={<GAdPatternPage />} />
       <Route path="/ad/create/pallette" element={<GAdColoursPage />} />
-      <Route path="/ad/create/ad_generation" element={<GAdGenerationPage />} />
       <Route
         path="/ad/create/information"
         element={<GAdIdentificationPage />}

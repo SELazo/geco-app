@@ -46,7 +46,8 @@ export const GContactsGroupPage = () => {
         setGroupsList(groupsData ?? []);
       } catch (error) {
         console.error('Error fetching groups:', error);
-        const errorMessage = error instanceof Error ? error.message : 'Error al cargar los grupos';
+        const errorMessage =
+          error instanceof Error ? error.message : 'Error al cargar los grupos';
         setError(errorMessage);
       } finally {
         setLoading(false);
@@ -60,8 +61,10 @@ export const GContactsGroupPage = () => {
   useEffect(() => {
     const previousPath = location.state?.from;
     console.log('📍 Navegación detectada desde:', previousPath);
-    
-    if (previousPath === `${ROUTES.GROUPS.ROOT}${ROUTES.GROUPS.ADD_GROUP_SUCCESS}`) {
+
+    if (
+      previousPath === `${ROUTES.GROUPS.ROOT}${ROUTES.GROUPS.ADD_GROUP_SUCCESS}`
+    ) {
       console.log('🔄 Recargando grupos después de creación exitosa...');
       // Forzar recarga de grupos
       const fetchGroups = async () => {
@@ -122,7 +125,6 @@ export const GContactsGroupPage = () => {
     );
   };
 
-
   return (
     <>
       <div className="geco-contacts-groups">
@@ -135,13 +137,15 @@ export const GContactsGroupPage = () => {
               className="geco-contacts-groups-nav-bar-section"
               to="/contacts/info"
             >
-              <GCircularButton
-                icon={GContactsIcon}
-                size="1.5em"
-                width="50px"
-                height="50px"
-                colorBackground={GWhite}
-              />
+              <div style={{ marginRight: '1vw' }}>
+                <GCircularButton
+                  icon={GContactsIcon}
+                  size="1.5em"
+                  width="50px"
+                  height="50px"
+                  colorBackground={GWhite}
+                />
+              </div>
             </Link>
             <GCircularButton
               icon={GIconButtonBack}
@@ -152,9 +156,7 @@ export const GContactsGroupPage = () => {
               onClickAction={NavigationService.goBack}
             />
           </div>
-          <div
-            className="geco-contacts-groups-head-nav-bar-right"
-          >
+          <div className="geco-contacts-groups-head-nav-bar-right">
             <GDropdownMenu menu={menuGroups} />
           </div>
         </div>
@@ -171,9 +173,13 @@ export const GContactsGroupPage = () => {
         {error && (
           <div className="geco-contacts-groups-empty">
             <p style={{ color: 'red' }}>Error: {error}</p>
-            <button 
+            <button
               onClick={() => window.location.reload()}
-              style={{ marginTop: '10px', padding: '8px 16px', cursor: 'pointer' }}
+              style={{
+                marginTop: '10px',
+                padding: '8px 16px',
+                cursor: 'pointer',
+              }}
             >
               Reintentar
             </button>

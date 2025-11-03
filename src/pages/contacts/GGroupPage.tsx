@@ -44,7 +44,10 @@ export const GGroupPage = () => {
         setGroup(groupData ?? null);
       } catch (error) {
         console.error('❌ Error fetching group:', error);
-        const errorMessage = error instanceof Error ? error.message : 'Error desconocido al cargar el grupo';
+        const errorMessage =
+          error instanceof Error
+            ? error.message
+            : 'Error desconocido al cargar el grupo';
         setError(errorMessage);
         // No navegar automáticamente, mostrar el error al usuario
       } finally {
@@ -57,14 +60,23 @@ export const GGroupPage = () => {
 
   const editContact = (contactId: number | string) => {
     if (!contactId || !group) {
-      console.error('❌ ID de CONTACTO o GRUPO no válido:', { contactId, group });
+      console.error('❌ ID de CONTACTO o GRUPO no válido:', {
+        contactId,
+        group,
+      });
       return;
     }
-    console.log('✅ Navegando a editar contacto:', contactId, 'desde grupo:', id);
-    const contactIdStr = typeof contactId === 'number' ? contactId.toString() : contactId;
+    console.log(
+      '✅ Navegando a editar contacto:',
+      contactId,
+      'desde grupo:',
+      id
+    );
+    const contactIdStr =
+      typeof contactId === 'number' ? contactId.toString() : contactId;
     // Pasar el groupId (de la URL) en el state para regresar aquí después de editar
     navigate(`/contacts/edit/${contactIdStr}`, {
-      state: { fromGroupId: id } // ID de Firestore del grupo desde la URL
+      state: { fromGroupId: id }, // ID de Firestore del grupo desde la URL
     });
   };
 
@@ -79,13 +91,15 @@ export const GGroupPage = () => {
             className="geco-contacts-list-nav-bar-section"
             to="/contacts/info"
           >
-            <GCircularButton
-              icon={GContactsIcon}
-              size="1.5em"
-              width="50px"
-              height="50px"
-              colorBackground={GWhite}
-            />
+            <div style={{ marginRight: '1vw' }}>
+              <GCircularButton
+                icon={GContactsIcon}
+                size="1.5em"
+                width="50px"
+                height="50px"
+                colorBackground={GWhite}
+              />
+            </div>
           </Link>
           <GCircularButton
             icon={GIconButtonBack}
@@ -98,7 +112,10 @@ export const GGroupPage = () => {
         </div>
       </div>
       <div className="geco-contacts-list-title">
-        <GHeadCenterTitle title={group?.group.name || 'Cargando...'} color={GBlack} />
+        <GHeadCenterTitle
+          title={group?.group.name || 'Cargando...'}
+          color={GBlack}
+        />
       </div>
 
       {loading && (
@@ -110,9 +127,13 @@ export const GGroupPage = () => {
       {error && (
         <div className="geco-contacts-empty">
           <p style={{ color: 'red' }}>Error: {error}</p>
-          <button 
+          <button
             onClick={() => navigate(ROUTES.GROUPS.ROOT)}
-            style={{ marginTop: '10px', padding: '8px 16px', cursor: 'pointer' }}
+            style={{
+              marginTop: '10px',
+              padding: '8px 16px',
+              cursor: 'pointer',
+            }}
           >
             Volver a grupos
           </button>

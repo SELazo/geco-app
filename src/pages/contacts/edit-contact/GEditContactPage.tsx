@@ -26,7 +26,7 @@ export const GEditContactPage = () => {
   const navigate = useNavigate();
   const location = useLocation();
   const { id } = useParams<{ id: string }>();
-  
+
   // Obtener fromGroupId del state de navegación (si viene de un grupo)
   const fromGroupId = (location.state as any)?.fromGroupId;
 
@@ -281,13 +281,15 @@ export const GEditContactPage = () => {
           <GLogoLetter />
         </Link>
         <Link className="geco-add-contact-nav-bar-section" to="/contacts/info">
-          <GCircularButton
-            icon={GContactsIcon}
-            size="1.5em"
-            width="50px"
-            height="50px"
-            colorBackground={GWhite}
-          />
+          <div style={{ marginRight: '1vw' }}>
+            <GCircularButton
+              icon={GContactsIcon}
+              size="1.5em"
+              width="50px"
+              height="50px"
+              colorBackground={GWhite}
+            />
+          </div>
         </Link>
         <GCircularButton
           icon={GIconButtonBack}

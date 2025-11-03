@@ -27,6 +27,14 @@ export interface INewAdInfo {
   pallette: string;
   titleHelper: string;
   descriptionHelper: string;
+  // Configuración de colores independientes
+  independentColors?: boolean;
+  titleColor?: string;
+  textColor?: string;
+  // Configuración de template personalizado
+  templateMode?: 'quick' | 'custom';
+  customTitleDisp?: string;
+  customTextDisp?: string;
 }
 
 export interface INewGroupForm {
@@ -145,6 +153,36 @@ export const sessionSlice = createSlice({
         pallette: action.payload,
       };
     },
+    setNewAdColorConfig: (
+      state,
+      action: PayloadAction<{
+        independentColors: boolean;
+        titleColor?: string;
+        textColor?: string;
+      }>
+    ) => {
+      state.formNewAd = {
+        ...state.formNewAd,
+        independentColors: action.payload.independentColors,
+        titleColor: action.payload.titleColor,
+        textColor: action.payload.textColor,
+      };
+    },
+    setNewAdTemplateMode: (
+      state,
+      action: PayloadAction<{
+        templateMode: 'quick' | 'custom';
+        customTitleDisp?: string;
+        customTextDisp?: string;
+      }>
+    ) => {
+      state.formNewAd = {
+        ...state.formNewAd,
+        templateMode: action.payload.templateMode,
+        customTitleDisp: action.payload.customTitleDisp,
+        customTextDisp: action.payload.customTextDisp,
+      };
+    },
     clearNewAdForm: (state) => {
       state.formNewAd = {} as INewAdInfo;
     },
@@ -227,6 +265,8 @@ export const {
   setNewAdImg,
   setNewAdPallette,
   setNewAdTemplate,
+  setNewAdColorConfig,
+  setNewAdTemplateMode,
   setNewAdIdentification,
   setNewStrategyTitle,
   setNewStrategyAds,

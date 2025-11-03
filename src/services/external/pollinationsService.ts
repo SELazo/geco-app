@@ -27,9 +27,11 @@ class PollinationsService {
    * ✅ Sin API Key
    * ✅ Sin límites
    */
-  async generateImage(request: IGenerateImageRequest): Promise<IGenerateImageResponse> {
+  async generateImage(
+    request: IGenerateImageRequest
+  ): Promise<IGenerateImageResponse> {
     try {
-      console.log('🎨 Generando imagen con Pollinations.ai (GRATIS)...');
+      console.log('🎨 Generando imagen con Pollinations.ai...');
       console.log('🎨 Prompt:', request.prompt);
 
       // Mejorar el prompt para mejores resultados
@@ -53,25 +55,27 @@ class PollinationsService {
 
       // La imagen se genera automáticamente al acceder a la URL
       // No hay API de respuesta, la URL ES la imagen
-      
+
       // Descargar la imagen y convertir a base64
       console.log('📥 Descargando imagen...');
       const imageBase64 = await this.urlToBase64(imageUrl);
-      
+
       console.log('✅ Imagen generada exitosamente');
       console.log('✅ Tamaño base64:', imageBase64.length, 'caracteres');
 
       return {
         success: true,
         imageUrl: imageUrl,
-        imageBase64: imageBase64
+        imageBase64: imageBase64,
       };
-
     } catch (error) {
       console.error('❌ Error al generar imagen:', error);
       return {
         success: false,
-        error: error instanceof Error ? error.message : 'Error desconocido al generar imagen'
+        error:
+          error instanceof Error
+            ? error.message
+            : 'Error desconocido al generar imagen',
       };
     }
   }
@@ -84,17 +88,17 @@ class PollinationsService {
       // Intentar hasta 3 veces (Pollinations a veces tarda en generar)
       let attempts = 0;
       const maxAttempts = 3;
-      
+
       while (attempts < maxAttempts) {
         try {
           const response = await fetch(url);
-          
+
           if (!response.ok) {
             throw new Error(`HTTP error! status: ${response.status}`);
           }
-          
+
           const blob = await response.blob();
-          
+
           return new Promise((resolve, reject) => {
             const reader = new FileReader();
             reader.onloadend = () => {
@@ -114,12 +118,15 @@ class PollinationsService {
           }
         }
       }
-      
-      throw new Error('No se pudo descargar la imagen después de varios intentos');
-      
+
+      throw new Error(
+        'No se pudo descargar la imagen después de varios intentos'
+      );
     } catch (error) {
       console.error('❌ Error al convertir imagen a base64:', error);
-      throw new Error('No se pudo convertir la imagen. Por favor, intenta de nuevo.');
+      throw new Error(
+        'No se pudo convertir la imagen. Por favor, intenta de nuevo.'
+      );
     }
   }
 
@@ -152,7 +159,7 @@ class PollinationsService {
    * Utilidad para esperar
    */
   private sleep(ms: number): Promise<void> {
-    return new Promise(resolve => setTimeout(resolve, ms));
+    return new Promise((resolve) => setTimeout(resolve, ms));
   }
 }
 

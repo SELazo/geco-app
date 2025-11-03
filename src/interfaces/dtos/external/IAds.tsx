@@ -32,6 +32,8 @@ export interface INewAd {
   img: File | string;
   template: IAdPattern;
   pallette: string;
+  titleColor?: string; // Color específico para el título (hex)
+  textColor?: string;  // Color específico para el texto (hex)
 }
 
 export interface IAd {
