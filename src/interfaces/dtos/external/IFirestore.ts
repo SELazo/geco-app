@@ -6,20 +6,51 @@ export interface IFirestoreDocument {
   updatedAt?: Date;
 }
 
+export interface IChannel {
+  type: 'whatsapp' | 'email' | 'sms';
+  templateId?: string;
+  content: {
+    text?: string;
+    subject?: string; // Para email
+    attachments?: Array<{
+      type: 'image' | 'document' | 'video';
+      url: string;
+      name?: string;
+    }>;
+  };
+  schedule: string;
+  status: 'pending' | 'sending' | 'sent' | 'failed';
+  sentAt?: Date;
+  metadata?: {
+    messageId?: string;
+    error?: string;
+    [key: string]: any;
+  };
+}
+
 export interface IStrategy extends IFirestoreDocument {
   title: string;
   description?: string;
   ads: string[]; // IDs de anuncios
   groups: string[]; // IDs de grupos
+  channels: IChannel[]; // Canales de difusión configurados
   startDate: Date;
   endDate: Date;
-  periodicity: string;
-  schedule: string;
+  periodicity: 'once' | 'daily' | 'weekly' | 'monthly';
+  schedule: string; // Hora del día en formato 'HH:MM'
   enableForm?: boolean;
   formType?: 'Pedido rápido' | 'Contacto simple' | 'Reservas / turnos' | 'Catálogo';
   formConfig?: any;
-  status: 'active' | 'paused' | 'completed' | 'draft';
+  status: 'draft' | 'scheduled' | 'active' | 'paused' | 'completed';
   userId: string;
+  metadata?: {
+    lastRun?: Date;
+    nextRun?: Date;
+    totalRecipients?: number;
+    sentCount?: number;
+    failedCount?: number;
+    [key: string]: any;
+  };
 }
 
 export interface IContact extends IFirestoreDocument {
