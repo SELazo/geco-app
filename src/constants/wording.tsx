@@ -338,11 +338,11 @@ export const SignUpSuccessfull: IFeedback = {
 };
 
 export const PostAdSuccessfull: IFeedback = {
-  title: 'Publicidad creada con éxito!',
+  title: 'Publicidad creada',
   subtitle:
-    'Podrás visualizala en Publicidades o elegirla para una de tus Estrategias de comunicación!',
-  buttonLabel: 'Okey',
-  buttonPath: '/ad',
+    'Podrás visualizarla en Publicidades y utilizarla para una de tus Estrategias de comunicación',
+  buttonLabel: 'Okay',
+  buttonPath: '/ad/list',
 };
 
 export const PostEditAdSuccessfull: IFeedback = {

@@ -20,7 +20,7 @@ import { GLogoLetter } from '../../components/GLogoLetter';
 import { Link, useNavigate } from 'react-router-dom';
 import { GDropdownMenu, IMenuItem } from '../../components/GDropdownMenu';
 import { IContact } from '../../interfaces/dtos/external/IFirestore';
-import { SessionState } from '../../redux/sessionSlice';
+import { RootState } from '../../redux/gecoStore';
 import { ROUTES } from '../../constants/routes';
 
 export const GContactsListPage = () => {
@@ -28,38 +28,43 @@ export const GContactsListPage = () => {
   const [contacts, setContacts] = useState<IContact[]>([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string>('');
-  
+
   // Obtener usuario desde Redux
-  const user = useSelector((state: SessionState) => state.user);
-  const auth = useSelector((state: SessionState) => state.auth);
+  const user = useSelector((state: RootState) => state.user);
+  const auth = useSelector((state: RootState) => state.auth);
 
   useEffect(() => {
     const fetchContacts = async () => {
       try {
         setLoading(true);
         setError('');
-        
-        console.log('👤 Usuario actual:', user);
-        
+
         // Verificar que tenemos un usuario válido
         if (!user || !user.id || user.id === -1) {
           console.log('⚠️ Usuario no válido:', user);
           console.log('🔐 Estado de autenticación:', auth);
-          setError('Usuario no encontrado. Verifica que hayas iniciado sesión.');
+          setError(
+            'Usuario no encontrado. Verifica que hayas iniciado sesión.'
+          );
           return;
         }
-        
+
         console.log('🔥 Obteniendo contactos para usuario:', user.id);
-        
+
         // Obtener contactos del usuario desde Firestore
-        const userContacts = await ContactsFirestoreService.getUserContacts(user.id.toString());
-        
+        const userContacts = await ContactsFirestoreService.getUserContacts(
+          user.id.toString()
+        );
+
         console.log('✅ Contactos obtenidos:', userContacts);
         setContacts(userContacts);
-        
       } catch (error) {
         console.error('❌ Error cargando contactos:', error);
-        setError(error instanceof Error ? error.message : 'Error desconocido al cargar contactos');
+        setError(
+          error instanceof Error
+            ? error.message
+            : 'Error desconocido al cargar contactos'
+        );
       } finally {
         setLoading(false);
       }
@@ -118,13 +123,15 @@ export const GContactsListPage = () => {
               className="geco-contacts-list-nav-bar-section"
               to="/contacts/info"
             >
-              <GCircularButton
-                icon={GContactsIcon}
-                size="1.5em"
-                width="50px"
-                height="50px"
-                colorBackground={GWhite}
-              />
+              <div style={{ marginRight: '1vw' }}>
+                <GCircularButton
+                  icon={GContactsIcon}
+                  size="1.5em"
+                  width="50px"
+                  height="50px"
+                  colorBackground={GWhite}
+                />
+              </div>
             </Link>
             <GCircularButton
               icon={GIconButtonBack}
@@ -147,7 +154,12 @@ export const GContactsListPage = () => {
 
         {/* Mostrar indicador de carga */}
         {loading && (
-          <Box display="flex" justifyContent="center" alignItems="center" minHeight="200px">
+          <Box
+            display="flex"
+            justifyContent="center"
+            alignItems="center"
+            minHeight="200px"
+          >
             <CircularProgress />
           </Box>
         )}
@@ -167,11 +179,13 @@ export const GContactsListPage = () => {
                 {contacts.map((item) => (
                   <GContactItem
                     key={item.id}
-                    contact={{
-                      ...item,
-                      account_id: 1, // Valor por defecto para compatibilidad
-                      cellphone: item.phone || '', // Mapear phone a cellphone
-                    } as any}
+                    contact={
+                      {
+                        ...item,
+                        account_id: 1, // Valor por defecto para compatibilidad
+                        cellphone: item.phone || '', // Mapear phone a cellphone
+                      } as any
+                    }
                     icon={GEditIcon}
                     iconBackgroundColor={GYellow}
                     onClickAction={() => editContact(item.id)}
@@ -184,7 +198,14 @@ export const GContactsListPage = () => {
 
         {/* Mostrar mensaje cuando no hay contactos */}
         {!loading && !error && contacts.length === 0 && (
-          <Box display="flex" flexDirection="column" justifyContent="center" alignItems="center" minHeight="200px" gap={2}>
+          <Box
+            display="flex"
+            flexDirection="column"
+            justifyContent="center"
+            alignItems="center"
+            minHeight="200px"
+            gap={2}
+          >
             <Alert severity="info">
               No tienes contactos aún. ¡Agrega tu primer contacto!
             </Alert>

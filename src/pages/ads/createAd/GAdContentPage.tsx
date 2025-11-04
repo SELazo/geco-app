@@ -46,8 +46,10 @@ export const GAdContentPage = () => {
   const dispatch = useDispatch();
 
   useEffect(() => {
-    if (!formNewAd.template && !formNewAd.pallette) {
+    if (!formNewAd || !formNewAd.template || !formNewAd.pallette) {
+      console.error('formNewAd no está completo:', formNewAd);
       navigate(`${ROUTES.AD.ROOT}`);
+      return;
     }
   }, [formNewAd]);
 

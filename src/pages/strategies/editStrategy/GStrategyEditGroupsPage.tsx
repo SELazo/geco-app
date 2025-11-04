@@ -36,7 +36,7 @@ import { IStrategyProps } from '../../../components/GStrategyCard';
 const { getGroups } = GroupsService;
 
 export const GStrategyEditGroupsPage = () => {
-  const [selectedNumbers, setSelectedNumbers] = useState<number[]>([]);
+  const [selectedNumbers, setSelectedNumbers] = useState<(number | string)[]>([]);
   const [groupsList, setGroupsList] = useState<IGroup[]>([]);
   const [error, setError] = useState({ show: false, message: '' });
   const navigate = useNavigate();

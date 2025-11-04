@@ -40,8 +40,10 @@ export const GAdOwnImgPage = () => {
   const navigate = useNavigate();
 
   useEffect(() => {
-    if (!formNewAd.template && !formNewAd.pallette) {
+    if (!formNewAd || (!formNewAd.template && !formNewAd.pallette)) {
+      console.error('formNewAd no está completo:', formNewAd);
       navigate(`${ROUTES.AD.ROOT}`);
+      return;
     }
   }, []);
 

@@ -12,7 +12,7 @@ import { GLogoLetter } from '../../../components/GLogoLetter';
 import { Link } from 'react-router-dom';
 import { useEffect, useState } from 'react';
 import { IContact } from '../../../interfaces/dtos/external/IFirestore';
-import { SessionState } from '../../../redux/sessionSlice';
+import { RootState } from '../../../redux/gecoStore';
 import { useSelector } from 'react-redux';
 import { Alert, CircularProgress, Box } from '@mui/material';
 
@@ -23,8 +23,8 @@ export const GDeleteContactsListPage = () => {
   const [deleting, setDeleting] = useState<string | null>(null);
   
   // Obtener usuario desde Redux
-  const user = useSelector((state: SessionState) => state.user);
-  const auth = useSelector((state: SessionState) => state.auth);
+  const user = useSelector((state: RootState) => state.user);
+  const auth = useSelector((state: RootState) => state.auth);
 
   useEffect(() => {
     const fetchContacts = async () => {

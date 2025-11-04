@@ -11,62 +11,174 @@ import {
 } from '../../../constants/buttons';
 import { GBlack, GRed, GWhite, GYellow } from '../../../constants/palette';
 import { NavigationService } from '../../../services/internal/navigationService';
-import { AdsService } from '../../../services/external/adsService';
+import { AdsServiceHybrid } from '../../../services/external/adsServiceHybrid';
 import { GHeadCenterTitle } from '../../../components/GHeadCenterTitle';
 import { AdHeadCenterTitle } from '../../../constants/wording';
 import { GAdListItem } from '../../../components/GAdListItem';
 import { GLogoLetter } from '../../../components/GLogoLetter';
 import { Link, useNavigate } from 'react-router-dom';
-import { IGetAdResponse } from '../../../interfaces/dtos/external/IAds';
+import { IAd } from '../../../interfaces/dtos/external/IFirestore';
 import { ROUTES } from '../../../constants/routes';
-import { ApiResponse } from '../../../interfaces/dtos/external/IResponse';
 import { GPopUpMessage } from '../../../components/GPopUpMessage';
-
-const { getAds, deleteAd } = AdsService;
+import { useSelector } from 'react-redux';
+import { RootState } from '../../../redux/gecoStore';
 
 export const GAdsListPage = () => {
-  const [ads, setAds] = useState<IGetAdResponse[]>([]);
+  const [ads, setAds] = useState<IAd[]>([]);
+  const [loading, setLoading] = useState(true);
+  const user = useSelector((state: RootState) => state.user);
+  const isAuthenticated = useSelector((state: RootState) => state.auth.isAuthenticated);
   const [isDeletePopupOpen, setDeletePopupOpen] = useState(false);
   const [isDeleteErrorPopupOpen, setDeleteErrorPopupOpen] = useState(false);
-  const [selectedId, setSelectedId] = useState<number | null>(null);
+  const [selectedId, setSelectedId] = useState<string | null>(null);
 
   const navigate = useNavigate();
+  
   useEffect(() => {
+    console.log('🔄 useEffect ejecutado - Usuario:', user);
+    console.log('🔄 useEffect ejecutado - isAuthenticated:', isAuthenticated);
+    
     const fetchAds = async () => {
+      // Obtener usuario: de Redux o de localStorage
+      let currentUser = user;
+      
+      if (!currentUser || !currentUser.id) {
+        console.log('⏳ Usuario no disponible en Redux, cargando desde localStorage...');
+        
+        // Cargar directamente desde localStorage
+        const storedUser = localStorage.getItem('user');
+        
+        if (!storedUser) {
+          console.error('❌ No hay usuario en localStorage - Redirigiendo a login...');
+          setLoading(false);
+          navigate('/login');
+          return;
+        }
+        
+        // Parsear usuario desde localStorage
+        try {
+          currentUser = JSON.parse(storedUser);
+          console.log('✅ Usuario cargado desde localStorage:', currentUser);
+        } catch (e) {
+          console.error('❌ Error parseando usuario - Redirigiendo a login...');
+          setLoading(false);
+          navigate('/login');
+          return;
+        }
+      }
+      
+      // Verificar que tenemos un usuario válido (con email como mínimo)
+      if (!currentUser || (!currentUser.id && !currentUser.email)) {
+        console.error('❌ Usuario inválido (sin id ni email) - Redirigiendo a login...');
+        console.error('❌ Usuario recibido:', currentUser);
+        setLoading(false);
+        navigate('/login');
+        return;
+      }
+      
+      // Si no tiene id pero tiene email, usar email como identificador
+      const userId = currentUser.id || currentUser.email;
+      console.log('✅ Usando identificador de usuario:', userId);
+      
       try {
-        const response = await getAds();
-        const adsData = response as ApiResponse<IGetAdResponse[]>;
-        setAds(adsData.data ?? []);
+        console.log('✅ Usuario disponible:', userId);
+        console.log('🔍 Cargando publicidades para usuario:', userId);
+        const adsData = await AdsServiceHybrid.getUserAds(String(userId));
+        console.log('📦 Publicidades obtenidas de Firestore:', adsData);
+        
+        if (!adsData || adsData.length === 0) {
+          console.log('ℹ️ No hay publicidades para este usuario');
+          setAds([]);
+          setLoading(false);
+          return;
+        }
+        
+        // Mapear datos de Firestore a la interfaz esperada
+        const mappedAds = adsData.map((ad: any) => {
+          console.log('🗺️ Mapeando publicidad:', ad);
+          
+          // Manejar ad_create_date que puede ser Timestamp o Date
+          let dateString = new Date().toISOString();
+          if (ad.ad_create_date) {
+            if (typeof ad.ad_create_date === 'object' && 'seconds' in ad.ad_create_date) {
+              // Es un Timestamp de Firestore
+              dateString = new Date((ad.ad_create_date as any).seconds * 1000).toISOString();
+            } else if (ad.ad_create_date instanceof Date) {
+              dateString = ad.ad_create_date.toISOString();
+            }
+          }
+          
+          // 🔍 BUSCAR IMAGEN EN MÚLTIPLES UBICACIONES (soporta estructuras antiguas y nuevas)
+          let imageUrl = '';
+          if (ad.ad_image) {
+            // Estructura actual: ad_image
+            imageUrl = ad.ad_image;
+            console.log('✅ Imagen encontrada en ad.ad_image (longitud):', imageUrl.length);
+          } else if (ad.content?.imageUrl) {
+            // Estructura alternativa: content.imageUrl
+            imageUrl = ad.content.imageUrl;
+            console.log('✅ Imagen encontrada en ad.content.imageUrl (longitud):', imageUrl.length);
+          } else if (ad.imageUrl) {
+            // Estructura alternativa: imageUrl directo
+            imageUrl = ad.imageUrl;
+            console.log('✅ Imagen encontrada en ad.imageUrl (longitud):', imageUrl.length);
+          } else {
+            console.warn('⚠️ No se encontró imagen para publicidad:', ad.id);
+          }
+          
+          return {
+            id: ad.id, // Mantener ID de Firestore (string)
+            firestoreId: ad.id, // Guardar ID original
+            firestoreData: ad, // Guardar datos completos de Firestore
+            title: ad.ad_title || ad.title || 'Sin título',
+            description: ad.ad_description || ad.description || '',
+            size: ad.ad_size || ad.size || '1080x1080',
+            create_date: dateString,
+            deleted_date: ad.ad_deleted_date || null,
+            account_id: ad.ad_account_id || 0,
+            ad_template: {
+              id: ad.ad_templates?.ad_temp_id || 0,
+              type: ad.ad_size || '',
+              disposition_pattern: ad.ad_templates?.ad_temp_id || 0,
+              color_text: '#000000',
+            },
+            imageUrl: imageUrl, // ✅ Imagen con fallbacks múltiples
+          };
+        }) as any;
+        
+        console.log('✅ Publicidades mapeadas:', mappedAds);
+        setAds(mappedAds);
+        setLoading(false);
       } catch (error) {
-        console.error(error); // TODO: Mostrar error en pantalla
+        console.error('❌ Error al cargar publicidades:', error);
+        setLoading(false);
       }
     };
 
     fetchAds();
-  }, []);
+  }, []); // Solo ejecutar una vez al montar, ya que cargamos desde localStorage si es necesario
 
-  const viewAd = (id: number) => {
+  const viewAd = (id: string) => {
+    const adData = ads.find((ad) => ad.id === id);
     navigate(`${ROUTES.AD.ROOT}${ROUTES.AD.LIST.VIEW}`, {
-      state: ads.find((ad) => ad.id === id),
+      state: adData,
     });
   };
 
   const handleDeleteAd = async () => {
     if (selectedId !== null) {
-      await deleteAd(selectedId)
-        .then((response) => {
-          if (response.success) {
-            window.location.reload();
-          }
-        })
-        .catch(() => {
-          setDeletePopupOpen(false);
-          setDeleteErrorPopupOpen(true);
-        });
+      try {
+        await AdsServiceHybrid.deleteAd(selectedId);
+        window.location.reload();
+      } catch (error) {
+        console.error('Error al eliminar publicidad:', error);
+        setDeletePopupOpen(false);
+        setDeleteErrorPopupOpen(true);
+      }
     }
   };
 
-  const handleDelete = (id: number) => {
+  const handleDelete = (id: string) => {
     setSelectedId(id);
     setDeletePopupOpen(true);
   };
@@ -101,28 +213,35 @@ export const GAdsListPage = () => {
         <div className="geco-ads-list-title">
           <GHeadCenterTitle title={AdHeadCenterTitle} color={GBlack} />
         </div>
-        {ads.length > 0 && (
+        {loading && (
+          <div className="geco-ads-empty">
+            <p>Cargando publicidades...</p>
+          </div>
+        )}
+        {!loading && ads.length > 0 && (
           <div className="geco-ads-list-container">
             <div className="geco-ads-list-ul">
               <div className="geco-ads-list-item">
                 {ads.map((item) => (
-                  <GAdListItem
-                    key={item.id}
-                    ad={item}
-                    icon={GViewIcon}
-                    iconBackgroundColor={GYellow}
-                    onClickAction={() => viewAd(item.id)}
-                    icon2={GDeletetIcon}
-                    iconBackgroundColor2={GRed}
-                    onClickAction2={() => handleDelete(item.id)}
-                  />
+                  item.id && (
+                    <GAdListItem
+                      key={item.id}
+                      ad={item as any}
+                      icon={GViewIcon}
+                      iconBackgroundColor={GYellow}
+                      onClickAction={() => viewAd(item.id!)}
+                      icon2={GDeletetIcon}
+                      iconBackgroundColor2={GRed}
+                      onClickAction2={() => handleDelete(item.id!)}
+                    />
+                  )
                 ))}
               </div>
             </div>
           </div>
         )}
 
-        {ads.length === 0 && (
+        {!loading && ads.length === 0 && (
           <div className="geco-ads-empty">
             <p>No tiene publicidades aún.</p>
           </div>

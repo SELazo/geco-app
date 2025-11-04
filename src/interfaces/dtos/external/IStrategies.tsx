@@ -9,8 +9,8 @@ export interface IStrategyResponse {
   periodicity: string;
   schedule: string;
   account_id: number;
-  ads: number[];
-  groups: number[];
+  ads: (number | string)[]; // ✅ Compatibilidad con Firestore
+  groups: (number | string)[]; // ✅ Compatibilidad con Firestore
 }
 
 export interface IStrategyService {
@@ -20,8 +20,8 @@ export interface IStrategyService {
     end_date: Date,
     periodicity: string,
     schedule: string,
-    ads: number[],
-    groups: number[],
+    ads: (number | string)[],
+    groups: (number | string)[],
     form_type?: string,
     form_config?: any
   ): Promise<ApiResponse<IBasicSuccessResponse>>;
@@ -34,8 +34,8 @@ export interface IStrategyService {
       end_date: Date;
       periodicity: string;
       schedule: string;
-      ads: number[];
-      groups: number[];
+      ads: (number | string)[];
+      groups: (number | string)[];
       form_type?: string;
       form_config?: any;
     }

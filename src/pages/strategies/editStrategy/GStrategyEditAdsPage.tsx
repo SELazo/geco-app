@@ -35,7 +35,7 @@ const { getAds } = AdsService;
 const { getDateString } = DateService;
 
 export const GStrategyEditAdsPage = () => {
-  const [selectedNumbers, setSelectedNumbers] = useState<number[]>([]);
+  const [selectedNumbers, setSelectedNumbers] = useState<(number | string)[]>([]);
   const [adsList, setAdsList] = useState<IGetAdResponse[]>([]);
   const [error, setError] = useState({ show: false, message: '' });
   const navigate = useNavigate();
@@ -147,8 +147,8 @@ export const GStrategyEditAdsPage = () => {
                     className="geco-checkbox"
                     type="checkbox"
                     id={`strategy-${ad.id}`}
-                    checked={selectedNumbers.includes(ad.id)}
-                    onChange={(e) => handleAdsSelection(e, ad.id)}
+                    checked={selectedNumbers.includes(typeof ad.id === 'string' ? parseInt(ad.id) : ad.id)}
+                    onChange={(e) => handleAdsSelection(e, typeof ad.id === 'string' ? parseInt(ad.id) : ad.id)}
                   />
                 </div>
               </div>

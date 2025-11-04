@@ -34,8 +34,10 @@ export const GAdColoursPage = () => {
   const navigate = useNavigate();
 
   useEffect(() => {
-    if (!formNewAd.template) {
+    if (!formNewAd || !formNewAd.template) {
+      console.error('formNewAd no está inicializado:', formNewAd);
       navigate(`${ROUTES.AD.ROOT}`);
+      return;
     }
     const fetchColours = async () => {
       try {

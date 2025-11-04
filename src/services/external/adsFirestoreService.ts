@@ -8,7 +8,10 @@ export class AdsFirestoreService {
    * Crear un nuevo anuncio
    */
   static async createAd(ad: Omit<IAd, 'id' | 'createdAt' | 'updatedAt'>): Promise<string> {
-    return FirestoreService.create(this.COLLECTION_NAME, ad);
+    console.log('💾 AdsFirestoreService.createAd - Datos a guardar:', ad);
+    const id = await FirestoreService.create(this.COLLECTION_NAME, ad);
+    console.log('✅ AdsFirestoreService.createAd - ID generado:', id);
+    return id;
   }
 
   /**

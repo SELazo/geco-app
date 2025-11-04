@@ -2,7 +2,7 @@ import { createSlice, PayloadAction } from '@reduxjs/toolkit';
 import { IAdPattern } from '../interfaces/dtos/external/IAds';
 
 export interface User {
-  id: number;
+  id: number | string; // Soportar IDs de Firestore (strings) y números
   name: string;
   email: string;
 }
@@ -27,6 +27,14 @@ export interface INewAdInfo {
   pallette: string;
   titleHelper: string;
   descriptionHelper: string;
+  // Configuración de colores independientes
+  independentColors?: boolean;
+  titleColor?: string;
+  textColor?: string;
+  // Configuración de template personalizado
+  templateMode?: 'quick' | 'custom';
+  customTitleDisp?: string;
+  customTextDisp?: string;
 }
 
 export interface INewGroupForm {
@@ -91,6 +99,10 @@ export const sessionSlice = createSlice({
       state.auth.isAuthenticated = false;
       state.auth.token = null;
     },
+    extendSession: (state) => {
+      // Esta acción solo se usa para triggear el middleware que actualizará localStorage
+      // No necesita modificar el estado
+    },
     setNewFormGroupInfo: (state, action: PayloadAction<INewGoupInfo>) => {
       state.formNewGroup.groupInfo = action.payload;
     },
@@ -139,6 +151,36 @@ export const sessionSlice = createSlice({
       state.formNewAd = {
         ...state.formNewAd,
         pallette: action.payload,
+      };
+    },
+    setNewAdColorConfig: (
+      state,
+      action: PayloadAction<{
+        independentColors: boolean;
+        titleColor?: string;
+        textColor?: string;
+      }>
+    ) => {
+      state.formNewAd = {
+        ...state.formNewAd,
+        independentColors: action.payload.independentColors,
+        titleColor: action.payload.titleColor,
+        textColor: action.payload.textColor,
+      };
+    },
+    setNewAdTemplateMode: (
+      state,
+      action: PayloadAction<{
+        templateMode: 'quick' | 'custom';
+        customTitleDisp?: string;
+        customTextDisp?: string;
+      }>
+    ) => {
+      state.formNewAd = {
+        ...state.formNewAd,
+        templateMode: action.payload.templateMode,
+        customTitleDisp: action.payload.customTitleDisp,
+        customTextDisp: action.payload.customTextDisp,
       };
     },
     clearNewAdForm: (state) => {
@@ -213,6 +255,7 @@ export const {
   resetTerms,
   loginSuccess,
   logout,
+  extendSession,
   setNewFormGroupInfo,
   setNewGroupContacts,
   clearNewGroupForm,
@@ -222,6 +265,8 @@ export const {
   setNewAdImg,
   setNewAdPallette,
   setNewAdTemplate,
+  setNewAdColorConfig,
+  setNewAdTemplateMode,
   setNewAdIdentification,
   setNewStrategyTitle,
   setNewStrategyAds,

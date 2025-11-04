@@ -65,7 +65,7 @@ export const GEditUserInfoPage = () => {
 
   const onSubmit = async (data: SignUpFormData) => {
     const userData: IUser = {
-      id: user.id,
+      id: typeof user.id === 'string' ? parseInt(user.id) : user.id,
       name: data.name,
       email: data.email,
       password: data.password

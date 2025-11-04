@@ -23,17 +23,17 @@ import { IContactResponse } from '../../../interfaces/dtos/external/IContacts';
 import { ContactsService } from '../../../services/external/contactsService';
 import { ContactsFirestoreService } from '../../../services/external/contactsFirestoreService';
 import { IContact } from '../../../interfaces/dtos/external/IFirestore';
-import { SessionState } from '../../../redux/sessionSlice';
+import { RootState } from '../../../redux/gecoStore';
 
 const { newContact } = ContactsService;
 
 export const GListContactsToImportPage = () => {
   const location = useLocation();
   const navigate = useNavigate();
-  
+
   // Obtener usuario desde Redux
-  const user = useSelector((state: SessionState) => state.user);
-  
+  const user = useSelector((state: RootState) => state.user);
+
   // Estados para manejo de la importación
   const [contacts, setContacts] = useState<IContactResponse[]>(
     () => location.state.contacts
@@ -41,17 +41,19 @@ export const GListContactsToImportPage = () => {
   const [importing, setImporting] = useState(false);
   const [importError, setImportError] = useState<string>('');
   const [checkingDuplicates, setCheckingDuplicates] = useState(false);
-  const [duplicateInfo, setDuplicateInfo] = useState<Map<number, { isDuplicate: boolean; existingContact?: IContact }>>(new Map());
+  const [duplicateInfo, setDuplicateInfo] = useState<
+    Map<number, { isDuplicate: boolean; existingContact?: IContact }>
+  >(new Map());
 
   const deleteContact = async (id: number) => {
     const newContacts = contacts.filter((c) => c.id !== id);
-    
+
     // Actualizar la lista de contactos
     setContacts(newContacts);
-    
+
     // Limpiar completamente la información de duplicados
     setDuplicateInfo(new Map());
-    
+
     // Re-verificar inmediatamente con la nueva lista de contactos
     if (newContacts.length > 0 && user && user.id) {
       // Pasar explícitamente la nueva lista para evitar problemas de closure
@@ -68,7 +70,7 @@ export const GListContactsToImportPage = () => {
 
     // Usar la lista proporcionada o la del estado actual
     const currentContacts = contactsToCheck || contacts;
-    
+
     if (currentContacts.length === 0) {
       setDuplicateInfo(new Map());
       return;
@@ -81,48 +83,66 @@ export const GListContactsToImportPage = () => {
       setDuplicateInfo(new Map());
 
       // Obtener todos los contactos existentes del usuario
-      const existingContacts = await ContactsFirestoreService.getUserContacts(user.id.toString());
-      
+      const existingContacts = await ContactsFirestoreService.getUserContacts(
+        user.id.toString()
+      );
+
       // VERIFICACIÓN CRÍTICA: Si no hay contactos en base, NO DEBE HABER DUPLICADOS
       if (existingContacts.length === 0) {
-        const duplicateMap = new Map<number, { isDuplicate: boolean; existingContact?: IContact }>();
+        const duplicateMap = new Map<
+          number,
+          { isDuplicate: boolean; existingContact?: IContact }
+        >();
         currentContacts.forEach((contact) => {
           duplicateMap.set(contact.id, {
             isDuplicate: false,
-            existingContact: undefined
+            existingContact: undefined,
           });
         });
-        
+
         setDuplicateInfo(duplicateMap);
         return;
       }
 
-      const duplicateMap = new Map<number, { isDuplicate: boolean; existingContact?: IContact }>();
+      const duplicateMap = new Map<
+        number,
+        { isDuplicate: boolean; existingContact?: IContact }
+      >();
 
       currentContacts.forEach((contact) => {
         // Verificar duplicados por email
-        const isDuplicateByEmail = contact.email && existingContacts.find(existing => 
-          existing.email && existing.email.toLowerCase() === contact.email.toLowerCase()
-        );
-        
+        const isDuplicateByEmail =
+          contact.email &&
+          existingContacts.find(
+            (existing) =>
+              existing.email &&
+              existing.email.toLowerCase() === contact.email.toLowerCase()
+          );
+
         // Verificar duplicados por teléfono
-        const isDuplicateByPhone = contact.phone && existingContacts.find(existing => 
-          existing.phone && existing.phone.replace(/\D/g, '') === contact.phone.toString().replace(/\D/g, '')
-        );
+        const isDuplicateByPhone =
+          contact.phone &&
+          existingContacts.find(
+            (existing) =>
+              existing.phone &&
+              existing.phone.replace(/\D/g, '') ===
+                contact.phone.toString().replace(/\D/g, '')
+          );
 
         const existingContact = isDuplicateByEmail || isDuplicateByPhone;
         const isDuplicate = !!existingContact;
 
         duplicateMap.set(contact.id, {
           isDuplicate,
-          existingContact: existingContact || undefined
+          existingContact: existingContact || undefined,
         });
       });
 
       setDuplicateInfo(duplicateMap);
-      
-      const duplicatesCount = Array.from(duplicateMap.values()).filter(info => info.isDuplicate).length;
 
+      const duplicatesCount = Array.from(duplicateMap.values()).filter(
+        (info) => info.isDuplicate
+      ).length;
     } catch (error) {
       console.error('❌ Error verificando duplicados:', error);
       // En caso de error, limpiar la información de duplicados
@@ -149,7 +169,9 @@ export const GListContactsToImportPage = () => {
 
       // Validar que tenemos un usuario válido
       if (!user || !user.id || user.id === -1) {
-        setImportError('Usuario no encontrado. Por favor, inicia sesión nuevamente.');
+        setImportError(
+          'Usuario no encontrado. Por favor, inicia sesión nuevamente.'
+        );
         console.error('❌ Usuario no disponible:', user);
         return;
       }
@@ -161,67 +183,87 @@ export const GListContactsToImportPage = () => {
 
       // Importar TODOS los contactos, incluyendo duplicados
       const contactsToImport = contacts;
-      
-      console.log(`📥 Importando ${contactsToImport.length} contacto${contactsToImport.length !== 1 ? 's' : ''} (incluyendo posibles duplicados)`);
+
+      console.log(
+        `📥 Importando ${contactsToImport.length} contacto${
+          contactsToImport.length !== 1 ? 's' : ''
+        } (incluyendo posibles duplicados)`
+      );
 
       // Crear contactos en Firestore (todos los contactos)
       const importPromises = contactsToImport.map(async (contact) => {
         try {
           // Convertir formato de IContactResponse a IContact para Firestore
-          const contactData: Omit<IContact, 'id' | 'createdAt' | 'updatedAt'> = {
-            name: contact.name.trim(),
-            email: contact.email?.trim() || undefined,
-            phone: contact.phone?.toString().trim() || undefined,
-            groups: [], // Sin grupos inicialmente
-            tags: ['importado-excel'], // Tag para identificar contactos importados
-            userId: user.id.toString(),
-            status: 'active',
-          };
+          const contactData: Omit<IContact, 'id' | 'createdAt' | 'updatedAt'> =
+            {
+              name: contact.name.trim(),
+              email: contact.email?.trim() || undefined,
+              phone: contact.phone?.toString().trim() || undefined,
+              groups: [], // Sin grupos inicialmente
+              tags: ['importado-excel'], // Tag para identificar contactos importados
+              userId: user.id.toString(),
+              status: 'active',
+            };
 
           console.log('💾 Creando contacto:', contactData.name);
-          const contactId = await ContactsFirestoreService.createContact(contactData);
+          const contactId = await ContactsFirestoreService.createContact(
+            contactData
+          );
           console.log('✅ Contacto creado con ID:', contactId);
-          
+
           return { success: true, name: contactData.name, id: contactId };
         } catch (error) {
           console.error('❌ Error creando contacto:', contact.name, error);
-          return { success: false, name: contact.name, error: error instanceof Error ? error.message : 'Error desconocido' };
+          return {
+            success: false,
+            name: contact.name,
+            error: error instanceof Error ? error.message : 'Error desconocido',
+          };
         }
       });
 
       // Esperar a que se procesen todos los contactos
       const results = await Promise.all(importPromises);
-      
+
       // Contar éxitos y errores
-      const successful = results.filter(r => r.success).length;
-      const failed = results.filter(r => !r.success).length;
-      
-      console.log(`📊 Importación completada: ${successful} éxitos, ${failed} errores`);
-      
+      const successful = results.filter((r) => r.success).length;
+      const failed = results.filter((r) => !r.success).length;
+
+      console.log(
+        `📊 Importación completada: ${successful} éxitos, ${failed} errores`
+      );
+
       if (failed > 0) {
-        const failedContacts = results.filter(r => !r.success);
+        const failedContacts = results.filter((r) => !r.success);
         console.warn('⚠️ Contactos que fallaron:', failedContacts);
-        setImportError(`Se importaron ${successful} contactos correctamente, pero ${failed} contactos fallaron.`);
+        setImportError(
+          `Se importaron ${successful} contactos correctamente, pero ${failed} contactos fallaron.`
+        );
       }
-      
+
       if (successful > 0) {
         // Navegar a página de éxito si al menos algunos contactos se importaron
         navigate('/contacts/success-add-contacts-excel', {
-          state: { 
-            imported: successful, 
+          state: {
+            imported: successful,
             failed: failed,
             total: contacts.length,
             skippedDuplicates: 0, // Ya no omitimos duplicados
-            originalTotal: contacts.length
-          }
+            originalTotal: contacts.length,
+          },
         });
       } else {
-        setImportError('No se pudo importar ningún contacto. Verifica los datos e intenta nuevamente.');
+        setImportError(
+          'No se pudo importar ningún contacto. Verifica los datos e intenta nuevamente.'
+        );
       }
-      
     } catch (error) {
       console.error('❌ Error general en importación:', error);
-      setImportError(error instanceof Error ? error.message : 'Error desconocido durante la importación');
+      setImportError(
+        error instanceof Error
+          ? error.message
+          : 'Error desconocido durante la importación'
+      );
     } finally {
       setImporting(false);
     }
@@ -239,13 +281,15 @@ export const GListContactsToImportPage = () => {
               className="geco-contacts-list-nav-bar-section"
               to="/contacts/info"
             >
-              <GCircularButton
-                icon={GContactsIcon}
-                size="1.5em"
-                width="50px"
-                height="50px"
-                colorBackground={GWhite}
-              />
+              <div style={{ marginRight: '1vw' }}>
+                <GCircularButton
+                  icon={GContactsIcon}
+                  size="1.5em"
+                  width="50px"
+                  height="50px"
+                  colorBackground={GWhite}
+                />
+              </div>
             </Link>
             <GCircularButton
               icon={GIconButtonBack}
@@ -280,14 +324,14 @@ export const GListContactsToImportPage = () => {
               })}
             </div>
           </div>
-          
+
           {/* Mostrar error si existe */}
           {importError && (
             <Alert severity="error" sx={{ m: 2 }}>
               Error en la importación: {importError}
             </Alert>
           )}
-          
+
           {/* Mostrar estado de verificación de duplicados */}
           {checkingDuplicates && (
             <Box sx={{ m: 2 }}>
@@ -301,24 +345,29 @@ export const GListContactsToImportPage = () => {
           {!checkingDuplicates && duplicateInfo.size > 0 && (
             <Box sx={{ m: 2 }}>
               {(() => {
-                const duplicatesCount = Array.from(duplicateInfo.values()).filter(info => info.isDuplicate).length;
+                const duplicatesCount = Array.from(
+                  duplicateInfo.values()
+                ).filter((info) => info.isDuplicate).length;
                 const newContactsCount = contacts.length - duplicatesCount;
-                
+
                 if (duplicatesCount > 0) {
                   return (
                     <Alert severity="info">
                       <strong>Resumen de verificación:</strong>
+                      <br />• {newContactsCount} contacto
+                      {newContactsCount !== 1 ? 's' : ''} nuevo
+                      {newContactsCount !== 1 ? 's' : ''}
+                      <br />• {duplicatesCount} contacto
+                      {duplicatesCount !== 1 ? 's' : ''} posiblemente duplicado
+                      {duplicatesCount !== 1 ? 's' : ''}
                       <br />
-                      • {newContactsCount} contacto{newContactsCount !== 1 ? 's' : ''} nuevo{newContactsCount !== 1 ? 's' : ''}
                       <br />
-                      • {duplicatesCount} contacto{duplicatesCount !== 1 ? 's' : ''} posiblemente duplicado{duplicatesCount !== 1 ? 's' : ''}
-                      <br />
-                      <br />
-                      <strong>Nota:</strong> Todos los contactos se importarán, incluyendo los posibles duplicados.
+                      <strong>Nota:</strong> Todos los contactos se importarán,
+                      incluyendo los posibles duplicados.
                       <br />
                       <button
                         onClick={() => {
-                          const nonDuplicates = contacts.filter(contact => {
+                          const nonDuplicates = contacts.filter((contact) => {
                             const duplicateData = duplicateInfo.get(contact.id);
                             return !duplicateData?.isDuplicate;
                           });
@@ -331,7 +380,7 @@ export const GListContactsToImportPage = () => {
                           border: 'none',
                           borderRadius: '4px',
                           cursor: 'pointer',
-                          fontSize: '0.8rem'
+                          fontSize: '0.8rem',
                         }}
                       >
                         🗑️ Eliminar duplicados de la lista (opcional)
@@ -341,8 +390,10 @@ export const GListContactsToImportPage = () => {
                 } else {
                   return (
                     <Alert severity="success">
-                      ✅ {contacts.length} contacto{contacts.length !== 1 ? 's' : ''} listo{contacts.length !== 1 ? 's' : ''} para importar.
-                      No se encontraron duplicados.
+                      ✅ {contacts.length} contacto
+                      {contacts.length !== 1 ? 's' : ''} listo
+                      {contacts.length !== 1 ? 's' : ''} para importar. No se
+                      encontraron duplicados.
                     </Alert>
                   );
                 }
@@ -351,26 +402,48 @@ export const GListContactsToImportPage = () => {
           )}
 
           {/* Mostrar información de contactos si no se han verificado duplicados */}
-          {!checkingDuplicates && duplicateInfo.size === 0 && contacts.length > 0 && (
-            <Box sx={{ m: 2 }}>
-              <Alert severity="info">
-                {contacts.length} contacto{contacts.length !== 1 ? 's' : ''} listo{contacts.length !== 1 ? 's' : ''} para importar.
-                Puedes eliminar contactos individuales antes de importar.
-              </Alert>
-            </Box>
-          )}
-          
-          <form onSubmit={(e) => { e.preventDefault(); addContacts(); }} style={{ position: 'relative', margin: '16px' }}>
+          {!checkingDuplicates &&
+            duplicateInfo.size === 0 &&
+            contacts.length > 0 && (
+              <Box sx={{ m: 2 }}>
+                <Alert severity="info">
+                  {contacts.length} contacto{contacts.length !== 1 ? 's' : ''}{' '}
+                  listo{contacts.length !== 1 ? 's' : ''} para importar. Puedes
+                  eliminar contactos individuales antes de importar.
+                </Alert>
+              </Box>
+            )}
+
+          <form
+            onSubmit={(e) => {
+              e.preventDefault();
+              addContacts();
+            }}
+            style={{ position: 'relative', margin: '16px' }}
+          >
             <GSubmitButton
-              label={importing ? "Importando..." : `Importar ${contacts.length} Contacto${contacts.length !== 1 ? 's' : ''}`}
+              label={
+                importing
+                  ? 'Importando...'
+                  : `Importar ${contacts.length} Contacto${
+                      contacts.length !== 1 ? 's' : ''
+                    }`
+              }
               colorBackground={importing ? '#ccc' : GYellow}
               colorFont={GBlack}
               disabled={importing || contacts.length === 0}
             />
             {importing && (
-              <Box display="flex" justifyContent="center" alignItems="center" mt={2}>
+              <Box
+                display="flex"
+                justifyContent="center"
+                alignItems="center"
+                mt={2}
+              >
                 <CircularProgress size={24} />
-                <span style={{ marginLeft: '8px' }}>Guardando contactos en la base de datos...</span>
+                <span style={{ marginLeft: '8px' }}>
+                  Guardando contactos en la base de datos...
+                </span>
               </Box>
             )}
           </form>

@@ -9,7 +9,7 @@ export interface ILoginResponse {
 export interface IValidateSessionResponse {
     success: boolean;
     user: {
-        id: number;
+        id: number | string; // Soportar IDs de Firestore (strings) y números
         name: string;
         email: string;
     };

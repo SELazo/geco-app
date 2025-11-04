@@ -5,7 +5,7 @@ import bcrypt from 'bcryptjs';
 export class AuthFirestoreService {
   private static readonly USERS_COLLECTION = 'users';
   private static readonly SESSIONS_COLLECTION = 'session'; // Nombre correcto: session (singular)
-  private static readonly SESSION_TIMEOUT = 5 * 60 * 1000; // 5 minutos en millisegundos
+  private static readonly SESSION_TIMEOUT = 60 * 60 * 1000; // 1 hora en millisegundos
 
 
   /**
@@ -223,7 +223,7 @@ export class AuthFirestoreService {
       const userResponse = { ...user };
       delete (userResponse as any).password;
 
-      console.log('✅ Sesión válida para usuario:', user.email);
+      // console.log('✅ Sesión válida para usuario:', user.email); // Reducir logs
       return {
         user: userResponse as IUser,
         sessionId: session.id!

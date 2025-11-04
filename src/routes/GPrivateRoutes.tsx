@@ -30,8 +30,12 @@ import { GEditUserInfoSuccessPage } from '../pages/user/GEditUserInfoSuccessPage
 import { GEditContactPage } from '../pages/contacts/edit-contact/GEditContactPage';
 import { GAdsPage } from '../pages/ads/GAdsPage';
 import { GAdSizePage } from '../pages/ads/createAd/GAdSizePage';
+import { GAdImagePage } from '../pages/ads/createAd/GAdImagePage';
+import { GAdContentBuilderPage } from '../pages/ads/createAd/GAdContentBuilderPage';
+// Legacy imports (mantener por compatibilidad)
 import { GAdContentPage } from '../pages/ads/createAd/GAdContentPage';
 import { GAdImgTypePage } from '../pages/ads/createAd/GAdImgTypePage';
+import { GAdAIImagePage } from '../pages/ads/createAd/GAdAIImagePage';
 import { GAdOwnImgPage } from '../pages/ads/createAd/GAdOwnImgPage';
 import { GAdPatternPage } from '../pages/ads/createAd/GAdPatternPage';
 import { GAdColoursPage } from '../pages/ads/createAd/GAdColoursPage';
@@ -64,6 +68,10 @@ import { GAdEditSuccessPage } from '../pages/ads/editAds/GAdEditSuccessPage';
 import { GAdEditIdentificationPage } from '../pages/ads/editAds/GAdEditIdentificationPage';
 import { GResponsesListPage } from '../pages/responses/GResponsesListPage';
 import { GResponsesViewPage } from '../pages/responses/GResponsesViewPage';
+import { GEditGroupSelectPage } from '../pages/contacts/edit-group/GEditGroupSelectPage';
+import { GEditGroupFormStep1Page } from '../pages/contacts/edit-group/GEditGroupFormStep1Page';
+import { GEditGroupFormStep2Page } from '../pages/contacts/edit-group/GEditGroupFormStep2Page';
+import { GEditGroupFormStep3Page } from '../pages/contacts/edit-group/GEditGroupFormStep3Page';
 
 export const GPrivateRoutes = () => {
   return (
@@ -109,6 +117,10 @@ export const GPrivateRoutes = () => {
           path="groups/sucess-add-group"
           element={<GNewGroupSuccessPage />}
         />
+        <Route path="groups/edit-group" element={<GEditGroupSelectPage />} />
+        <Route path="groups/edit-group/:id" element={<GEditGroupFormStep1Page />} />
+        <Route path="groups/edit-group/:id/members" element={<GEditGroupFormStep2Page />} />
+        <Route path="groups/edit-group/:id/add-members" element={<GEditGroupFormStep3Page />} />
         <Route path="groups/:id" element={<GGroupPage />} />
         <Route path="list" element={<GContactsListPage />} />
         <Route path="edit/:id" element={<GEditContactPage />} />
@@ -126,13 +138,18 @@ export const GPrivateRoutes = () => {
       </Route>
       <Route path="/pricing" element={<GHomePage />} />
       <Route path="/ad" element={<GAdsPage />} />
+      {/* Nuevo flujo optimizado */}
       <Route path="/ad/create/size" element={<GAdSizePage />} />
+      <Route path="/ad/create/image" element={<GAdImagePage />} />
+      <Route path="/ad/create/content-builder" element={<GAdContentBuilderPage />} />
+      <Route path="/ad/create/ad_generation" element={<GAdGenerationPage />} />
+      {/* Rutas legacy (mantener por compatibilidad) */}
       <Route path="/ad/create/content" element={<GAdContentPage />} />
-      <Route path="/ad/create/image" element={<GAdImgTypePage />} />
+      <Route path="/ad/create/image-type" element={<GAdImgTypePage />} />
+      <Route path="/ad/create/image/ai" element={<GAdAIImagePage />} />
       <Route path="/ad/create/image/own" element={<GAdOwnImgPage />} />
       <Route path="/ad/create/pattern" element={<GAdPatternPage />} />
       <Route path="/ad/create/pallette" element={<GAdColoursPage />} />
-      <Route path="/ad/create/ad_generation" element={<GAdGenerationPage />} />
       <Route
         path="/ad/create/information"
         element={<GAdIdentificationPage />}

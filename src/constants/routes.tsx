@@ -15,6 +15,10 @@ export const ROUTES = {
     ADD_GROUP_MEMBERS: '/add-group/members',
     ADD_GROUP_SUCCESS: '/sucess-add-group',
     GROUP_SEE_MORE: '/:id',
+    EDIT_GROUP_SELECT: '/edit-group',
+    EDIT_GROUP_STEP1: '/edit-group/:id',
+    EDIT_GROUP_STEP2: '/edit-group/:id/members',
+    EDIT_GROUP_STEP3: '/edit-group/:id/add-members',
   },
   USER: {
     EDIT_SUCCESS: '/user/edit-success',
@@ -24,15 +28,18 @@ export const ROUTES = {
     CREATE: {
       ROOT: '/create',
       SIZE: '/size',
+      IMAGE: '/image',
+      CONTENT_BUILDER: '/content-builder',
+      AD_GENERATION: '/ad_generation',
+      INFORMATION: '/information',
+      SUCCESS: '/success',
+      // Rutas legacy (mantener por compatibilidad)
       CONTENT: '/content',
-      IMAGE_TYPE: '/image',
+      IMAGE_TYPE: '/image-type',
       IMAGE_AI: '/image/ai',
       IMAGE_OWN: '/image/own',
       PATTERN: '/pattern',
       PALLETTE: '/pallette',
-      AD_GENERATION: '/ad_generation',
-      INFORMATION: '/information',
-      SUCCESS: '/success',
     },
     LIST: {
       ROOT: '/list',

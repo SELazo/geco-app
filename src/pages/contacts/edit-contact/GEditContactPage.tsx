@@ -5,7 +5,7 @@ import { useState, useEffect } from 'react';
 import { useSelector } from 'react-redux';
 import { Alert, Box } from '@mui/material';
 import { PacmanLoader } from 'react-spinners';
-import { useParams, useNavigate, Link } from 'react-router-dom';
+import { useParams, useNavigate, Link, useLocation } from 'react-router-dom';
 
 import '../../../styles/ginputBox.css';
 import '../../../styles/gform.css';
@@ -20,15 +20,19 @@ import { NavigationService } from '../../../services/internal/navigationService'
 import { ContactsFirestoreService } from '../../../services/external/contactsFirestoreService';
 import { GLogoLetter } from '../../../components/GLogoLetter';
 import { IContact } from '../../../interfaces/dtos/external/IFirestore';
-import { SessionState } from '../../../redux/sessionSlice';
+import { RootState } from '../../../redux/gecoStore';
 
 export const GEditContactPage = () => {
   const navigate = useNavigate();
+  const location = useLocation();
   const { id } = useParams<{ id: string }>();
 
+  // Obtener fromGroupId del state de navegación (si viene de un grupo)
+  const fromGroupId = (location.state as any)?.fromGroupId;
+
   // Obtener usuario desde Redux
-  const user = useSelector((state: SessionState) => state.user);
-  const auth = useSelector((state: SessionState) => state.auth);
+  const user = useSelector((state: RootState) => state.user);
+  const auth = useSelector((state: RootState) => state.auth);
   // Estados para manejo de carga y errores
   const [loading, setLoading] = useState(true);
   const [saving, setSaving] = useState(false);
@@ -206,8 +210,13 @@ export const GEditContactPage = () => {
         updatedContactData
       );
 
-      // Navegar de vuelta a la lista de contactos
-      navigate('/contacts/list');
+      // Navegar de vuelta al grupo si venimos de ahí, sino a la lista general
+      if (fromGroupId) {
+        console.log('✅ Regresando al grupo:', fromGroupId);
+        navigate(`/contacts/groups/${fromGroupId}`);
+      } else {
+        navigate('/contacts/list');
+      }
     } catch (error) {
       setSaveError(
         error instanceof Error ? error.message : 'Error desconocido'
@@ -230,8 +239,13 @@ export const GEditContactPage = () => {
 
       await ContactsFirestoreService.deleteContact(contact.id!);
 
-      // Navegar de vuelta a la lista de contactos
-      navigate('/contacts/list');
+      // Navegar de vuelta al grupo si venimos de ahí, sino a la lista general
+      if (fromGroupId) {
+        console.log('✅ Regresando al grupo después de eliminar:', fromGroupId);
+        navigate(`/contacts/groups/${fromGroupId}`);
+      } else {
+        navigate('/contacts/list');
+      }
     } catch (error) {
       setSaveError(
         error instanceof Error ? error.message : 'Error eliminando contacto'
@@ -267,13 +281,15 @@ export const GEditContactPage = () => {
           <GLogoLetter />
         </Link>
         <Link className="geco-add-contact-nav-bar-section" to="/contacts/info">
-          <GCircularButton
-            icon={GContactsIcon}
-            size="1.5em"
-            width="50px"
-            height="50px"
-            colorBackground={GWhite}
-          />
+          <div style={{ marginRight: '1vw' }}>
+            <GCircularButton
+              icon={GContactsIcon}
+              size="1.5em"
+              width="50px"
+              height="50px"
+              colorBackground={GWhite}
+            />
+          </div>
         </Link>
         <GCircularButton
           icon={GIconButtonBack}

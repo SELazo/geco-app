@@ -45,7 +45,7 @@ export const GAdSizePage = () => {
   const handleSizeChange = (event: string) => {
     dispatch(setNewAdSize(event));
     navigate(
-      `${ROUTES.AD.ROOT}${ROUTES.AD.CREATE.ROOT}${ROUTES.AD.CREATE.PATTERN}`,
+      `${ROUTES.AD.ROOT}${ROUTES.AD.CREATE.ROOT}${ROUTES.AD.CREATE.IMAGE}`,
       { state: event }
     );
   };

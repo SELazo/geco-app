@@ -22,12 +22,13 @@ import { ROUTES } from '../../../constants/routes';
 import { GSubmitButton } from '../../../components/GSubmitButton';
 import { GDropdownHelp } from '../../../components/GDropdownHelp';
 import { useDispatch, useSelector } from 'react-redux';
-import { AdsService } from '../../../services/external/adsService';
+import { AdsFirestoreService } from '../../../services/external/adsFirestoreService';
+import { IAd } from '../../../interfaces/dtos/external/IFirestore';
 import { RootState } from '../../../redux/gecoStore';
-import { IAd } from '../../../interfaces/dtos/external/IAds';
 import { useEffect, useState } from 'react';
 import { PacmanLoader } from 'react-spinners';
 import { clearNewAdForm } from '../../../redux/sessionSlice';
+import { compressBase64Image, getBase64SizeKB } from '../../../utils/imageCompression';
 
 type AdData = {
   titleHelper: string;
@@ -36,7 +37,11 @@ type AdData = {
 
 export const GAdIdentificationPage = () => {
   const [loading, setLoading] = useState(false);
+  const [error, setError] = useState<string | null>(null);
+  const [isReady, setIsReady] = useState(false);
   const formNewAd = useSelector((state: RootState) => state.formNewAd);
+  const user = useSelector((state: RootState) => state.user);
+  const isAuthenticated = useSelector((state: RootState) => state.auth.isAuthenticated);
   const validationSchema = Yup.object().shape({
     titleHelper: Yup.string()
       .required(
@@ -56,42 +61,170 @@ export const GAdIdentificationPage = () => {
   const base64Ad = location && location.state;
 
   useEffect(() => {
-    if (!formNewAd.template || !formNewAd.pallette || !base64Ad) {
-      navigate(`${ROUTES.AD.ROOT}`);
+    console.log('🔍 Verificando datos al cargar componente...');
+    console.log('👤 Usuario:', user);
+    console.log('🔒 isAuthenticated:', isAuthenticated);
+    console.log('📋 formNewAd:', formNewAd);
+    console.log('🖼️ base64Ad disponible:', !!base64Ad);
+    
+    // Obtener usuario: de Redux o de localStorage
+    let currentUser = user;
+    
+    if (!currentUser || !currentUser.id) {
+      console.log('⏳ Usuario no disponible en Redux, cargando desde localStorage...');
+      
+      // Cargar directamente desde localStorage
+      const storedUser = localStorage.getItem('user');
+      
+      if (!storedUser) {
+        console.error('❌ No hay usuario en localStorage - Redirigiendo a login...');
+        setIsReady(false);
+        navigate('/login');
+        return;
+      }
+      
+      // Parsear usuario desde localStorage
+      try {
+        currentUser = JSON.parse(storedUser);
+        console.log('✅ Usuario cargado desde localStorage:', currentUser);
+      } catch (e) {
+        console.error('❌ Error parseando usuario - Redirigiendo a login...');
+        setIsReady(false);
+        navigate('/login');
+        return;
+      }
     }
-  }, []);
+    
+    // Verificar que tenemos un usuario válido (con email como mínimo)
+    if (!currentUser || (!currentUser.id && !currentUser.email)) {
+      console.error('❌ Usuario inválido (sin id ni email) - Redirigiendo a login...');
+      console.error('❌ Usuario recibido:', currentUser);
+      setIsReady(false);
+      navigate('/login');
+      return;
+    }
+    
+    // Usuario disponible, verificar formNewAd
+    if (!formNewAd || !formNewAd.template || !formNewAd.pallette || !base64Ad) {
+      console.error('❌ formNewAd no está completo:', formNewAd);
+      navigate(`${ROUTES.AD.ROOT}`);
+      return;
+    }
+    
+    console.log('✅ Todos los datos disponibles para crear publicidad');
+    setIsReady(true);
+    setError(null);
+  }, []); // Solo ejecutar una vez al montar
 
   const onSubmit = async (data: AdData) => {
-    const adInfo = { ...formNewAd };
-    const newAd: IAd = {
-      title: data.titleHelper,
-      description: data.descriptionHelper ? data.descriptionHelper : '',
-      size: adInfo.size,
-      ad_template: {
-        color_text: adInfo.pallette,
-        type: adInfo.size,
-        disposition_pattern: adInfo.template.id,
-      },
-    };
-    setLoading(true);
-    const response = await AdsService.postGenerateAd(newAd);
-    if (!response) {
-      navigate(`${ROUTES.AD.ROOT}${ROUTES.AD.CREATE.ROOT}${ROUTES.AD.ERROR}`);
+    // Obtener usuario de Redux o localStorage
+    let currentUser = user;
+    
+    if (!currentUser || !currentUser.id) {
+      console.log('⏳ Usuario no disponible en Redux, cargando desde localStorage...');
+      const storedUser = localStorage.getItem('user');
+      
+      if (!storedUser) {
+        setError('Usuario no disponible. Por favor, inicia sesión nuevamente.');
+        return;
+      }
+      
+      try {
+        currentUser = JSON.parse(storedUser);
+        console.log('✅ Usuario cargado desde localStorage para crear:', currentUser);
+      } catch (e) {
+        setError('Error al cargar usuario. Por favor, inicia sesión nuevamente.');
+        return;
+      }
     }
-    const sendImgResponse = await AdsService.sendBase64InChunks(
-      base64Ad.replace(/^data:image\/(png|jpeg|jpg);base64,/, ''),
-      response.data?.id!
-    );
+    
+    // Verificar que tenemos un usuario válido (id o email)
+    if (!currentUser || (!currentUser.id && !currentUser.email)) {
+      setError('Usuario inválido. Por favor, inicia sesión nuevamente.');
+      return;
+    }
+    
+    // Usar id o email como identificador
+    const userId = currentUser.id || currentUser.email;
+    console.log('✅ Usando identificador de usuario:', userId);
 
-    if (!sendImgResponse) {
-      navigate(`${ROUTES.AD.ROOT}${ROUTES.AD.CREATE.ROOT}${ROUTES.AD.ERROR}`);
+    setLoading(true);
+    setError(null);
+    
+    try {
+      console.log('📝 Iniciando creación de publicidad...');
+      console.log('👤 Usuario ID:', userId);
+      
+      if (!base64Ad) {
+        throw new Error('No hay imagen base64 disponible');
+      }
+      
+      console.log('🖼️ Imagen base64 (longitud):', base64Ad.length);
+      
+      // Comprimir imagen si es necesaria
+      const originalSizeKB = getBase64SizeKB(base64Ad);
+      console.log('📏 Tamaño original de imagen:', originalSizeKB, 'KB');
+      
+      let finalImage = base64Ad;
+      if (originalSizeKB > 700) {
+        console.log('🗜️ Imagen supera 700KB, comprimiendo...');
+        finalImage = await compressBase64Image(base64Ad, 700, 0.8);
+        const compressedSizeKB = getBase64SizeKB(finalImage);
+        console.log('✅ Imagen comprimida:', compressedSizeKB, 'KB');
+        console.log('✅ Reducción:', Math.round(((originalSizeKB - compressedSizeKB) / originalSizeKB) * 100), '%');
+      } else {
+        console.log('✅ Imagen dentro del límite, no requiere compresión');
+      }
+      
+      const adInfo = { ...formNewAd };
+      
+      // Crear objeto de publicidad para Firestore usando interfaz IAd
+      const adData: any = {
+        title: data.titleHelper.trim(), // ✅ Sin prefijo para IAd
+        description: data.descriptionHelper?.trim() || '', // ✅ Sin prefijo para IAd
+        content: {
+          titleAd: data.titleHelper.trim(),
+          textAd: data.descriptionHelper?.trim() || '',
+          imageUrl: finalImage
+        },
+        template: adInfo.template ? String(adInfo.template.id) : '',
+        palette: adInfo.pallette || '',
+        size: adInfo.size || '1080x1080',
+        userId: String(userId),
+        status: 'active' as const,
+      };
+      
+      console.log('💾 Guardando en Firestore...');
+      console.log('💾 Datos:', {
+        title: adData.title,
+        userId: adData.userId,
+        imageLength: adData.content?.imageUrl?.length || 0
+      });
+      
+      // Guardar en Firestore (IGUAL QUE CONTACTOS)
+      const adId = await AdsFirestoreService.createAd(adData);
+      
+      console.log('✅ Publicidad creada con ID:', adId);
+      
+      // Limpiar formulario y navegar (IGUAL QUE CONTACTOS)
+      reset();
+      dispatch(clearNewAdForm());
+      
+      console.log('🚀 Navegando a pantalla de éxito...');
+      navigate('/ad/create/success');
+      
+      console.log('✅ Proceso completado');
+    } catch (error: any) {
+      console.error('❌ Error al crear publicidad:', error);
+      console.error('❌ Detalles:', {
+        name: error?.name,
+        message: error?.message,
+        stack: error?.stack
+      });
+      setError(`Error al crear la publicidad: ${error?.message || 'Error desconocido'}`);
+    } finally {
+      setLoading(false);
     }
-    setLoading(false);
-    navigate(
-      `${ROUTES.AD.ROOT}${ROUTES.AD.CREATE.ROOT}${ROUTES.AD.CREATE.SUCCESS}`
-    );
-    reset();
-    dispatch(clearNewAdForm());
   };
 
   const {
@@ -146,7 +279,7 @@ export const GAdIdentificationPage = () => {
         />
       </div>
       <form className="geco-form" onSubmit={handleSubmit(onSubmit)}>
-        {loading ? (
+        {(loading || !isReady) ? (
           <div
             style={{
               textAlign: 'start',
@@ -154,6 +287,11 @@ export const GAdIdentificationPage = () => {
             }}
           >
             <PacmanLoader color={GYellow} />
+            {!isReady && !loading && (
+              <p style={{ marginTop: '20px', textAlign: 'center' }}>
+                Cargando datos del usuario...
+              </p>
+            )}
           </div>
         ) : (
           <>
@@ -180,6 +318,12 @@ export const GAdIdentificationPage = () => {
                 {errors.descriptionHelper?.message}
               </span>
             </div>
+
+            {error && (
+              <div className="span-error" style={{ marginBottom: '15px', textAlign: 'center' }}>
+                {error}
+              </div>
+            )}
 
             <GSubmitButton
               label="Crear publicidad"

@@ -29,6 +29,10 @@ import * as Yup from 'yup';
 import { AdsService } from '../../services/external/adsService';
 import { GLogoWord } from '../../components/GLogoWord';
 import { GBlack } from '../../constants/palette';
+import { StrategiesFirestoreService } from '../../services/external/strategiesFirestoreService';
+import { AdsFirestoreService } from '../../services/external/adsFirestoreService';
+import { FirestoreService } from '../../services/external/firestoreService';
+import { IStrategy, IAd } from '../../interfaces/dtos/external/IFirestore';
 
 // Expected shape for location.state
 // {
@@ -112,13 +116,114 @@ export const GPublicStrategyPage: React.FC = () => {
     let alive = true;
     const fetchStrategy = async () => {
       try {
-        const id = params.id ? parseInt(params.id, 10) : NaN;
-        if (!isNaN(id)) {
-          const data = mockPublicStrategy(id);
-          if (alive) setServerStrategy(data);
+        setLoading(true);
+        const id = params.id;
+        
+        if (!id) {
+          console.warn('⚠️ No hay ID de estrategia');
+          if (alive) setLoading(false);
+          return;
+        }
+
+        console.log('🔍 Cargando estrategia pública:', id);
+
+        // 1. Cargar estrategia desde Firestore
+        const strategy = await StrategiesFirestoreService.getStrategy(id) as IStrategy | null;
+        
+        if (!strategy) {
+          console.error('❌ Estrategia no encontrada:', id);
+          // Fallback a mock si no existe
+          const numId = parseInt(id, 10);
+          if (!isNaN(numId) && alive) {
+            setServerStrategy(mockPublicStrategy(numId));
+          }
+          if (alive) setLoading(false);
+          return;
+        }
+
+        console.log('✅ Estrategia cargada:', strategy.title);
+
+        // 2. Obtener relaciones de ads_by_strategy
+        console.log('🔗 Buscando publicidades asociadas en ads_by_strategy...');
+        
+        const relations = await FirestoreService.readAll('ads_by_strategy', {
+          where: [
+            { field: 'strategies_strategy_id', operator: '==', value: parseInt(id, 10) },
+            { field: 'deleted_date', operator: '==', value: null }
+          ]
+        });
+        
+        console.log(`📋 ${relations.length} relaciones encontradas`);
+        
+        if (relations.length === 0) {
+          console.warn('⚠️ No hay publicidades asociadas');
+          if (alive) {
+            setServerStrategy({
+              id: id,
+              name: strategy.title,
+              ads: [],
+              form_type: strategy.formType || 'Contacto simple',
+              form_config: strategy.formConfig || {}
+            });
+          }
+          if (alive) setLoading(false);
+          return;
+        }
+
+        // 3. Obtener IDs de publicidades desde las relaciones
+        const adIds = relations.map(rel => String(rel.ads_ad_id));
+        console.log('📋 IDs de publicidades:', adIds);
+
+        // 4. Cargar publicidades
+        const adsPromises = adIds.map(adId => 
+          AdsFirestoreService.getAd(adId)
+        );
+        const adsResults = await Promise.all(adsPromises);
+        
+        // Filtrar nulls y mapear a formato esperado
+        const loadedAds = adsResults
+          .filter((ad): ad is IAd => ad !== null)
+          .map((ad, index) => ({
+            id: index + 1, // Usar índice como ID numérico
+            title: ad.title,
+            description: ad.description,
+            image: ad.content?.imageUrl || '',
+            size: ad.size,
+            ad_template: {
+              color_text: ad.palette || '#000000',
+              type: 'promotional' as const,
+              disposition_pattern: 'center' as const
+            }
+          }));
+
+        console.log(`✅ ${loadedAds.length} publicidades cargadas`);
+
+        // 3. Guardar en estado
+        if (alive) {
+          setServerStrategy({
+            id: id,
+            name: strategy.title,
+            ads: loadedAds,
+            form_type: strategy.formType || 'Contacto simple',
+            form_config: strategy.formConfig || {}
+          });
+          
+          // Cargar imágenes en el estado de images
+          const imagesMap: Record<number, string> = {};
+          loadedAds.forEach((ad) => {
+            if (ad.image) {
+              imagesMap[ad.id] = ad.image;
+            }
+          });
+          setImages(imagesMap);
         }
       } catch (e) {
-        // ignore; fallback to state
+        console.error('❌ Error cargando estrategia:', e);
+        // Fallback to mock for development
+        const numId = params.id ? parseInt(params.id, 10) : 1;
+        if (!isNaN(numId) && alive) {
+          setServerStrategy(mockPublicStrategy(numId));
+        }
       } finally {
         if (alive) setLoading(false);
       }
@@ -510,15 +615,38 @@ export const GPublicStrategyPage: React.FC = () => {
             >
               <form
                 className={isSubmitted ? 'was-submitted' : ''}
-                onSubmit={handleSubmit((data) => {
+                onSubmit={handleSubmit(async (data) => {
                   try {
+                    // Guardar código de país en localStorage
                     localStorage.setItem('public_form_cc', data.country_code);
-                  } catch {}
-                  setSnackMsg(
-                    `Enviado (mock): ${data.country_code} ${data.phone}`
-                  );
-                  setSnackOpen(true);
-                  reset({ country_code: data.country_code });
+                    
+                    console.log('📝 Guardando respuesta en Firestore...');
+                    console.log('📝 Datos del formulario:', data);
+                    
+                    // Preparar datos para guardar en tabla forms
+                    const formData = {
+                      form_id: parseInt(params.id || '0', 10), // ID de la estrategia
+                      name: data.name || '',
+                      phone: `${data.country_code} ${data.phone}`,
+                      description: data.message || data.comments || '',
+                      add_date_form: new Date()
+                    };
+                    
+                    console.log('💾 Guardando en forms:', formData);
+                    
+                    // Guardar en Firestore en la colección 'forms'
+                    await FirestoreService.create('forms', formData);
+                    
+                    console.log('✅ Respuesta guardada exitosamente');
+                    
+                    setSnackMsg('¡Gracias! Tu mensaje ha sido enviado.');
+                    setSnackOpen(true);
+                    reset({ country_code: data.country_code });
+                  } catch (error) {
+                    console.error('❌ Error guardando respuesta:', error);
+                    setSnackMsg('Error al enviar el formulario. Intenta nuevamente.');
+                    setSnackOpen(true);
+                  }
                 })}
               >
                 {renderStaticForm(formType, formConfig, storedCC, {

@@ -37,7 +37,7 @@ export const GAddNewGroupFormStep1Page = () => {
   const navigate = useNavigate();
   const dispatch = useDispatch();
   let hasGroupInfo: INewGroupForm = useSelector(
-    (state: any) => state.auth.formNewGroup
+    (state: any) => state.formNewGroup
   );
 
   useEffect(() => {
@@ -76,13 +76,15 @@ export const GAddNewGroupFormStep1Page = () => {
           <GLogoLetter />
         </Link>
         <Link className="geco-add-group-nav-bar-section" to="/contacts/info">
-          <GCircularButton
-            icon={GContactsIcon}
-            size="1.5em"
-            width="50px"
-            height="50px"
-            colorBackground={GWhite}
-          />
+          <div style={{ marginRight: '1vw' }}>
+            <GCircularButton
+              icon={GContactsIcon}
+              size="1.5em"
+              width="50px"
+              height="50px"
+              colorBackground={GWhite}
+            />
+          </div>
         </Link>
         <GCircularButton
           icon={GIconButtonBack}

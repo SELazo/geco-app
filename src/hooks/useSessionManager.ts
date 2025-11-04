@@ -1,6 +1,6 @@
 import { useEffect, useCallback, useRef } from 'react';
 import { useDispatch } from 'react-redux';
-import { logout } from '../redux/sessionSlice';
+import { logout, extendSession } from '../redux/sessionSlice';
 import AuthFirestoreService from '../services/external/authFirestoreService';
 
 interface UseSessionManagerProps {
@@ -14,8 +14,8 @@ export const useSessionManager = ({ token, isAuthenticated, onLogout }: UseSessi
   const timeoutRef = useRef<NodeJS.Timeout | null>(null);
   const lastActivityRef = useRef<number>(Date.now());
   
-  // Tiempo de inactividad: 5 minutos
-  const INACTIVITY_TIMEOUT = 5 * 60 * 1000;
+  // Tiempo de inactividad: 1 hora
+  const INACTIVITY_TIMEOUT = 60 * 60 * 1000;
 
   /**
    * Cerrar sesión por inactividad
@@ -47,11 +47,14 @@ export const useSessionManager = ({ token, isAuthenticated, onLogout }: UseSessi
     // Actualizar última actividad
     lastActivityRef.current = Date.now();
 
+    // Extender la sesión en localStorage
+    dispatch(extendSession());
+
     // Configurar nuevo timer
     timeoutRef.current = setTimeout(() => {
       handleInactivityLogout();
     }, INACTIVITY_TIMEOUT);
-  }, [isAuthenticated, handleInactivityLogout, INACTIVITY_TIMEOUT]);
+  }, [isAuthenticated, handleInactivityLogout, INACTIVITY_TIMEOUT, dispatch]);
 
   /**
    * Manejar eventos de actividad del usuario

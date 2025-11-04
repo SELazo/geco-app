@@ -34,11 +34,13 @@ import { ROUTES } from '../../../constants/routes';
 import { DateService } from '../../../services/internal/dateService';
 import { GroupsService } from '../../../services/external/groupsService';
 import { IGroup } from '../../../interfaces/dtos/external/IGroups';
+import { GroupsServiceFirestore } from '../../../services/external/groupsServiceFirestore';
 
 const { getGroups } = GroupsService;
 
 export const GStrategyGroupsPage = () => {
   const [selectedNumbers, setSelectedNumbers] = useState<number[]>([]);
+  const [selectedFirestoreIds, setSelectedFirestoreIds] = useState<string[]>([]);
   const [groupsList, setGroupsList] = useState<IGroup[]>([]);
   const [error, setError] = useState({ show: false, message: '' });
   const navigate = useNavigate();
@@ -51,10 +53,43 @@ export const GStrategyGroupsPage = () => {
   useEffect(() => {
     const fetchGroups = async () => {
       try {
-        const groupsData = await getGroups();
-        setGroupsList(groupsData ?? []);
+        console.log('🔍 Cargando grupos desde Firestore...');
+        
+        // Obtener usuario
+        const storedUser = localStorage.getItem('user');
+        if (!storedUser) {
+          console.error('❌ No hay usuario');
+          setGroupsList([]);
+          return;
+        }
+        
+        const user = JSON.parse(storedUser);
+        const userId = user.id || user.email;
+        
+        console.log('👤 Buscando grupos para userId:', userId);
+        
+        // Cargar grupos desde Firestore (usa getGroups que ya filtra por usuario)
+        const firestoreGroups = await GroupsServiceFirestore.getGroups();
+        console.log(`✅ ${firestoreGroups.length} grupos cargados desde Firestore`);
+        console.log('📦 Datos de Firestore:', firestoreGroups);
+        
+        // Mapear a formato esperado (con ID numérico para UI)
+        const mappedGroups = firestoreGroups.map((group: any, index: number) => ({
+          id: index + 1,
+          firestoreId: group.id,
+          name: group.name || 'Sin nombre',
+          description: group.description || '',
+          contacts: group.contactIds || group.contacts || [],
+          created: group.createdAt || group.created || new Date(),
+          account_id: parseInt(group.userId || '0')
+        }));
+        
+        console.log('📊 Grupos mapeados:', mappedGroups);
+        setGroupsList(mappedGroups);
+        
       } catch (error) {
-        console.log(error); // TODO: Mostrar error en pantalla
+        console.error('❌ Error cargando grupos:', error);
+        setGroupsList([]);
       }
     };
 
@@ -64,14 +99,16 @@ export const GStrategyGroupsPage = () => {
   const validationSchema = Yup.object().shape({});
 
   const onSubmit = async () => {
-    if (selectedNumbers.length === 0) {
+    if (selectedFirestoreIds.length === 0) {
       setError({
         show: true,
         message:
           'Selecciona al menos un grupo para que reciba las comunicaciones de tu estrategia.',
       });
     } else {
-      dispatch(setNewStrategyGroups(selectedNumbers));
+      // Guardar los firestoreIds en lugar de los IDs numéricos
+      console.log('💾 Guardando IDs de grupos:', selectedFirestoreIds);
+      dispatch(setNewStrategyGroups(selectedFirestoreIds as any));
       navigate(
         `${ROUTES.STRATEGY.ROOT}${ROUTES.STRATEGY.CREATE.ROOT}${ROUTES.STRATEGY.CREATE.PERIOD}`
       );
@@ -79,16 +116,28 @@ export const GStrategyGroupsPage = () => {
     }
   };
 
-  const handleAdsSelection = (
+  const handleGroupSelection = (
     e: React.ChangeEvent<HTMLInputElement>,
-    id: number
+    id: number,
+    firestoreId: string
   ) => {
     const isChecked = e.target.checked;
+    
+    // Actualizar IDs numéricos (para UI)
     setSelectedNumbers((prevSelectedNumbers) => {
       if (isChecked) {
         return [...prevSelectedNumbers, id];
       } else {
         return prevSelectedNumbers.filter((number) => number !== id);
+      }
+    });
+    
+    // Actualizar firestoreIds (para guardar en estrategia)
+    setSelectedFirestoreIds((prevIds) => {
+      if (isChecked) {
+        return [...prevIds, firestoreId];
+      } else {
+        return prevIds.filter((fid) => fid !== firestoreId);
       }
     });
   };
@@ -145,7 +194,7 @@ export const GStrategyGroupsPage = () => {
                     type="checkbox"
                     id={`strategy-${group.id}`}
                     checked={selectedNumbers.includes(group.id)}
-                    onChange={(e) => handleAdsSelection(e, group.id)}
+                    onChange={(e) => handleGroupSelection(e, group.id, (group as any).firestoreId || String(group.id))}
                   />
                 </div>
               </div>

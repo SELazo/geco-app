@@ -86,3 +86,18 @@
 .file-preview-ad-view img {
   width: 100%;
 }
+
+/* Sección de contenido de imagen - Solo desktop */
+.image-content-section {
+  border: none;
+  border-radius: 0;
+  box-shadow: none;
+}
+
+@media (min-width: 768px) {
+  .image-content-section {
+    border: 2px solid #18191f;
+    border-radius: 12px;
+    box-shadow: 0 2px 0 #18191f;
+  }
+}

@@ -20,15 +20,15 @@ import { NavigationService } from '../../../services/internal/navigationService'
 import { ContactsFirestoreService } from '../../../services/external/contactsFirestoreService';
 import { Link, useNavigate } from 'react-router-dom';
 import { IContact } from '../../../interfaces/dtos/external/IFirestore';
-import { SessionState } from '../../../redux/sessionSlice';
+import { RootState } from '../../../redux/gecoStore';
 import { GLogoLetter } from '../../../components/GLogoLetter';
 
 export const GAddContactPage = () => {
   const navigate = useNavigate();
 
   // Obtener usuario desde Redux
-  const user = useSelector((state: SessionState) => state.user);
-  const auth = useSelector((state: SessionState) => state.auth);
+  const user = useSelector((state: RootState) => state.user);
+  const auth = useSelector((state: RootState) => state.auth);
 
   // Estados para manejo de carga y errores
   const [saving, setSaving] = useState(false);
@@ -117,13 +117,22 @@ export const GAddContactPage = () => {
       setSaving(true);
       setSaveError('');
 
-      // Validar que tenemos un usuario válido
-      if (!user || !user.id || user.id === -1) {
+      // Validar que tenemos un usuario válido (aceptar tanto string como number)
+      if (
+        !user ||
+        !user.id ||
+        user.id === -1 ||
+        user.id === '0' ||
+        user.id === 0
+      ) {
+        console.error('❌ Usuario inválido:', user);
         setSaveError(
           'Usuario no encontrado. Por favor, inicia sesión nuevamente.'
         );
         return;
       }
+
+      console.log('✅ Usuario válido para crear contacto:', user);
 
       // Validar que tenemos al menos email o teléfono
       if (!data.email && !data.cellphone) {
@@ -185,13 +194,15 @@ export const GAddContactPage = () => {
           <GLogoLetter />
         </Link>
         <Link className="geco-add-contact-nav-bar-section" to="/contacts/info">
-          <GCircularButton
-            icon={GContactsIcon}
-            size="1.5em"
-            width="50px"
-            height="50px"
-            colorBackground={GWhite}
-          />
+          <div style={{ marginRight: '1vw' }}>
+            <GCircularButton
+              icon={GContactsIcon}
+              size="1.5em"
+              width="50px"
+              height="50px"
+              colorBackground={GWhite}
+            />
+          </div>
         </Link>
         <GCircularButton
           icon={GIconButtonBack}
