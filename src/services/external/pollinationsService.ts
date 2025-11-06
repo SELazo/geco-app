@@ -48,7 +48,7 @@ class PollinationsService {
       // - enhance: Mejor calidad
       // - model: turbo (más rápido) o flux (mejor calidad)
       const encodedPrompt = encodeURIComponent(enhancedPrompt);
-      const imageUrl = `${this.baseUrl}/${encodedPrompt}?width=${width}&height=${height}&nologo=true&enhance=true&model=turbo`;
+      const imageUrl = `${this.baseUrl}/${encodedPrompt}?width=${width}&height=${height}&nologo=true&enhance=true&model=turbo&safe=true`;
 
       console.log('📤 Solicitando imagen a Pollinations.ai...');
       console.log('🔗 URL:', imageUrl.substring(0, 100) + '...');
