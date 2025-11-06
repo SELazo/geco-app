@@ -35,21 +35,32 @@ import {
 import { RootState } from '../../../redux/gecoStore';
 import { LocalizationProvider, TimeField } from '@mui/x-date-pickers';
 import dayjs, { Dayjs } from 'dayjs';
-import { setNewStrategyConfig } from '../../../redux/sessionSlice';
+import { setNewStrategyConfig, INewStrategyForm } from '../../../redux/sessionSlice';
 
 const { getPeriodicities, getSchedules } = StrategyService;
 
 export const GStrategyPeriodicityPage = () => {
   const userStatus = useSelector((state: RootState) => state.user.id);
+  const strategyForm: INewStrategyForm = useSelector(
+    (state: RootState) => state.formNewStrategy
+  );
+  
   const [periodicities, setPeriodicities] = useState<IPeriodicity[]>([]);
   const [schedules, setSchedules] = useState<ISchedule[]>([]);
   const [selectedPeriodicity, setSelectedPeriodicity] = useState<
     string | undefined
-  >();
+  >(strategyForm?.periodicity);
   const [selectedSchedule, setSelectedSchedule] = useState<
     string | undefined
-  >();
-  const [isCustom, setIsCustom] = useState(false);
+  >(strategyForm?.schedule);
+  const [isCustom, setIsCustom] = useState(() => {
+    // Si hay un schedule guardado que no está en las opciones predefinidas, es custom
+    if (strategyForm?.schedule) {
+      const predefinedSchedules = ['09:00', '12:00', '15:00', '18:00'];
+      return !predefinedSchedules.includes(strategyForm.schedule);
+    }
+    return false;
+  });
   const navigate = useNavigate();
   const dispatch = useDispatch();
 
@@ -66,9 +77,15 @@ export const GStrategyPeriodicityPage = () => {
           schedulesData[0]
         ) {
           setPeriodicities(periodicitiesData);
-          setSelectedPeriodicity(periodicitiesData[0].value);
           setSchedules(schedulesData);
-          setSelectedSchedule(schedulesData[0].value);
+          
+          // Solo establecer valores por defecto si NO hay valores precargados
+          if (!strategyForm?.periodicity) {
+            setSelectedPeriodicity(periodicitiesData[0].value);
+          }
+          if (!strategyForm?.schedule) {
+            setSelectedSchedule(schedulesData[0].value);
+          }
         }
       } catch (error) {
         navigate(

@@ -25,11 +25,6 @@
   margin-right: 1vw;
 }
 
-.geco-add-group-header-title {
-  min-width: 325px;
-  max-width: 325px;
-}
-
 .geco-add-group-header-title .geco-section-subtitle {
   white-space: pre-line;
 }

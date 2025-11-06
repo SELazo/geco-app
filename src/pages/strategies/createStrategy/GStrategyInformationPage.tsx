@@ -29,11 +29,13 @@ import { GSubmitButton } from '../../../components/GSubmitButton';
 import { GDropdownHelp } from '../../../components/GDropdownHelp';
 import { useState } from 'react';
 import { PacmanLoader } from 'react-spinners';
-import { useDispatch } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 import {
   setNewAdIdentification,
   setNewStrategyTitle,
+  INewStrategyForm,
 } from '../../../redux/sessionSlice';
+import { RootState } from '../../../redux/gecoStore';
 
 export const GStrategyInformationPage = () => {
   const validationSchema = Yup.object().shape({
@@ -46,6 +48,11 @@ export const GStrategyInformationPage = () => {
 
   const navigate = useNavigate();
   const dispatch = useDispatch();
+  
+  // Leer valores previos de Redux
+  const strategyForm: INewStrategyForm = useSelector(
+    (state: RootState) => state.formNewStrategy
+  );
 
   const onSubmit = async (data: any) => {
     dispatch(setNewStrategyTitle(data.title));
@@ -64,6 +71,9 @@ export const GStrategyInformationPage = () => {
     title: string;
   }>({
     resolver: yupResolver(validationSchema),
+    defaultValues: {
+      title: strategyForm?.title || '',
+    },
   });
 
   return (

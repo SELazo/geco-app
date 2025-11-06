@@ -1,4 +1,4 @@
-import React, { useState, useRef } from 'react';
+import React, { useState, useRef, useEffect } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import { useDispatch, useSelector } from 'react-redux';
 import {
@@ -17,6 +17,7 @@ import {
 import '../../../styles/ginputBox.css';
 import '../../../styles/gform.css';
 import '../../../styles/gcreatead.css';
+import '../../../styles/gpublic-strategy.css';
 
 import { GHeadSectionTitle } from '../../../components/GHeadSectionTitle';
 import { GCircularButton } from '../../../components/GCircularButton';
@@ -73,6 +74,54 @@ export const GStrategyFormConfigPage = () => {
   const [categoriesList, setCategoriesList] = useState<string[]>([]);
   const [allowQuantity, setAllowQuantity] = useState<boolean>(true);
   const [categoriesError, setCategoriesError] = useState<string>('');
+
+  // Precargar valores desde Redux
+  useEffect(() => {
+    if (formNewStrategy) {
+      console.log('🔄 Precargando configuración de formulario:', formNewStrategy);
+      
+      // Precargar enableForm y formType
+      if (formNewStrategy.enableForm !== undefined) {
+        setEnableForm(formNewStrategy.enableForm);
+      }
+      
+      if (formNewStrategy.formType) {
+        setFormType(formNewStrategy.formType as (typeof FORM_TYPES)[number]);
+      }
+      
+      // Precargar formConfig si existe
+      if (formNewStrategy.formConfig) {
+        const config = formNewStrategy.formConfig;
+        
+        // Configuración de Reservas / turnos
+        if (config.allow_days_ahead !== undefined) {
+          setAllowDaysAhead(config.allow_days_ahead);
+        }
+        if (config.time_slot_minutes !== undefined) {
+          setTimeSlotMinutes(config.time_slot_minutes);
+        }
+        if (config.require_name !== undefined) {
+          setRequireName(config.require_name);
+        }
+        if (config.require_phone !== undefined) {
+          setRequirePhone(config.require_phone);
+        }
+        if (config.services && Array.isArray(config.services)) {
+          setServices(config.services);
+        }
+        
+        // Configuración de Catálogo
+        if (config.categories && Array.isArray(config.categories)) {
+          setCategoriesList(config.categories);
+        }
+        if (config.allow_quantity !== undefined) {
+          setAllowQuantity(config.allow_quantity);
+        }
+      }
+      
+      console.log('✅ Configuración precargada');
+    }
+  }, []); // Solo ejecutar una vez al montar
 
   const normalizeLabel = (input: string): string => {
     const collapsed = input.trim().replace(/\s+/g, ' ');
@@ -154,31 +203,38 @@ export const GStrategyFormConfigPage = () => {
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    
+
     // 🔒 SOLUCIÓN DEFINITIVA: Usar sessionStorage como barrera global
     const lastSubmission = sessionStorage.getItem('last_formconfig_submission');
-    
+
     if (lastSubmission) {
       const timeSinceLastSubmit = Date.now() - parseInt(lastSubmission);
-      if (timeSinceLastSubmit < 3000) { // Menos de 3 segundos
-        console.log('⏳ Bloqueo de seguridad FormConfig: Ya se guardó hace', timeSinceLastSubmit, 'ms');
+      if (timeSinceLastSubmit < 3000) {
+        // Menos de 3 segundos
+        console.log(
+          '⏳ Bloqueo de seguridad FormConfig: Ya se guardó hace',
+          timeSinceLastSubmit,
+          'ms'
+        );
         return;
       }
     }
-    
+
     // Marcar inmediatamente en sessionStorage
     sessionStorage.setItem('last_formconfig_submission', String(Date.now()));
-    
+
     // Prevenir múltiples clicks con useRef
     if (isSubmitting.current) {
       console.log('⏳ Ya hay un guardado en proceso, ignorando...');
       return;
     }
-    
+
     isSubmitting.current = true;
-    
+
     // Desactivar el botón INMEDIATAMENTE
-    const submitButton = (e.currentTarget as HTMLFormElement).querySelector('button[type="submit"]') as HTMLButtonElement;
+    const submitButton = (e.currentTarget as HTMLFormElement).querySelector(
+      'button[type="submit"]'
+    ) as HTMLButtonElement;
     if (submitButton) {
       submitButton.disabled = true;
       submitButton.style.pointerEvents = 'none';
@@ -246,12 +302,12 @@ export const GStrategyFormConfigPage = () => {
     // ✅ NO guardar en Firestore aquí - solo actualizar Redux
     // La creación final se hace en GStrategyResumePage
     console.log('✅ Configuración guardada en Redux, navegando a resumen...');
-    
+
     // Navegar a la página de resumen
     navigate(
       `${ROUTES.STRATEGY.ROOT}${ROUTES.STRATEGY.CREATE.ROOT}${ROUTES.STRATEGY.CREATE.RESUME}`
     );
-    
+
     isSubmitting.current = false; // ✅ Resetear flag
   };
 
@@ -291,246 +347,638 @@ export const GStrategyFormConfigPage = () => {
         />
       </div>
 
-      <form className="geco-form" onSubmit={handleSubmit}>
-        <h3 className="geco-strategy-subtitle">
-          ¿Querés agregar un formulario?
-        </h3>
-        <FormControlLabel
-          value="start"
-          control={
-            <Switch
-              checked={enableForm}
-              color="primary"
-              onChange={() => setEnableForm((v) => !v)}
-            />
-          }
-          label={
-            <span style={{ fontFamily: 'Montserrat' }}>
-              {enableForm ? 'Sí' : 'No'}
-            </span>
-          }
-          labelPlacement="start"
-        />
+      <form
+        style={{
+          textAlign: 'center',
+          display: 'flex',
+          flexDirection: 'column',
+          alignItems: 'center',
+        }}
+        onSubmit={handleSubmit}
+      >
+        <div className="content-builder-container">
+          {/* Panel de configuración */}
+          <div className="content-builder-settings">
+            <div className="config-section">
+              <h3
+                style={{
+                  margin: '0 0 12px 0',
+                  fontSize: '18px',
+                  fontWeight: 700,
+                }}
+              >
+                📝 Configuración del formulario
+              </h3>
 
-        <h3
-          className="geco-strategy-subtitle"
-          style={{ opacity: enableForm ? 1 : 0.5 }}
-        >
-          ¿Qué tipo de formulario querés agregar?
-        </h3>
-        <div className="geco-strategy-options-group">
-          <RadioGroup
-            row
-            value={formType}
-            onChange={(e) => setFormType(e.target.value as any)}
-            sx={{
-              display: 'flex',
-              flexDirection: 'column',
-              justifyContent: 'center',
-            }}
-          >
-            {FORM_TYPES.map((opt) => (
-              <FormControlLabel
-                key={opt}
-                value={opt}
-                control={<Radio disabled={!enableForm} />}
-                label={<span style={{ fontFamily: 'Montserrat' }}>{opt}</span>}
-              />
-            ))}
-          </RadioGroup>
+              <div
+                style={{
+                  display: 'flex',
+                  flexDirection: 'column',
+                  gap: '20px',
+                }}
+              >
+                {/* Activar formulario */}
+                <div style={{ marginBottom: '8px' }}>
+                  <label
+                    style={{
+                      fontWeight: 600,
+                      fontSize: '14px',
+                      marginBottom: '8px',
+                      display: 'block',
+                    }}
+                  >
+                    ¿Querés agregar un formulario?
+                  </label>
+                  <FormControlLabel
+                    control={
+                      <Switch
+                        checked={enableForm}
+                        color="primary"
+                        onChange={() => setEnableForm((v) => !v)}
+                      />
+                    }
+                    label={
+                      <span style={{ fontFamily: 'Montserrat' }}>
+                        {enableForm ? 'Sí' : 'No'}
+                      </span>
+                    }
+                  />
+                </div>
+
+                {/* Tipo de formulario */}
+                <div style={{ opacity: enableForm ? 1 : 0.5 }}>
+                  <label
+                    style={{
+                      fontWeight: 600,
+                      fontSize: '14px',
+                      marginBottom: '8px',
+                      display: 'block',
+                    }}
+                  >
+                    Tipo de formulario
+                  </label>
+                  <RadioGroup
+                    value={formType}
+                    onChange={(e) => setFormType(e.target.value as any)}
+                    sx={{
+                      display: 'flex',
+                      flexDirection: 'column',
+                    }}
+                  >
+                    {FORM_TYPES.map((opt) => (
+                      <FormControlLabel
+                        key={opt}
+                        value={opt}
+                        control={<Radio disabled={!enableForm} />}
+                        label={
+                          <span style={{ fontFamily: 'Montserrat' }}>
+                            {opt}
+                          </span>
+                        }
+                      />
+                    ))}
+                  </RadioGroup>
+                </div>
+
+                {/* Configuración específica */}
+                {enableForm && formType === 'Reservas / turnos' ? (
+                  <Stack spacing={2}>
+                    <TextField
+                      type="number"
+                      label="Días permitidos hacia adelante"
+                      value={allowDaysAhead}
+                      onChange={(e) =>
+                        setAllowDaysAhead(parseInt(e.target.value || '0', 10))
+                      }
+                      inputProps={{ min: 0, max: 365 }}
+                      error={!!allowDaysAheadError}
+                      helperText={allowDaysAheadError}
+                    />
+                    <TextField
+                      type="number"
+                      label="Duración de turno (minutos)"
+                      value={timeSlotMinutes}
+                      onChange={(e) =>
+                        setTimeSlotMinutes(parseInt(e.target.value || '0', 10))
+                      }
+                      inputProps={{ min: 5, max: 480, step: 5 }}
+                      error={!!timeSlotMinutesError}
+                      helperText={timeSlotMinutesError}
+                    />
+                    <div
+                      style={{
+                        display: 'flex',
+                        flexDirection: 'column',
+                        justifyContent: 'center',
+                        alignItems: 'center',
+                      }}
+                    >
+                      <FormControlLabel
+                        control={
+                          <Switch
+                            checked={requireName}
+                            onChange={() => setRequireName((v) => !v)}
+                          />
+                        }
+                        label={
+                          <span style={{ fontFamily: 'Montserrat' }}>
+                            Requerir nombre
+                          </span>
+                        }
+                      />
+                      <FormControlLabel
+                        control={
+                          <Switch
+                            checked={requirePhone}
+                            onChange={() => setRequirePhone((v) => !v)}
+                          />
+                        }
+                        label={
+                          <span style={{ fontFamily: 'Montserrat' }}>
+                            Requerir teléfono
+                          </span>
+                        }
+                      />
+                    </div>
+                    <Autocomplete
+                      multiple
+                      freeSolo
+                      options={[]}
+                      value={services}
+                      onChange={(event, newValue) =>
+                        setServices(() => {
+                          const normalized = newValue
+                            .map((v) =>
+                              typeof v === 'string' ? normalizeLabel(v) : ''
+                            )
+                            .filter((v) => v);
+                          const seen = new Set<string>();
+                          const result: string[] = [];
+                          normalized.forEach((item) => {
+                            const key = item.toLowerCase();
+                            if (!seen.has(key)) {
+                              seen.add(key);
+                              result.push(item);
+                            }
+                          });
+                          return result;
+                        })
+                      }
+                      renderTags={(value: readonly string[], getTagProps) =>
+                        value.map((option: string, index: number) => (
+                          <Chip
+                            variant="outlined"
+                            label={option}
+                            {...getTagProps({ index })}
+                          />
+                        ))
+                      }
+                      renderInput={(params) => (
+                        <TextField
+                          {...params}
+                          label="Servicios"
+                          placeholder="Escribí y presioná Enter para agregar"
+                          error={!!servicesError}
+                          helperText={servicesError}
+                        />
+                      )}
+                    />
+                  </Stack>
+                ) : null}
+
+                {enableForm && formType === 'Catálogo' ? (
+                  <Stack spacing={2}>
+                    <Autocomplete
+                      multiple
+                      freeSolo
+                      options={[]}
+                      value={categoriesList}
+                      onChange={(event, newValue) =>
+                        setCategoriesList(() => {
+                          const normalized = newValue
+                            .map((v) =>
+                              typeof v === 'string' ? normalizeLabel(v) : ''
+                            )
+                            .filter((v) => v);
+                          const seen = new Set<string>();
+                          const result: string[] = [];
+                          normalized.forEach((item) => {
+                            const key = item.toLowerCase();
+                            if (!seen.has(key)) {
+                              seen.add(key);
+                              result.push(item);
+                            }
+                          });
+                          return result;
+                        })
+                      }
+                      renderTags={(value: readonly string[], getTagProps) =>
+                        value.map((option: string, index: number) => (
+                          <Chip
+                            variant="outlined"
+                            label={option}
+                            {...getTagProps({ index })}
+                          />
+                        ))
+                      }
+                      renderInput={(params) => (
+                        <TextField
+                          {...params}
+                          label="Categorías"
+                          placeholder="Escribí y presioná Enter para agregar"
+                          error={!!categoriesError}
+                          helperText={categoriesError}
+                        />
+                      )}
+                    />
+                    <div
+                      style={{
+                        display: 'flex',
+                        flexDirection: 'column',
+                        justifyContent: 'center',
+                        alignItems: 'center',
+                      }}
+                    >
+                      <FormControlLabel
+                        control={
+                          <Switch
+                            checked={allowQuantity}
+                            onChange={() => setAllowQuantity((v) => !v)}
+                          />
+                        }
+                        label={
+                          <span style={{ fontFamily: 'Montserrat' }}>
+                            Permitir cantidad
+                          </span>
+                        }
+                      />
+                    </div>
+                  </Stack>
+                ) : null}
+
+                {/* Mostrar error si existe */}
+                {saveError && (
+                  <Alert severity="error" sx={{ mt: 2 }}>
+                    Error al guardar: {saveError}
+                  </Alert>
+                )}
+              </div>
+            </div>
+          </div>
+
+          {/* Panel derecho: Preview */}
+          <div className="content-builder-preview desktop-sticky">
+            <div
+              className="config-section"
+              style={{ padding: '16px', background: '#f9fafc' }}
+            >
+              <h3
+                style={{
+                  margin: '0 0 16px 0',
+                  fontSize: '18px',
+                  fontWeight: 700,
+                  textAlign: 'center',
+                }}
+              >
+                👁️ Vista previa
+              </h3>
+
+              {!enableForm ? (
+                <div
+                  style={{
+                    border: '2px dashed #cfd3dc',
+                    borderRadius: '8px',
+                    padding: '40px 20px',
+                    textAlign: 'center',
+                    color: '#9FA4B4',
+                  }}
+                >
+                  <div style={{ fontSize: '48px', marginBottom: '8px' }}>
+                    📋
+                  </div>
+                  <div style={{ fontSize: '14px' }}>
+                    Activá el formulario para ver la previsualización
+                  </div>
+                </div>
+              ) : (
+                /* Usar estilos reales del formulario público */
+                <div
+                  className="public-form"
+                  style={{
+                    background: '#fff',
+                    padding: '16px',
+                    borderRadius: '12px',
+                    border: '2px solid #18191f',
+                    boxShadow: '0 2px 0 #18191f',
+                  }}
+                >
+                  <h3 className="public-form-title">{formType}</h3>
+
+                  {/* Preview según tipo de formulario */}
+                  {formType === 'Pedido rápido' && (
+                    <>
+                      <div className="public-form-group">
+                        <label>Nombre</label>
+                        <input
+                          className="public-form-input"
+                          placeholder="Tu nombre"
+                          disabled
+                          style={{ cursor: 'not-allowed', opacity: 0.7 }}
+                        />
+                      </div>
+                      <div className="public-form-group">
+                        <label>Teléfono</label>
+                        <div className="public-phone-row">
+                          <select
+                            className="public-form-input"
+                            disabled
+                            style={{ cursor: 'not-allowed', opacity: 0.7 }}
+                          >
+                            <option>+54 (AR)</option>
+                          </select>
+                          <input
+                            className="public-form-input"
+                            placeholder="Tu teléfono"
+                            disabled
+                            style={{ cursor: 'not-allowed', opacity: 0.7 }}
+                          />
+                        </div>
+                      </div>
+                      <div className="public-form-group">
+                        <label>Producto o servicio</label>
+                        <input
+                          className="public-form-input"
+                          placeholder="¿Qué querés pedir?"
+                          disabled
+                          style={{ cursor: 'not-allowed', opacity: 0.7 }}
+                        />
+                      </div>
+                      <div className="public-form-group">
+                        <label>Comentarios adicionales (opcional)</label>
+                        <textarea
+                          className="public-form-input"
+                          rows={2}
+                          placeholder="Detalles del pedido"
+                          disabled
+                          style={{
+                            cursor: 'not-allowed',
+                            opacity: 0.7,
+                            resize: 'none',
+                          }}
+                        />
+                      </div>
+                      <div className="public-form-note">
+                        Pedido rápido • Te contactaremos para confirmar
+                      </div>
+                    </>
+                  )}
+
+                  {formType === 'Contacto simple' && (
+                    <>
+                      <div className="public-form-group">
+                        <label>Nombre</label>
+                        <input
+                          className="public-form-input"
+                          placeholder="Tu nombre"
+                          disabled
+                          style={{ cursor: 'not-allowed', opacity: 0.7 }}
+                        />
+                      </div>
+                      <div className="public-form-group">
+                        <label>Email</label>
+                        <input
+                          className="public-form-input"
+                          type="email"
+                          placeholder="tu@email.com"
+                          disabled
+                          style={{ cursor: 'not-allowed', opacity: 0.7 }}
+                        />
+                      </div>
+                      <div className="public-form-group">
+                        <label>Teléfono (opcional)</label>
+                        <div className="public-phone-row">
+                          <select
+                            className="public-form-input"
+                            disabled
+                            style={{ cursor: 'not-allowed', opacity: 0.7 }}
+                          >
+                            <option>+54 (AR)</option>
+                          </select>
+                          <input
+                            className="public-form-input"
+                            placeholder="Tu teléfono"
+                            disabled
+                            style={{ cursor: 'not-allowed', opacity: 0.7 }}
+                          />
+                        </div>
+                      </div>
+                      <div className="public-form-group">
+                        <label>Mensaje</label>
+                        <textarea
+                          className="public-form-input"
+                          rows={4}
+                          placeholder="¿En qué podemos ayudarte?"
+                          disabled
+                          style={{
+                            cursor: 'not-allowed',
+                            opacity: 0.7,
+                            resize: 'none',
+                          }}
+                        />
+                      </div>
+                      <div className="public-form-note">
+                        Te responderemos a la brevedad por email
+                      </div>
+                    </>
+                  )}
+
+                  {formType === 'Reservas / turnos' && (
+                    <>
+                      {requireName && (
+                        <div className="public-form-group">
+                          <label>Nombre</label>
+                          <input
+                            className="public-form-input"
+                            placeholder="Tu nombre"
+                            disabled
+                            style={{ cursor: 'not-allowed', opacity: 0.7 }}
+                          />
+                        </div>
+                      )}
+                      {requirePhone && (
+                        <div className="public-form-group">
+                          <label>Teléfono</label>
+                          <div className="public-phone-row">
+                            <select
+                              className="public-form-input"
+                              disabled
+                              style={{ cursor: 'not-allowed', opacity: 0.7 }}
+                            >
+                              <option>+54 (AR)</option>
+                            </select>
+                            <input
+                              className="public-form-input"
+                              placeholder="Tu teléfono"
+                              disabled
+                              style={{ cursor: 'not-allowed', opacity: 0.7 }}
+                            />
+                          </div>
+                        </div>
+                      )}
+                      <div className="public-form-group">
+                        <label>Servicio</label>
+                        <select
+                          className="public-form-input"
+                          style={{ cursor: 'not-allowed', opacity: 0.7 }}
+                        >
+                          <option value="">Elegí un servicio</option>
+                          {services.map((service, idx) => (
+                            <option key={idx} value={service}>
+                              {service}
+                            </option>
+                          ))}
+                        </select>
+                      </div>
+                      <div className="public-form-row">
+                        <div className="public-form-group">
+                          <label>Fecha</label>
+                          <input
+                            className="public-form-input"
+                            type="date"
+                            disabled
+                            style={{ cursor: 'not-allowed', opacity: 0.7 }}
+                          />
+                        </div>
+                        <div className="public-form-group">
+                          <label>Hora</label>
+                          <input
+                            className="public-form-input"
+                            type="time"
+                            disabled
+                            style={{ cursor: 'not-allowed', opacity: 0.7 }}
+                          />
+                        </div>
+                      </div>
+                      <div className="public-form-group">
+                        <label>Comentarios</label>
+                        <textarea
+                          className="public-form-input"
+                          rows={3}
+                          placeholder="Escribí tu mensaje"
+                          disabled
+                          style={{
+                            cursor: 'not-allowed',
+                            opacity: 0.7,
+                            resize: 'none',
+                          }}
+                        />
+                      </div>
+                      <div className="public-form-note">
+                        {services.length > 0
+                          ? `${services.length} servicio${
+                              services.length > 1 ? 's' : ''
+                            } disponible${
+                              services.length > 1 ? 's' : ''
+                            } • Turnos de ${timeSlotMinutes} min`
+                          : `Turnos de ${timeSlotMinutes} minutos • Hasta ${allowDaysAhead} días adelante`}
+                      </div>
+                    </>
+                  )}
+
+                  {formType === 'Catálogo' && (
+                    <>
+                      <div className="public-form-group">
+                        <label>Categoría</label>
+                        <select
+                          className="public-form-input"
+                          disabled
+                          style={{ cursor: 'not-allowed', opacity: 0.7 }}
+                        >
+                          <option value="">Elegí una categoría</option>
+                          {categoriesList.map((cat, idx) => (
+                            <option key={idx} value={cat}>
+                              {cat}
+                            </option>
+                          ))}
+                        </select>
+                      </div>
+                      {allowQuantity && (
+                        <div className="public-form-group">
+                          <label>Cantidad</label>
+                          <input
+                            className="public-form-input"
+                            type="number"
+                            min="1"
+                            defaultValue="1"
+                            disabled
+                            style={{ cursor: 'not-allowed', opacity: 0.7 }}
+                          />
+                        </div>
+                      )}
+                      <div className="public-form-group">
+                        <label>Nombre</label>
+                        <input
+                          className="public-form-input"
+                          placeholder="Tu nombre"
+                          disabled
+                          style={{ cursor: 'not-allowed', opacity: 0.7 }}
+                        />
+                      </div>
+                      <div className="public-form-group">
+                        <label>Teléfono</label>
+                        <div className="public-phone-row">
+                          <select
+                            className="public-form-input"
+                            disabled
+                            style={{ cursor: 'not-allowed', opacity: 0.7 }}
+                          >
+                            <option>+54 (AR)</option>
+                          </select>
+                          <input
+                            className="public-form-input"
+                            placeholder="Tu teléfono"
+                            disabled
+                            style={{ cursor: 'not-allowed', opacity: 0.7 }}
+                          />
+                        </div>
+                      </div>
+                      <div className="public-form-group">
+                        <label>Comentarios</label>
+                        <textarea
+                          className="public-form-input"
+                          rows={3}
+                          placeholder="Escribí tu mensaje"
+                          disabled
+                          style={{
+                            cursor: 'not-allowed',
+                            opacity: 0.7,
+                            resize: 'none',
+                          }}
+                        />
+                      </div>
+                      {categoriesList.length > 0 && (
+                        <div className="public-form-note">
+                          {categoriesList.length} categoría
+                          {categoriesList.length > 1 ? 's' : ''} disponible
+                          {categoriesList.length > 1 ? 's' : ''}
+                        </div>
+                      )}
+                    </>
+                  )}
+                </div>
+              )}
+            </div>
+          </div>
         </div>
 
-        {enableForm && formType === 'Reservas / turnos' ? (
-          <Stack
-            spacing={2}
-            sx={{
-              mt: 2,
-              width: '100%',
-              justifyContent: 'center',
-            }}
-          >
-            <TextField
-              type="number"
-              label="Días permitidos hacia adelante"
-              value={allowDaysAhead}
-              onChange={(e) =>
-                setAllowDaysAhead(parseInt(e.target.value || '0', 10))
-              }
-              inputProps={{ min: 0, max: 365 }}
-              error={!!allowDaysAheadError}
-              helperText={allowDaysAheadError}
-            />
-            <TextField
-              type="number"
-              label="Duración de turno (minutos)"
-              value={timeSlotMinutes}
-              onChange={(e) =>
-                setTimeSlotMinutes(parseInt(e.target.value || '0', 10))
-              }
-              inputProps={{ min: 5, max: 480, step: 5 }}
-              error={!!timeSlotMinutesError}
-              helperText={timeSlotMinutesError}
-            />
-            <div
-              style={{
-                display: 'flex',
-                flexDirection: 'column',
-                justifyContent: 'center',
-                alignItems: 'center',
-              }}
-            >
-              <FormControlLabel
-                control={
-                  <Switch
-                    checked={requireName}
-                    onChange={() => setRequireName((v) => !v)}
-                  />
-                }
-                label={
-                  <span style={{ fontFamily: 'Montserrat' }}>
-                    Requerir nombre
-                  </span>
-                }
-              />
-              <FormControlLabel
-                control={
-                  <Switch
-                    checked={requirePhone}
-                    onChange={() => setRequirePhone((v) => !v)}
-                  />
-                }
-                label={
-                  <span style={{ fontFamily: 'Montserrat' }}>
-                    Requerir teléfono
-                  </span>
-                }
-              />
-            </div>
-            <Autocomplete
-              multiple
-              freeSolo
-              options={[]}
-              value={services}
-              onChange={(event, newValue) =>
-                setServices(() => {
-                  const normalized = newValue
-                    .map((v) =>
-                      typeof v === 'string' ? normalizeLabel(v) : ''
-                    )
-                    .filter((v) => v);
-                  const seen = new Set<string>();
-                  const result: string[] = [];
-                  normalized.forEach((item) => {
-                    const key = item.toLowerCase();
-                    if (!seen.has(key)) {
-                      seen.add(key);
-                      result.push(item);
-                    }
-                  });
-                  return result;
-                })
-              }
-              renderTags={(value: readonly string[], getTagProps) =>
-                value.map((option: string, index: number) => (
-                  <Chip
-                    variant="outlined"
-                    label={option}
-                    {...getTagProps({ index })}
-                  />
-                ))
-              }
-              renderInput={(params) => (
-                <TextField
-                  {...params}
-                  label="Servicios"
-                  placeholder="Escribí y presioná Enter para agregar"
-                  error={!!servicesError}
-                  helperText={servicesError}
-                />
-              )}
-            />
-          </Stack>
-        ) : null}
-
-        {enableForm && formType === 'Catálogo' ? (
-          <Stack spacing={2} sx={{ mt: 2, width: '100%' }}>
-            <Autocomplete
-              multiple
-              freeSolo
-              options={[]}
-              value={categoriesList}
-              onChange={(event, newValue) =>
-                setCategoriesList(() => {
-                  const normalized = newValue
-                    .map((v) =>
-                      typeof v === 'string' ? normalizeLabel(v) : ''
-                    )
-                    .filter((v) => v);
-                  const seen = new Set<string>();
-                  const result: string[] = [];
-                  normalized.forEach((item) => {
-                    const key = item.toLowerCase();
-                    if (!seen.has(key)) {
-                      seen.add(key);
-                      result.push(item);
-                    }
-                  });
-                  return result;
-                })
-              }
-              renderTags={(value: readonly string[], getTagProps) =>
-                value.map((option: string, index: number) => (
-                  <Chip
-                    variant="outlined"
-                    label={option}
-                    {...getTagProps({ index })}
-                  />
-                ))
-              }
-              renderInput={(params) => (
-                <TextField
-                  {...params}
-                  label="Categorías"
-                  placeholder="Escribí y presioná Enter para agregar"
-                  error={!!categoriesError}
-                  helperText={categoriesError}
-                />
-              )}
-            />
-            <div
-              style={{
-                display: 'flex',
-                flexDirection: 'column',
-                justifyContent: 'center',
-                alignItems: 'center',
-              }}
-            >
-              <FormControlLabel
-                control={
-                  <Switch
-                    checked={allowQuantity}
-                    onChange={() => setAllowQuantity((v) => !v)}
-                  />
-                }
-                label={
-                  <span style={{ fontFamily: 'Montserrat' }}>
-                    Permitir cantidad
-                  </span>
-                }
-              />
-            </div>
-          </Stack>
-        ) : null}
-
-        {/* Mostrar error si existe */}
-        {saveError && (
-          <Alert severity="error" sx={{ mt: 2 }}>
-            Error al guardar: {saveError}
-          </Alert>
-        )}
-
-        {/* Botón de submit con indicador de carga */}
-        <div style={{ position: 'relative', marginTop: '16px' }}>
+        {/* Botón de submit */}
+        <div
+          style={{
+            marginTop: '24px',
+            textAlign: 'center',
+            position: 'relative',
+          }}
+        >
           <GSubmitButton
             label={saving ? 'Guardando...' : 'Siguiente'}
             colorBackground={saving ? '#ccc' : GYellow}
