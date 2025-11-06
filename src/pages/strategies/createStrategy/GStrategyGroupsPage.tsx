@@ -47,8 +47,33 @@ export const GStrategyGroupsPage = () => {
   const dispatch = useDispatch();
 
   const strategyForm: INewStrategyForm = useSelector(
-    (state: any) => state.auth.formNewStrategy
+    (state: any) => state.formNewStrategy
   );
+
+  // Precargar grupos ya seleccionados
+  useEffect(() => {
+    if (strategyForm?.groups && strategyForm.groups.length > 0 && groupsList.length > 0) {
+      console.log('🔄 Precargando grupos seleccionados:', strategyForm.groups);
+      
+      // Buscar los grupos correspondientes y agregar sus IDs numéricos y de Firestore
+      const selectedGroupsData = groupsList.filter((group) => 
+        strategyForm.groups.includes((group as any).firestoreId || String(group.id))
+      );
+      
+      const numericIds = selectedGroupsData.map(group => 
+        typeof group.id === 'number' ? group.id : parseInt(String(group.id))
+      );
+      
+      const firestoreIds = selectedGroupsData.map(group => 
+        (group as any).firestoreId || String(group.id)
+      );
+      
+      setSelectedNumbers(numericIds);
+      setSelectedFirestoreIds(firestoreIds);
+      
+      console.log('✅ Precargados:', { numericIds, firestoreIds });
+    }
+  }, [groupsList, strategyForm?.groups]);
 
   useEffect(() => {
     const fetchGroups = async () => {

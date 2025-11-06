@@ -22,19 +22,38 @@ import { GLogoLetter } from '../../../components/GLogoLetter';
 import { ROUTES } from '../../../constants/routes';
 import { GSubmitButton } from '../../../components/GSubmitButton';
 import { GDropdownHelp } from '../../../components/GDropdownHelp';
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { FormControlLabel, Switch } from '@mui/material';
-import { useDispatch } from 'react-redux';
-import { setNewStrategyDates } from '../../../redux/sessionSlice';
+import { useDispatch, useSelector } from 'react-redux';
+import { setNewStrategyDates, INewStrategyForm } from '../../../redux/sessionSlice';
+import { RootState } from '../../../redux/gecoStore';
 
 export const GStrategyPeriodPage = () => {
   const today = new Date();
-  const [isRangePicker, setIsRangePicker] = useState(false);
-  const [selectedDay, setSelectedDay] = useState<Date | undefined>(today);
-  const [selectedRange, setSelectedRange] = useState<DateRange | undefined>();
-  const [validationError, setValidationError] = useState('');
   const navigate = useNavigate();
   const dispatch = useDispatch();
+  
+  // Leer valores previos de Redux
+  const strategyForm: INewStrategyForm = useSelector(
+    (state: RootState) => state.formNewStrategy
+  );
+  
+  // Determinar si es rango basado en fechas previas
+  const hasRange = strategyForm?.startDate && strategyForm?.endDate && 
+    new Date(strategyForm.startDate).getTime() !== new Date(strategyForm.endDate).getTime();
+  
+  // Precargar estados
+  const [isRangePicker, setIsRangePicker] = useState(hasRange || false);
+  const [selectedDay, setSelectedDay] = useState<Date | undefined>(
+    strategyForm?.startDate && !hasRange ? new Date(strategyForm.startDate) : today
+  );
+  const [selectedRange, setSelectedRange] = useState<DateRange | undefined>(
+    hasRange ? {
+      from: new Date(strategyForm.startDate!),
+      to: new Date(strategyForm.endDate!),
+    } : undefined
+  );
+  const [validationError, setValidationError] = useState('');
 
   const handleSwitchChange = () => {
     setIsRangePicker(!isRangePicker);
