@@ -536,37 +536,43 @@ export const GStrategyAdsPage = () => {
                       }}
                     >
                       {/* Imagen */}
-                      {selectedAds[currentAdIndex] && adImages[typeof selectedAds[currentAdIndex].id === 'number' ? selectedAds[currentAdIndex].id : parseInt(String(selectedAds[currentAdIndex].id))] ? (
-                        <CardMedia
-                          component="img"
-                          image={adImages[typeof selectedAds[currentAdIndex].id === 'number' ? selectedAds[currentAdIndex].id : parseInt(String(selectedAds[currentAdIndex].id))]}
-                          alt={selectedAds[currentAdIndex]?.title || 'Publicidad'}
-                          sx={{
-                            height: 240,
-                            objectFit: 'cover',
-                          }}
-                        />
-                      ) : (
-                        <Box
-                          sx={{
-                            height: 240,
-                            background: 'repeating-linear-gradient(-45deg,#e5e7eb,#e5e7eb 10px,#f3f4f6 10px,#f3f4f6 20px)',
-                            display: 'flex',
-                            alignItems: 'center',
-                            justifyContent: 'center',
-                          }}
-                        >
-                          <Typography
+                      {(() => {
+                        const currentAd = selectedAds[currentAdIndex];
+                        if (!currentAd) return null;
+                        const adId: number = typeof currentAd.id === 'number' ? currentAd.id : parseInt(String(currentAd.id));
+                        const imageUrl = adImages[adId];
+                        return imageUrl ? (
+                          <CardMedia
+                            component="img"
+                            image={imageUrl}
+                            alt={currentAd?.title || 'Publicidad'}
                             sx={{
-                              fontFamily: 'Montserrat',
-                              color: '#9fa4b4',
-                              fontSize: '1rem',
+                              height: 240,
+                              objectFit: 'cover',
+                            }}
+                          />
+                        ) : (
+                          <Box
+                            sx={{
+                              height: 240,
+                              background: 'repeating-linear-gradient(-45deg,#e5e7eb,#e5e7eb 10px,#f3f4f6 10px,#f3f4f6 20px)',
+                              display: 'flex',
+                              alignItems: 'center',
+                              justifyContent: 'center',
                             }}
                           >
-                            Cargando...
-                          </Typography>
-                        </Box>
-                      )}
+                            <Typography
+                              sx={{
+                                fontFamily: 'Montserrat',
+                                color: '#9fa4b4',
+                                fontSize: '1rem',
+                              }}
+                            >
+                              Cargando...
+                            </Typography>
+                          </Box>
+                        );
+                      })()}
 
                       {/* Contenido */}
                       <CardContent

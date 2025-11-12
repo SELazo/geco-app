@@ -27,9 +27,6 @@ export const GEditContactPage = () => {
   const location = useLocation();
   const { id } = useParams<{ id: string }>();
 
-  // Obtener fromGroupId del state de navegación (si viene de un grupo)
-  const fromGroupId = (location.state as any)?.fromGroupId;
-
   // Obtener usuario desde Redux
   const user = useSelector((state: RootState) => state.user);
   const auth = useSelector((state: RootState) => state.auth);
