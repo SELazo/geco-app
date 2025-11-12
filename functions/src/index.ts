@@ -23,3 +23,10 @@ app.use('/communication-strategies-api', strategiesRouter);
 
 // Force redeploy - Fixed strategies API params: match frontend request format - 2025-01-31 23:14
 export const api = functions.https.onRequest(app);
+
+// ========================================
+// 💳 MERCADO PAGO - Sistema de Suscripción Premium
+// ========================================
+export { createPremiumPreference } from './mercadopago/createPreference';
+export { mercadoPagoWebhook } from './mercadopago/webhook';
+export { checkPremiumExpiration, checkPremiumExpirationManual } from './cron/checkPremiumExpiration';

@@ -55,7 +55,7 @@ export const GHomePage = () => {
             </div>
 
             <button className="geco-without-background-btn">
-              <Link to={'/user/pricing'}>
+              <Link to={'/premium'}>
                 <GIcon
                   color={GPremiumStarIcon.color}
                   icon-type={GPremiumStarIcon['icon-type']}

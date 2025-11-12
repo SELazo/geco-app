@@ -72,6 +72,10 @@ import { GEditGroupSelectPage } from '../pages/contacts/edit-group/GEditGroupSel
 import { GEditGroupFormStep1Page } from '../pages/contacts/edit-group/GEditGroupFormStep1Page';
 import { GEditGroupFormStep2Page } from '../pages/contacts/edit-group/GEditGroupFormStep2Page';
 import { GEditGroupFormStep3Page } from '../pages/contacts/edit-group/GEditGroupFormStep3Page';
+import { GPremiumPage } from '../pages/user/GPremiumPage';
+import { GPremiumSuccessPage } from '../pages/user/GPremiumSuccessPage';
+import { GPremiumFailurePage } from '../pages/user/GPremiumFailurePage';
+import { GPremiumPendingPage } from '../pages/user/GPremiumPendingPage';
 
 export const GPrivateRoutes = () => {
   return (
@@ -87,6 +91,11 @@ export const GPrivateRoutes = () => {
         <Route path="message-sended" element={<GSuccessSendCommentPage />} />
         <Route path="*" element={<Navigate to="/use/info" />} />
       </Route>
+      {/* Rutas de Premium */}
+      <Route path="/premium" element={<GPremiumPage />} />
+      <Route path="/premium/success" element={<GPremiumSuccessPage />} />
+      <Route path="/premium/failure" element={<GPremiumFailurePage />} />
+      <Route path="/premium/pending" element={<GPremiumPendingPage />} />
       <Route path="/contacts" element={<GContactsRenderMainPage />}>
         <Route path="options" element={<GContactsPage />} />
         <Route path="add-contact" element={<GAddContactPage />} />

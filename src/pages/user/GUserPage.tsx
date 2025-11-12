@@ -85,11 +85,11 @@ export const GUserPage = () => {
               height="70px"
               colorBackground={GWhite}
               onClickAction={NavigationService.handleNavigation(
-                '/user/pricing'
+                '/premium'
               )}
             />
             <div className="user-body-icons-texts">
-              <p>{PricingTitle}</p>
+              <p>Cuenta Premium</p>
             </div>
           </div>
 
